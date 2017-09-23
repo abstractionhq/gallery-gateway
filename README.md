@@ -25,8 +25,7 @@ WORKSPACE_COMPOSER_GLOBAL_INSTALL=true
 ...
 ENV WEB_DOCUMENT_ROOT=/var/www/public/
 ...
-```
-(See: https://github.com/laradock/laradock/issues/849)  
+```  
 6. `docker-compose up -d apache2 mysql mailhog`
 7. Now wait. Take a coffee break. Grab a snack. This will take a while.
 8. Enter the `workspace` container: `docker-compose exec workspace bash` (On Windows, you'll have to pass the `workspace` container's id `docker-compose exec {container-id-from-docker-ps} bash`)
@@ -45,6 +44,7 @@ php artisan migrate --seed
 Notes:
 - If you make any additional changes to the Laradock configuration, you can rebuild your running containers by adding the `--build` flag to your command (eg. `docker-compose up --build -d apache2 mysql mailhog`).
 - To stop the Laradock environment, run `docker-compose down` while in the `laradock` folder.
+- Step 5 may not be needed in the future (See: https://github.com/laradock/laradock/issues/849)
 
 ### Need a MySQL GUI?
 
