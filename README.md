@@ -2,7 +2,7 @@
 
 ## Development
 
-Checkout this repository: `git clone https://github.com/robmcl4/A-B-S-T-R-A-C-T-I-O-N.git`
+Checkout this repository: `git clone --recursive https://github.com/robmcl4/A-B-S-T-R-A-C-T-I-O-N.git`
 
 We use [Laradock](http://laradock.io/) for our local development.
 
