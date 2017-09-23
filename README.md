@@ -26,7 +26,7 @@ WORKSPACE_COMPOSER_GLOBAL_INSTALL=true
 ENV WEB_DOCUMENT_ROOT=/var/www/public/
 ...
 ```
-(See: https://github.com/laradock/laradock/issues/849)
+(See: https://github.com/laradock/laradock/issues/849)  
 6. `docker-compose up -d apache2 mysql mailhog`
 7. Now wait. Take a coffee break. Grab a snack. This will take a while.
 8. Enter the `workspace` container: `docker-compose exec workspace bash` (On Windows, you'll have to pass the `workspace` container's id `docker-compose exec {container-id-from-docker-ps} bash`)
