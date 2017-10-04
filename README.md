@@ -50,7 +50,9 @@ Notes:
 
 To stand up a SAML identity provider for dev purposes (mocking RIT Shibboleth):
 
-Create the file `laradock/test-saml-idp/Dockerfile` with the following contents
+Create a new folder `laradock/test-saml-idp`.
+
+Create the file `laradock/test-saml-idp/Dockerfile` with the following contents:
 
 ```
 FROM kristophjunge/test-saml-idp
@@ -72,8 +74,8 @@ Edit `laradock/docker-compose.yml` and add the following before the
         - "${TEST_SAML_IDP_HTTPS_PORT}:443"
       environment:
         SIMPLESAMLPHP_SP_ENTITY_ID: http://app.example.com
-        SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
-        SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
+        SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/saml2/acs
+        SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/saml2/sls
         SIMPLESAMLPHP_ADMIN_PASSWORD: test
         SIMPLESAMLPHP_SECRET_SALT: salt
       networks:
@@ -81,7 +83,7 @@ Edit `laradock/docker-compose.yml` and add the following before the
         - backend
 ```
 
-Edit your `.env` file to have the following configuration params:
+Edit the Laradock `.env` file to have the following configuration params:
 
 ```
 ### TEST SAML SERVER ###########################################################
