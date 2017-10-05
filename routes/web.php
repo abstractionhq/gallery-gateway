@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    // return Saml2::login(URL::full());
+    return Saml2::login(URL::full() . "/something");
 
     return view('welcome');
 });
