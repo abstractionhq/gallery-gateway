@@ -13,6 +13,8 @@
 
 Route::get('/', function () {
     return Saml2::login(URL::full() . "/something");
+});
 
-    return view('welcome');
+Route::get('/logout', function () {
+    return Saml2::logout();
 });
