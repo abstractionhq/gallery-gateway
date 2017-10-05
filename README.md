@@ -46,6 +46,55 @@ Notes:
 - To stop the Laradock environment, run `docker-compose down` while in the `laradock` folder.
 - Step 5 may not be needed in the future (See: https://github.com/laradock/laradock/issues/849)
 
+### Test SAML Server
+
+To stand up a SAML identity provider for dev purposes (mocking RIT Shibboleth):
+
+Create a new folder `laradock/test-saml-idp`.
+
+Create the file `laradock/test-saml-idp/Dockerfile` with the following contents:
+
+```
+FROM kristophjunge/test-saml-idp
+
+EXPOSE 80 443
+```
+
+Edit `laradock/docker-compose.yml` and add the following before the
+`Networks Setup` section.
+
+```
+### Test SAML IDP Container #################################
+    test-saml-idp:
+      build:
+        context: .
+        dockerfile: test-saml-idp/Dockerfile
+      ports:
+        - "${TEST_SAML_IDP_HTTP_PORT}:80"
+        - "${TEST_SAML_IDP_HTTPS_PORT}:443"
+      environment:
+        SIMPLESAMLPHP_SP_ENTITY_ID: http://app.example.com
+        SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/saml2/acs
+        SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/saml2/sls
+        SIMPLESAMLPHP_ADMIN_PASSWORD: test
+        SIMPLESAMLPHP_SECRET_SALT: salt
+      networks:
+        - frontend
+        - backend
+```
+
+Edit the Laradock `.env` file to have the following configuration params:
+
+```
+### TEST SAML SERVER ###########################################################
+
+TEST_SAML_IDP_HTTP_PORT=8081
+TEST_SAML_IDP_HTTPS_PORT=4431
+```
+
+Then run `docker-compose up --build -d test-saml-idp`. From now on you may start
+this container by running `docker-compose up -d test-saml-idp`.
+
 ### Need a MySQL GUI?
 
 - SequelPro (https://www.sequelpro.com/)
