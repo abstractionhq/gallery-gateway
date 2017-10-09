@@ -1,12 +1,8 @@
 <?php
 
-Route::get('/home', function () {
-    $users[] = Auth::user();
-    $users[] = Auth::guard()->user();
+Route::get('/admin/home', function (Request $request) {
     $users[] = Auth::guard('admin')->user();
 
-    //dd($users);
-
     return view('admin.home');
-})->name('home');
+})->name('admin.home');
 

@@ -12,27 +12,20 @@
 */
 
 Route::get('/', function () {
-    return Saml2::login(URL::full() . "/something");
-});
-
-Route::get('/logout', function () {
-    return Saml2::logout();
+    return view('welcome');
 });
 
 Route::group(['prefix' => 'admin'], function () {
-  Route::get('/login', 'AdminAuth\LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'AdminAuth\LoginController@login');
-  Route::post('/logout', 'AdminAuth\LoginController@logout')->name('logout');
+  Route::get('/login', 'AdminAuth\LoginController@showLoginForm')->name('admin.login');
+  Route::post('/logout', 'AdminAuth\LoginController@logout')->name('admin.logout');
 });
 
 Route::group(['prefix' => 'student'], function () {
-  Route::get('/login', 'StudentAuth\LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'StudentAuth\LoginController@login');
-  Route::post('/logout', 'StudentAuth\LoginController@logout')->name('logout');
+  Route::get('/login', 'StudentAuth\LoginController@showLoginForm')->name('student.login');
+  Route::post('/logout', 'StudentAuth\LoginController@logout')->name('student.logout');
 });
 
 Route::group(['prefix' => 'judge'], function () {
-  Route::get('/login', 'JudgeAuth\LoginController@showLoginForm')->name('login');
-  Route::post('/login', 'JudgeAuth\LoginController@login');
-  Route::post('/logout', 'JudgeAuth\LoginController@logout')->name('logout');
+  Route::get('/login', 'JudgeAuth\LoginController@showLoginForm')->name('judge.login');
+  Route::post('/logout', 'JudgeAuth\LoginController@logout')->name('judge.logout');
 });
