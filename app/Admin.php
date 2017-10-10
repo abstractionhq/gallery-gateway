@@ -23,7 +23,7 @@ class Admin extends Authenticatable
      *
      * @var array
      */
-     protected $hidden = [
+    protected $hidden = [
         'remember_token',
     ];
 }

@@ -42,23 +42,38 @@ class LoginEventListener
         $username = str_replace('@example.com', '', $username);
 
         if ($username === null || $username === '') {
-            throw new Exception('username not found');
+            throw new Exception('Username Not Found');
         }
 
-        if ($url === route('admin.home')) {
-            // want to login as admin
-            $laravelUser = Admin::where('username', $username)->first();
-            if (!isset($laravelUser)) {
-                throw new Exception('you are not an administrator');
-            }
-            Auth::guard('admin')->login($laravelUser);
-        } elseif ($url === route('student.home')) {
-            // do something
-        } elseif ($url === route('judge.home')) {
-            // do something
-        } else {
-            throw new Exception('unknown login destination');
+        switch ($url) {
+            case route('admin.home'):
+                // Wants to login as Admin
+                $laravelUser = Admin::where('username', $username)->first();
+                if (!isset($laravelUser)) {
+                    throw new Exception('You are Not an Administrator');
+                }
+                Auth::guard('admin')->login($laravelUser);
+                break;
+            case route('student.home'):
+                // Wants to login as Student
+                $laravelUser = Student::where('username', $username)->first();
+                if (!isset($laravelUser)) {
+                    throw new Exception('You are Not a Student');
+                }
+                Auth::guard('student')->login($laravelUser);
+                break;
+            case route('judge.home'):
+                // Wants to login as Judge
+                $laravelUser = Judge::where('username', $username)->first();
+                if (!isset($laravelUser)) {
+                    throw new Exception('You are Not a Judge');
+                }
+                Auth::guard('judge')->login($laravelUser);
+                break;
+            default:
+                throw new Exception('Unknown Login Destination');
         }
+
         session(['name_id' => $user->getNameId()]);
         session(['session_index' => $user->getSessionIndex()]);
     }

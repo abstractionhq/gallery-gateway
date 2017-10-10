@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\StudentAuth;
 
+use Aacotroneo\Saml2\Facades\Saml2Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        return view('student.auth.login');
+        return Saml2Auth::login(route('student.home'));
     }
 
     /**
