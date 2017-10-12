@@ -41,6 +41,12 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
+        'saml' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,            
+            \Illuminate\Session\Middleware\StartSession::class,            
+        ]
     ];
 
     /**
@@ -51,6 +57,12 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'judge' => \App\Http\Middleware\RedirectIfNotJudge::class,
+        'judge.guest' => \App\Http\Middleware\RedirectIfJudge::class,
+        'student' => \App\Http\Middleware\RedirectIfNotStudent::class,
+        'student.guest' => \App\Http\Middleware\RedirectIfStudent::class,
+        'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+        'admin.guest' => \App\Http\Middleware\RedirectIfAdmin::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
