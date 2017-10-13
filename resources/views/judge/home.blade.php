@@ -15,5 +15,6 @@
     </style>
     <h1>Hello, {{ Auth::guard('judge')->user()->username }}</h1>
     <p>You are logged in as Judge!</p>
+    <a href="{{ route('logout') }}">Logout</a>
 </body>
 </html>
