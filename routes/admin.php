@@ -8,7 +8,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     // Show related routes
     Route::group(['prefix' => 'show'], function () {
-        Route::get('', 'ShowController@get');
-        Route::post('/create', 'ShowController@create');
+        Route::get('/', 'ShowController@get');
+        Route::post('/', 'ShowController@create');
     });
 });
