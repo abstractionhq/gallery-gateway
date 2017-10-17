@@ -13,17 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class LoginEventListener
 {
-
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Someone is attempting to login, and Saml2 has received the event to
      * process. It's now our job to look up the user and log in.

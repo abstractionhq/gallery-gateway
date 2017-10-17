@@ -13,19 +13,18 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('/logout', 'AuthController@logout')->name('logout');
 
 Route::group(['prefix' => 'admin'], function () {
-  Route::get('/login', 'AdminAuth\LoginController@showLoginForm')->name('admin.login');
-  Route::post('/logout', 'AdminAuth\LoginController@logout')->name('admin.logout');
+  Route::get('/login', 'AuthController@login')->name('admin.login');
 });
 
 Route::group(['prefix' => 'student'], function () {
-  Route::get('/login', 'StudentAuth\LoginController@showLoginForm')->name('student.login');
-  Route::post('/logout', 'StudentAuth\LoginController@logout')->name('student.logout');
+  Route::get('/login', 'AuthController@login')->name('student.login');
 });
 
 Route::group(['prefix' => 'judge'], function () {
-  Route::get('/login', 'JudgeAuth\LoginController@showLoginForm')->name('judge.login');
-  Route::post('/logout', 'JudgeAuth\LoginController@logout')->name('judge.logout');
+  Route::get('/login', 'AuthController@login')->name('judge.login');
 });
