@@ -19,13 +19,15 @@ WORKSPACE_INSTALL_YARN=true
 ...
 WORKSPACE_COMPOSER_GLOBAL_INSTALL=true
 ...
+WORKSPACE_INSTALL_PYTHON=true
+...
 ```
 5. `vim apache2/Dockerfile` and change
 ```
 ...
 ENV WEB_DOCUMENT_ROOT=/var/www/public/
 ...
-```  
+```
 6. `docker-compose up -d apache2 mysql mailhog`
 7. Now wait. Take a coffee break. Grab a snack. This will take a while.
 8. Enter the `workspace` container: `docker-compose exec workspace bash` (On Windows, you'll have to pass the `workspace` container's id `docker-compose exec {container-id-from-docker-ps} bash`)
@@ -94,6 +96,20 @@ TEST_SAML_IDP_HTTPS_PORT=4431
 
 Then run `docker-compose up --build -d test-saml-idp`. From now on you may start
 this container by running `docker-compose up -d test-saml-idp`.
+
+### Frontend
+
+Make sure you're in the Docker `workspace` when running these commands,
+since Sass installs and compiles based on a target platform, and your local
+machine is likely different than the workspace.
+
+Run `npm install` to install Node.js dependencies.
+
+Run `npm run dev` to compile assets during development.
+
+Run `npm run watch-poll` to start a development server that watches and recompiles on changes.
+
+For more `npm` commands, look at `package.json`
 
 ### Need a MySQL GUI?
 

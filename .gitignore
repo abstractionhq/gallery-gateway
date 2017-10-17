@@ -1,13 +1,32 @@
+# Dependencies
 /node_modules
-/public/hot
-/public/storage
-/storage/*.key
 /vendor
+
+# Editors
 /.idea
 /.vagrant
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
+
+# Environment
 .env
 .vagrant
+/storage/*.key
+
+# Homestead
+Homestead.json
+Homestead.yaml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# macOS
+.DS_Store
+
+# Public
+/public/hot
+/public/storage
+/public/css/*
+/public/js/*
+/public/fonts/*
+/public/mix-manifest.json
