@@ -21,6 +21,7 @@ WORKSPACE_COMPOSER_GLOBAL_INSTALL=true
 ...
 WORKSPACE_INSTALL_PYTHON=true
 ...
+```
 5. `vim apache2/Dockerfile` and change
 ```
 ...
@@ -103,7 +104,12 @@ since Sass installs and compiles based on a target platform, and your local
 machine is likely different than the workspace.
 
 Run `npm install` to install Node.js dependencies.
+
+Run `npm run dev` to compile assets during development.
+
 Run `npm run watch-poll` to start a development server that watches and recompiles on changes.
+
+For more `npm` commands, look at `package.json`
 
 ### Need a MySQL GUI?
 
