@@ -21,6 +21,7 @@ class ShowController extends Controller
 
         ]);
         $show = Show::create($request->all());
+        $show->save();
         return response()->json($show, 201);
     }
 }
