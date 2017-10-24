@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Show;
 
 class ShowController extends Controller
-{  
+{
     public function create(Request $request)
     {
         $request->validate([
@@ -20,13 +20,8 @@ class ShowController extends Controller
             'judging_end' => 'required|date| after:judging_start'
 
         ]);
-        $show = Show::create($request->all());   
+        $show = Show::create($request->all());
+        $show->save();
         return response()->json($show, 201);
-    }    
-
-    public function get()
-    {
-        Log::info($_SERVER['REQUEST_METHOD']);
-        return response()->json(['hi'], 200);        
     }
 }

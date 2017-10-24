@@ -7,8 +7,7 @@ Route::group(['prefix' => 'admin'], function () {
     })->name('admin.home');
 
     // Show related routes
-    Route::group(['prefix' => 'show'], function () {
-        Route::get('/', 'ShowController@get');
+    Route::group(['prefix' => 'show', 'middleware' => ['JsonApi']], function () {
         Route::post('/', 'ShowController@create');
     });
 });
