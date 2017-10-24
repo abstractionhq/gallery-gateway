@@ -5,4 +5,3 @@ Route::get('/judge/home', function () {
 
     return view('judge.home');
 })->name('judge.home');
-
