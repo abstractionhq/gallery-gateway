@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
+import Home from '../components/Home.vue'
+import ManageShows from '../components/shows/ManageShows.vue'
+import CreateShow from '../components/shows/CreateShow.vue'
+import ViewShow from '../components/shows/ViewShow.vue'
 
 Vue.use(Router)
 
@@ -10,7 +13,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: HelloWorld
+      component: Home
+    },
+    {
+      path: '/shows',
+      component: ManageShows
+    },
+    {
+      path: '/shows/create',
+      component: CreateShow
+    },
+    {
+      path: '/shows/:id',
+      component: ViewShow
     }
     // TODO: Catch all component for NotFound
     // TODO: Apache Rewrite for non-existant URLs
