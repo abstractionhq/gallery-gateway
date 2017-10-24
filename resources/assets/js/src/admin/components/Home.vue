@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <main class='container'>
-      <h1>Home</h1>
-      <h2>{{ msg }}</h2>
-      <router-link to='shows'>Manage Shows</router-link>
-    </main>
-  </div>
+  <b-container>
+    <h1>Home</h1>
+    <h2>{{ msg }}</h2>
+    <router-link to='shows'>Manage Shows</router-link>
+  </b-container>
 </template>
 
 <script>
