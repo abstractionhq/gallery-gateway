@@ -26,20 +26,30 @@
 <script>
 export default {
   name: 'view-show',
+  beforeRouteEnter(to, from, next) {
+    axios
+      .get(`/admin/show/${to.params.id}`)
+      .then((data) => {
+        next(d => d.setData(data.data))
+      })
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.show = null
+    axios
+      .get(`/admin/show/${to.params.id}`)
+      .then((data) => {
+        this.setData(data.data)
+        next()
+      })
+  },
+  methods: {
+    setData(data) {
+      this.show = data
+    }
+  },
   data () { // TODO: State Management
     return {
-      show: {
-        id: 1,
-        name: 'Example Name',
-        description: 'Example Description',
-        entry_cap: 2,
-        submission_start: '2017-11-15 12:00:00',
-        submission_end: '2017-11-25 12:00:00',
-        judging_start: '2017-12-15 12:00:00',
-        judging_end: '2017-12-25 12:00:00',
-        created_at: '2017-10-24 12:00:00',
-        updated_at: '2017-10-24 12:00:00'
-      }
+      show: {}
     }
   }
 }

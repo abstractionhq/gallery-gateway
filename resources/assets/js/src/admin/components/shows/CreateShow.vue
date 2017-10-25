@@ -72,12 +72,20 @@
         </b-form>
       </b-col>
     </b-row>
+    <vue-toast ref='toast'></vue-toast>
   </b-container>
 </template>
 
 <script>
+import VueToast from 'vue-toast'
+
+let toast
+
 export default {
   name: 'create-show',
+  components: {
+    VueToast
+  },
   data() {
     return {
       form: {
@@ -85,9 +93,26 @@ export default {
       }
     }
   },
+  mounted() {
+    toast = this.$refs.toast
+    toast.setOptions({position: 'bottom right'})
+  },
   methods: {
     onSubmit() {
-      console.log(JSON.stringify(this.form))
+      axios
+        .post('/admin/show', this.form)
+        .then(() => {
+          toast.showToast('Show Successfully Created', {theme: 'success'})
+          const router = this.$router
+          setTimeout(function() {
+            router.push({path: '/shows'})
+          }, 1000)
+        })
+        .catch(() => {
+          toast.showToast('There was an error. Please try again.', {theme: 'error'})
+        })
+
+
     }
   }
 }

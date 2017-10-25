@@ -25,7 +25,8 @@ export default new Router({
     },
     {
       path: '/shows/:id',
-      component: ViewShow
+      component: ViewShow,
+      props: true
     }
     // TODO: Catch all component for NotFound
     // TODO: Apache Rewrite for non-existant URLs

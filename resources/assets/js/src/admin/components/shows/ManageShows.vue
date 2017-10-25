@@ -19,34 +19,30 @@
 <script>
 export default {
   name: 'manage-shows',
-  data () {
+  beforeRouteEnter(to, from, next) {
+    axios
+      .get(`/admin/show`)
+      .then((data) => {
+        next(d => d.setData(data.data))
+      })
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.shows = null
+    axios
+      .get(`/admin/show`)
+      .then((data) => {
+        this.setData(data.data)
+        next()
+      })
+  },
+  methods: {
+    setData(data) {
+      this.shows = data
+    }
+  },
+  data () { // TODO: State Management
     return {
-      shows: [
-        {
-          id: 1,
-          name: 'Example Name',
-          description: 'Example Description',
-          entry_cap: 2,
-          submission_start: '2017-11-15 12:00:00',
-          submission_end: '2017-11-25 12:00:00',
-          judging_start: '2017-12-15 12:00:00',
-          judging_end: '2017-12-25 12:00:00',
-          created_at: '2017-10-24 12:00:00',
-          updated_at: '2017-10-24 12:00:00'
-        },
-        {
-          id: 2,
-          name: 'Example Name 2',
-          description: 'Example Description 2',
-          entry_cap: 3,
-          submission_start: '2017-11-15 12:00:00',
-          submission_end: '2017-11-25 12:00:00',
-          judging_start: '2017-12-15 12:00:00',
-          judging_end: '2017-12-25 12:00:00',
-          created_at: '2017-10-24 12:00:00',
-          updated_at: '2017-10-24 12:00:00'
-        }
-      ]
+      shows: []
     }
   }
 }

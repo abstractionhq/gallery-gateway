@@ -8,6 +8,18 @@ use App\Show;
 
 class ShowController extends Controller
 {
+    public function index(Request $request)
+    {
+        $shows = Show::all();
+        return response()->json($shows, 200);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $show = Show::findOrFail($id);
+        return response()->json($show, 200);
+    }
+
     public function create(Request $request)
     {
         $request->validate([
