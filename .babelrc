@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "env", {
+        "loose": true,
+        "modules": false,
+        "target": ["ie 10"],
+        "useBuiltIns": "entry"
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-react-remove-prop-types",
+      ]
+    },
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
+    }
+  }
+}
