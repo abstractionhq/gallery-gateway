@@ -35,8 +35,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
         $this->mapWebRoutes();
 
         $this->mapJudgeRoutes();
@@ -62,37 +60,32 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapJudgeRoutes()
     {
-        Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/judge.php'));
+        Route::middleware('judge_api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/judge/api.php'));
+        Route::middleware('judge_web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/judge/web.php'));
+
     }
 
     protected function mapStudentRoutes()
     {
-        Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/student.php'));
-    }
+        Route::middleware('student_api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/student/api.php'));
+        Route::middleware('student_web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/student/web.php'));
+}
 
     protected function mapAdminRoutes()
     {
-        Route::middleware('admin')
+        Route::middleware('admin_api')
              ->namespace($this->namespace)
-             ->group(base_path('routes/admin.php'));
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::prefix('api')
-             ->middleware('api')
+             ->group(base_path('routes/admin/api.php'));
+        Route::middleware('admin_web')
              ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+             ->group(base_path('routes/admin/web.php'));
     }
 }

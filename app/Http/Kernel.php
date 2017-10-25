@@ -31,29 +31,47 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
         'api' => [
-            'throttle:60,1',
-            'bindings',
-        ],
-
-        'saml' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,            
-            \Illuminate\Session\Middleware\StartSession::class,            
-        ],
-        'admin' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            'accessGuard:admin'
-        ]
-
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,            
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,            
+        ],
+        'saml' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+        ],
+        'student_api' => [
+            'api',
+            'ApiAccessGuard:student'
+        ],
+        'student_web' => [
+            'web',
+            'WebAccessGuard:student'
+        ],
+        'judge_api' => [
+            'api',
+            'ApiAccessGuard:judge'
+        ],
+        'judge_web' => [
+            'web',
+            'WebAccessGuard:judge'
+        ],
+        'admin_api' => [
+            'api',
+            'ApiAccessGuard:admin'
+        ],
+        'admin_web' => [
+            'web',
+            'WebAccessGuard:admin'
+        ],
     ];
 
     /**
@@ -64,18 +82,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'judge' => \App\Http\Middleware\RedirectIfNotJudge::class,
-        'judge.guest' => \App\Http\Middleware\RedirectIfJudge::class,
-        'student' => \App\Http\Middleware\RedirectIfNotStudent::class,
-        'student.guest' => \App\Http\Middleware\RedirectIfStudent::class,
-        'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
-        'admin.guest' => \App\Http\Middleware\RedirectIfAdmin::class,
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'accessGuard' => \App\Http\Middleware\AccessDeniedIfNotGuard::class,                    
+        'JsonApi' =>\App\Http\Middleware\JsonApi::class,
+        'ApiAccessGuard' => \App\Http\Middleware\AccessDeniedIfNotGuard::class,
+        'WebAccessGuard' => \App\Http\Middleware\RedirectIfNotGuard::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,        
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

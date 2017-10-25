@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
-class RedirectIfStudent
+class RedirectIfNotGuard
 {
 	/**
 	 * Handle an incoming request.
@@ -15,12 +16,11 @@ class RedirectIfStudent
 	 * @param  string|null  $guard
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next, $guard = 'student')
-	{
-	    if (Auth::guard($guard)->check()) {
-	        return redirect('student/home');
+	public function handle($request, Closure $next, $guard)
+	{	
+	    if (!Auth::guard($guard)->check()) {
+	        return redirect(route('home'));
 	    }
-
 	    return $next($request);
 	}
 }
