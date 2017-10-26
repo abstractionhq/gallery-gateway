@@ -27,6 +27,8 @@ export default {
   },
 
   saml: {
+    // URL that goes to the front-end on successful SAML finalize
+    finalUrl: process.env.SAML_SUCCESS_URL,
     // URL that goes from the Identity Provider -> Service Provider
     callbackUrl: process.env.SAML_CALLBACK_URL,
     // URL that goes from the Service Provider -> Identity Provider

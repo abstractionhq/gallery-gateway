@@ -5,6 +5,8 @@ import passport from 'passport';
 import saml from 'passport-saml';
 import verifyUser from '../middleware/verifyUser';
 import bodyParser from 'body-parser';
+import User from '../models/user';
+import { STUDENT } from '../permissionLevels'
 
 
 const router = Router(); // eslint-disable-line new-cap
@@ -22,12 +24,10 @@ function sign(payload) {
 }
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-  console.log(user);
   done(null, user);
 });
 
@@ -50,8 +50,24 @@ const samlStrategy = new saml.Strategy({
   validateInResponseTo: false,
   disableRequestedAuthnContext: true
 }, function(profile, done) {
-  console.log(profile);
-  return done(null, profile); 
+  // We've received login success, we need to look up the user
+  const email = profile.email || '';
+  const user = email.replace('@example.com', '');
+  if (!user) {
+    return done('No user property found', null);
+  }
+  return done(null, User
+    .findOrCreate({
+      where: { username: user },
+      defaults: {
+        firstName: 'unknown',
+        lastName: 'unknown',
+        type: STUDENT
+      }
+    })
+    .spread((user, created) => {
+      return Promise.all([user.save(), created]);
+    }));
 });
 
 passport.use(samlStrategy);
@@ -72,7 +88,7 @@ router
       bodyParser.urlencoded({ extended: true }),
       passport.authenticate('saml', { failureRedirect: '/login/fail' }),
       (req, res) => {
-        res.redirect('/');
+        res.redirect(samlConfig.finalUrl);
       });
 
 router
