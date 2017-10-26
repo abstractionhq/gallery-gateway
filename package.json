@@ -23,6 +23,8 @@
     "keypair": "^1.0.1",
     "mysql2": "^1.4.2",
     "nconf": "^0.8.5",
+    "passport": "^0.4.0",
+    "passport-saml": "^0.30.0",
     "sequelize": "^4.15.0"
   },
   "devDependencies": {
