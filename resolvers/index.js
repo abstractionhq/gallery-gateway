@@ -1,9 +1,15 @@
-import UserQuery from './userQuery';
-import User from './userType';
+import UserQuery from './queries/userQuery';
+import User from './types/userType';
+import DateScalar from './types/dateScalar';
+import CreateShow from  './mutations/createShow';
 
 export default {
+    ...User,    
+    ...DateScalar,
     Query: {
         ...UserQuery,
     },
-    ...User,
+    Mutation: {
+        ...CreateShow,
+    },
 }

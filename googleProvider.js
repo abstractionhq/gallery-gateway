@@ -34,7 +34,7 @@ export default class GoogleProvider {
       .spread((user, created) => {
         user.firstName = this.payload.given_name;
         user.lastName = this.payload.family_name;
-        user.userType = STUDENT;
+        user.type = STUDENT;
         return Promise.all([user.save(), created]);
       });
   }

@@ -14,6 +14,7 @@ type User {
     firstName: String!
     lastName: String!
     displayName: String
+    type: UserType!
     entries: [Entry]
     shows: [Show]
 }
@@ -112,10 +113,10 @@ enum UserType {
 
 type Query {
     user(id: ID!): User
+    users(type: UserType): [User]
     group(id: ID!): Group
     show(id: ID!): Show
     vote(id: ID!): Vote
-    users(type: UserType): [User]
     groups: [Group]
     shows: [Show]
     votes: [Vote]

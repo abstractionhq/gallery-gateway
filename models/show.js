@@ -37,11 +37,16 @@ export default sequelize.define('show', {
 {
     validate: {
         entryAndJudingDateValidation() {
-            if (this.entryStart > this.entryEnd) {
+            const entryStart = new Date(this.entryStart);
+            const entryEnd = new Date(this.entryEnd);
+            const judgingStart = new Date(this.judgingStart);
+            const judgingEnd = new Date(this.judgingEnd);
+
+            if (entryStart > entryEnd) {
                 throw new Error('Entry start date must be before the entry end date');                
-            } else if (this.entryEnd >= this.judgingEnd) {
+            } else if (entryEnd >= judgingStart) {
                 throw new Error('Entry end date must be before or equal to the judging start date');
-            } else if (this.judgingStart > this.judgingEnd) {
+            } else if (judgingStart > judgingEnd) {
                 throw new Error('Judging start date must be before the judging end date');
             }
         }

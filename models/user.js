@@ -22,7 +22,7 @@ export default sequelize.define('user', {
     displayName: {
         type: DataTypes.STRING,        
     },
-    userType: {
+    type: {
         type: DataTypes.ENUM(STUDENT, ADMIN, JUDGE),
         allowNull: false,
         notEmpty: true,
