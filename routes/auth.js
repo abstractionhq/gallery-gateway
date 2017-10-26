@@ -18,7 +18,7 @@ function sign(payload) {
       token: jwt.sign(
         payload,
         jwtConfig.secret,
-        { expiresInMinutes: jwtConfig.expiresInMinutes, algorithm: 'RS256' }
+        { algorithm: 'RS256' }
       ),
     };
 }
@@ -56,18 +56,19 @@ const samlStrategy = new saml.Strategy({
   if (!user) {
     return done('No user property found', null);
   }
-  return done(null, User
-    .findOrCreate({
-      where: { username: user },
-      defaults: {
-        firstName: 'unknown',
-        lastName: 'unknown',
-        type: STUDENT
-      }
-    })
-    .spread((user, created) => {
-      return Promise.all([user.save(), created]);
-    }));
+  var promise = User
+  .findOrCreate({
+    where: { username: user },
+    defaults: {
+      firstName: 'unknown',
+      lastName: 'unknown',
+      type: STUDENT
+    }
+  })
+  .spread((user, created) => {
+    return Promise.all([user.save(), created]);
+  });
+  promise.then((thing) => done(null, thing[0]));
 });
 
 passport.use(samlStrategy);
@@ -78,7 +79,7 @@ router
       passport.initialize(),
       passport.authenticate('saml', { failureRedirect: '/auth/login/fail' }),
       (req, res, next) => {
-        res.redirect('/')
+        res.redirect(samlConfig.finalUrl);
       });
 
 router
@@ -88,7 +89,9 @@ router
       bodyParser.urlencoded({ extended: true }),
       passport.authenticate('saml', { failureRedirect: '/login/fail' }),
       (req, res) => {
-        res.redirect(samlConfig.finalUrl);
+        res
+          .cookie('token', sign(req.user.dataValues), { maxAge: 7200000,}) //todo fix this with jwt time
+          .redirect(samlConfig.finalUrl);
       });
 
 router

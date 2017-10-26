@@ -4,6 +4,7 @@ import models from './models';
 import router from './routes';
 import jwt from 'express-jwt';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import schema from './schema';
 
 const app = express();
@@ -17,6 +18,7 @@ models();
 // }));
 
 app.use(bodyParser.json());
+app.use(cookieParser())
 app.use(router);
 
 app.use('/graphql', graphqlHttp(req => ({
