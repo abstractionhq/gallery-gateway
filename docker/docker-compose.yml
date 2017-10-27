@@ -1,0 +1,16 @@
+version: '2'
+services:
+  test-saml-idp:
+    build:
+      context: .
+      dockerfile: test-saml-idp/Dockerfile
+    environment:
+      SIMPLESAMLPHP_SP_ENTITY_ID: http://app.example.com
+      SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost:3000/auth/login/callback
+      SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://REPLACE_THIS_WITH_LOGOUT_URL
+      SIMPLESAMLPHP_ADMIN_PASSWORD: test
+      SIMPLESAMLPHP_SECRET_SALT: salt
+    ports:
+      - "8081:80"
+    volumes:
+      - ./test-saml-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php
