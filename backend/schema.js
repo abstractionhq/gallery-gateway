@@ -131,7 +131,6 @@ type Query {
 
 type Mutation {
     createJudge(input: UserInput!): User
-    createStudent(input: UserInput!): User
     updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User
 

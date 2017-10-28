@@ -7,7 +7,8 @@ export default sequelize.define('user', {
     username: {
         type: DataTypes.STRING,
         allowNull: false,
-        notEmpty: true,        
+        notEmpty: true, 
+        unique: true,       
     },
     firstName: {
         type: DataTypes.STRING,
