@@ -1,9 +1,13 @@
-# react-webpack2
-Boilerplate for React built with Webpack2
+# Frontend
 
-## setup
-* `npm install`
-* `npm start`
-* build dist `npm run build`
-* run lint `npm run lint`
+## Getting Started
 
+1. `yarn install`
+2. `yarn start`
+
+## Development
+
+- Automatic Code Formatting: `yarn run format`
+- Run Tests: `yarn run test`
+- Build for Production: `yarn run build`
+- Analyze Bundles: `yarn run debug`
