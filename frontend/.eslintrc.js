@@ -2,17 +2,12 @@ module.exports = {
   parser: 'babel-eslint',
   extends: [
     'react-app',
-    'standard',
-    'prettier',
-    'prettier/standard'
+    'standard'
   ],
   plugins: [
     'prettier',
     'standard'
   ],
-  'rules': {
-    'prettier/standard': 'error'
-  },
   settings: {
     'import/resolver': {
       webpack: {

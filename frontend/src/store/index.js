@@ -1,7 +1,9 @@
-const store = do {
-  if (process.env.NODE_ENV === 'production')
-    require('./prod').default // eslint-disable-line
-  else require('./dev').default // eslint-disable-line
+let store
+
+if (process.env.NODE_ENV === 'production') {
+  store = require('./prod').default
+} else {
+  store = require('./dev').default
 }
 
 export default store

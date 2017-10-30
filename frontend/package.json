@@ -6,8 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development BABEL_ENV=development node ./server.js",
     "build": "cross-env NODE_ENV=production BABEL_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.config.prod.js",
-    "lint": "eslint --ext .js ./src",
-    "format": "prettier --write --no-semi --single-quote --jsx-bracket-same-line './src/*.js' './src/**/*.js'",
+    "format": "prettier-standard './src/*.js' './src/**/*.js'",
     "debug": "DEBUG=true npm run build -- --display-optimization-bailout",
     "test": ""
   },
@@ -25,7 +24,7 @@
     }
   ],
   "dependencies": {
-    "apollo-client": "^2.0.1",
+    "apollo-client": "^1.9.3",
     "babel-polyfill": "^6.26.0",
     "connected-react-router": "^4.2.3",
     "graphql": "^0.11.7",
@@ -33,7 +32,7 @@
     "history": "^4.7.2",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
-    "react-apollo": "^2.0.0",
+    "react-apollo": "^1.4.16",
     "react-dom": "^16.0.0",
     "react-hot-loader": "^3.1.1",
     "react-redux": "^5.0.6",
@@ -70,10 +69,12 @@
     "node-sass": "^4.5.3",
     "pre-push": "^0.1.1",
     "prettier": "^1.7.4",
+    "prettier-standard": "^7.0.3",
     "raw-loader": "^0.5.1",
     "redux-devtools": "^3.4.0",
     "resolve-url-loader": "^2.2.0",
     "sass-loader": "^6.0.6",
+    "standard": "^10.0.3",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",

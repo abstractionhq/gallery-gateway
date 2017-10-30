@@ -16,7 +16,7 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname,
+    path: __dirname, // TODO: May need to change
     filename: '[name].bundle.js',
     publicPath: '/'
   },

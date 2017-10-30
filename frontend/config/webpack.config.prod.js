@@ -13,7 +13,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(__dirname, 'dist', 'assets'),
+    path: path.join(__dirname, '../', 'dist', 'assets'),
     filename: '[name].[chunkhash].js',
     publicPath: '/assets/'
   },
@@ -38,7 +38,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunksSortMode: 'dependency',
       title: 'Abstraction', // TODO: Change
-      filename: './index.html',
+      filename: '../index.html',
       template: './src/index.ejs'
     }),
     new webpack.optimize.UglifyJsPlugin({
