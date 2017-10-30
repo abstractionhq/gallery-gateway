@@ -1,23 +1,22 @@
 module.exports = {
-  globals: {
-    gapi: true,
-  },
+  parser: 'babel-eslint',
   extends: [
-    "sse",
+    'react-app',
+    'standard',
+    'prettier',
+    'prettier/standard'
   ],
-  parser: "babel-eslint",
-  env: {
-    browser: true,
-    node: true,
-  },
-  ecmaFeatures: {
-    jsx: true,
-    es6: true,
+  plugins: [
+    'prettier',
+    'standard'
+  ],
+  'rules': {
+    'prettier/standard': 'error'
   },
   settings: {
     'import/resolver': {
       webpack: {
-        config: "webpack.config.prod.js"
+        config: './config/webpack.config.prod.js'
       }
     }
   },
