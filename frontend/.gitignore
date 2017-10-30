@@ -59,3 +59,6 @@ typings/
 
 # ignore keys
 keys/
+
+# App Build
+dist/
