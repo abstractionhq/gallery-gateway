@@ -1,8 +1,10 @@
-import Sequelize from 'sequelize';
+import Sequelize from 'sequelize'
 
 export default new Sequelize(
-    process.env.ABSTRACTION_DBNAME || "database",
-    process.env.ABSTRACTION_DBUSER || "root",
-    process.env.ABSTRACTION_DBPASS || "password",
-    {dialect: "mysql"},
-);
+  process.env.ABSTRACTION_DB_NAME,
+  process.env.ABSTRACTION_DB_USER,
+  process.env.ABSTRACTION_DB_PASS, {
+    host: process.env.ABSTRACTION_DB_HOST,
+    dialect: 'mysql'
+  }
+)
