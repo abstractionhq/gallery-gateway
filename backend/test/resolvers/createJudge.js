@@ -47,7 +47,7 @@ describe('Judge creation resolver', function () {
         });
     });
 
-    it('upgrades students with the same username to judges', (done) => {
+    it('changes the user type to judge if a student with the same username already exists', (done) => {
         const input = { input: {
             username: "user3",
             firstName: "Adam",

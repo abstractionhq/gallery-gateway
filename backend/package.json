@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "nodemon ./bin/www --exec babel-node",
-    "test": "cross-env NODE_ENV=test nyc mocha \"test/**/*.js\"",
+    "test": "cross-env NODE_ENV=test nyc mocha test/**/*.js",
     "bootstrap": "babel-node ./bootstrap.js",
     "keygen": "babel-node keygen"
   },
