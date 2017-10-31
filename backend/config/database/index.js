@@ -14,6 +14,7 @@ const development = {
 
 const test = {
     dialect: 'mysql',
+    logging: false,
     user: USER,
     password: PASSWORD,
     database: "test",
