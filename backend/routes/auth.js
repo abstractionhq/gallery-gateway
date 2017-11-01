@@ -14,13 +14,11 @@ const router = Router(); // eslint-disable-line new-cap
 const jwtConfig = nconf.get('auth:jwt');
 
 function sign(payload) {
-    return {
-      token: jwt.sign(
+    return jwt.sign(
         payload,
         jwtConfig.secret,
         { algorithm: 'RS256' }
-      ),
-    };
+      );
 }
 
 passport.serializeUser(function(user, done) {
@@ -79,7 +77,10 @@ router
       passport.initialize(),
       passport.authenticate('saml', { failureRedirect: '/auth/login/fail' }),
       (req, res, next) => {
-        res.redirect(samlConfig.finalUrl);
+        const token = sign(req.user.dataValues)        
+        res.redirect(
+          samlConfig.finalUrl + '#?token=' + encodeURIComponent(token)
+        )
       });
 
 router
@@ -89,9 +90,10 @@ router
       bodyParser.urlencoded({ extended: true }),
       passport.authenticate('saml', { failureRedirect: '/login/fail' }),
       (req, res) => {
-        res
-          .cookie('token', sign(req.user.dataValues), { maxAge: 7200000,}) //todo fix this with jwt time
-          .redirect(samlConfig.finalUrl);
+        const token = sign(req.user.dataValues)
+        res.redirect(
+          samlConfig.finalUrl + '#?token=' + encodeURIComponent(token)
+        )
       });
 
 router

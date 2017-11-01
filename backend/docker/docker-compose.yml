@@ -11,6 +11,6 @@ services:
       SIMPLESAMLPHP_ADMIN_PASSWORD: test
       SIMPLESAMLPHP_SECRET_SALT: salt
     ports:
-      - "8081:80"
+      - "8080:80"
     volumes:
       - ./test-saml-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php
