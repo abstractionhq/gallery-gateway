@@ -16,23 +16,27 @@ const render = Component => {
 }
 
 window.onload = () => {
-  // get rid of jwt token in hash, if exists
-  // THIS IS AWFUL I HATE IT
-  const parts = window.location.hash.split("?");
-  if (parts.length === 2) {
-    const params = new URLSearchParams(parts[1]);
-    if (params.has("token")) {
-      // great, we've got a new token
-      window.localStorage.setItem("_token_v1", params.get("token"));
-      // now let's remove it from the url hash :[
-      params.delete("token");
-      if (params.toString() !== "") {
-        window.location.hash = parts[0] + "?" + params.toString();
-      } else {
-        window.location.hash = parts[0];
-      }
-    }
+  //
+  // if the jwt token is in the cookie, read that in, and then delete the
+  // cookie
+
+  // from https://stackoverflow.com/q/10730362
+  function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
   }
+  if (getCookie('_token_v1')) {
+    // from https://stackoverflow.com/a/10593045
+    function delete_cookie(name) {
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+    window.localStorage.setItem('_token_v1', getCookie('_token_v1'));
+    delete_cookie('_token_v1');
+  }
+
+  //
+  // Start rendering the main site
   render(Root)
 }
 

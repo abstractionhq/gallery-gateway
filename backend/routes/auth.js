@@ -77,10 +77,10 @@ router
       passport.initialize(),
       passport.authenticate('saml', { failureRedirect: '/auth/login/fail' }),
       (req, res, next) => {
-        const token = sign(req.user.dataValues)        
-        res.redirect(
-          samlConfig.finalUrl + '#?token=' + encodeURIComponent(token)
-        )
+        const token = sign(req.user.dataValues)
+        res
+          .cookie('_token_v1', token)
+          .redirect(samlConfig.finalUrl)
       });
 
 router
@@ -91,9 +91,9 @@ router
       passport.authenticate('saml', { failureRedirect: '/login/fail' }),
       (req, res) => {
         const token = sign(req.user.dataValues)
-        res.redirect(
-          samlConfig.finalUrl + '#?token=' + encodeURIComponent(token)
-        )
+        res
+          .cookie('_token_v1', token)
+          .redirect(samlConfig.finalUrl)
       });
 
 router
