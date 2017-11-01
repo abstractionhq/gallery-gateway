@@ -1,4 +1,4 @@
-version: '2'
+version: '3.1'
 services:
   test-saml-idp:
     build:
@@ -14,3 +14,12 @@ services:
       - "8081:80"
     volumes:
       - ./test-saml-idp/authsources.php:/var/www/simplesamlphp/config/authsources.php
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: "database"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+    - "3306:3306"
+    volumes:
+    - ./mysql/createTestDb.sql:/docker-entrypoint-initdb.d/createTestDb.sql
