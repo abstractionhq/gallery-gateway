@@ -1,10 +1,12 @@
 import Sequelize from 'sequelize'
+import nconf from './index'
+
+const env = nconf.get('NODE_ENV')
+const dbConfig = nconf.get('db')[env]
 
 export default new Sequelize(
-  process.env.ABSTRACTION_DB_NAME,
-  process.env.ABSTRACTION_DB_USER,
-  process.env.ABSTRACTION_DB_PASS, {
-    host: process.env.ABSTRACTION_DB_HOST,
-    dialect: 'mysql'
-  }
+  dbConfig.database,
+  dbConfig.user,
+  dbConfig.password,
+  dbConfig
 )
