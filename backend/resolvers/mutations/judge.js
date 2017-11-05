@@ -1,3 +1,5 @@
+import { UserError } from 'graphql-errors'
+
 import User from '../../models/user'
 import { ADMIN, JUDGE, STUDENT } from '../../permissionLevels'
 
@@ -13,7 +15,7 @@ export function createJudge (_, args) {
         return User.create(user)
       }
 
-      throw new Error('Username Already Exists')
+      throw new UserError('Username Already Exists')
     })
 }
 
@@ -41,6 +43,6 @@ export function updatePermissions (_, args) {
         }
       }
 
-      throw new Error('User Not Found')
+      throw new UserError('User Not Found')
     })
 }
