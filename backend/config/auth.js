@@ -1,16 +1,14 @@
 import fs from 'fs'
 
-const decryptionPvk = fs.existsSync('./keys/private.key')
-  ? fs.readFileSync('./keys/private.key') : ''
-const privateCert = fs.existsSync('./keys/saml_cert_private.pem')
-  ? fs.readFileSync('./keys/saml_cert_private.pem') : ''
-const publicCert = fs.existsSync('./keys/saml_cert_private.pem')
-  ? fs.readFileSync('./keys/saml_cert_private.pem') : ''
+const privateCert = fs.existsSync('./keys/private.key')
+  ? fs.readFileSync('./keys/private.key', 'utf-8') : ''
+const publicCert = fs.existsSync('./keys/public.key')
+  ? fs.readFileSync('./keys/public.key', 'utf-8') : ''
 
 export default {
   jwt: {
-    secret: fs.readFileSync('./keys/private.key').toString(), // eslint-disable-line no-sync
-    pub: fs.readFileSync('./keys/public.key').toString(), // eslint-disable-line no-sync
+    secret: privateCert.toString(),
+    pub: publicCert.toString(),
     expiresInMinutes: 60 * 24 * 2
   },
   saml: {
@@ -23,11 +21,11 @@ export default {
     // Usually specified as `/shibboleth` from site root
     issuer: process.env.ISSUER,
     // Service Provider private key
-    decryptionPvk: decryptionPvk,
+    decryptionPvk: privateCert,
     // Service Provider Certificate, private
-    privateCert: privateCert,
+    privateCert,
     // Service Provider Certificate, public
-    publicCert: publicCert,
+    publicCert,
     // Identity Provider's public key
     cert: fs.readFileSync('./keys/idp_cert.pem', 'utf8').toString()
   }

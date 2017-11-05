@@ -6,6 +6,7 @@ import jwt from 'express-jwt'
 import { maskErrors } from 'graphql-errors'
 
 import config from './config'
+import { passport } from './config/passport'
 import models from './models'
 import router from './routes'
 import schema from './schema'
@@ -21,7 +22,9 @@ models()
 // }));
 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(passport.initialize())
 app.use(router)
 
 maskErrors(schema)

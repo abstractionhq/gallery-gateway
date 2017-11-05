@@ -1,12 +1,8 @@
-import { Router } from 'express';
-import auth from './auth';
-import nconf from '../config';
+import { Router } from 'express'
+import auth from './auth'
 
-const router = Router();
+const router = Router()
 
-const apiConfig = nconf.get('api');
-const apiPath = `/${apiConfig.prefix}/${apiConfig.version}`;
+router.use(auth)
 
-router.use('/auth', auth);
-
-export default router;
+export default router
