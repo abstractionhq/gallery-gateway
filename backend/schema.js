@@ -23,7 +23,12 @@ input UserInput {
     username: String!
     firstName: String!
     lastName: String!
-    displayName: String    
+    displayName: String
+}
+
+input PermissionInput {
+    username: String!
+    type: UserType
 }
 
 type Group {
@@ -67,7 +72,7 @@ interface Entry {
     student: User
     show: Show
     comment: String
-    forSale: Boolean    
+    forSale: Boolean
 }
 
 type Photo implements Entry {
@@ -91,7 +96,7 @@ type Video implements Entry {
     show: Show
     videoURL: String
     comment: String
-    forSale: Boolean    
+    forSale: Boolean
 }
 
 type OtherMedia implements Entry {
@@ -102,7 +107,7 @@ type OtherMedia implements Entry {
     photoPath: String
     comment: String
     moreCopies: Boolean
-    forSale: Boolean    
+    forSale: Boolean
 }
 
 enum UserType {
@@ -131,6 +136,7 @@ type Query {
 
 type Mutation {
     createJudge(input: UserInput!): User
+    updatePermissions(input: PermissionInput!): User
     updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User
 
