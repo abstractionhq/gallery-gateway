@@ -4,8 +4,9 @@ import { ADMIN, JUDGE, STUDENT } from '../permissionLevels'
 
 
 export default function (req, res, next) {
-  if (req.headers.authorization) {
-    const token = req.headers.authorization.substr(7);
+  if (req.headers.authorization &&
+      req.headers.authorization.indexOf("Bearer ") === 0) {
+    const token = req.headers.authorization.substr("Bearer ".length);
     jwt.verify(
       token,
       nconf.get('auth:jwt:pub'),
