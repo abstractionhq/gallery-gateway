@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 
 import config from '../config'
 import { passport, samlStrategy } from '../config/passport'
-import verifyUser from '../middleware/verifyUser'
 
 const router = Router()
 

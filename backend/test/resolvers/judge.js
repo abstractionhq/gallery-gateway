@@ -4,53 +4,62 @@ import { expect } from 'chai'
 import db from '../../config/sequelize'
 import User from '../../models/user'
 import { createJudge, updatePermissions } from '../../resolvers/mutations/judge'
+import { fakeUser } from '../factories'
 
 describe('Judge Resolvers', function () {
-  before(function (done) {
+  beforeEach(function (done) {
     db.sync({force: true}).then(() => {
       User
         .destroy({where: {}})
         .then(() => done())
     })
   })
-  after(function (done) {
+  afterEach(function (done) {
     User
       .destroy({where: {}})
-      .then(() => {
-        db.close()
-        done()
-      })
+      .then(() => done())
   })
 
   describe('Judge Creation Resolver', function () {
     it('Does not allow duplicate usernames', function (done) {
-      const input = {input: {
-        username: 'user1',
-        firstName: 'Jane',
-        lastName: 'Doe'
-      }}
-      User.create({
-        username: 'user1',
-        firstName: 'john',
-        lastName: 'smith',
-        type: 'ADMIN'
-      })
-        .then(() => {
-          createJudge('', input)
-            .catch((err) => {
-              expect(err).to.exist
-              expect(err.message).to.equal('Username Already Exists')
-              done()
-            })
+      fakeUser({type: 'ADMIN'})
+        .then((me) => {
+          const input = {input: {
+            username: me.username,
+            firstName: 'Jane',
+            lastName: 'Doe'
+          }}
+          createJudge('', input, {auth: {type: 'ADMIN'}})
+          .catch((err) => {
+            expect(err).to.exist
+            expect(err.message).to.equal('Username Already Exists')
+            done()
+          })
         })
     })
 
     it('Does not allow null values', function (done) {
       const input = {input: {username: 'user2'}}
-      createJudge('', input)
+      createJudge('', input, {auth: {type: 'ADMIN'}})
         .catch((err) => {
           expect(err).to.exist
           expect(err.message).to.equal('notNull Violation: firstName cannot be null,\nnotNull Violation: lastName cannot be null')
+          done()
+        })
+    })
+
+    it('Creates a judge', function (done) {
+      const input = {input: {
+        username: 'hey_im_a_judge',
+        firstName: 'myFirstName',
+        lastName: 'myLastName'
+      }}
+      createJudge('', input, {auth: {type: 'ADMIN'}})
+        .then((user) => {
+          expect(user.id).to.exist
+          expect(user.username).to.eq('hey_im_a_judge')
+          expect(user.firstName).to.eq('myFirstName')
+          expect(user.lastName).to.eq('myLastName')
           done()
         })
     })
@@ -62,14 +71,12 @@ describe('Judge Resolvers', function () {
         username: 'user3'
       }}
 
-      User.create({
+      fakeUser({
         username: 'user3',
-        firstName: 'Adam',
-        lastName: 'Savage',
         type: 'STUDENT'
       })
         .then(() => {
-          updatePermissions('', input)
+          updatePermissions('', input, {auth: {type: 'ADMIN'}})
             .then((result) => {
               expect(result.dataValues.username).to.equal('user3')
               expect(result.dataValues.type).to.equal('JUDGE')
@@ -83,14 +90,12 @@ describe('Judge Resolvers', function () {
         username: 'user4'
       }}
 
-      User.create({
+      fakeUser({
         username: 'user4',
-        firstName: 'Bob',
-        lastName: 'Ross',
         type: 'JUDGE'
       })
         .then(() => {
-          updatePermissions('', input)
+          updatePermissions('', input, {auth: {type: 'ADMIN'}})
             .then((result) => {
               expect(result.dataValues.username).to.equal('user4')
               expect(result.dataValues.type).to.equal('ADMIN')
@@ -104,14 +109,12 @@ describe('Judge Resolvers', function () {
         username: 'user5'
       }}
 
-      User.create({
+      fakeUser({
         username: 'user5',
-        firstName: 'Clark',
-        lastName: 'Kent',
         type: 'ADMIN'
       })
         .then(() => {
-          updatePermissions('', input)
+          updatePermissions('', input, {auth: {type: 'ADMIN'}})
             .then((result) => {
               expect(result.dataValues.username).to.equal('user5')
               expect(result.dataValues.type).to.equal('ADMIN')
@@ -126,14 +129,12 @@ describe('Judge Resolvers', function () {
         type: 'STUDENT'
       }}
 
-      User.create({
+      fakeUser({
         username: 'user7',
-        firstName: 'Mr',
-        lastName: 'Rogers',
         type: 'JUDGE'
       })
         .then(() => {
-          updatePermissions('', input)
+          updatePermissions('', input, {auth: {type: 'ADMIN'}})
             .then((result) => {
               expect(result.dataValues.username).to.equal('user7')
               expect(result.dataValues.type).to.equal('STUDENT')

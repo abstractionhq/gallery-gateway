@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "nodemon ./bin/www --exec babel-node",
-    "test": "cross-env NODE_ENV=test nyc mocha test/**/*.js",
+    "test": "cross-env NODE_ENV=test nyc mocha test/setup.js test/**/*.js",
     "bootstrap": "babel-node ./bootstrap.js",
     "keygen": "babel-node keygen"
   },
@@ -55,6 +55,7 @@
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.4.0",
+    "faker": "^4.1.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",

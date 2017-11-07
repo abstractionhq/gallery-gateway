@@ -3,7 +3,10 @@ import { UserError } from 'graphql-errors'
 import User from '../../models/user'
 import { ADMIN, JUDGE, STUDENT } from '../../permissionLevels'
 
-export function createJudge (_, args) {
+export function createJudge (_, args, req) {
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied');    
+  }
   return User.findOne({where: {username: args.input.username}})
     .then((user) => {
       // The user w/ that username doesn't exist, so create them
@@ -19,8 +22,10 @@ export function createJudge (_, args) {
     })
 }
 
-// TODO: Middleware that checks that the person sending this mutation is an ADMIN
-export function updatePermissions (_, args) {
+export function updatePermissions (_, args, req) {
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied');    
+  }
   return User.findOne({where: {username: args.input.username}})
     .then((user) => {
       if (user !== null) {
