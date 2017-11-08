@@ -4,6 +4,9 @@ module.exports = {
     'react-app',
     'standard'
   ],
+  rules: {
+    'space-infix-ops': 'off'
+  },
   plugins: [
     'prettier',
     'standard'
@@ -14,5 +17,5 @@ module.exports = {
         config: './config/webpack.config.prod.js'
       }
     }
-  },
-};
+  }
+}
