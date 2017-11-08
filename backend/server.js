@@ -3,6 +3,7 @@ import express from 'express'
 import graphqlHttp from 'express-graphql'
 import jwt from 'express-jwt'
 import { maskErrors } from 'graphql-errors'
+import cors from 'cors'
 
 import config from './config'
 import { passport } from './config/passport'
@@ -14,6 +15,7 @@ import parseJwtUser from './middleware/parseJwtUser'
 const app = express()
 models()
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(passport.initialize())

@@ -14,8 +14,8 @@ function sign (payload) {
  * @param {User} user
  * @return {string} the token
  */
-export function signUserToken(user) {
-  return sign(user.dataValues);
+export function signUserToken (user) {
+  return sign(user.dataValues)
 }
 
 /**
@@ -23,16 +23,16 @@ export function signUserToken(user) {
  * @param {string} token the jwt token
  * @return {object} decoded token
  */
-export function decodeUserToken(token) {
-  var decoded = {};
+export function decodeUserToken (token) {
+  var decoded = {}
   jwt.verify(
     token,
     nconf.get('auth:jwt:pub'),
     { algorithm: 'RS256' },
     (err, decoded_) => {
       if (!err) {
-        decoded = decoded_;
+        decoded = decoded_
       }
-  });
+    })
   return decoded
 }

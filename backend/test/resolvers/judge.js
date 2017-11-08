@@ -30,11 +30,11 @@ describe('Judge Resolvers', function () {
             lastName: 'Doe'
           }}
           createJudge('', input, {auth: {type: 'ADMIN'}})
-          .catch((err) => {
-            expect(err).to.exist
-            expect(err.message).to.equal('Username Already Exists')
-            done()
-          })
+            .catch((err) => {
+              expect(err).to.exist
+              expect(err.message).to.equal('Username Already Exists')
+              done()
+            })
         })
     })
 

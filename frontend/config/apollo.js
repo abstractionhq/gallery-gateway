@@ -1,9 +1,9 @@
-import { ApolloClient, createNetworkInterface } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { HttpLink, InMemoryCache } from 'apollo-client-preset'
 
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: 'http://localhost:3000/graphql' // TODO: Read from .env
-  })
+  link: new HttpLink({uri: 'http://localhost:3000/graphql'}), // TODO: Read from .env
+  cache: new InMemoryCache()
 })
 
 export default client

@@ -9,10 +9,10 @@ import { STUDENT } from '../permissionLevels'
  * @param {string} opts.username - username, default faked
  * @return {Promise<User>} the user that was made
  */
-export function fakeUser(opts) {
-  opts = opts || {};
-  opts.type = opts.type || STUDENT;
-  opts.username = opts.username || faker.internet.userName();
+export function fakeUser (opts) {
+  opts = opts || {}
+  opts.type = opts.type || STUDENT
+  opts.username = opts.username || faker.internet.userName()
   return User.create({
     username: opts.username,
     firstName: faker.name.firstName(),
