@@ -31,7 +31,7 @@ describe('API Routes', function () {
         .then(() => done())
     })
 
-    it('rejects getting all users when not logged in', function(done) {
+    it('rejects getting all users when not logged in', function (done) {
       request(server)
         .post('/graphql')
         .send({'query': '{users {id}}'})
@@ -43,7 +43,7 @@ describe('API Routes', function () {
         .end(done)
     })
 
-    it('lists all users when logged in as admin', function(done) {
+    it('lists all users when logged in as admin', function (done) {
       fakeUser({type: 'ADMIN'}).then((user) => {
         const token = signUserToken(user)
         request(server)

@@ -1,7 +1,7 @@
 export default {
-    User: {
-        shows(user) {
-            return user.getShows();
-        },
-    },
-};
+  User: {
+    shows (user) {
+      return user.getShows()
+    }
+  }
+}

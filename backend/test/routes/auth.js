@@ -7,7 +7,6 @@ import { expect } from 'chai'
 import { fakeUser } from '../factories'
 import { decodeUserToken } from '../util'
 
-
 describe('Authentication', () => {
   beforeEach(function (done) {
     db.sync({force: true}).then(() => {

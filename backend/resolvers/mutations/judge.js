@@ -5,7 +5,7 @@ import { ADMIN, JUDGE, STUDENT } from '../../permissionLevels'
 
 export function createJudge (_, args, req) {
   if (req.auth.type !== ADMIN) {
-    throw new UserError('Permission Denied');    
+    throw new UserError('Permission Denied')
   }
   return User.findOne({where: {username: args.input.username}})
     .then((user) => {
@@ -24,7 +24,7 @@ export function createJudge (_, args, req) {
 
 export function updatePermissions (_, args, req) {
   if (req.auth.type !== ADMIN) {
-    throw new UserError('Permission Denied');    
+    throw new UserError('Permission Denied')
   }
   return User.findOne({where: {username: args.input.username}})
     .then((user) => {

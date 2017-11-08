@@ -1,9 +1,9 @@
 import {
-    makeExecutableSchema,
-    addMockFunctionsToSchema,
-} from 'graphql-tools';
+  makeExecutableSchema,
+  addMockFunctionsToSchema
+} from 'graphql-tools'
 
-import resolvers from './resolvers';
+import resolvers from './resolvers'
 
 const typeDefs = `
 scalar Date
@@ -156,8 +156,8 @@ input OrderByItem {
     sort: String!
     direction: SortDirection!
 }
-`;
+`
 
-const schema = makeExecutableSchema({typeDefs, resolvers});
-//addMockFunctionsToSchema({schema});
-export default schema;
+const schema = makeExecutableSchema({typeDefs, resolvers})
+// addMockFunctionsToSchema({schema});
+export default schema

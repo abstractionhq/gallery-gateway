@@ -1,6 +1,6 @@
 import { STUDENT, ADMIN, JUDGE } from '../../permissionLevels'
 
-export function up(queryInterface, Sequelize) {
+export function up (queryInterface, Sequelize) {
   return queryInterface.createTable('users', {
     id: {
       allowNull: false,
@@ -12,25 +12,25 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false,
       notEmpty: true,
-      unique: true,
+      unique: true
     },
     firstName: {
       type: Sequelize.STRING,
       allowNull: false,
-      notEmpty: true,
+      notEmpty: true
     },
     lastName: {
       type: Sequelize.STRING,
       allowNull: false,
-      notEmpty: true,
+      notEmpty: true
     },
     displayName: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     },
     type: {
       type: Sequelize.ENUM(STUDENT, ADMIN, JUDGE),
       allowNull: false,
-      notEmpty: true,
+      notEmpty: true
     },
     createdAt: {
       allowNull: false,
@@ -40,9 +40,9 @@ export function up(queryInterface, Sequelize) {
       allowNull: false,
       type: Sequelize.DATE
     }
-  });
+  })
 }
 
-export function down(queryInterface) {
-  return queryInterface.dropTable('users');
+export function down (queryInterface) {
+  return queryInterface.dropTable('users')
 }
