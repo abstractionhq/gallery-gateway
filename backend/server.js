@@ -4,6 +4,7 @@ import express from 'express'
 import graphqlHttp from 'express-graphql'
 import jwt from 'express-jwt'
 import { maskErrors } from 'graphql-errors'
+import cors from 'cors'
 
 import config from './config'
 import models from './models'
@@ -20,6 +21,7 @@ models()
 //     algorithms: ['RS256', 'RS384', 'RS512'],
 // }));
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(router)
