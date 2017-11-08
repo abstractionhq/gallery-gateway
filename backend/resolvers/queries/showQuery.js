@@ -5,5 +5,11 @@ export function show (_, args, req) {
 }
 
 export function shows (_, args, req) {
+  if (args.orderBy) {
+    return Show.findAll({
+      order: [[args.orderBy.sort, args.orderBy.direction]]
+    })
+  }
+
   return Show.findAll()
 }

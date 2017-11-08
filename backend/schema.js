@@ -47,6 +47,8 @@ type Show {
     judgingEnd: Date!
     entryCap: Int!
     entries: [Entry]
+    createdAt: Date!
+    updatedAt: Date!
 }
 
 input ShowInput {
@@ -123,7 +125,7 @@ type Query {
     show(id: ID!): Show
     vote(id: ID!): Vote
     groups: [Group]
-    shows: [Show]
+    shows(orderBy: OrderByItem): [Show]
     votes: [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
@@ -143,6 +145,16 @@ type Mutation {
     createShow(input: ShowInput!): Show
     updateShow(id: ID!, input: ShowInput!): Show
     deleteShow(id: ID!): Boolean
+}
+
+enum SortDirection {
+    ASC
+    DESC
+}
+
+input OrderByItem {
+    sort: String!
+    direction: SortDirection!
 }
 `;
 
