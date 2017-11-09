@@ -16,9 +16,11 @@ const CalendarContainer = styled.div`
 
 class CreateShowForm extends Component {
   submit = (values) => {
-    const { create } = this.props
+    const { create, done } = this.props
 
     create(values)
+      .then(done())
+      // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
   }
 
   render () {
@@ -49,6 +51,7 @@ class CreateShowForm extends Component {
             <Flex column align='center'>
               <CalendarContainer>
                 <Label>Submission Dates</Label>
+                {/* TODO: Update the selected dates if they're manually typed */}
                 <Fields
                   names={['entryStart', 'entryEnd']}
                   component={props => (
