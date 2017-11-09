@@ -1,4 +1,5 @@
 import Show from '../../models/show'
+import { UserError } from 'graphql-errors'
 import { ADMIN } from '../../permissionLevels'
 
 export default {

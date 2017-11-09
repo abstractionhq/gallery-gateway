@@ -5,7 +5,7 @@ const NotFound = () => (
   <Container>
     <Row>
       <Col>
-        <h1>NotFound</h1>
+        <h1>Not Found</h1>
       </Col>
     </Row>
   </Container>

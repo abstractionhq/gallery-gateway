@@ -25,7 +25,7 @@ const ShowCard = (props) => (
           <dt>Submission Ends:</dt>
           <dd><Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment></dd>
         </dl>
-        <Link to={`show/${props.id}/submissions`}><Button color='info' style={{cursor: 'pointer'}}>View Submissions</Button></Link>
+        <Button color='info' style={{cursor: 'pointer'}} tag={Link} to={`show/${props.id}/submissions`}>View Submissions</Button>
       </Box>
       <Box w={1/2}>
         <dl>
@@ -34,7 +34,7 @@ const ShowCard = (props) => (
           <dt>Judging Ends:</dt>
           <dd><Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment></dd>
         </dl>
-        <Link to={`show/${props.id}/judges`}><Button color='info' style={{cursor: 'pointer'}}>Manage Judges</Button></Link>
+        <Button color='info' style={{cursor: 'pointer'}} tag={Link} to={`show/${props.id}/judges`}>Manage Judges</Button>
       </Box>
     </Flex>
   </Card>

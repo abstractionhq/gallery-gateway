@@ -7,7 +7,14 @@ const Home = () => (
     <Row>
       <Col>
         <h1>Home</h1>
-        <Link to='/admin'>Admin</Link>
+        <ul>
+          <li>
+            <Link to='/admin'>Admin</Link>
+          </li>
+          <li>
+            <a href='http://localhost:3000/auth/login'>Login</a>
+          </li>
+        </ul>
       </Col>
     </Row>
   </Container>
