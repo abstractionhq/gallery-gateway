@@ -8,7 +8,7 @@
     "build": "cross-env NODE_ENV=production BABEL_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.config.prod.js",
     "format": "prettier-standard './src/*.js' './src/**/*.js'",
     "debug": "DEBUG=true npm run build -- --display-optimization-bailout",
-    "test": ""
+    "test": "jest"
   },
   "pre-push": [
     "format",
@@ -21,6 +21,10 @@
     },
     {
       "name": "Kayla Davis"
+    },
+    {
+      "name": "Tina Howard",
+      "email": "chtinahow@gmail.com"
     }
   ],
   "dependencies": {
@@ -53,6 +57,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.10",
     "babel-preset-env": "^1.6.1",
@@ -60,6 +65,8 @@
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
+    "enzyme": "^3.1.1",
+    "enzyme-adapter-react-16": "^1.0.4",
     "eslint": "^4.10.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-config-react-app": "^2.0.1",
@@ -78,12 +85,14 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
+    "jest": "^21.2.1",
     "node-sass": "^4.5.3",
     "pre-push": "^0.1.1",
     "prettier": "^1.7.4",
     "prettier-standard": "^7.0.3",
     "raw-loader": "^0.5.1",
     "redux-devtools": "^3.4.0",
+    "regenerator-runtime": "^0.11.0",
     "resolve-url-loader": "^2.2.0",
     "sass-loader": "^6.0.6",
     "standard": "^10.0.3",
