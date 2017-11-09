@@ -22,6 +22,10 @@ export default class NavBar extends Component {
     })
   }
 
+  logout () {
+    window.localStorage.removeItem('_token_v1')
+  }
+
   render () {
     return (
       <NavBarContainer>
@@ -35,6 +39,9 @@ export default class NavBar extends Component {
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to='/admin/reports'>Reports</NavLink>
+              </NavItem>
+              <NavItem>
+                <Link to='/' className='nav-link' onClick={this.logout}>Logout</Link>
               </NavItem>
             </Nav>
           </Collapse>
