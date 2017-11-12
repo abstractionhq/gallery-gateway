@@ -3,7 +3,7 @@
     [
       "env", {
         "loose": true,
-        "modules": false,
+        "modules": "umd",
         "target": ["ie 10"],
         "useBuiltIns": "entry"
       }
