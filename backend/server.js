@@ -1,7 +1,6 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 import graphqlHttp from 'express-graphql'
-import jwt from 'express-jwt'
 import { maskErrors } from 'graphql-errors'
 import cors from 'cors'
 

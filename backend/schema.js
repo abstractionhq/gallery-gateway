@@ -47,6 +47,7 @@ type Show {
     judgingEnd: Date!
     entryCap: Int!
     entries: [Entry]
+    judges: [User]    
     createdAt: Date!
     updatedAt: Date!
 }
@@ -143,6 +144,7 @@ type Mutation {
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
+    assignToShow(showId: ID!, usernames: [String]): Boolean    
     updateShow(id: ID!, input: ShowInput!): Show
     deleteShow(id: ID!): Boolean
 }
