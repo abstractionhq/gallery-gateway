@@ -1,0 +1,8 @@
+query Judges {
+  users(type: JUDGE) {
+    id
+    username
+    firstName
+    lastName
+  }
+}
