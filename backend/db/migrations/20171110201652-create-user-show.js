@@ -1,9 +1,9 @@
 export function up (queryInterface, Sequelize) {
   return queryInterface.createTable('user_shows', {
-    userId: {
-      type: Sequelize.INTEGER,
+    username: {
+      type: Sequelize.STRING,
       allowNull: false,
-      references: { model: 'users', key: 'id' },
+      references: { model: 'users', key: 'username' },
       primaryKey: true
     },
     showId: {

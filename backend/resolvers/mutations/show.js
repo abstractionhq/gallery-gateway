@@ -12,34 +12,13 @@ export function createShow (_, args, req) {
 }
 
 export function assignToShow (_, args, req) {
-  let judges = []
-  for (let username of args.usernames) {
-    let user = User.findOne({where: {username: username}})
-    judges.push(user)
-  }
   return Show.findOne({where: {id: args.showId}}).then((show) => {
     if (show !== null) {
-      return findJudges(judges).then((judgesList) => {
-        return show.addUsers(judgesList)
+      return show.addUsers(args.usernames).catch(() => {
+        throw new UserError('Cannot find one or more usernames')
       })
     } else {
       throw new UserError('Show Not Found')
     }
-  }).then(() => { return 'Success' })
-}
-
-function findJudges (judges) {
-  return Promise.all(judges).then((judgesList) => {
-    let usersFound = []
-    for (let judge of judgesList) {
-      if (judge !== null && judge.type !== STUDENT) {
-        usersFound.push(judge)
-      }
-    }
-    if (judges.length === usersFound.length) {
-      return usersFound
-    } else {
-      throw new UserError('Some judges not found. Aborting assignment')
-    }
-  })
+  }).then(() => { return true })
 }

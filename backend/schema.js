@@ -9,8 +9,7 @@ const typeDefs = `
 scalar Date
 
 type User {
-    id: ID!
-    username: String!
+    username: ID!
     firstName: String!
     lastName: String!
     displayName: String
