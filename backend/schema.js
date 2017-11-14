@@ -143,9 +143,11 @@ type Mutation {
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
-    assignToShow(showId: ID!, usernames: [String]): Boolean    
     updateShow(id: ID!, input: ShowInput!): Show
     deleteShow(id: ID!): Boolean
+    assignToShow(showId: ID!, usernames: [String]!): Boolean    
+    removeFromShow(showId: ID!, usernames: [String]!): Boolean    
+    
 }
 
 enum SortDirection {

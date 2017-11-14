@@ -56,7 +56,6 @@ describe('Judge Resolvers', function () {
       }}
       createJudge('', input, {auth: {type: 'ADMIN'}})
         .then((user) => {
-          expect(user.id).to.exist
           expect(user.username).to.eq('hey_im_a_judge')
           expect(user.firstName).to.eq('myFirstName')
           expect(user.lastName).to.eq('myLastName')

@@ -1,8 +1,6 @@
 import Show from '../../models/show'
-import User from '../../models/user'
-
 import { UserError } from 'graphql-errors'
-import { ADMIN, STUDENT } from '../../permissionLevels'
+import { ADMIN } from '../../permissionLevels'
 
 export function createShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
@@ -14,9 +12,27 @@ export function createShow (_, args, req) {
 export function assignToShow (_, args, req) {
   return Show.findOne({where: {id: args.showId}}).then((show) => {
     if (show !== null) {
-      return show.addUsers(args.usernames).catch(() => {
-        throw new UserError('Cannot find one or more usernames')
-      })
+      if (args.usernames.length > 0) {
+        return show.addUsers(args.usernames).catch(() => {
+          throw new UserError('Cannot find one or more usernames')
+        })
+      } else {
+        throw new UserError('Please input one or more usernames')
+      }
+    } else {
+      throw new UserError('Show Not Found')
+    }
+  }).then(() => { return true })
+}
+
+export function removeFromShow (_, args, req) {
+  return Show.findOne({where: {id: args.showId}}).then((show) => {
+    if (show !== null) {
+      if (args.usernames.length > 0) {
+        return show.removeUsers(args.usernames)
+      } else {
+        throw new UserError('Please input one or more usernames')
+      }
     } else {
       throw new UserError('Show Not Found')
     }
