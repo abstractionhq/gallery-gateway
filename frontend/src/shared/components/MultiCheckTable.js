@@ -84,7 +84,6 @@ class MultiCheckTable extends Component {
 
   render () {
     const {
-      loading,
       data,
       columns,
       unique,
@@ -124,16 +123,14 @@ class MultiCheckTable extends Component {
     ]
 
     return (
-      loading
-        ? null
-        : <ReactTable
-          data={data}
-          columns={tableColumns}
-          defaultPageSize={10}
-          resizable={false}
-          className='-striped -highlight'
-          {...otherProps}
-        />
+      <ReactTable
+        data={data}
+        columns={tableColumns}
+        defaultPageSize={10}
+        resizable={false}
+        className='-striped -highlight'
+        {...otherProps}
+      />
     )
   }
 }
