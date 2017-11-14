@@ -52,12 +52,12 @@ class JudgeAssignmentTables extends Component {
 
     return (
       <Row>
-        <Col>
+        <Col xs='12' md='5'>
           <CenteredSubHeading>Unassigned</CenteredSubHeading>
           <JudgesTable judges={loading ? [] : unassigned} />
           {/* TODO: Form and Button to Create a new Judge */}
         </Col>
-        <Col sm='2'>
+        <Col xs='12' md='2'>
           <Flex column align='center' justify='center' style={{minHeight: '50vh'}}>
             <Box mb={50} w='100%'>
               <Button
@@ -81,7 +81,7 @@ class JudgeAssignmentTables extends Component {
             </Box>
           </Flex>
         </Col>
-        <Col>
+        <Col xs='12' md='5'>
           <CenteredSubHeading>Assigned</CenteredSubHeading>
           <JudgesTable judges={loading ? [] : assigned} />
         </Col>
