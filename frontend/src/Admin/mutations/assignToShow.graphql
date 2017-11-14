@@ -1,0 +1,5 @@
+mutation assignToShow($showId: ID!, $usernames: [String]) {
+  assignToShow(showId: $showId, usernames: $usernames) {
+    Boolean
+  }
+}
