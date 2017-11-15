@@ -6,7 +6,6 @@ export function up (queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: false,
       notEmpty: true,
-      unique: true,
       primaryKey: true
     },
     firstName: {

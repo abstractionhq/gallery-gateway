@@ -24,9 +24,10 @@ describe('Show Resolvers', function () {
       createShow('', {}, {auth: {type: 'ADMIN'}})
         .catch((err) => {
           expect(err).to.exist
-          expect(err.message).to.equal('notNull Violation: show.name cannot be null,\nnotNull Violation: show.entryCap cannot be null,\nnotNull Violation: show.entryStart cannot be null,\nnotNull Violation: show.entryEnd cannot be null,\nnotNull Violation: show.judgingStart cannot be null,\nnotNull Violation: show.judgingEnd cannot be null')
+          const result = err.message.match(/notNull Violation/)
+          expect(result).to.not.equal(null)
+          done()
         })
-      done()
     })
     it('Creates a show', function (done) {
       const input = { input: {
@@ -58,8 +59,8 @@ describe('Show Resolvers', function () {
         .catch((err) => {
           expect(err).to.exist
           expect(err.message).to.equal('Validation error: Entry start date must be before the entry end date')
+          done()
         })
-      done()
     })
   })
   describe('Assign to show', function () {

@@ -11,30 +11,29 @@ export function createShow (_, args, req) {
 
 export function assignToShow (_, args, req) {
   return Show.findOne({where: {id: args.showId}}).then((show) => {
-    if (show !== null) {
-      if (args.usernames.length > 0) {
-        return show.addUsers(args.usernames).catch(() => {
-          throw new UserError('Cannot find one or more usernames')
-        })
-      } else {
-        throw new UserError('Please input one or more usernames')
-      }
-    } else {
+    if (show === null) {
       throw new UserError('Show Not Found')
     }
+    if (args.usernames.length < 1) {
+      throw new UserError('Please input one or more usernames')
+    }
+    return show
+      .addUsers(args.usernames)
+      .catch(() => {
+        throw new UserError('Cannot find one or more usernames')
+      })
   }).then(() => { return true })
 }
 
 export function removeFromShow (_, args, req) {
   return Show.findOne({where: {id: args.showId}}).then((show) => {
-    if (show !== null) {
-      if (args.usernames.length > 0) {
-        return show.removeUsers(args.usernames)
-      } else {
-        throw new UserError('Please input one or more usernames')
-      }
-    } else {
+    if (show === null) {
       throw new UserError('Show Not Found')
     }
+    if (args.usernames.length < 1) {
+      throw new UserError('Please input one or more usernames')
+    }
+    return show
+      .removeUsers(args.usernames)
   }).then(() => { return true })
 }

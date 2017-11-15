@@ -7,8 +7,7 @@ export default sequelize.define('user', {
     type: DataTypes.STRING,
     allowNull: false,
     notEmpty: true,
-    unique: true,
-    primaryKey: true
+    primaryKey: true  //RIT usernames are unique between individuals and cannot be changed
   },
   firstName: {
     type: DataTypes.STRING,

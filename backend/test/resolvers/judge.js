@@ -43,7 +43,8 @@ describe('Judge Resolvers', function () {
       createJudge('', input, {auth: {type: 'ADMIN'}})
         .catch((err) => {
           expect(err).to.exist
-          expect(err.message).to.equal('notNull Violation: user.firstName cannot be null,\nnotNull Violation: user.lastName cannot be null')
+          const result = err.message.match(/notNull Violation/)
+          expect(result).to.not.equal(null)
           done()
         })
     })
