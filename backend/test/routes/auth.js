@@ -67,7 +67,6 @@ describe('Authentication', () => {
           User.findOne({where: {username: 'user1'}})
             .then((user) => {
               expect(user.username).to.eq('user1')
-              expect(user.id).to.be.gte(0)
               expect(user.type).to.eq('STUDENT')
               done()
             })

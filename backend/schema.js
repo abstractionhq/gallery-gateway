@@ -9,8 +9,7 @@ const typeDefs = `
 scalar Date
 
 type User {
-    id: ID!
-    username: String!
+    username: ID!
     firstName: String!
     lastName: String!
     displayName: String
@@ -47,6 +46,7 @@ type Show {
     judgingEnd: Date!
     entryCap: Int!
     entries: [Entry]
+    judges: [User]    
     createdAt: Date!
     updatedAt: Date!
 }
@@ -145,6 +145,9 @@ type Mutation {
     createShow(input: ShowInput!): Show
     updateShow(id: ID!, input: ShowInput!): Show
     deleteShow(id: ID!): Boolean
+    assignToShow(showId: ID!, usernames: [String]!): Boolean    
+    removeFromShow(showId: ID!, usernames: [String]!): Boolean    
+    
 }
 
 enum SortDirection {
