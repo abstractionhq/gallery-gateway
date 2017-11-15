@@ -10,6 +10,9 @@ export function createShow (_, args, req) {
 }
 
 export function assignToShow (_, args, req) {
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied')
+  }
   return Show.findOne({where: {id: args.showId}}).then((show) => {
     if (show === null) {
       throw new UserError('Show Not Found')
@@ -26,6 +29,9 @@ export function assignToShow (_, args, req) {
 }
 
 export function removeFromShow (_, args, req) {
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied')
+  }
   return Show.findOne({where: {id: args.showId}}).then((show) => {
     if (show === null) {
       throw new UserError('Show Not Found')
