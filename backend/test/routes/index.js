@@ -34,7 +34,7 @@ describe('API Routes', function () {
     it('rejects getting all users when not logged in', function (done) {
       request(server)
         .post('/graphql')
-        .send({'query': '{users {id}}'})
+        .send({'query': '{users {username}}'})
         .expect((res) => {
           expect(res.body).to.have.property('errors')
           expect(res.body.errors).to.have.lengthOf(1)
@@ -49,8 +49,8 @@ describe('API Routes', function () {
         request(server)
           .post('/graphql')
           .set('Authorization', 'Bearer ' + token)
-          .send({'query': '{users {id}}'})
-          .expect(200, {data: {users: [{id: user.id}]}})
+          .send({'query': '{users {username}}'})
+          .expect(200, {data: {users: [{username: user.username}]}})
           .end(done)
       })
     })
