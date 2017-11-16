@@ -12,5 +12,7 @@ before_install:
   # install packages
   - cd frontend && yarn install && cd ..
   - cd backend && npm install && cd ..
+  # install certs
+  - cd backend && curl https://github.com/kristophjunge/docker-test-saml-idp/blob/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
 script:
   - cd backend && npm test && cd ..
