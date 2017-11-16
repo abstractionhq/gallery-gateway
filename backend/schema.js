@@ -79,9 +79,6 @@ interface Entry {
 
 type Photo implements Entry {
     id: ID!
-    group: Group
-    student: User
-    show: Show
     photoPath: String
     horizDimInch: Float
     vertDimInch: Float
@@ -89,6 +86,9 @@ type Photo implements Entry {
     media: String
     moreCopies: Boolean
     forSale: Boolean
+    group: Group
+    student: User
+    show: Show
 }
 
 type Video implements Entry {
