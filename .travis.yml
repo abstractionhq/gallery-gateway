@@ -23,7 +23,7 @@ before_install:
   - cd backend && npm install && cd ..
   # install certs
   - cd backend && mkdir keys && cd ..
-  - cd backend && curl https://github.com/kristophjunge/docker-test-saml-idp/blob/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
+  - cd backend && curl https://raw.githubusercontent.com/kristophjunge/docker-test-saml-idp/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
   - cd backend && npm run keygen && cd ..
   # create mysql database
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
