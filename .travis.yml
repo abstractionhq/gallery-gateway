@@ -4,7 +4,12 @@ node_js:
 services:
   - mysql
 env:
-  - ABSTRACTION_DB_USER=travis
+  global:
+    - ABSTRACTION_DB_USER=travis
+    - SAML_CALLBACK_URL=http://localhost:3000/auth/login/callback
+    - SAML_ENTRY_POINT=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+    - ISSUER=http://app.example.com
+    - SAML_SUCCESS_URL=http://localhost:5000/
 cache:
   directories:
     - "backend/node_modules"
