@@ -5,8 +5,6 @@ services:
   - mysql
 env:
   - ABSTRACTION_DB_USER=travis
-  - ABSTRACTION_DB_PASS=
-  - ABSTRACTION_DB_HOST=localhost
 cache:
   directories:
     - "backend/node_modules"

@@ -42,6 +42,8 @@ describe('Authentication', () => {
       request(server)
         .post('/auth/login/callback')
         .expect((res) => {
+          console.log(res.headers)
+          console.log(res.body)
           expect(res.headers).to.have.property('location')
           expect(
             res.headers.location.indexOf(nconf.get('auth:saml:entryPoint'))
