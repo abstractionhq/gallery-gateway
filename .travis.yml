@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "lts/8"
+  - "8"
 cache:
   directories:
     - "backend/node_modules"
