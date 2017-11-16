@@ -33,12 +33,9 @@ describe('User Queries', function () {
     })
     it('Does not allow non admins to find other users by username', function (done) {
       fakeUser({username: 'user1'}).then((u) => {
-        try {
-          user('', {id: 'anotheruser'}, {auth: {type: 'STUDENT', id: 'user1'}})
-        } catch (error) {
-          expect(error).to.exist
-          done()
-        }
+        expect(() => user('', {id: 'anotheruser'},
+          {auth: { type: 'STUDENT', id: 'user1' }})).to.throw(/Permission Denied/)
+        done()
       })
     })
     it('Allows admin to search for anyone', function (done) {
