@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - "8"
+services:
+  - mysql
+env:
+  - ABSTRACTION_DB_USER=travis
+  - ABSTRACTION_DB_PASS=
+  - ABSTRACTION_DB_HOST=localhost
 cache:
   directories:
     - "backend/node_modules"
@@ -15,5 +21,8 @@ before_install:
   # install certs
   - cd backend && mkdir keys && cd ..
   - cd backend && curl https://github.com/kristophjunge/docker-test-saml-idp/blob/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
+  - cd backend && npm run keygen && cd ..
+  # create mysql database
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 script:
   - cd backend && npm test && cd ..
