@@ -130,5 +130,18 @@ describe('Show Resolvers', function () {
           })
       })
     })
+    it('Removes input users from show', function (done) {
+      fakeShow().then((s) => {
+        Promise.all([fakeUser({username: 'user1'}), fakeUser({username: 'user2'})]).then(() => {
+          const input = {showId: s.id, usernames: ['user1', 'user2']}
+          removeFromShow('', input, {auth: {type: 'ADMIN'}})
+            .then((result) => {
+              expect(result).to.exist
+              expect(result).to.equal(true)
+              done()
+            })
+        })
+      })
+    })
   })
 })
