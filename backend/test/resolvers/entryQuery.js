@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai'
-import Entry from '../../models/entry'
 import { entries } from '../../resolvers/queries/entryQuery'
 import { fakeImageEntry } from '../factories'
 
