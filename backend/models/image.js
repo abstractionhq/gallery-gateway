@@ -1,17 +1,30 @@
-'use strict';
-module.exports = (sequelize, DataTypes) => {
-  var image = sequelize.define('image', {
-    photo: DataTypes.STRING,
-    horizDimInch: DataTypes.FLOAT,
-    vertDimInch: DataTypes.FLOAT,
-    mediaType: DataTypes.STRING,
-    title: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
+import Entry, { IMAGE_ENTRY } from './entry'
+import DataTypes from 'sequelize'
+import sequelize from '../config/sequelize'
+
+export default sequelize.define('image', {
+  path: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    notEmpty: true
+  },
+  horizDimInch: {
+    type: DataTypes.FLOAT
+  },
+  vertDimInch: {
+    type: DataTypes.FLOAT
+  },
+  mediaType: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+},
+{
+  instanceMethods: {
+    getEntry () {
+      return Entry.findOne({
+        where: {entryType: IMAGE_ENTRY, entryId: this.id}
+      })
     }
-  });
-  return image;
-};
+  }
+})

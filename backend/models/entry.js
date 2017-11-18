@@ -1,13 +1,27 @@
+import Image from './image'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 
-export default sequelize.define('entry', {
-  entrantType: {
+const IMAGE = 3
+export const IMAGE_ENTRY = IMAGE
+
+const VIDEO = 4
+export const VIDEO_ENTRY = VIDEO
+
+const OTHER = 5
+export const OTHER_ENTRY = OTHER
+
+const Entry = sequelize.define('entry', {
+  showId: {
     allowNull: false,
     type: DataTypes.INTEGER
   },
-  entrantId: {
-    allowNull: false,
+  studentUsername: {
+    allowNull: true,
+    type: DataTypes.STRING
+  },
+  groupId: {
+    allowNull: true,
     type: DataTypes.INTEGER
   },
   entryType: {
@@ -36,6 +50,10 @@ export default sequelize.define('entry', {
   awardWon: {
     type: DataTypes.TEXT
   },
+  invited: {
+    allowNull: true,
+    type: DataTypes.BOOLEAN
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE
@@ -45,3 +63,17 @@ export default sequelize.define('entry', {
     type: DataTypes.DATE
   }
 })
+
+/*
+ * Gets the associated photo as a Promise
+ */
+Entry.prototype.getImage = function getImage () {
+  if (this.entryType !== IMAGE) {
+    return Promise.resolve(null)
+  }
+  return Image.findOne({
+    where: {id: this.entryId}
+  })
+}
+
+export default Entry

@@ -6,13 +6,32 @@ export function up (queryInterface, Sequelize) {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    entrantType: {
-      allowNull: false,
-      type: Sequelize.INTEGER
+    showId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'shows',
+        key: 'id'
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
     },
-    entrantId: {
-      allowNull: false,
-      type: Sequelize.INTEGER
+    studentUsername: {
+      type: Sequelize.STRING,
+      references: {
+        model: 'users',
+        key: 'username'
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
+    },
+    groupId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'groups',
+        key: 'id'
+      },
+      onUpdate: 'cascade',
+      onDelete: 'cascade'
     },
     entryType: {
       allowNull: false,
@@ -39,6 +58,10 @@ export function up (queryInterface, Sequelize) {
     },
     awardWon: {
       type: Sequelize.TEXT
+    },
+    invited: {
+      allowNull: true,
+      type: Sequelize.BOOLEAN
     },
     createdAt: {
       allowNull: false,

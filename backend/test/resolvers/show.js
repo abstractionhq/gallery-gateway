@@ -7,18 +7,6 @@ import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutati
 import { fakeShow, fakeUser } from '../factories'
 
 describe('Show Resolvers', function () {
-  beforeEach(function (done) {
-    db.sync({force: true}).then(() => {
-      Show
-        .destroy({where: {}})
-        .then(() => done())
-    })
-  })
-  afterEach(function (done) {
-    Show
-      .destroy({where: {}})
-      .then(() => done())
-  })
   describe('Create a show', function () {
     it('Does not allow null values', function (done) {
       createShow('', {}, {auth: {type: 'ADMIN'}})

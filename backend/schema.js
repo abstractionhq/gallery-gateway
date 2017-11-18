@@ -75,17 +75,19 @@ interface Entry {
     show: Show
     comment: String
     forSale: Boolean
+    invited: Boolean
 }
 
 type Photo implements Entry {
     id: ID!
-    photoPath: String
+    path: String
     horizDimInch: Float
     vertDimInch: Float
     comment: String
     media: String
     moreCopies: Boolean
     forSale: Boolean
+    invited: Boolean
     group: Group
     student: User
     show: Show
@@ -99,6 +101,7 @@ type Video implements Entry {
     videoURL: String
     comment: String
     forSale: Boolean
+    invited: Boolean
 }
 
 type OtherMedia implements Entry {
@@ -110,6 +113,7 @@ type OtherMedia implements Entry {
     comment: String
     moreCopies: Boolean
     forSale: Boolean
+    invited: Boolean
 }
 
 enum UserType {
@@ -133,7 +137,7 @@ type Query {
     photos: [Photo]
     videos: [Video]
     otherMedia: [OtherMedia]
-    entries: [Entry]
+    entries(showId: ID): [Entry]
 }
 
 type Mutation {

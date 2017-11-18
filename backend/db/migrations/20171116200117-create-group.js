@@ -1,10 +1,14 @@
 export function up (queryInterface, Sequelize) {
-  return queryInterface.createTable('group', {
+  return queryInterface.createTable('groups', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
+    },
+    name: {
+      allowNull: false,
+      type: Sequelize.STRING
     },
     createdAt: {
       allowNull: false,

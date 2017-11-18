@@ -8,20 +8,6 @@ import { fakeUser } from '../factories'
 import { decodeUserToken } from '../util'
 
 describe('Authentication', () => {
-  beforeEach(function (done) {
-    db.sync({force: true}).then(() => {
-      User
-        .destroy({where: {}})
-        .then(() => done())
-    })
-  })
-
-  afterEach(function (done) {
-    User
-      .destroy({where: {}})
-      .then(() => done())
-  })
-
   describe('/auth/login', () => {
     it('redirects logged-out users to SAML endpoint', (done) => {
       request(server)

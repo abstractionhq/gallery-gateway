@@ -8,19 +8,6 @@ import { fakeUser } from '../factories'
 import { STUDENT, JUDGE, ADMIN } from '../../permissionLevels'
 
 describe('User Queries', function () {
-  beforeEach(function (done) {
-    db.sync({force: true}).then(() => {
-      User
-        .destroy({where: {}})
-        .then(() => done())
-    })
-  })
-  afterEach(function (done) {
-    User
-      .destroy({where: {}})
-      .then(() => done())
-  })
-
   describe('User query', function () {
     it('Allows users to find themeselves', function (done) {
       fakeUser({username: 'user1'}).then((u) => {
