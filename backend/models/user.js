@@ -1,20 +1,13 @@
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { STUDENT, ADMIN, JUDGE } from '../permissionLevels'
-const UserType = sequelize
 
 export default sequelize.define('user', {
-  id: {
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-    type: DataTypes.INTEGER
-  },
   username: {
     type: DataTypes.STRING,
     allowNull: false,
     notEmpty: true,
-    unique: true
+    primaryKey: true  //RIT usernames are unique between individuals and cannot be changed
   },
   firstName: {
     type: DataTypes.STRING,

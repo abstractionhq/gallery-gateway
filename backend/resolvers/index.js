@@ -1,6 +1,7 @@
 import User from './types/userType'
 import DateScalar from './types/dateScalar'
-import CreateShow from './mutations/createShow'
+import Show from './types/showType'
+import * as ShowMutations from './mutations/show'
 import * as ShowQuery from './queries/showQuery'
 import * as UserQuery from './queries/userQuery'
 import * as JudgeMutations from './mutations/judge'
@@ -8,12 +9,13 @@ import * as JudgeMutations from './mutations/judge'
 export default {
   ...User,
   ...DateScalar,
+  ...Show,
   Query: {
     ...UserQuery,
     ...ShowQuery
   },
   Mutation: {
-    ...CreateShow,
+    ...ShowMutations,
     ...JudgeMutations
   }
 }
