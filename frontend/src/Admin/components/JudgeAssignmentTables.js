@@ -13,42 +13,36 @@ const CenteredSubHeading = styled.h2`
 class JudgeAssignmentTables extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    unassigned: PropTypes.array.isRequired,
+    error: PropTypes.object.isRequired,
+    judges: PropTypes.array.isRequired,
     assigned: PropTypes.array.isRequired,
     unassign: PropTypes.func.isRequired,
-    assign: PropTypes.func.isRequired,
-    show: PropTypes.string.isRequired
+    assign: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    unassigned: [],
+    judges: [],
     assigned: []
   }
 
   assign = () => {
-    const {
-      show
-    } = this.props
-
     // TODO: GraphQL Mutation to assign the checked values in the unassigned table
-    this.props.assign(show, []) // TODO: Usernames
+    this.props.assign([]) // TODO: Usernames
   }
 
   unassign = () => {
-    const {
-      show
-    } = this.props
-
     // TODO: GraphQL Mutation to unassign the checked values in the assigned table
-    this.props.unassign(show, []) // TODO: Usernames
+    this.props.unassign([]) // TODO: Usernames
   }
 
   render () {
     const {
       loading,
-      unassigned,
+      judges,
       assigned
     } = this.props
+
+    const unassigned = judges.filter(judge => assigned.indexOf(judge) < 0)
 
     return (
       <Row>

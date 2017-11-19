@@ -1,22 +1,36 @@
 import { graphql } from 'react-apollo'
 
 import JudgesQuery from '../queries/judges.graphql'
+import JudgesForShowQuery from '../queries/judgesForShow.graphql'
 import AssignToShowMutation from '../mutations/assignToShow.graphql'
 import UnassignToShowMutation from '../mutations/unassignToShow.graphql'
 import JudgeAssignmentTables from '../components/JudgeAssignmentTables'
 
-const withQuery = graphql(JudgesQuery, {
-  props: ({data: { assigned, unassigned, loading }}) => ({
-    assigned,
-    unassigned,
-    loading
+const withJudgesQuery = graphql(JudgesQuery, {
+  props: ({data: { judges, loading, error }}) => ({
+    judges,
+    loading,
+    error
   })
 })(JudgeAssignmentTables)
 
+const withAssignedJudgesQuery = graphql(JudgesForShowQuery, {
+  props: ({data: { judges, loading, error }}) => ({
+    assigned: judges,
+    loading,
+    error
+  }),
+  options: (ownProps) => ({
+    variables: {
+      id: ownProps.params.id
+    }
+  })
+})(withJudgesQuery)
+
 const withAssignMutation = graphql(AssignToShowMutation, {
-  props: ({ mutate }) => ({
-    assign: (showId, usernames) => mutate({
-      variables: { showId, usernames }
+  props: (ownProps, { mutate }) => ({
+    assign: (usernames) => mutate({
+      variables: { showId: ownProps.params.id, usernames }
     })
   }),
   options: () => ({
@@ -26,12 +40,12 @@ const withAssignMutation = graphql(AssignToShowMutation, {
       }
     ]
   })
-})(withQuery)
+})(withAssignedJudgesQuery)
 
 const withUnassignMutation = graphql(UnassignToShowMutation, {
-  props: ({ mutate }) => ({
-    unassign: (showId, usernames) => mutate({
-      variables: { showId, usernames }
+  props: (ownProps, { mutate }) => ({
+    unassign: (usernames) => mutate({
+      variables: { showId: ownProps.params.id, usernames }
     })
   }),
   options: () => ({

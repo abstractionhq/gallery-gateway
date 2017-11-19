@@ -1,13 +1,5 @@
 query Judges {
-  assigned: users(type: JUDGE) { # TODO: Change this to the correct query
-    id
-    username
-    firstName
-    lastName
-  }
-
-  unassigned: users(type: JUDGE) { # TODO: Change this to the correct query
-    id
+  judges: users(type: JUDGE) {
     username
     firstName
     lastName
