@@ -1,8 +1,9 @@
+import database from './database'
 import Sequelize from 'sequelize'
 import nconf from './index'
 
 const env = nconf.get('NODE_ENV')
-const dbConfig = nconf.get('db')[env]
+const dbConfig = database[env]
 
 export default new Sequelize(
   dbConfig.database,

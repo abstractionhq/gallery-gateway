@@ -1,7 +1,6 @@
 import './env' // Needs to be before everything else so that environment variables are loaded first
 
 import nconf from 'nconf'
-import database from './database'
 import auth from './auth'
 
 nconf
@@ -10,7 +9,6 @@ nconf
   .use('memory')
 
 nconf.set('auth', auth)
-nconf.set('db', database)
 nconf.set('api:prefix', 'api')
 nconf.set('api:version', 'v1')
 
