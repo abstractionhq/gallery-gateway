@@ -7,7 +7,7 @@ const dbConfig = database[env]
 
 export default new Sequelize(
   dbConfig.database,
-  dbConfig.user,
+  dbConfig.username,
   dbConfig.password,
   dbConfig
 )
