@@ -16,21 +16,21 @@ const withJudgesQuery = graphql(JudgesQuery, {
 
 const withAssignedJudgesQuery = graphql(JudgesForShowQuery, {
   props: ({data: { judges, loading, error }}) => ({
-    assigned: judges,
+    assigned: loading ? [] : judges.judges,
     loading,
     error
   }),
   options: (ownProps) => ({
     variables: {
-      id: ownProps.params.id
+      id: ownProps.show
     }
   })
 })(withJudgesQuery)
 
 const withAssignMutation = graphql(AssignToShowMutation, {
-  props: (ownProps, { mutate }) => ({
+  props: ({ ownProps, mutate }) => ({
     assign: (usernames) => mutate({
-      variables: { showId: ownProps.params.id, usernames }
+      variables: { showId: ownProps.show, usernames }
     })
   }),
   options: () => ({
@@ -43,9 +43,9 @@ const withAssignMutation = graphql(AssignToShowMutation, {
 })(withAssignedJudgesQuery)
 
 const withUnassignMutation = graphql(UnassignToShowMutation, {
-  props: (ownProps, { mutate }) => ({
+  props: ({ ownProps, mutate }) => ({
     unassign: (usernames) => mutate({
-      variables: { showId: ownProps.params.id, usernames }
+      variables: { showId: ownProps.show, usernames }
     })
   }),
   options: () => ({

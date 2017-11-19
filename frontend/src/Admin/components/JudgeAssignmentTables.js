@@ -12,12 +12,13 @@ const CenteredSubHeading = styled.h2`
 
 class JudgeAssignmentTables extends Component {
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.object.isRequired,
     judges: PropTypes.array.isRequired,
     assigned: PropTypes.array.isRequired,
     unassign: PropTypes.func.isRequired,
-    assign: PropTypes.func.isRequired
+    assign: PropTypes.func.isRequired,
+    show: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object
   }
 
   static defaultProps = {
