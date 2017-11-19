@@ -12,8 +12,16 @@ export function up (queryInterface, Sequelize) {
       references: { model: 'shows', key: 'id' },
       primaryKey: true
     },
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.fn('NOW')
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.fn('NOW')
+    }
   })
 }
 
