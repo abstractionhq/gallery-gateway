@@ -5,7 +5,7 @@ import { ADMIN, IMAGE_ENTRY } from '../../constants'
 
 export function createPhoto (_, args, req) {
   // TODO update the below to account for group submission rights
-  const submittingOwnWork = req.auth.username !== undefined && req.auth.username === args.input.studentUsername
+  const submittingOwnWork = req.auth.username !== undefined && req.auth.username === args.input.entry.studentUsername
   if (req.auth.type !== ADMIN && !submittingOwnWork) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')

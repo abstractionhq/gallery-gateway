@@ -19,7 +19,8 @@ export default sequelize.define('image', {
   },
   mediaType: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    notEmpty: true
   }
 },
 {
@@ -28,6 +29,16 @@ export default sequelize.define('image', {
       return Entry.findOne({
         where: {entryType: IMAGE_ENTRY, entryId: this.id}
       })
+    }
+  },
+  validate: {
+    dimensionsPositiveValidation () {
+      if (this.vertDimInch <= 0) {
+        throw new Error('vertDimInch must be positive')
+      }
+      if (this.horizDimInch <= 0) {
+        throw new Error('horizDimInch must be positive')
+      }
     }
   }
 })

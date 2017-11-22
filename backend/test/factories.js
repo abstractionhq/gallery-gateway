@@ -34,6 +34,7 @@ export function fakeShow (opts) {
   opts.judgingStart = opts.judgingStart || faker.date.between('2015-01-05', '2015-01-06')
   opts.judgingEnd = opts.judgingEnd || faker.date.between('2015-01-07', '2015-01-08')
   opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
+  opts.excludeFromJudging = opts.excludeFromJudging === undefined ? faker.random.boolean() : opts.excludeFromJudging
   return Show.create({
     name: opts.name,
     description: opts.description,
@@ -42,7 +43,8 @@ export function fakeShow (opts) {
     entryEnd: opts.entryEnd,
     judgingStart: opts.judgingStart,
     judgingEnd: opts.judgingEnd,
-    moreCopies: opts.moreCopies
+    moreCopies: opts.moreCopies,
+    excludeFromJudging: opts.excludeFromJudging
   })
 }
 

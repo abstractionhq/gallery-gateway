@@ -71,6 +71,10 @@ export function up (queryInterface, Sequelize) {
       allowNull: true,
       type: Sequelize.TEXT
     },
+    excludeFromJudging: {
+      allowNull: false,
+      type: Sequelize.BOOLEAN
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

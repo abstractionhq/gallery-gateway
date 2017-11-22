@@ -78,7 +78,8 @@ interface Entry {
     invited: Boolean
     yearLevel: String
     academicProgram: String
-    moreCopies: Boolean    
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
 }
 
 input EntryInput {
@@ -105,6 +106,7 @@ type Photo implements Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    excludeFromJudging: Boolean
     
     path: String
     horizDimInch: Float
@@ -132,6 +134,7 @@ type Video implements Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    excludeFromJudging: Boolean
     
     videoURL: String
 }
@@ -148,6 +151,7 @@ type OtherMedia implements Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    excludeFromJudging: Boolean
     
     photoPath: String
     moreCopies: Boolean
