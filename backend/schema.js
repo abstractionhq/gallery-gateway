@@ -67,34 +67,57 @@ type Vote {
     entry: Entry
 }
 
-
 interface Entry {
     id: ID!
     group: Group
     student: User
     show: Show
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
+    moreCopies: Boolean    
+}
+
+input EntryInput {
+    groupId: Int
+    studentUsername: String
+    showId: Int!
+    title: String!
+    comment: String
+    forSale: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
 }
 
 type Photo implements Entry {
     id: ID!
-    path: String
-    horizDimInch: Float
-    vertDimInch: Float
+    group: Group
+    student: User
+    show: Show
+    title: String
     comment: String
-    media: String
-    moreCopies: Boolean
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
-    group: Group
-    student: User
-    show: Show
+    moreCopies: Boolean
+    
+    path: String
+    horizDimInch: Float
+    vertDimInch: Float
+    mediaType: String
+}
+
+input PhotoInput {
+    entry: EntryInput
+    path: String!
+    horizDimInch: Float!
+    vertDimInch: Float!
+    mediaType: String
 }
 
 type Video implements Entry {
@@ -102,12 +125,15 @@ type Video implements Entry {
     group: Group
     student: User
     show: Show
-    videoURL: String
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
+    moreCopies: Boolean
+    
+    videoURL: String
 }
 
 type OtherMedia implements Entry {
@@ -115,13 +141,16 @@ type OtherMedia implements Entry {
     group: Group
     student: User
     show: Show
-    photoPath: String
+    title: String
     comment: String
-    moreCopies: Boolean
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
+    moreCopies: Boolean
+    
+    photoPath: String
+    moreCopies: Boolean
 }
 
 enum UserType {
@@ -160,6 +189,7 @@ type Mutation {
     assignToShow(showId: ID!, usernames: [String]!): Boolean    
     removeFromShow(showId: ID!, usernames: [String]!): Boolean    
     
+    createPhoto(input: PhotoInput!): Photo
 }
 
 enum SortDirection {

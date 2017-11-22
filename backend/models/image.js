@@ -10,10 +10,12 @@ export default sequelize.define('image', {
     notEmpty: true
   },
   horizDimInch: {
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
+    allowNull: false
   },
   vertDimInch: {
-    type: DataTypes.FLOAT
+    type: DataTypes.FLOAT,
+    allowNull: false
   },
   mediaType: {
     type: DataTypes.STRING,

@@ -33,6 +33,7 @@ export function fakeShow (opts) {
   opts.entryEnd = opts.entryEnd || faker.date.between('2015-01-03', '2015-01-04')
   opts.judgingStart = opts.judgingStart || faker.date.between('2015-01-05', '2015-01-06')
   opts.judgingEnd = opts.judgingEnd || faker.date.between('2015-01-07', '2015-01-08')
+  opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   return Show.create({
     name: opts.name,
     description: opts.description,
@@ -40,7 +41,8 @@ export function fakeShow (opts) {
     entryStart: opts.entryStart,
     entryEnd: opts.entryEnd,
     judgingStart: opts.judgingStart,
-    judgingEnd: opts.judgingEnd
+    judgingEnd: opts.judgingEnd,
+    moreCopies: opts.moreCopies
   })
 }
 
@@ -48,12 +50,12 @@ function fakeImage (opts) {
   opts.path = opts.path || faker.system.commonFileName('.jpg')
   opts.horizDimInch = opts.horizDimInch || faker.random.number({min: 1, max: 100})
   opts.vertDimInch = opts.vertDimInch || faker.random.number({min: 1, max: 100})
-  opts.media = opts.media || faker.lorem.word()
+  opts.mediaType = opts.mediaType || faker.lorem.word()
   return Image.create({
     path: opts.path,
     horizDimInch: opts.horizDimInch,
     vertDimInch: opts.vertDimInch,
-    mediaType: opts.media
+    mediaType: opts.mediaType
   })
 }
 

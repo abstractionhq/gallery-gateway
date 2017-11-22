@@ -44,7 +44,8 @@ const Entry = sequelize.define('entry', {
   },
   invited: {
     allowNull: true,
-    type: DataTypes.BOOLEAN
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   yearLevel: {
     allowNull: true,
