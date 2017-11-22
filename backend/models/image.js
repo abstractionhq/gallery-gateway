@@ -1,4 +1,5 @@
-import Entry, { IMAGE_ENTRY } from './entry'
+import Entry from './entry'
+import { IMAGE_ENTRY } from '../constants'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 

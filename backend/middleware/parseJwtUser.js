@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import nconf from '../config'
-import { ADMIN, JUDGE, STUDENT } from '../permissionLevels'
+import { ADMIN, JUDGE, STUDENT } from '../constants'
 
 export default function (req, res, next) {
   if (req.headers.authorization &&

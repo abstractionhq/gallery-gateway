@@ -63,6 +63,14 @@ export function up (queryInterface, Sequelize) {
       allowNull: true,
       type: Sequelize.BOOLEAN
     },
+    yearLevel: {
+      allowNull: true,
+      type: Sequelize.TEXT
+    },
+    academicProgram: {
+      allowNull: true,
+      type: Sequelize.TEXT
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

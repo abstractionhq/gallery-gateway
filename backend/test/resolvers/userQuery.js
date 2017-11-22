@@ -5,7 +5,7 @@ import db from '../../config/sequelize'
 import User from '../../models/user'
 import { user, users } from '../../resolvers/queries/userQuery'
 import { fakeUser } from '../factories'
-import { STUDENT, JUDGE, ADMIN } from '../../permissionLevels'
+import { STUDENT, JUDGE, ADMIN } from '../../constants'
 
 describe('User Queries', function () {
   describe('User query', function () {

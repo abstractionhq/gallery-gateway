@@ -1,4 +1,4 @@
-import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../models/entry'
+import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
 
 export default {
   Entry: {

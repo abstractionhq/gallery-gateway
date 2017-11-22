@@ -2,8 +2,8 @@ import faker from 'faker'
 import User from '../models/user'
 import Show from '../models/show'
 import Image from '../models/image'
-import Entry, { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../models/entry'
-import { STUDENT } from '../permissionLevels'
+import Entry from '../models/entry'
+import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
 /**
  * Fake a User
@@ -68,6 +68,8 @@ function fakeEntry (opts) {
   opts.forSale = opts.forSale === undefined ? faker.random.boolean() : opts.forSale
   opts.invited = opts.invited === undefined ? faker.random.boolean() : opts.invited
   opts.awardWon = opts.awardWon || faker.lorem.words(2)
+  opts.yearLevel = opts.yearLevel === undefined ? faker.lorem.word() : opts.yearLevel
+  opts.academicProgram = opts.academicProgram === undefined ? faker.lorem.word() : opts.academicProgram
   const showPromise = opts.show ? Promise.resolve(opts.show) : fakeShow()
   const userPromise = opts.user || opts.group ? Promise.resolve(opts.user) : fakeUser()
   const entryType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY

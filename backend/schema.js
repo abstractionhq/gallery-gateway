@@ -76,6 +76,8 @@ interface Entry {
     comment: String
     forSale: Boolean
     invited: Boolean
+    yearLevel: String
+    academicProgram: String
 }
 
 type Photo implements Entry {
@@ -88,6 +90,8 @@ type Photo implements Entry {
     moreCopies: Boolean
     forSale: Boolean
     invited: Boolean
+    yearLevel: String
+    academicProgram: String
     group: Group
     student: User
     show: Show
@@ -102,6 +106,8 @@ type Video implements Entry {
     comment: String
     forSale: Boolean
     invited: Boolean
+    yearLevel: String
+    academicProgram: String
 }
 
 type OtherMedia implements Entry {
@@ -114,6 +120,8 @@ type OtherMedia implements Entry {
     moreCopies: Boolean
     forSale: Boolean
     invited: Boolean
+    yearLevel: String
+    academicProgram: String
 }
 
 enum UserType {

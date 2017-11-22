@@ -1,15 +1,7 @@
 import Image from './image'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
-
-const IMAGE = 3
-export const IMAGE_ENTRY = IMAGE
-
-const VIDEO = 4
-export const VIDEO_ENTRY = VIDEO
-
-const OTHER = 5
-export const OTHER_ENTRY = OTHER
+import { IMAGE_ENTRY } from '../constants'
 
 const Entry = sequelize.define('entry', {
   showId: {
@@ -54,6 +46,14 @@ const Entry = sequelize.define('entry', {
     allowNull: true,
     type: DataTypes.BOOLEAN
   },
+  yearLevel: {
+    allowNull: true,
+    type: DataTypes.TEXT
+  },
+  academicProgram: {
+    allowNull: true,
+    type: DataTypes.TEXT
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE
@@ -68,7 +68,7 @@ const Entry = sequelize.define('entry', {
  * Gets the associated photo as a Promise
  */
 Entry.prototype.getImage = function getImage () {
-  if (this.entryType !== IMAGE) {
+  if (this.entryType !== IMAGE_ENTRY) {
     return Promise.resolve(null)
   }
   return Image.findOne({

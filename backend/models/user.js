@@ -1,6 +1,6 @@
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
-import { STUDENT, ADMIN, JUDGE } from '../permissionLevels'
+import { STUDENT, ADMIN, JUDGE } from '../constants'
 
 export default sequelize.define('user', {
   username: {

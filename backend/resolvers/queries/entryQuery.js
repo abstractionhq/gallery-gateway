@@ -1,6 +1,6 @@
-import Entry, { IMAGE_ENTRY } from '../../models/entry'
+import Entry from '../../models/entry'
 import { UserError } from 'graphql-errors'
-import { ADMIN } from '../../permissionLevels'
+import { ADMIN, IMAGE_ENTRY } from '../../constants'
 
 export function entries (_, args, req) {
   if (req.auth.type !== ADMIN) {
