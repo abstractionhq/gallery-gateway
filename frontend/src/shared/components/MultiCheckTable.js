@@ -2,84 +2,68 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import PropTypes from 'prop-types'
 
-import 'react-table/react-table.css'
-
-const UNCHECKED = 0
-const CHECKED = 1
-const INDETERMINATE = 2
-
 class MultiCheckTable extends Component {
   static propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
-    unique: PropTypes.string.isRequired
+    unique: PropTypes.string.isRequired,
+    // eg. if 'unique' is 'username',
+    // 'selected' could be used like:
+    // { user1: true, user2: true }
+    // but should not be used like:
+    // { user1: false }
+    // as this component only checks for prescence in 'selected' and total
+    // number of keys. In the second example 'user1' would still be considered selected.
+    // Also note, this component does not verify that the keys in 'selected' are valid 'unique' properties in 'data'.
+    selected: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      selected: {},
-      selectAll: UNCHECKED
-    }
+  static defaultProps = {
+    data: [],
+    selected: {}
   }
 
-  toggleRow = (unique) => {
+  handleSelectRow = (row) => {
     const {
-      data
+      selected,
+      onChange
     } = this.props
 
-    const newSelected = {
-      ...this.state.selected
+    const rows = {
+      ...selected
     }
-
-    if (newSelected[unique]) {
+    if (rows[row]) {
       // We're unchecking this row, so remove the key
-      delete newSelected[unique]
+      delete rows[row]
     } else {
       // We're checking this row, so add it in
-      newSelected[unique] = true
+      rows[row] = true
     }
 
-    const numSelected = Object.keys(newSelected).length
-    /* eslint-disable */
-    const selectAllState = do {
-      if (numSelected === Object.keys(data).length) {
-        CHECKED
-      } else if (numSelected === 0) {
-        UNCHECKED
-      } else {
-        INDETERMINATE
-      }
-    }
-    /* eslint-enable */
-
-    this.setState({
-      selected: newSelected,
-      selectAll: selectAllState
-    })
+    onChange(rows)
   }
 
-  toggleSelectAll = () => {
+  handleSelectAll = () => {
     const {
       data,
-      unique
+      unique,
+      selected,
+      onChange
     } = this.props
 
-    const newSelected = {}
+    // If none are selected, select them all
+    // If some are selected, unselect them all (aka select none of them)
+    const areSomeSelected = Object.keys(selected).length > 0
+    const rows = {}
 
-    // If all are UNCHECKED, check them all
-    // Otherwise, if we're in a CHECKED or INDETERMINATE state, uncheck them all
-    if (this.state.selectAll === UNCHECKED) {
+    if (!areSomeSelected) {
       data.forEach(row => {
-        newSelected[row[unique]] = true
+        rows[row[unique]] = true
       })
     }
 
-    this.setState({
-      selected: newSelected,
-      selectAll: this.state.selectAll === UNCHECKED ? CHECKED : UNCHECKED
-    })
+    onChange(rows)
   }
 
   render () {
@@ -87,8 +71,12 @@ class MultiCheckTable extends Component {
       data,
       columns,
       unique,
+      selected,
       ...otherProps
     } = this.props
+
+    const numSelected = Object.keys(selected).length
+    const isSelectAllIndeterminate = numSelected > 0 && numSelected < data.length
 
     const tableColumns = [
       {
@@ -99,20 +87,21 @@ class MultiCheckTable extends Component {
         Cell: ({ original }) => (
           <input
             type='checkbox'
-            checked={!!this.state.selected[original[unique]]}
-            onChange={() => this.toggleRow(original[unique])}
+            checked={!!selected[original[unique]]}
+            onChange={() => this.handleSelectRow(original[unique])}
           />
         ),
         Header: x => (
           <input
             type='checkbox'
-            checked={this.state.selectAll === CHECKED}
+            checked={data.length > 0 && numSelected === data.length}
+            disabled={data.length === 0}
             ref={input => {
               if (input) {
-                input.indeterminate = this.state.selectAll === INDETERMINATE
+                input.indeterminate = isSelectAllIndeterminate
               }
             }}
-            onChange={() => this.toggleSelectAll()}
+            onChange={() => this.handleSelectAll()}
           />
         ),
         style: {

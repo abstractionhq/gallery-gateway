@@ -19,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.css' // See: https://github.com/reactstrap/
 import 'semantic-ui-css/semantic.min.css' // See: https://react.semantic-ui.com/usage#semantic-ui-css-package
 import 'react-dates/lib/css/_datepicker.css' // See: https://github.com/airbnb/react-dates#webpack
 import 'open-iconic/font/css/open-iconic-bootstrap.css' // See: https://github.com/iconic/open-iconic#with-bootstrap
+import 'react-table/react-table.css' // See: https://github.com/react-tools/react-table#installation
 
 const Root = () => (
   <ApolloProvider client={apollo}>
