@@ -17,6 +17,20 @@
         "transform-react-remove-prop-types"
       ]
     },
+    "test": {
+      "presets": [
+        [
+          "env", {
+            "loose": true,
+            "modules": "commonjs",
+            "target": ["ie 10"],
+            "useBuiltIns": "entry"
+          }
+        ],
+        "stage-0",
+        "react"
+      ]
+    },
     "development": {
       "plugins": [
         "react-hot-loader/babel"
