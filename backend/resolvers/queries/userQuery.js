@@ -1,6 +1,6 @@
 import User from '../../models/user'
 import { UserError } from 'graphql-errors'
-import { STUDENT, ADMIN, JUDGE } from '../../permissionLevels'
+import { STUDENT, ADMIN, JUDGE } from '../../constants'
 
 export function user (_, args, req) {
   const isRequestingOwnUser = req.auth.id !== undefined && req.auth.id === args.id

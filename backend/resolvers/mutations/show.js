@@ -1,6 +1,6 @@
 import Show from '../../models/show'
 import { UserError } from 'graphql-errors'
-import { ADMIN } from '../../permissionLevels'
+import { ADMIN } from '../../constants'
 
 export function createShow (_, args, req) {
   if (req.auth.type !== ADMIN) {

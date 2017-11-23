@@ -62,3 +62,6 @@ keys/
 
 # App Build
 dist/
+
+# Jest Coverage
+__coverage__

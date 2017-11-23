@@ -7,19 +7,6 @@ import { createJudge, updatePermissions } from '../../resolvers/mutations/judge'
 import { fakeUser } from '../factories'
 
 describe('Judge Resolvers', function () {
-  beforeEach(function (done) {
-    db.sync({force: true}).then(() => {
-      User
-        .destroy({where: {}})
-        .then(() => done())
-    })
-  })
-  afterEach(function (done) {
-    User
-      .destroy({where: {}})
-      .then(() => done())
-  })
-
   describe('Judge Creation Resolver', function () {
     it('Does not allow duplicate usernames', function (done) {
       fakeUser({type: 'ADMIN'})

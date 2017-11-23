@@ -1,7 +1,7 @@
 import { UserError } from 'graphql-errors'
 
 import User from '../../models/user'
-import { ADMIN, JUDGE, STUDENT } from '../../permissionLevels'
+import { ADMIN, JUDGE, STUDENT } from '../../constants'
 
 export function createJudge (_, args, req) {
   if (req.auth.type !== ADMIN) {
