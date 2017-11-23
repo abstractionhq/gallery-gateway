@@ -14,6 +14,6 @@ describe('A Suite', function () {
   })
 
   it('Should render without throwing an error', function () {
-    expect(homeComponent.contains(<h1>Home</h1>)).toBe(true)
+    expect(homeComponent.contains('Gallery Gateway')).toBe(true)
   })
 })
