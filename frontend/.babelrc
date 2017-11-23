@@ -1,24 +1,18 @@
 {
-
+  "presets": [
+    [
+      "env", {
+        "loose": true,
+        "modules": false,
+        "target": ["ie 10"],
+        "useBuiltIns": "entry"
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
   "env": {
-    "production": {
-      "presets": [
-        [
-          "env", {
-            "loose": true,
-            "modules": false,
-            "target": ["ie 10"],
-            "useBuiltIns": "entry"
-          }
-        ],
-        "stage-0",
-        "react"
-      ],
-      "plugins": [
-        "transform-react-remove-prop-types"
-      ]
-    },
-    "testing": {
+    "test": {
       "presets": [
         [
           "env", {
@@ -30,21 +24,9 @@
         ],
         "stage-0",
         "react"
-      ],
+      ]
     },
     "development": {
-      "presets": [
-        [
-          "env", {
-            "loose": true,
-            "modules": false,
-            "target": ["ie 10"],
-            "useBuiltIns": "entry"
-          }
-        ],
-        "stage-0",
-        "react"
-      ],
       "plugins": [
         "react-hot-loader/babel"
       ]
