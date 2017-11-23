@@ -12,44 +12,72 @@ const CenteredSubHeading = styled.h2`
 
 class JudgeAssignmentTables extends Component {
   static propTypes = {
-    judges: PropTypes.array.isRequired,
-    assigned: PropTypes.array.isRequired,
-    unassign: PropTypes.func.isRequired,
+    showId: PropTypes.number.isRequired,
+    fetchData: PropTypes.func.isRequired,
+    data: PropTypes.shape({
+      unassignedJudges: PropTypes.array.isRequired,
+      assignedJudges: PropTypes.array.isRequired
+    }),
     assign: PropTypes.func.isRequired,
-    show: PropTypes.string.isRequired,
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.object
+    unassign: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    judges: [],
-    assigned: []
+    data: {
+      assignedJudges: [],
+      unassignedJudges: []
+    }
+  }
+
+  state = {
+    selectedUnassignedJudges: {},
+    selectedAssignedJudges: {}
+  }
+
+  componentDidMount () {
+    this.props.fetchData()
   }
 
   assign = () => {
-    // TODO: GraphQL Mutation to assign the checked values in the unassigned table
-    this.props.assign([]) // TODO: Usernames
+    const judges = Object.keys(this.state.selectedUnassignedJudges)
+
+    if (judges.length) {
+      this.props.assign(judges)
+      // TODO: Refetch / Update Local Data
+    }
   }
 
   unassign = () => {
-    // TODO: GraphQL Mutation to unassign the checked values in the assigned table
-    this.props.unassign([]) // TODO: Usernames
+    const judges = Object.keys(this.state.selectedAssignedJudges)
+
+    if (judges.length) {
+      this.props.unassign(judges)
+      // TODO: Refetch / Update Local Data
+    }
+  }
+
+  handleAssignedJudgesChange = (selectedAssignedJudges) => {
+    this.setState({selectedAssignedJudges})
+  }
+
+  handleUnassignedJudgesChange = (selectedUnassignedJudges) => {
+    this.setState({selectedUnassignedJudges})
   }
 
   render () {
     const {
-      loading,
-      judges,
-      assigned
+      data
     } = this.props
-
-    const unassigned = judges.filter(judge => assigned.indexOf(judge) < 0)
 
     return (
       <Row>
         <Col xs='12' md='5'>
           <CenteredSubHeading>Unassigned</CenteredSubHeading>
-          <JudgesTable judges={loading ? [] : unassigned} />
+          <JudgesTable
+            judges={data.unassignedJudges}
+            selected={this.state.selectedUnassignedJudges}
+            onChange={this.handleUnassignedJudgesChange}
+          />
           {/* TODO: Form and Button to Create a new Judge */}
         </Col>
         <Col xs='12' md='2'>
@@ -78,7 +106,11 @@ class JudgeAssignmentTables extends Component {
         </Col>
         <Col xs='12' md='5'>
           <CenteredSubHeading>Assigned</CenteredSubHeading>
-          <JudgesTable judges={loading ? [] : assigned} />
+          <JudgesTable
+            judges={data.assignedJudges}
+            selected={this.state.selectedAssignedJudges}
+            onChange={this.handleAssignedJudgesChange}
+          />
         </Col>
       </Row>
     )

@@ -23,16 +23,21 @@ const JudgesTable = (props) => (
     columns={columns}
     data={props.judges}
     unique='username'
+    selected={props.selected}
+    onChange={props.onChange}
     defaultSorted={[{ id: 'lastName', desc: false }]}
   />
 )
 
 JudgesTable.propTypes = {
-  judges: PropTypes.array.isRequired
+  judges: PropTypes.array.isRequired,
+  selected: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 JudgesTable.defaultProps = {
-  judges: []
+  judges: [],
+  selected: {}
 }
 
 export default JudgesTable

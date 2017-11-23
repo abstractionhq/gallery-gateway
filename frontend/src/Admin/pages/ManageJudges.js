@@ -11,7 +11,7 @@ const Heading = styled.h1`
 const ManageJudges = (props) => (
   <Container fluid>
     <Heading>Manage Judges</Heading> {/* TODO: Mention the name of the show */}
-    <JudgeAssignmentTables show={props.match.params.id} />
+    <JudgeAssignmentTables showId={parseInt(props.match.params.id, 10)} /> {/* TODO: Make this better */}
   </Container>
 )
 

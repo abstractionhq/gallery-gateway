@@ -1,60 +1,47 @@
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
+import { connect } from 'react-redux'
+
+import { feetchJudgesByAssignmentForShow } from '../actions'
 
 import JudgesQuery from '../queries/judges.graphql'
 import JudgesForShowQuery from '../queries/judgesForShow.graphql'
+
 import AssignToShowMutation from '../mutations/assignToShow.graphql'
-import UnassignToShowMutation from '../mutations/unassignToShow.graphql'
+import RemoveFromShowMutation from '../mutations/removeFromShow.graphql'
+
 import JudgeAssignmentTables from '../components/JudgeAssignmentTables'
 
-const withJudgesQuery = graphql(JudgesQuery, {
-  props: ({data: { judges, loading, error }}) => ({
-    judges,
-    loading,
-    error
-  })
-})(JudgeAssignmentTables)
+const mapStateToProps = ({Admin}) => ({
+  data: {
+    unassignedJudges: Admin.unassignedJudges || [], // TODO: Change the store hierarchy?
+    assignedJudges: Admin.assignedJudges || []
+  }
+})
 
-const withAssignedJudgesQuery = graphql(JudgesForShowQuery, {
-  props: ({data: { judges, loading, error }}) => ({
-    assigned: loading ? [] : judges.judges,
-    loading,
-    error
-  }),
-  options: (ownProps) => ({
-    variables: {
-      id: ownProps.show
-    }
-  })
-})(withJudgesQuery)
+const mapDispatchToProps = (dispatch, {showId}) => ({
+  fetchData: () => dispatch(feetchJudgesByAssignmentForShow(showId))
+})
 
-const withAssignMutation = graphql(AssignToShowMutation, {
-  props: ({ ownProps, mutate }) => ({
-    assign: (usernames) => mutate({
-      variables: { showId: ownProps.show, usernames }
+const withRedux = connect(mapStateToProps, mapDispatchToProps)(JudgeAssignmentTables)
+
+const withMutations = compose(
+  graphql(AssignToShowMutation, {
+    props: ({ownProps, mutate}) => ({
+      assign: (usernames) => mutate({
+        variables: {
+          showId: ownProps.showId,
+          usernames
+        }
+      })
     })
   }),
-  options: () => ({
-    refetchQueries: [
-      {
-        query: JudgesQuery
-      }
-    ]
-  })
-})(withAssignedJudgesQuery)
-
-const withUnassignMutation = graphql(UnassignToShowMutation, {
-  props: ({ ownProps, mutate }) => ({
-    unassign: (usernames) => mutate({
-      variables: { showId: ownProps.show, usernames }
+  graphql(RemoveFromShowMutation, {
+    props: ({ownProps, mutate}) => ({
+      unassign: (usernames) => mutate({
+        variables: {showId: ownProps.showId, usernames}
+      })
     })
-  }),
-  options: () => ({
-    refetchQueries: [
-      {
-        query: JudgesQuery
-      }
-    ]
   })
-})(withAssignMutation)
+)(withRedux)
 
-export default withUnassignMutation
+export default withMutations
