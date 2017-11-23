@@ -17,20 +17,6 @@ describe('API Routes', function () {
   })
 
   describe('Simple GraphQL auth', function () {
-    beforeEach(function (done) {
-      db.sync({force: true}).then(() => {
-        User
-          .destroy({where: {}})
-          .then(() => done())
-      })
-    })
-
-    afterEach(function (done) {
-      User
-        .destroy({where: {}})
-        .then(() => done())
-    })
-
     it('rejects getting all users when not logged in', function (done) {
       request(server)
         .post('/graphql')

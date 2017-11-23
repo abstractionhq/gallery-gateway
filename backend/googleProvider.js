@@ -1,7 +1,7 @@
 import google from 'googleapis'
 import nconf from './config'
 import User from './models/user'
-import { STUDENT } from './permissionLevels'
+import { STUDENT } from './constants'
 
 const OAuth2 = google.auth.OAuth2
 

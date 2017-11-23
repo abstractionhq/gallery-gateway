@@ -7,19 +7,6 @@ import { show, shows } from '../../resolvers/queries/showQuery'
 import { fakeShow } from '../factories'
 
 describe('Show Queries', function () {
-  beforeEach(function (done) {
-    db.sync({force: true}).then(() => {
-      Show
-        .destroy({where: {}})
-        .then(() => done())
-    })
-  })
-  afterEach(function (done) {
-    Show
-      .destroy({where: {}})
-      .then(() => done())
-  })
-
   describe('Show query', function () {
     it('Finds a show given the id', function (done) {
       fakeShow().then((s) => {

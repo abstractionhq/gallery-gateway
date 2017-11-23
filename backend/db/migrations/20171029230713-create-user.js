@@ -1,4 +1,4 @@
-import { STUDENT, ADMIN, JUDGE } from '../../permissionLevels'
+import { STUDENT, ADMIN, JUDGE } from '../../constants'
 
 export function up (queryInterface, Sequelize) {
   return queryInterface.createTable('users', {

@@ -3,7 +3,7 @@ import saml from 'passport-saml'
 
 import config from './index'
 import User from '../models/user'
-import { STUDENT } from '../permissionLevels'
+import { STUDENT } from '../constants'
 
 const samlConfig = config.get('auth:saml')
 

@@ -67,14 +67,31 @@ type Vote {
     entry: Entry
 }
 
-
 interface Entry {
     id: ID!
     group: Group
     student: User
     show: Show
+    title: String
     comment: String
     forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
+}
+
+input EntryInput {
+    groupId: Int
+    studentUsername: String
+    showId: Int!
+    title: String!
+    comment: String
+    forSale: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
 }
 
 type Photo implements Entry {
@@ -82,13 +99,27 @@ type Photo implements Entry {
     group: Group
     student: User
     show: Show
-    photoPath: String
+    title: String
+    comment: String
+    forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
+    
+    path: String
     horizDimInch: Float
     vertDimInch: Float
-    comment: String
-    media: String
-    moreCopies: Boolean
-    forSale: Boolean
+    mediaType: String
+}
+
+input PhotoInput {
+    entry: EntryInput
+    path: String!
+    horizDimInch: Float!
+    vertDimInch: Float!
+    mediaType: String
 }
 
 type Video implements Entry {
@@ -96,9 +127,16 @@ type Video implements Entry {
     group: Group
     student: User
     show: Show
-    videoURL: String
+    title: String
     comment: String
     forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
+    
+    videoURL: String
 }
 
 type OtherMedia implements Entry {
@@ -106,10 +144,17 @@ type OtherMedia implements Entry {
     group: Group
     student: User
     show: Show
-    photoPath: String
+    title: String
     comment: String
-    moreCopies: Boolean
     forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
+    
+    photoPath: String
+    moreCopies: Boolean
 }
 
 enum UserType {
@@ -133,7 +178,7 @@ type Query {
     photos: [Photo]
     videos: [Video]
     otherMedia: [OtherMedia]
-    entries: [Entry]
+    entries(showId: ID): [Entry]
 }
 
 type Mutation {
@@ -148,6 +193,7 @@ type Mutation {
     assignToShow(showId: ID!, usernames: [String]!): Boolean    
     removeFromShow(showId: ID!, usernames: [String]!): Boolean    
     
+    createPhoto(input: PhotoInput!): Photo
 }
 
 enum SortDirection {
