@@ -1,0 +1,3 @@
+mutation removeFromShow($showId: ID!, $usernames: [String]!) {
+  removeFromShow(showId: $showId, usernames: $usernames)
+}

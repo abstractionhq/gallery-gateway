@@ -1,5 +1,0 @@
-mutation unassignToShow($showId: ID!, $usernames: [String]) {
-  unassignToShow(showId: $showId, usernames: $usernames) {
-    Boolean
-  }
-}
