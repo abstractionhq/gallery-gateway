@@ -12,7 +12,7 @@ const Dashboard = () => (
         <Shows />
       </Col>
       <Col md='3'>
-        <Link to='show/create'><Button color='primary' style={{cursor: 'pointer'}}>Create Show</Button></Link>
+        <Button color='primary' style={{cursor: 'pointer'}} tag={Link} to='/admin/show/create'>Create Show</Button>
       </Col>
     </Row>
   </Container>

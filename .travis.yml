@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+  - "8"
+services:
+  - mysql
+env:
+  global:
+    - ABSTRACTION_DB_USER=travis
+    - SAML_CALLBACK_URL=http://localhost:3000/auth/login/callback
+    - SAML_ENTRY_POINT=http://localhost:8080/simplesaml/saml2/idp/SSOService.php
+    - ISSUER=http://app.example.com
+    - SAML_SUCCESS_URL=http://localhost:5000/
+cache:
+  directories:
+    - "backend/node_modules"
+    - "frontend/node_modules"
+before_install:
+  # install yarn
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s --
+  - export PATH="$HOME/.yarn/bin:$PATH"
+  # install packages
+  - cd frontend && yarn install && cd ..
+  - cd backend && npm install && cd ..
+  # install certs
+  - cd backend && mkdir keys && cd ..
+  - cd backend && curl https://raw.githubusercontent.com/kristophjunge/docker-test-saml-idp/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
+  - cd backend && npm run keygen && cd ..
+  # create mysql database
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+script:
+  - cd backend && npm test && cd ..

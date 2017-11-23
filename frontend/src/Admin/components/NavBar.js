@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap'
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
 
 const NavBarContainer = styled.div`
@@ -22,6 +22,10 @@ export default class NavBar extends Component {
     })
   }
 
+  logout () {
+    window.localStorage.removeItem('_token_v1')
+  }
+
   render () {
     return (
       <NavBarContainer>
@@ -31,10 +35,13 @@ export default class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <Link to='/admin/judges' className='nav-link'>Manage Judges</Link>
+                <NavLink tag={Link} to='/admin/judges'>Judges</NavLink>
               </NavItem>
               <NavItem>
-                <Link to='/admin/reports' className='nav-link'>Reports</Link>
+                <NavLink tag={Link} to='/admin/reports'>Reports</NavLink>
+              </NavItem>
+              <NavItem>
+                <Link to='/' className='nav-link' onClick={this.logout}>Logout</Link>
               </NavItem>
             </Nav>
           </Collapse>

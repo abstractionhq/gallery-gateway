@@ -2,17 +2,11 @@ import { STUDENT, ADMIN, JUDGE } from '../../permissionLevels'
 
 export function up (queryInterface, Sequelize) {
   return queryInterface.createTable('users', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
     username: {
       type: Sequelize.STRING,
       allowNull: false,
       notEmpty: true,
-      unique: true
+      primaryKey: true
     },
     firstName: {
       type: Sequelize.STRING,
