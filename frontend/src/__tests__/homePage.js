@@ -1,19 +1,19 @@
 import React from 'react'
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { shallow, mount, render } from 'enzyme'
+import Enzyme, { shallow } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
 import Home from '../Home/Page'
 
-Enzyme.configure({ adapter: new Adapter() });
+Enzyme.configure({ adapter: new Adapter() })
 
-
-
-describe('A suite', () => {
+describe('A Suite', function () {
   let homeComponent
-  beforeEach(() => {
+
+  beforeEach(function () {
     homeComponent = shallow(<Home />)
   })
-  it('should render without throwing an error', () => {
+
+  it('Should render without throwing an error', function () {
     expect(homeComponent.contains(<h1>Home</h1>)).toBe(true)
   })
 })
