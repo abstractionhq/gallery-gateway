@@ -28,4 +28,4 @@ before_install:
   # create mysql database
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 script:
-  - cd backend && npm test && cd ..
+  - cd backend && npm test && cd ../frontend && yarn test && cd ..
