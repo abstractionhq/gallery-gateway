@@ -6,7 +6,6 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development BABEL_ENV=development node ./server.js",
     "build": "cross-env NODE_ENV=production BABEL_ENV=production ./node_modules/.bin/webpack --config ./config/webpack.config.prod.js",
-    "test": "cross-env NODE_ENV=testing jest ./node_modules/.bin/jest",
     "format": "prettier-standard './src/*.js' './src/**/*.js'",
     "debug": "DEBUG=true npm run build -- --display-optimization-bailout",
     "test": "jest"
@@ -92,6 +91,7 @@
     "prettier": "^1.7.4",
     "prettier-standard": "^7.0.3",
     "raw-loader": "^0.5.1",
+    "react-test-renderer": "^16.1.1",
     "redux-devtools": "^3.4.0",
     "regenerator-runtime": "^0.11.0",
     "resolve-url-loader": "^2.2.0",
@@ -102,5 +102,16 @@
     "webpack": "^3.8.1",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!__coverage__/**",
+      "!.eslintrc.js",
+      "!dist/**"
+    ],
+    "coverageDirectory": "__coverage__"
   }
 }
