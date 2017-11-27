@@ -18,7 +18,7 @@ export const fetchShows = () => (dispatch, getState, client) => {
 
 export const fetchJudges = () => (dispatch, getState, client) => {
   return client.query({query: JudgesQuery})
-    .then(({data}) => dispatch({type: FETCH_JUDGES, payload: data}))
+    .then(({data: {judges}}) => dispatch({type: FETCH_JUDGES, payload: judges}))
     .catch(console.error) // TODO: Handle the error
 }
 
@@ -36,29 +36,26 @@ export const fetchJudgesForShow = (showId) => (dispatch, getState, client) => {
 export const feetchJudgesByAssignmentForShow = (showId) => (dispatch, getState, client) => {
   return Promise
     .all([
-      client.query({query: JudgesQuery}),
       client.query({
         query: JudgesForShowQuery,
         variables: {
           id: showId
         }
-      })
+      }),
+      dispatch(fetchJudges())
     ])
-    .spread(({data: {judges: allJudges}, loading: allJudgesLoading}, {data: {judges: {judges: assignedJudges}}, loading: assignedJudgesLoading}) => {
-      if (allJudgesLoading || assignedJudgesLoading) {
+    .spread(({data: {judges: {judges}}, loading}) => {
+      if (loading) {
         dispatch({
           type: LOADING_DATA,
           payload: {}
         })
       } else {
-        const assignedUsernames = assignedJudges.map(judge => judge.username)
-        const unassignedJudges = allJudges.filter(judge => !assignedUsernames.includes(judge.username))
         dispatch({
           type: FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW,
-          payload: {
-            unassignedJudges,
-            assignedJudges
-          }})
+          payload: Object.keys(judges),
+          showId
+        })
       }
     })
     .catch(console.error) // TODO: Handle the error

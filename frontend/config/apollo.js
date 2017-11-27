@@ -18,7 +18,17 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
 const client = new ApolloClient({
   link: concat(authMiddleware, httpLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    dataIdFromObject: o => {
+      switch (o.__typename) {
+        case 'User':
+          // The primary key of 'User' is 'username'
+          return o.username
+        default:
+          return o.id
+      }
+    }
+  })
 })
 
 export default client

@@ -9,7 +9,7 @@ export default function createReducer (asyncReducers = {}) {
   return connectRouter(history)(
     combineReducers({
       form: formReducer,
-      Admin: AdminReducer,
+      admin: AdminReducer,
       ...asyncReducers
     })
   )

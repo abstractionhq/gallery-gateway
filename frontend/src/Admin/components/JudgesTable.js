@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import MultiCheckTable from 'shared/components/MultiCheckTable'
+import CheckboxTable from 'shared/components/CheckboxTable'
 
 const columns = [
   {
@@ -19,7 +19,7 @@ const columns = [
 ]
 
 const JudgesTable = (props) => (
-  <MultiCheckTable
+  <CheckboxTable
     columns={columns}
     data={props.judges}
     unique='username'
