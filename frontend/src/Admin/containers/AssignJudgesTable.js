@@ -11,22 +11,24 @@ import RemoveFromShowMutation from '../mutations/removeFromShow.graphql'
 
 import AssignJudgesTable from '../components/AssignJudgesTable'
 
-const filterUnassignedJudges = (allJudges = [], assignedJudges = []) => {
-  const assignedUsernames = mapAssignmentsToJudges(allJudges, assignedJudges).map(judge => judge.username)
-  const unassignedJudges = Object.values(allJudges).filter(judge => !assignedUsernames.includes(judge.username))
-  return unassignedJudges
+const filterUnassignedJudges = (judges, assignments = []) => {
+  return Object.values(judges).filter(judge => !assignments.includes(judge.username))
 }
 
-const mapAssignmentsToJudges = (allJudges = [], assignedJudges = []) => {
-  return assignedJudges.map(key => allJudges[key])
+const mapAssignmentsToJudges = (judges, assignments = []) => {
+  return assignments.map(key => judges[key])
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  data: {
-    unassignedJudges: filterUnassignedJudges(state.admin.judges, state.admin.assignments[ownProps.showId]),
-    assignedJudges: mapAssignmentsToJudges(state.admin.judges, state.admin.assignments[ownProps.showId])
+const mapStateToProps = (state, ownProps) => {
+  const judges = state.admin.judges
+  const assignments = state.admin.assignments[ownProps.showId]
+  return {
+    data: {
+      unassignedJudges: filterUnassignedJudges(judges, assignments),
+      assignedJudges: mapAssignmentsToJudges(judges, assignments)
+    }
   }
-})
+}
 
 const mapDispatchToProps = (dispatch, {showId}) => ({
   fetchData: () => dispatch(feetchJudgesByAssignmentForShow(showId))

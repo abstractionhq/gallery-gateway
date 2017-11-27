@@ -3,7 +3,6 @@ import { Container } from 'reactstrap'
 import styled from 'styled-components'
 
 import AssignJudgesTable from '../containers/AssignJudgesTable'
-import { parseId } from 'utils'
 
 const Heading = styled.h1`
   margin-bottom: 25px;
@@ -12,7 +11,7 @@ const Heading = styled.h1`
 const ManageJudges = (props) => (
   <Container fluid>
     <Heading>Manage Judges</Heading> {/* TODO: Mention the name of the show */}
-    <AssignJudgesTable showId={parseId(props.match.params.id)} /> {/* TODO: Handle non-number input more gracefully */}
+    <AssignJudgesTable showId={props.match.params.id} /> {/* TODO: Handle non-number input more gracefully */}
   </Container>
 )
 

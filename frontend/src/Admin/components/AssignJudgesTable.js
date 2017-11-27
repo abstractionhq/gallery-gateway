@@ -12,7 +12,7 @@ const CenteredSubHeading = styled.h2`
 
 class JudgeAssignmentTables extends Component {
   static propTypes = {
-    showId: PropTypes.number.isRequired,
+    showId: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
     data: PropTypes.shape({
       unassignedJudges: PropTypes.array.isRequired,

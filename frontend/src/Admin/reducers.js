@@ -2,19 +2,33 @@ import { combineReducers } from 'redux'
 
 import * as actions from './actions'
 
+// Example State:
+// {
+//   1: {id: '1', name...},
+//   2: {id: '2', name...}
+// }
 const shows = (state = {}, action) => {
   switch (action.type) {
     case actions.FETCH_SHOWS:
+      if (!action.payload.length) {
+        return state
+      }
+
+      const shows = action.payload.reduce((accum, show) => { accum[show.id] = show; return accum }, {})
       return {
         ...state,
-        ...action.payload
+        ...shows
       }
     case actions.FETCH_JUDGES_FOR_SHOW:
+      if (!action.payload.id) {
+        return state
+      }
+
       return {
         ...state,
-        [action.showId]: {
-          ...state[action.showId],
-          judges: action.payload
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          judges: action.payload.judges
         }
       }
     default:
@@ -24,17 +38,20 @@ const shows = (state = {}, action) => {
 
 // Example State:
 // {
-//   1: { username: 'user1' }
-//   2: { username: 'user2' }
+//   user1: { username: 'user1', firstName... }
+//   user2: { username: 'user2', firstName... }
 // }
 const judges = (state = {}, action) => {
   switch (action.type) {
     case actions.FETCH_JUDGES:
-      // NOTE: Currently, the Apollo normalized id's are arbitrary and don't correspond
-      // to the id specified in 'dataIdFromObject'
+      if (!action.payload.length) {
+        return state
+      }
+
+      const judges = action.payload.reduce((accum, judge) => { accum[judge.username] = judge; return accum }, {})
       return {
         ...state,
-        ...action.payload
+        ...judges
       }
     default:
       return state
@@ -49,9 +66,13 @@ const judges = (state = {}, action) => {
 const assignments = (state = {}, action) => {
   switch (action.type) {
     case actions.FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW:
+      if (!action.payload.id) {
+        return state
+      }
+
       return {
         ...state,
-        [action.showId]: action.payload
+        [action.payload.id]: Object.values(action.payload.judges).map(judge => judge.username)
       }
     default:
       return state

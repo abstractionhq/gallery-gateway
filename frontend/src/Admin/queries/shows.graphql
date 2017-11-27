@@ -10,5 +10,8 @@ query Shows {
     entryCap
     createdAt
     updatedAt
+    judges {
+      username
+    }
   }
 }

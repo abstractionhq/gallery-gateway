@@ -1,9 +1,13 @@
 query JudgesForShow($id: ID!) {
-  judges: show(id: $id) {
+  show(id: $id) {
+    id
     judges {
       username
       firstName
       lastName
+      shows {
+        id
+      }
     }
   }
 }

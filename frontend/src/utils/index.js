@@ -15,13 +15,3 @@ export const createLoading = namespace => type => ({
     loading: true
   }
 })
-
-export const parseId = (str) => {
-  const result = parseInt(str, 10)
-  if (isNaN(result)) {
-    // str is not a number so give it back
-    return str
-  }
-
-  return result
-}

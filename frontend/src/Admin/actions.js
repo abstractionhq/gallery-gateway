@@ -12,7 +12,7 @@ export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW = 'FETCH_JUDGES_BY_ASSIGNMENT_F
 
 export const fetchShows = () => (dispatch, getState, client) => {
   return client.query({query: ShowsQuery})
-    .then(({data}) => dispatch({type: FETCH_SHOWS, payload: data}))
+    .then(({data: {shows}}) => dispatch({type: FETCH_SHOWS, payload: shows}))
     .catch(console.error) // TODO: Handle the error
 }
 
@@ -29,7 +29,7 @@ export const fetchJudgesForShow = (showId) => (dispatch, getState, client) => {
       id: showId
     }
   })
-    .then(({data}) => dispatch({type: FETCH_JUDGES_FOR_SHOW, payload: data}))
+    .then(({data: {show}}) => dispatch({type: FETCH_JUDGES_FOR_SHOW, payload: show}))
     .catch(console.error) // TODO: Handle the error
 }
 
@@ -42,9 +42,10 @@ export const feetchJudgesByAssignmentForShow = (showId) => (dispatch, getState, 
           id: showId
         }
       }),
+      dispatch(fetchShows()),
       dispatch(fetchJudges())
     ])
-    .spread(({data: {judges: {judges}}, loading}) => {
+    .spread(({data: {show}, loading}) => {
       if (loading) {
         dispatch({
           type: LOADING_DATA,
@@ -53,8 +54,7 @@ export const feetchJudgesByAssignmentForShow = (showId) => (dispatch, getState, 
       } else {
         dispatch({
           type: FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW,
-          payload: Object.keys(judges),
-          showId
+          payload: show
         })
       }
     })
