@@ -26,12 +26,24 @@ export function up (queryInterface, Sequelize) {
     },
     {
       username: 'user5',
+      firstName: 'Bob',
+      lastName: 'Ross',
+      type: 'JUDGE'
+    },
+    {
+      username: 'user6',
+      firstName: 'Uma',
+      lastName: 'Thurman',
+      type: 'JUDGE'
+    },
+    {
+      username: 'user7',
       firstName: 'Fred',
       lastName: 'Rogers',
       type: 'STUDENT'
     },
     {
-      username: 'user6',
+      username: 'user8',
       firstName: 'Roberta',
       lastName: 'Jenkins',
       type: 'STUDENT'
