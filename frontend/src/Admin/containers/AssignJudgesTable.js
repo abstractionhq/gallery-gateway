@@ -44,18 +44,14 @@ const withMutations = compose(
           showId: ownProps.showId,
           usernames
         },
-        update: (client, {data: assignToShow}) => {
-          if (assignToShow) {
-            const data = client.readQuery({
-              query: JudgesForShowQuery,
-              variables: {
-                id: ownProps.showId
-              }
-            })
-
-            console.log(data) // TODO: Finish. See: https://www.apollographql.com/docs/react/features/cache-updates.html#directAccess
+        refetchQueries: [{
+          query: JudgesForShowQuery,
+          variables: {
+            id: ownProps.showId
           }
-        }
+        }, {
+          query: JudgesQuery
+        }]
       })
     })
   }),
@@ -66,18 +62,14 @@ const withMutations = compose(
           showId: ownProps.showId,
           usernames
         },
-        update: (client, {data: removeFromShow}) => {
-          if (removeFromShow) {
-            const data = client.readQuery({
-              query: JudgesForShowQuery,
-              variables: {
-                id: ownProps.showId
-              }
-            })
-
-            console.log(data) // TODO: Finish. See: https://www.apollographql.com/docs/react/features/cache-updates.html#directAccess
+        refetchQueries: [{
+          query: JudgesForShowQuery,
+          variables: {
+            id: ownProps.showId
           }
-        }
+        }, {
+          query: JudgesQuery
+        }]
       })
     })
   })
