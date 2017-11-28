@@ -1,12 +1,13 @@
 import React from 'react'
+import { Container } from 'reactstrap'
 
 import CreateShowForm from '../containers/CreateShowForm'
 
 const CreateShow = () => (
-  <div>
+  <Container>
     <h1>Create Show</h1>
     <CreateShowForm />
-  </div>
+  </Container>
 )
 
 export default CreateShow
