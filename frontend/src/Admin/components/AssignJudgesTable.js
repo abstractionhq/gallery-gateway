@@ -3,6 +3,8 @@ import { Row, Col, Button } from 'reactstrap'
 import { Flex, Box } from 'rebass'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left'
+import FaLongArrowRight from 'react-icons/lib/fa/long-arrow-right'
 
 import JudgesTable from '../components/JudgesTable'
 
@@ -89,7 +91,7 @@ class JudgeAssignmentTables extends Component {
                 style={{cursor: 'pointer'}}
                 onClick={() => this.assign()}
               >
-                Assign <span className='oi oi-arrow-right' aria-hidden='true'></span>
+                Assign <FaLongArrowRight />
               </Button>
             </Box>
             <Box mt={50} w='100%'>
@@ -99,7 +101,7 @@ class JudgeAssignmentTables extends Component {
                 style={{cursor: 'pointer'}}
                 onClick={() => this.unassign()}
               >
-                <span className='oi oi-arrow-left' aria-hidden='true'></span> Unassign
+                <FaLongArrowLeft /> Unassign
               </Button>
             </Box>
           </Flex>

@@ -17,7 +17,6 @@ import 'moment-timezone' // See: https://github.com/headzoo/react-moment#timezon
 import 'react-dates/initialize' // See: https://github.com/airbnb/react-dates#initialize
 import 'bootstrap/dist/css/bootstrap.css' // See: https://github.com/reactstrap/reactstrap#adding-bootstrap
 import 'react-dates/lib/css/_datepicker.css' // See: https://github.com/airbnb/react-dates#webpack
-import 'open-iconic/font/css/open-iconic-bootstrap.css' // See: https://github.com/iconic/open-iconic#with-bootstrap
 import 'react-table/react-table.css' // See: https://github.com/react-tools/react-table#installation
 
 const Root = () => (
