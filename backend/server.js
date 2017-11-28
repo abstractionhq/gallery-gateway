@@ -29,6 +29,6 @@ app.use('/graphql', graphqlHttp(req => ({
   context: req
 })))
 
-router.post('/upload', imageUploader)
+router.post('/static/upload', imageUploader)
 
 export default app // for testing

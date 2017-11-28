@@ -1,24 +1,26 @@
 import multer from 'multer'
+import guid from 'guid'
 
-var Storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './images')
+const Storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, './images') // TODO: See if we want a ./year/images
   },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '_' + Date.now() + '_' + file.originalname)
+  filename: (req, file, callback) => {
+    let filename = guid.raw
+    callback(null, `${filename[0]}/${filename[1]}/${filename}.jpg`)
   }
 })
 
-var upload = multer({
+const upload = multer({
   storage: Storage,
-  limits: {fileSize: 1000000, files: 1} // Max 1 MB
+  limits: {fileSize: 50000000, files: 1} // Max 50 MB
 })
 
 export default function uploader (req, res) {
-  upload(req, res, function (err) {
-    if (err) {
-      return res.end('Something went wrong!')
-    }
-    return res.end('File uploaded sucessfully!.')
+  return upload(req, res, (err) => {
+    console.log(err)
+    return res.json({message: 'Failed to upload'})
+  }).then(() => {
+    return res.json({path: req.file.filename})
   })
 }
