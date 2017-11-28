@@ -1,7 +1,11 @@
 import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 
-import { feetchJudgesByAssignmentForShow } from '../actions'
+import {
+  feetchJudgesByAssignmentForShow,
+  assignJudgesToShow,
+  removeJudgesFromShow
+} from '../actions'
 
 import JudgesQuery from '../queries/judges.graphql'
 import JudgesForShowQuery from '../queries/judgesForShow.graphql'
@@ -31,7 +35,9 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = (dispatch, {showId}) => ({
-  fetchData: () => dispatch(feetchJudgesByAssignmentForShow(showId))
+  fetchData: () => dispatch(feetchJudgesByAssignmentForShow(showId)),
+  afterAssign: (usernames) => dispatch(assignJudgesToShow(showId, usernames)),
+  afterUnassign: (usernames) => dispatch(removeJudgesFromShow(showId, usernames))
 })
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps)(AssignJudgesTable)

@@ -21,7 +21,9 @@ class JudgeAssignmentTables extends Component {
       assignedJudges: PropTypes.array.isRequired
     }),
     assign: PropTypes.func.isRequired,
-    unassign: PropTypes.func.isRequired
+    unassign: PropTypes.func.isRequired,
+    afterAssign: PropTypes.func.isRequired,
+    afterUnassign: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -45,7 +47,14 @@ class JudgeAssignmentTables extends Component {
 
     if (judges.length) {
       this.props.assign(judges)
-      // TODO: Refetch / Update Local Data
+        .then(() => {
+          this.props.afterAssign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
+        })
     }
   }
 
@@ -54,7 +63,14 @@ class JudgeAssignmentTables extends Component {
 
     if (judges.length) {
       this.props.unassign(judges)
-      // TODO: Refetch / Update Local Data
+        .then(() => {
+          this.props.afterUnassign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
+        })
     }
   }
 
