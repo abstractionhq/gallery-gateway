@@ -10,6 +10,7 @@ import models from './models'
 import router from './routes'
 import schema from './schema'
 import parseJwtUser from './middleware/parseJwtUser'
+import imageUploader from './upload'
 
 const app = express()
 models()
@@ -27,5 +28,7 @@ app.use('/graphql', graphqlHttp(req => ({
   graphiql: config.get('NODE_ENV') !== 'production',
   context: req
 })))
+
+router.post('/static/upload', imageUploader) // TODO: Require Authentication
 
 export default app // for testing
