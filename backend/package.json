@@ -34,7 +34,6 @@
     "graphql": "^0.11.7",
     "graphql-errors": "^2.1.0",
     "graphql-tools": "^2.5.1",
-    "guid": "0.0.12",
     "jsonwebtoken": "^8.1.0",
     "keypair": "^1.0.1",
     "mkdirp": "^0.5.1",
@@ -44,7 +43,8 @@
     "passport": "^0.4.0",
     "passport-saml": "^0.30.0",
     "sequelize": "^4.15.0",
-    "umzug": "^2.1.0"
+    "umzug": "^2.1.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
