@@ -29,6 +29,6 @@ app.use('/graphql', graphqlHttp(req => ({
   context: req
 })))
 
-router.post('/static/upload', imageUploader)
+router.post('/static/upload', imageUploader) // TODO: Require Authentication
 
 export default app // for testing
