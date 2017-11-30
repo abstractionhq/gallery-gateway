@@ -12,7 +12,7 @@ const CenteredSubHeading = styled.h2`
   text-align: center;
 `
 
-class JudgeAssignmentTables extends Component {
+class AssignJudgesTable extends Component {
   static propTypes = {
     showId: PropTypes.string.isRequired,
     fetchData: PropTypes.func.isRequired,
@@ -135,4 +135,4 @@ class JudgeAssignmentTables extends Component {
   }
 }
 
-export default JudgeAssignmentTables
+export default AssignJudgesTable

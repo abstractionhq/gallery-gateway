@@ -9,6 +9,18 @@ import * as actions from './actions'
 // }
 const shows = (state = {}, action) => {
   switch (action.type) {
+    case actions.FETCH_SHOW:
+      if (!action.payload.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          ...action.payload
+        }
+      }
     case actions.FETCH_SHOWS:
       if (!action.payload.length) {
         return state

@@ -1,0 +1,17 @@
+query Show($id: ID!) {
+  show(id: $id) {
+    id
+    name
+    description
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+    entryCap
+    createdAt
+    updatedAt
+    judges {
+      username
+    }
+  }
+}
