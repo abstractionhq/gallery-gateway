@@ -3,7 +3,9 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import { persistState } from 'redux-devtools' // eslint-disable-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'connected-react-router'
+
 import createReducer from '../reducer'
+import client from '../../config/apollo'
 
 function getDebugSessionKey () {
   const matches = window.location.href.match(/[?&]debug_session=([^&]+)\b/)
@@ -13,7 +15,7 @@ function getDebugSessionKey () {
 const store = createStore(
   createReducer(),
   compose(
-    applyMiddleware(thunk, routerMiddleware(history)),
+    applyMiddleware(thunk.withExtraArgument(client), routerMiddleware(history)),
     persistState(getDebugSessionKey()),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )

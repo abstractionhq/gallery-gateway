@@ -1,0 +1,13 @@
+query JudgesForShow($id: ID!) {
+  show(id: $id) {
+    id
+    judges {
+      username
+      firstName
+      lastName
+      shows {
+        id
+      }
+    }
+  }
+}

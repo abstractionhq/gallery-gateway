@@ -5,27 +5,29 @@ const HOST = process.env.ABSTRACTION_DB_HOST
 
 const development = {
   dialect: 'mysql',
-  user: USER,
-  password: PASSWORD,
-  database: DB,
   host: HOST,
+  database: DB,
+  username: USER,
+  password: PASSWORD,
   port: 3306
 }
 
 const test = {
   dialect: 'mysql',
-  logging: false,
-  user: USER,
-  password: PASSWORD,
-  database: 'test',
   host: HOST,
-  port: 3306
+  database: 'test',
+  username: USER,
+  password: PASSWORD,
+  port: 3306,
+  logging: false
 }
 
-export default {
+// Additonal exports so that sequelize-cli can read this config properly
+module.exports = {
   development,
   test,
-  migrations: {
-    path: 'db/migrations'
+  default: {
+    development,
+    test
   }
 }

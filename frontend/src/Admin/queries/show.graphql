@@ -1,5 +1,5 @@
-query Shows {
-  shows(orderBy: { sort: "entryStart", direction: DESC }) {
+query Show($id: ID!) {
+  show(id: $id) {
     id
     name
     description
