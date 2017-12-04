@@ -1,6 +1,6 @@
 import Entry from '../../models/entry'
 import { UserError } from 'graphql-errors'
-import { ADMIN, IMAGE_ENTRY } from '../../constants'
+import { ADMIN, IMAGE_ENTRY, VIDEO_ENTRY } from '../../constants'
 
 export function entries (_, args, req) {
   if (req.auth.type !== ADMIN) {
@@ -14,6 +14,8 @@ export function entries (_, args, req) {
       return entry.getImage().then((image) => {
         return Object.assign(entry, image.dataValues)
       })
+    } else if (entry.entryType === VIDEO_ENTRY) {
+      return entry
     } else {
       throw new Error('unknown entry type')
     }
