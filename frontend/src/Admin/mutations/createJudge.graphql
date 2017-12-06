@@ -1,0 +1,8 @@
+mutation createJudge($input: UserInput!) {
+  createJudge(input: $input) {
+    username
+    firstName
+    lastName
+    displayName
+  }
+}

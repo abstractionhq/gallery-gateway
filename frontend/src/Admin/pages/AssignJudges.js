@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import AssignJudgesTable from '../containers/AssignJudgesTable'
+import CreateJudgeForm from '../containers/CreateJudgeForm'
 import NotFound from '../../shared/components/NotFound'
 import { fetchShow } from '../actions'
 
@@ -30,6 +31,7 @@ class AssignJudges extends Component {
       <Container fluid>
         <Heading>Assign Judges | {show.name}</Heading>
         <AssignJudgesTable showId={show.id} />
+        <CreateJudgeForm />
       </Container>
     )
   }
