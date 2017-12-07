@@ -1,7 +1,8 @@
 import Image from './image'
+import Video from './video'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
-import { IMAGE_ENTRY } from '../constants'
+import { IMAGE_ENTRY, VIDEO_ENTRY } from '../constants'
 
 const Entry = sequelize.define('entry', {
   showId: {
@@ -86,9 +87,14 @@ Entry.prototype.getImage = function getImage () {
   if (this.entryType !== IMAGE_ENTRY) {
     return Promise.resolve(null)
   }
-  return Image.findOne({
-    where: {id: this.entryId}
-  })
+  return Image.findOne({ where: {id: this.entryId} })
+}
+
+Entry.prototype.getVideo = function getVideo () {
+  if (this.entryType !== VIDEO_ENTRY) {
+    return Promise.resolve(null)
+  }
+  return Video.findOne({ where: {id: this.entryId} })
 }
 
 export default Entry

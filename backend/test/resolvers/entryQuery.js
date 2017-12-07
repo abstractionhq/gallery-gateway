@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { entries } from '../../resolvers/queries/entryQuery'
-import { fakeImageEntry } from '../factories'
+import { fakeImageEntry, fakeVideoEntry } from '../factories'
 
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
@@ -16,7 +16,7 @@ describe('Entry Queries', function () {
           expect(entries).to.be.length(0)
         })
     })
-    it('Gets an entry when it exists', function () {
+    it('Gets an image entry when it exists', function () {
       return fakeImageEntry({horizDimInch: 3, vertDimInch: 4})
         .then((entry) => {
           return entries('', {}, {auth: {type: 'ADMIN'}})
@@ -26,6 +26,19 @@ describe('Entry Queries', function () {
               expect(resultEntries[0].title).to.equal(entry.title)
               expect(resultEntries[0].horizDimInch).to.equal(3)
               expect(resultEntries[0].vertDimInch).to.equal(4)
+            })
+        })
+    })
+    it('gets a video entry when it exists', function () {
+      return fakeVideoEntry({videoId: 'abc123'})
+        .then((entry) => {
+          return entries('', {}, {auth: {type: 'ADMIN'}})
+            .then((resultEntries) => {
+              expect(resultEntries).to.be.length(1)
+              expect(resultEntries[0].id).to.equal(entry.id)
+              expect(resultEntries[0].title).to.equal(entry.title)
+              expect(resultEntries[0].provider).to.equal('youtube')
+              expect(resultEntries[0].videoId).to.equal('abc123')
             })
         })
     })

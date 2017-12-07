@@ -3,6 +3,7 @@ import User from '../models/user'
 import Show from '../models/show'
 import Image from '../models/image'
 import Entry from '../models/entry'
+import Video from '../models/video'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
 /**
@@ -60,6 +61,14 @@ function fakeImage (opts) {
     mediaType: opts.mediaType
   })
 }
+function fakeVideo (opts) {
+  opts.provider = opts.provider || 'youtube'
+  opts.videoId = opts.videoId || faker.random.alphaNumeric(8)
+  return Video.create({
+    provider: opts.provider,
+    videoId: opts.videoId
+  })
+}
 
 function fakeEntry (opts) {
   opts = opts || {}
@@ -104,6 +113,16 @@ export function fakeImageEntry (opts) {
   return imagePromise
     .then((image) => {
       opts.image = image
+      return fakeEntry(opts)
+    })
+}
+
+export function fakeVideoEntry (opts) {
+  opts = opts || {}
+  const videoPromise = opts.video ? Promise.resolve(opts.video) : fakeVideo(opts)
+  return videoPromise
+    .then((video) => {
+      opts.video = video
       return fakeEntry(opts)
     })
 }

@@ -15,7 +15,9 @@ export function entries (_, args, req) {
         return Object.assign(entry, image.dataValues)
       })
     } else if (entry.entryType === VIDEO_ENTRY) {
-      return entry
+      return entry.getVideo().then((video) => {
+        return Object.assign(entry, video.dataValues)
+      })
     } else {
       throw new Error('unknown entry type')
     }

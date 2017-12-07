@@ -26,7 +26,7 @@ export default sequelize.define('video', {
   validate: {
     allowed_provider () {
       if (!ALLOWED_VIDEO_PROVIDERS.has(this.provider)) {
-        throw new Error('video source must be from youtube or vimeo')
+        throw new Error('Video source must be from youtube or vimeo')
       }
     }
   }

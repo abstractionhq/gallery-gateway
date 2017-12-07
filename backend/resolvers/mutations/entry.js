@@ -30,7 +30,7 @@ export function createVideo (_, args, req) {
   }
   const { type, id } = parseVideo(args.input.url)
   if (!type || !id) {
-    throw new UserError('Video url not valid')
+    throw new UserError('The video URL must be a valid URL from Youtube or Vimeo')
   }
   return Video.create({
     provider: type,
@@ -40,7 +40,7 @@ export function createVideo (_, args, req) {
       ...args.input.entry,
       entryType: IMAGE_ENTRY,
       entryId: video.id
-    })
+    }).then((entry) => Object.assign(entry, video.dataValues))
   })
 }
 
