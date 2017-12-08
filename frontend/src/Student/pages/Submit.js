@@ -2,14 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col, Button } from 'reactstrap'
 
-const Dashboard = () => (
+import SubmissionForm from '../containers/SubmissionForm'
+
+const Submit = () => (
   <Container>
     <Row>
       <Col>
-        {/* TODO: Show all open shows w/ link to any submissions a student made to them */}
+        <h1>New Submission</h1>
+        <SubmissionForm />
       </Col>
     </Row>
   </Container>
 )
 
-export default Dashboard
+export default Submit
