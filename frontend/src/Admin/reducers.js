@@ -77,8 +77,8 @@ const judges = (state = {}, action) => {
       }
 
       return {
-        [action.payload.username]: action.payload,
-        ...state
+        ...state,
+        [action.payload.username]: action.payload
       }
     default:
       return state
