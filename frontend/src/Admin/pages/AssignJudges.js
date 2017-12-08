@@ -13,6 +13,11 @@ const Heading = styled.h1`
   margin-bottom: 25px;
 `
 
+const FormContainer = styled.div`
+  margin-top: 25px;
+  margin-bottom: 25px;
+`
+
 class AssignJudges extends Component {
   static propTypes = {
     show: PropTypes.any // Object w/ 'id' and 'name' property or something falsey
@@ -31,7 +36,9 @@ class AssignJudges extends Component {
       <Container fluid>
         <Heading>Assign Judges | {show.name}</Heading>
         <AssignJudgesTable showId={show.id} />
-        <CreateJudgeForm />
+        <FormContainer>
+          <CreateJudgeForm />
+        </FormContainer>
       </Container>
     )
   }

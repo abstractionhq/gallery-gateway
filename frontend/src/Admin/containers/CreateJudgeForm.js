@@ -5,11 +5,9 @@ import CreateJudgeMutation from '../mutations/createJudge.graphql'
 import CreateJudgeForm from '../components/CreateJudgeForm'
 import { addJudge } from '../actions'
 
-function mapDispatchToProps (dispatch) {
-  return {
-    myAddJudge: (judge) => dispatch(addJudge(judge))
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  myAddJudge: (judge) => dispatch(addJudge(judge))
+})
 
 const withMutations = graphql(CreateJudgeMutation, {
   props: ({mutate, ownProps: {myAddJudge}}) => ({

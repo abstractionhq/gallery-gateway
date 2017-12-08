@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { Form, FormGroup, Label, Button } from 'reactstrap'
-import { Flex, Box } from 'rebass'
+import { Form, FormGroup, Label, Button, Row, Col } from 'reactstrap'
 import { Field, reduxForm } from 'redux-form'
 
 class CreateJudgeForm extends Component {
   submit = (values) => {
-    const { create } = this.props
+    const {
+      create,
+      reset
+    } = this.props
 
     create(values)
+      .then(() => reset()) // Clear the form after submitted
   }
 
   render () {
@@ -16,25 +19,35 @@ class CreateJudgeForm extends Component {
     } = this.props
 
     return (
-      <Form onSubmit={handleSubmit(this.submit)} style={{marginBottom: '25px', marginTop: '25px'}}>
-        <h3>Add Judge</h3>
-        <Flex>
-          <Box w={1/2}>
+      <Form onSubmit={handleSubmit(this.submit)}>
+        <h3>Add New Judge</h3>
+        <Row>
+          <Col md='6' xs='12'>
             <FormGroup>
               <Label for='username'>Username</Label>
-              <Field id='username' component='input' type='text' name='username' className='form-control' />
+              <div className='input-group'>
+                <Field id='username' component='input' type='text' name='username' className='form-control' required />
+                <span className="input-group-addon">@rit.edu</span>
+              </div>
             </FormGroup>
-            <FormGroup>
-              <Label for='firstName'>First Name</Label>
-              <Field id='firstName' component='input' type='text' name='firstName' className='form-control' />
-            </FormGroup>
-            <FormGroup>
-              <Label for='lastName'>Last Name</Label>
-              <Field id='lastName' component='input' type='text' name='lastName' className='form-control' />
-            </FormGroup>
-            <Button type='submit' color='primary' style={{cursor: 'pointer'}}>Add</Button>
-          </Box>
-        </Flex>
+            <Row>
+              <Col md='6' xs='12'>
+                <FormGroup>
+                  <Label for='firstName'>First Name</Label>
+                  <Field id='firstName' component='input' type='text' name='firstName' className='form-control' required />
+                </FormGroup>
+              </Col>
+              <Col md='6' xs='12'>
+                <FormGroup>
+                  <Label for='lastName'>Last Name</Label>
+                  <Field id='lastName' component='input' type='text' name='lastName' className='form-control' required />
+                </FormGroup>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        <Button type='submit' color='primary' style={{cursor: 'pointer'}}>Add</Button>
       </Form>
     )
   }
