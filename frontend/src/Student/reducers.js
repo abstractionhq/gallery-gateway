@@ -9,6 +9,28 @@ const students = (state = {}, action) => {
   }
 }
 
+const ui = (state = {
+  submission: {}
+}, action) => {
+  switch (action.type) {
+    case actions.UPLOAD_IMAGE:
+      if (!action.payload.path) {
+        return state
+      }
+
+      return {
+        ...state,
+        submission: {
+          ...state.submission,
+          previewImage: action.payload
+        }
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
-  students
+  students,
+  ui
 })
