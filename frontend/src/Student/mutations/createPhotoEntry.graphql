@@ -1,3 +1,5 @@
 mutation createPhotoEntry($input: PhotoInput!) {
-  createPhoto(input: $input)
+  createPhoto(input: $input) {
+    id
+  }
 }

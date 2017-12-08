@@ -21,7 +21,7 @@ const withRedux = connect(mapStateToProps, mapDispatchToProps)(SubmissionForm)
 const withMutations = compose(
   graphql(CreatePhotoEntry, {
     props: ({mutate}) => ({
-      submit: (entry) => mutate({
+      create: (entry) => mutate({
         variables: { input: entry }
       })
     })
