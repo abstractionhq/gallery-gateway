@@ -79,7 +79,6 @@ interface Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    excludeFromJudging: Boolean
 }
 
 input EntryInput {
@@ -98,17 +97,16 @@ type Photo implements Entry {
     id: ID!
     group: Group
     student: User
-    show: Show
-    title: String
+    show: Show!
+    title: String!
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    excludeFromJudging: Boolean
     
-    path: String
+    path: String!
     horizDimInch: Float
     vertDimInch: Float
     mediaType: String
@@ -126,17 +124,22 @@ type Video implements Entry {
     id: ID!
     group: Group
     student: User
-    show: Show
-    title: String
+    show: Show!
+    title: String!
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    excludeFromJudging: Boolean
     
-    videoURL: String
+    provider: String!
+    videoId: String!
+}
+
+input VideoInput {
+    entry: EntryInput
+    url: String!
 }
 
 type OtherMedia implements Entry {
@@ -151,7 +154,6 @@ type OtherMedia implements Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    excludeFromJudging: Boolean
     
     photoPath: String
     moreCopies: Boolean
@@ -194,6 +196,7 @@ type Mutation {
     removeFromShow(showId: ID!, usernames: [String]!): Boolean    
     
     createPhoto(input: PhotoInput!): Photo
+    createVideo(input: VideoInput!): Video
 }
 
 enum SortDirection {

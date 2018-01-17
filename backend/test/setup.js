@@ -3,6 +3,7 @@ import Show from '../models/show'
 import Entry from '../models/entry'
 import Group from '../models/group'
 import Image from '../models/image'
+import Video from '../models/video'
 import db from '../config/sequelize'
 
 before(function () {
@@ -14,7 +15,7 @@ beforeEach(function () {
     return db.query('SET FOREIGN_KEY_CHECKS = 0', {transaction: t})
       .then(() => {
         return Promise.all(
-          [User, Show, Entry, Group, Image]
+          [User, Show, Entry, Group, Image, Video]
             .map((model) => model.destroy({where: {}, transaction: t}))
         )
       })

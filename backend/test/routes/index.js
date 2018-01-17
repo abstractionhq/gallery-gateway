@@ -1,7 +1,5 @@
 import request from 'supertest'
 import server from '../../server'
-import db from '../../config/sequelize'
-import User from '../../models/user'
 import { expect } from 'chai'
 import { signUserToken } from '../util'
 import { fakeUser } from '../factories'

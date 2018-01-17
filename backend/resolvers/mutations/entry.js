@@ -1,12 +1,12 @@
 import { UserError } from 'graphql-errors'
 import Entry from '../../models/entry'
 import Image from '../../models/image'
+import Video from '../../models/video'
 import { ADMIN, IMAGE_ENTRY } from '../../constants'
+import {allowedToSubmit, parseVideo} from '../../helpers/submittion'
 
 export function createPhoto (_, args, req) {
-  // TODO update the below to account for group submission rights
-  const submittingOwnWork = req.auth.username !== undefined && req.auth.username === args.input.entry.studentUsername
-  if (req.auth.type !== ADMIN && !submittingOwnWork) {
+  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')
   }
@@ -21,5 +21,26 @@ export function createPhoto (_, args, req) {
       entryType: IMAGE_ENTRY,
       entryId: image.id
     }).then((entry) => Object.assign(entry, image.dataValues))
+  })
+}
+
+export function createVideo (_, args, req) {
+  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
+    // don't allow non-admins to submit work claiming to be from someone else
+    throw new UserError('Permission Denied')
+  }
+  const { type, id } = parseVideo(args.input.url)
+  if (!type || !id) {
+    throw new UserError('The video URL must be a valid URL from Youtube or Vimeo')
+  }
+  return Video.create({
+    provider: type,
+    videoId: id
+  }).then((video) => {
+    return Entry.create({
+      ...args.input.entry,
+      entryType: IMAGE_ENTRY,
+      entryId: video.id
+    }).then((entry) => Object.assign(entry, video.dataValues))
   })
 }
