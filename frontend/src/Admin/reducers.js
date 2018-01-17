@@ -71,6 +71,15 @@ const judges = (state = {}, action) => {
         ...state,
         ...judges
       }
+    case actions.ADD_JUDGE:
+      if (!action.payload.username) {
+        return state
+      }
+
+      return {
+        ...state,
+        [action.payload.username]: action.payload
+      }
     default:
       return state
   }

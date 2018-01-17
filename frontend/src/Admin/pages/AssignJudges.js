@@ -5,10 +5,16 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import AssignJudgesTable from '../containers/AssignJudgesTable'
+import CreateJudgeForm from '../containers/CreateJudgeForm'
 import NotFound from '../../shared/components/NotFound'
 import { fetchShow } from '../actions'
 
 const Heading = styled.h1`
+  margin-bottom: 25px;
+`
+
+const FormContainer = styled.div`
+  margin-top: 25px;
   margin-bottom: 25px;
 `
 
@@ -30,6 +36,9 @@ class AssignJudges extends Component {
       <Container fluid>
         <Heading>Assign Judges | {show.name}</Heading>
         <AssignJudgesTable showId={show.id} />
+        <FormContainer>
+          <CreateJudgeForm />
+        </FormContainer>
       </Container>
     )
   }

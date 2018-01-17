@@ -13,6 +13,7 @@ export const FETCH_JUDGES_FOR_SHOW = 'FETCH_JUDGES_FOR_SHOW'
 export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW = 'FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW'
 export const ASSIGN_JUDGES_TO_SHOW = 'ASSIGN_JUDGES_TO_SHOW'
 export const REMOVE_JUDGES_FROM_SHOW = 'REMOVE_JUDGES_FROM_SHOW'
+export const ADD_JUDGE = 'ADD_JUDGE'
 
 export const fetchShow = (showId) => (dispatch, getState, client) => {
   return client.query({
@@ -93,5 +94,12 @@ export const removeJudgesFromShow = (showId, usernames) => (dispatch, getState, 
       id: showId,
       usernames
     }
+  })
+}
+
+export const addJudge = (judge) => (dispatch, getState, client) => {
+  dispatch({
+    type: ADD_JUDGE,
+    payload: judge
   })
 }
