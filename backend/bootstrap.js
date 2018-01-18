@@ -11,7 +11,7 @@ export default function bootstrap () {
     storage: 'sequelize',
     storageOptions: { sequelize },
     migrations: {
-      path: nconf.get('db:migrations:path'),
+      path: './db/migrations',
       params: [sequelize.getQueryInterface(), sequelize.constructor]
     }
   })
