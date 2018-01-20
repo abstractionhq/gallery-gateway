@@ -8,7 +8,7 @@ import CreateShowForm from '../components/CreateShowForm'
 
 function mapDispatchToProps (dispatch) {
   return {
-    done: () => dispatch(push('/admin/'))
+    done: () => dispatch(push('/'))
   }
 }
 

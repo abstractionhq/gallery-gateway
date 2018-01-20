@@ -4,6 +4,9 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 
+import store from './store'
+import * as sharedActions from './shared/actions'
+
 import Root from './'
 
 const render = Component => {
