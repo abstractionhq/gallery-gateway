@@ -1,9 +1,8 @@
 import path from 'path'
-
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
-import graphqlHttp from 'express-graphql'
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import { maskErrors } from 'graphql-errors'
 
 import config from './config'
@@ -15,6 +14,7 @@ import parseJwtUser from './middleware/parseJwtUser'
 import imageUploader from './upload'
 
 const app = express()
+
 models()
 
 app.use(cors())
@@ -25,11 +25,14 @@ app.use(parseJwtUser)
 app.use(router)
 
 maskErrors(schema)
-app.use('/graphql', graphqlHttp(req => ({
+app.use('/graphql', graphqlExpress(req => ({
   schema,
-  graphiql: config.get('NODE_ENV') !== 'production',
   context: req
 })))
+
+if (config.get('NODE_ENV') !== 'production') {
+  app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
+}
 
 app.use('/static', express.static(path.join(__dirname, 'images')))
 router.post('/static/upload', imageUploader) // TODO: Require Authentication
