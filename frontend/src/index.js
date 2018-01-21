@@ -7,7 +7,7 @@ import apollo from '../config/apollo'
 import history from './history'
 import store from './store'
 
-import LoginSwitch from './shared/containers/LoginSwitch'
+import LoginSwitch from './shared/components/LoginSwitch'
 
 // Initialize Global Imports
 import 'moment-timezone' // See: https://github.com/headzoo/react-moment#timezone-support

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 
 import NavBar from '../components/NavBar'
-import { logoutUser } from '../../shared/actions'
+import { logout } from '../../shared/actions'
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(logoutUser())
+    logout: () => dispatch(logout())
   }
 }
 
