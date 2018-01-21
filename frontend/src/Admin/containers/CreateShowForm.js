@@ -6,11 +6,9 @@ import ShowsQuery from '../queries/shows.graphql'
 import CreateShowMutation from '../mutations/createShow.graphql'
 import CreateShowForm from '../components/CreateShowForm'
 
-function mapDispatchToProps (dispatch) {
-  return {
-    done: () => dispatch(push('/admin/'))
-  }
-}
+const mapDispatchToProps = (dispatch) => ({
+  done: () => dispatch(push('/admin/'))
+})
 
 const withRedux = connect(null, mapDispatchToProps)(CreateShowForm)
 

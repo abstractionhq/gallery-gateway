@@ -1,8 +1,10 @@
+import path from 'path'
+
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import express from 'express'
 import graphqlHttp from 'express-graphql'
 import { maskErrors } from 'graphql-errors'
-import cors from 'cors'
 
 import config from './config'
 import { passport } from './config/passport'
@@ -29,6 +31,7 @@ app.use('/graphql', graphqlHttp(req => ({
   context: req
 })))
 
+app.use('/static', express.static(path.join(__dirname, 'images')))
 router.post('/static/upload', imageUploader) // TODO: Require Authentication
 
 export default app // for testing
