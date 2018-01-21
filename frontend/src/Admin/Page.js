@@ -13,11 +13,11 @@ import NotFound from '../shared/components/NotFound'
 const Admin = () => (
   <Layout>
     <Switch>
-      <Route exact path='/admin' component={Dashboard} />
-      <Route exact path='/admin/show/create' component={CreateShow} />
-      <Route exact path='/admin/show/:id' component={ViewShow} />
-      <Route exact path='/admin/show/:id/judges' component={AssignJudges} />
-      <Route exact path='/admin/judges' component={ManageJudges} />
+      <Route exact path='/' component={Dashboard} />
+      <Route exact path='/show/new' component={CreateShow} />
+      <Route exact path='/show/:id' component={ViewShow} />
+      <Route exact path='/show/:id/judges' component={AssignJudges} />
+      <Route exact path='/judges' component={ManageJudges} />
       <Route component={NotFound} />
     </Switch>
   </Layout>
