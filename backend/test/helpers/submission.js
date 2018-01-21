@@ -11,7 +11,6 @@ describe('Parse Video URL', function () {
     expect(parseVideo('http://youtube.com/watch?v=12345678905').id).to.equal('12345678905')
     expect(parseVideo('http://youtu.be/12345678906').id).to.equal('12345678906')
     expect(parseVideo('http://youtu.be/12345678906').type).to.equal('youtube')
-    // TODO: Failing Test Case
     expect(parseVideo('https://www.youtube.com/watch?t=1s&v=12345678901').id).to.equal('12345678901')
     done()
   })
