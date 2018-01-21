@@ -1,19 +1,20 @@
 import './env' // Needs to be before everything else so that environment variables are loaded first
 
-import nconf from 'nconf'
+import config from 'nconf'
+
 import auth from './auth'
 
-nconf
+config
   .argv()
   .env()
   .use('memory')
 
-nconf.set('auth', auth)
-nconf.set('api:prefix', 'api')
-nconf.set('api:version', 'v1')
+config.set('auth', auth)
+config.set('api:prefix', 'api')
+config.set('api:version', 'v1')
 
-nconf.defaults({
+config.defaults({
   NODE_ENV: 'development'
 })
 
-export default nconf
+export default config

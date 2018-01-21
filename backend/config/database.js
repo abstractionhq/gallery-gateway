@@ -1,7 +1,9 @@
-const DB = process.env.ABSTRACTION_DB_NAME
-const USER = process.env.ABSTRACTION_DB_USER
-const PASSWORD = process.env.ABSTRACTION_DB_PASS
-const HOST = process.env.ABSTRACTION_DB_HOST
+import config from './index'
+
+const DB = config.get('ABSTRACTION_DB_NAME')
+const USER = config.get('ABSTRACTION_DB_USER')
+const PASSWORD = config.get('ABSTRACTION_DB_PASS')
+const HOST = config.get('ABSTRACTION_DB_HOST')
 
 const development = {
   dialect: 'mysql',
