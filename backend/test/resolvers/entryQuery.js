@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 
 import { entries } from '../../resolvers/queries/entryQuery'
-import { fakeImageEntry, fakeVideoEntry } from '../factories'
+import { fakeImageEntry, fakeVideoEntry, fakeOtherEntry } from '../factories'
 
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
@@ -40,6 +40,18 @@ describe('Entry Queries', function () {
               expect(resultEntries[0].title).to.equal(entry.title)
               expect(resultEntries[0].provider).to.equal('youtube')
               expect(resultEntries[0].videoId).to.equal('abc123')
+            })
+        })
+    })
+    it('gets an other media entry when it exists', function () {
+      return fakeOtherEntry({path: 'foo.jpg'})
+        .then((entry) => {
+          return entries('', {}, {auth: {type: 'ADMIN'}})
+            .then((resultEntries) => {
+              expect(resultEntries).to.be.length(1)
+              expect(resultEntries[0].id).to.equal(entry.id)
+              expect(resultEntries[0].title).to.equal(entry.title)
+              expect(resultEntries[0].path).to.equal('foo.jpg')
             })
         })
     })

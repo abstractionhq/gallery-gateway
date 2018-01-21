@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import Entry from '../../models/entry'
-import { createPhoto, createVideo } from '../../resolvers/mutations/entry'
+import { createPhoto, createVideo, createOtherMedia } from '../../resolvers/mutations/entry'
 import { fakeUser, fakeShow } from '../factories'
 
 describe('Entry Mutations', function () {
@@ -292,14 +292,62 @@ describe('Entry Mutations', function () {
               academicProgram: 'learning',
               moreCopies: false
             },
-            path: 'a/path.jpg',
-            horizDimInch: 1.2,
-            vertDimInch: 1.3,
-            mediaType: 'mymedia'
+            url: 'https://vimeo.com/45196609'
           }
         }
         expect(() => {
           createVideo({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+        }).to.throw('Permission Denied')
+      })
+    })
+  })
+  describe('OtherMedia Creation', function () {
+    describe('Successes', function () {
+      it('accepts a path string', function () {
+        return Promise.all([fakeUser(), fakeShow()])
+          .then(([user, show]) => {
+            const args = {
+              input: {
+                entry: {
+                  studentUsername: user.username,
+                  showId: show.id,
+                  title: 'mytitle',
+                  comment: 'this is my comment',
+                  forSale: true,
+                  yearLevel: 'third',
+                  academicProgram: 'learning',
+                  moreCopies: false
+                },
+                path: 'foo.jpg'
+              }
+            }
+            return createOtherMedia({}, args, {auth: {type: 'ADMIN'}})
+              .then((other) => {
+                expect(other.path).to.equal('foo.jpg')
+                return Promise.resolve()
+              })
+          })
+      })
+    })
+    describe('Failures', function () {
+      it('denies users submitting for someone else', function () {
+        const args = {
+          input: {
+            entry: {
+              studentUsername: 'user2',
+              showId: 1,
+              title: 'mytitle',
+              comment: 'this is my comment',
+              forSale: false,
+              yearLevel: 'second',
+              academicProgram: 'learning',
+              moreCopies: false
+            },
+            path: 'a/path.jpg'
+          }
+        }
+        expect(() => {
+          createOtherMedia({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
         }).to.throw('Permission Denied')
       })
     })

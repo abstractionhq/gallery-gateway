@@ -146,8 +146,8 @@ type OtherMedia implements Entry {
     id: ID!
     group: Group
     student: User
-    show: Show
-    title: String
+    show: Show!
+    title: String!
     comment: String
     forSale: Boolean
     invited: Boolean
@@ -155,8 +155,12 @@ type OtherMedia implements Entry {
     academicProgram: String
     moreCopies: Boolean
     
-    photoPath: String
-    moreCopies: Boolean
+    photoPath: String!
+}
+
+input OtherMediaInput {
+    entry: EntryInput
+    path: String
 }
 
 enum UserType {
@@ -197,6 +201,7 @@ type Mutation {
     
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
+    createOtherMedia(input: OtherMediaInput!): OtherMedia
 }
 
 enum SortDirection {

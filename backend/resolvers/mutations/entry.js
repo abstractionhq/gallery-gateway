@@ -2,7 +2,8 @@ import { UserError } from 'graphql-errors'
 import Entry from '../../models/entry'
 import Image from '../../models/image'
 import Video from '../../models/video'
-import { ADMIN, IMAGE_ENTRY } from '../../constants'
+import Other from '../../models/other'
+import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY } from '../../constants'
 import { allowedToSubmit, parseVideo } from '../../helpers/submission'
 
 export function createPhoto (_, args, req) {
@@ -42,5 +43,21 @@ export function createVideo (_, args, req) {
       entryType: IMAGE_ENTRY,
       entryId: video.id
     }).then((entry) => Object.assign(entry, video.dataValues))
+  })
+}
+
+export function createOtherMedia (_, args, req) {
+  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
+    // don't allow non-admins to submit work claiming to be from someone else
+    throw new UserError('Permission Denied')
+  }
+  return Other.create({
+    path: args.input.path
+  }).then((other) => {
+    return Entry.create({
+      ...args.input.entry,
+      entryType: OTHER_ENTRY,
+      entryId: other.id
+    }).then((entry) => Object.assign(entry, other.dataValues))
   })
 }
