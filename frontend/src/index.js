@@ -11,7 +11,6 @@ import store from './store'
 import Admin from './Admin/Page'
 import Home from './Home/Page'
 import NotFound from './shared/components/NotFound'
-import Student from './Student/Page'
 
 // Initialize Global Imports
 import 'moment-timezone' // See: https://github.com/headzoo/react-moment#timezone-support
@@ -27,7 +26,6 @@ const Root = () => (
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/admin' component={Admin} />
-          <Route path='/student' component={Student} />
           <Route component={NotFound} />
         </Switch>
       </ConnectedRouter>

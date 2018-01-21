@@ -12,7 +12,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  done: () => dispatch(push('/student/')),
+  done: () => dispatch(push('/')),
   handleUpload: (file) => dispatch(uploadImage(file))
 })
 
