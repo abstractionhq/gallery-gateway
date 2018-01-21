@@ -27,7 +27,7 @@ const auth = (state = {}, action) => {
         user: action.payload.user
       }
     case actions.LOGOUT_USER:
-      return { }
+      return {}
     default:
       return state
   }
