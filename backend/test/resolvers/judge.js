@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai'
-import db from '../../config/sequelize'
-import User from '../../models/user'
+
 import { createJudge, updatePermissions } from '../../resolvers/mutations/judge'
 import { fakeUser } from '../factories'
 

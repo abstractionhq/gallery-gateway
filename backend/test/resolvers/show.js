@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai'
-import db from '../../config/sequelize'
-import Show from '../../models/show'
+
 import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutations/show'
 import { fakeShow, fakeUser } from '../factories'
 

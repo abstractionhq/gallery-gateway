@@ -1,6 +1,7 @@
 import request from 'supertest'
-import server from '../../server'
 import { expect } from 'chai'
+
+import server from '../../server'
 import { signUserToken } from '../util'
 import { fakeUser } from '../factories'
 

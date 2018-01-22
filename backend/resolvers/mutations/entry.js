@@ -3,7 +3,7 @@ import Entry from '../../models/entry'
 import Image from '../../models/image'
 import Video from '../../models/video'
 import { ADMIN, IMAGE_ENTRY } from '../../constants'
-import {allowedToSubmit, parseVideo} from '../../helpers/submittion'
+import { allowedToSubmit, parseVideo } from '../../helpers/submission'
 
 export function createPhoto (_, args, req) {
   if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {

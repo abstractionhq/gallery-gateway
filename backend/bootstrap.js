@@ -1,10 +1,9 @@
-import nconf from './config'
 import fs from 'fs'
 import Umzug from 'umzug'
-import keygen from './keygen'
-import sequelize from './config/sequelize'
 
-// import seeder from '../db/seeds';
+import nconf from './config'
+import sequelize from './config/sequelize'
+import keygen from './keygen'
 
 export default function bootstrap () {
   const umzug = new Umzug({
@@ -25,12 +24,6 @@ export default function bootstrap () {
   }
 
   return umzug.up()
-//   .then(() => {
-//     if (nconf.get('seed')) {
-//       console.log('Seeding database...'); // eslint-disable-line no-console
-//       return seeder();
-//     }
-//   });
 }
 
 if (require.main === module) {
