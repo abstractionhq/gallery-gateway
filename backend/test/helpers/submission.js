@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { parseVideo } from '../../helpers/submission'
 
 describe('Parse Video URL', function () {
-  it('Accepts valid YouTube URLs', function (done) {
+  it('Accepts valid YouTube URLs', function () {
     expect(parseVideo('https://www.youtube.com/watch?v=12345678901').id).to.equal('12345678901')
     expect(parseVideo('https://www.youtube.com/watch?v=12345678902').id).to.equal('12345678902')
     expect(parseVideo('http://www.youtube.com/watch?v=12345678903').id).to.equal('12345678903')
@@ -12,9 +12,8 @@ describe('Parse Video URL', function () {
     expect(parseVideo('http://youtu.be/12345678906').id).to.equal('12345678906')
     expect(parseVideo('http://youtu.be/12345678906').type).to.equal('youtube')
     expect(parseVideo('https://www.youtube.com/watch?t=1s&v=12345678901').id).to.equal('12345678901')
-    done()
   })
-  it('Accepts valid Vimeo URLs', function (done) {
+  it('Accepts valid Vimeo URLs', function () {
     expect(parseVideo('http://vimeo.com/1234').id).to.equal('1234')
     expect(parseVideo('https://vimeo.com/1234').id).to.equal('1234')
     expect(parseVideo('https://www.vimeo.com/1234').id).to.equal('1234')
@@ -23,6 +22,5 @@ describe('Parse Video URL', function () {
     expect(parseVideo('https://vimeo.com/channels/staffpicks/40004003').id).to.equal('40004003')
     expect(parseVideo('https://vimeo.com/album/3953264/video/166790295').id).to.equal('166790295')
     expect(parseVideo('https://vimeo.com/groups/motion/videos/73234724').id).to.equal('73234724')
-    done()
   })
 })
