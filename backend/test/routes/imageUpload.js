@@ -11,7 +11,7 @@ describe('Image upload', function (){
         .attach('image', 'test/resources/validTest.jpg')
         .expect((res) => {
             expect(res.body).to.have.property('path')
-            expect(fs.existsSync('images/' + res.body.path)).to.be.true
+            expect(fs.existsSync('test/images/' + res.body.path)).to.be.true
         })
         .expect(201)
         .end(done)
