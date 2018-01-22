@@ -36,7 +36,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('development')
     }),
     new HtmlWebpackPlugin({
-      title: 'Abstraction', // TODO: Change
+      title: 'Gallery Gateway',
       template: './src/index.ejs'
     })
   ],
@@ -53,20 +53,8 @@ module.exports = {
         exclude: /node_moduels/
       },
       {
-        test: /\.md$/,
-        loaders: ['raw-loader']
-      },
-      {
-        test: /\.s?css$/,
-        loaders: ['style-loader', 'css-loader', 'resolve-url-loader', 'sass-loader']
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-      },
-      {
-        test: /\.(ttf|eot|otf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
       },
       {
         test: /\.(gif|png|jpg|jpeg)(\?[a-z0-9]+)?$/,

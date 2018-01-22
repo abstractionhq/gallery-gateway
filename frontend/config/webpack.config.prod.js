@@ -37,7 +37,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({ name: 'runtime' }),
     new HtmlWebpackPlugin({
       chunksSortMode: 'dependency',
-      title: 'Abstraction', // TODO: Change
+      title: 'Gallery Gateway',
       filename: '../index.html',
       template: './src/index.ejs'
     }),
@@ -72,20 +72,8 @@ module.exports = {
         exclude: /node_moduels/
       },
       {
-        test: /\.md$/,
-        loaders: ['raw-loader']
-      },
-      {
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract(['css-loader', 'resolve-url-loader', 'sass-loader'])
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-      },
-      {
-        test: /\.(ttf|eot|otf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract(['css-loader'])
       },
       {
         test: /\.(gif|png|jpg|jpeg)(\?[a-z0-9]+)?$/,
