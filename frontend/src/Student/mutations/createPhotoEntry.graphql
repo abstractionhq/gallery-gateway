@@ -1,0 +1,5 @@
+mutation createPhotoEntry($input: PhotoInput!) {
+  createPhoto(input: $input) {
+    id
+  }
+}

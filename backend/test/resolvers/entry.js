@@ -1,5 +1,6 @@
-import Entry from '../../models/entry'
 import { expect } from 'chai'
+
+import Entry from '../../models/entry'
 import { createPhoto, createVideo } from '../../resolvers/mutations/entry'
 import { fakeUser, fakeShow } from '../factories'
 
