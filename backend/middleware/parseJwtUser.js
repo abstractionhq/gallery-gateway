@@ -20,7 +20,7 @@ export default function (req, res, next) {
   req.auth.type = req.auth.type || null;
   if (nconf.get('NODE_ENV') === 'development' &&
       req.headers.referer &&
-      req.headers.referer.indexOf('http://localhost:3000/graphql') === 0) {
+      req.headers.referer.indexOf('http://localhost:3000/graphiql') === 0) {
     req.auth.type = ADMIN;
   }
   next();

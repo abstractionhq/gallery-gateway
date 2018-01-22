@@ -1,5 +1,5 @@
 export function up (queryInterface, Sequelize) {
-  return queryInterface.createTable('other', {
+  return queryInterface.createTable('others', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -21,5 +21,5 @@ export function up (queryInterface, Sequelize) {
 }
 
 export function down (queryInterface) {
-  return queryInterface.dropTable('other')
+  return queryInterface.dropTable('others')
 }
