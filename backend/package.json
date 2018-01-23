@@ -18,6 +18,7 @@
   "scripts": {
     "start": "nodemon ./bin/www --exec babel-node",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 5000 test/setup.js test/**/*.js",
+    "test-file": "cross-env NODE_ENV=test nyc mocha test/setup.js",
     "bootstrap": "babel-node ./bootstrap.js",
     "keygen": "babel-node keygen",
     "sequelize": "babel-node ./node_modules/.bin/sequelize",
