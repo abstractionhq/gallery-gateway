@@ -3,6 +3,9 @@ import server from '../../server'
 import { expect } from 'chai'
 import uploader from '../../upload'
 import fs from 'fs'
+import nconf from '../../config'
+
+const image_dir = nconf.get('upload:imageDir')
 
 describe('Image upload', function (){
     it('saves valid images at expected location', function(done) {
@@ -11,7 +14,8 @@ describe('Image upload', function (){
         .attach('image', 'test/resources/validTest.jpg')
         .expect((res) => {
             expect(res.body).to.have.property('path')
-            expect(fs.existsSync('test/images/' + res.body.path)).to.be.true
+            expect(fs.existsSync(image_dir + '/' + 
+                res.body.path)).to.be.true
         })
         .expect(201)
         .end(done)

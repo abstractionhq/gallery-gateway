@@ -1,27 +1,19 @@
 import multer from 'multer'
 import mkdirp from 'mkdirp'
 import uuidv1 from 'uuid/v1'
+import nconf from './config'
 
-const test_dir = './test/images'
-const image_dir = './images'
+const image_dir = nconf.get('upload:imageDir')
 
 const Storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    if (process.env.NODE_ENV === 'test'){
-      callback(null, test_dir) // TODO: See if we want a ./year/images
-    } else {
       callback(null, image_dir) // TODO: See if we want a ./year/images
-    }
   },
   filename: (req, file, callback) => {
     // Generate a unique id for the file
     const filename = uuidv1()
     // Make sure the correct directories exist or are created
-    if (process.env.NODE_ENV === 'test'){
-      mkdirp.sync(`${test_dir}/${filename[0]}/${filename[1]}`)
-    } else {
-      mkdirp.sync(`${image_dir}/${filename[0]}/${filename[1]}`)
-    }
+    mkdirp.sync(`${image_dir}/${filename[0]}/${filename[1]}`)
     // Return the path for the file
     callback(null, `${filename[0]}/${filename[1]}/${filename}.jpg`)
   }

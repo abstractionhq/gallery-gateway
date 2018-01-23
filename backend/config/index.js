@@ -3,6 +3,7 @@ import './env' // Needs to be before everything else so that environment variabl
 import config from 'nconf'
 
 import auth from './auth'
+import fileUpload from './fileUpload'
 
 config
   .argv()
@@ -10,6 +11,7 @@ config
   .use('memory')
 
 config.set('auth', auth)
+config.set('upload', fileUpload)
 config.set('api:prefix', 'api')
 config.set('api:version', 'v1')
 
