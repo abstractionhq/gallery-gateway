@@ -15,3 +15,4 @@
 - To migrate the database: `npm run migrate`
 - To seed the database: `npm run seed`
 - To run tests: `npm run test`
+- To run single test file:  `npm run test-file 'test/[path to file]`
