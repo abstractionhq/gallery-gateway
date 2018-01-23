@@ -7,6 +7,14 @@ export default sequelize.define('other', {
   path: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.DATE
   }
 },
 {

@@ -1,6 +1,7 @@
 import Image from './image'
 import Video from './video'
 import Other from './other'
+import Group from './group'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
@@ -103,6 +104,14 @@ Entry.prototype.getOther = function getOther () {
     return Promise.resolve(null)
   }
   return Other.findOne({ where: {id: this.entryId} })
+}
+
+Entry.prototype.getGroup = function getGroup () {
+  if (this.groupId === null || this.groupId === undefined) {
+    // the above oddness is due to the fact that groupId == 0 is valid
+    return Promise.resolve(null)
+  }
+  return Group.findById(this.groupId)
 }
 
 export default Entry
