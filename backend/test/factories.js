@@ -4,6 +4,7 @@ import Show from '../models/show'
 import Image from '../models/image'
 import Entry from '../models/entry'
 import Video from '../models/video'
+import Other from '../models/other'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
 /**
@@ -61,12 +62,20 @@ function fakeImage (opts) {
     mediaType: opts.mediaType
   })
 }
+
 function fakeVideo (opts) {
   opts.provider = opts.provider || 'youtube'
   opts.videoId = opts.videoId || faker.random.alphaNumeric(8)
   return Video.create({
     provider: opts.provider,
     videoId: opts.videoId
+  })
+}
+
+function fakeOther (opts) {
+  opts.path = opts.path || faker.system.commonFileName('.jpg')
+  return Other.create({
+    path: opts.path
   })
 }
 
@@ -123,6 +132,16 @@ export function fakeVideoEntry (opts) {
   return videoPromise
     .then((video) => {
       opts.video = video
+      return fakeEntry(opts)
+    })
+}
+
+export function fakeOtherEntry (opts) {
+  opts = opts || {}
+  const otherPromise = opts.other ? Promise.resolve(opts.other) : fakeOther(opts)
+  return otherPromise
+    .then((other) => {
+      opts.other = other
       return fakeEntry(opts)
     })
 }
