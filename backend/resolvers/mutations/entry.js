@@ -22,9 +22,17 @@ const createEntry = (entry, entryType, entryId, t) => {
   }
   return groupPromise
     .then(group => {
-      // remove the `group` attribute and replace it with the `groupId`
+      // We now have access to a Group instance (from attributes above).
+      // The only thing left to do is create the Entry object, which is (mostly)
+      // described by the `entry` parameter. We must first remove its `group`
+      // property and replace it with the group's ID, since our orm recognizes
+      // groupId, not a Group
+
+      // clone the object
       let newEntry = Object.assign({}, entry)
+      // remove the 'group' property
       delete newEntry['group']
+      // create the new Entry with select properties filled-in
       return Entry.create({
         ...newEntry,
         entryType: entryType,
