@@ -32,8 +32,15 @@ input PermissionInput {
 
 type Group {
     id: ID!
-    name: String
-    students: [User]
+    name: String!
+    creator: User!
+    participants: String!
+}
+
+input GroupInput {
+    name: String!
+    creatorUsername: String!
+    participants: String!
 }
 
 type Show {
@@ -82,7 +89,7 @@ interface Entry {
 }
 
 input EntryInput {
-    groupId: Int
+    group: GroupInput
     studentUsername: String
     showId: Int!
     title: String!

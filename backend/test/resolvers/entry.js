@@ -1,8 +1,20 @@
 import { expect } from 'chai'
 
 import Entry from '../../models/entry'
+import Group from '../../models/group'
 import { createPhoto, createVideo, createOtherMedia } from '../../resolvers/mutations/entry'
 import { fakeUser, fakeShow } from '../factories'
+
+const standardEntry = (user, show) => ({
+  studentUsername: user.username,
+  showId: show.id,
+  title: 'mytitle',
+  comment: 'this is my comment',
+  forSale: false,
+  yearLevel: 'second',
+  academicProgram: 'learning',
+  moreCopies: false
+})
 
 describe('Entry Mutations', function () {
   describe('Image Creation', function () {
@@ -14,8 +26,33 @@ describe('Entry Mutations', function () {
             const show = models[1]
             const args = {
               input: {
+                entry: standardEntry(user, show),
+                path: 'a/path.jpg',
+                horizDimInch: 1.2,
+                vertDimInch: 1.3,
+                mediaType: 'mymedia'
+              }
+            }
+            return createPhoto({}, args, {auth: {type: 'ADMIN'}})
+              .then(() => {
+                // make sure an Entry was created
+                return Entry.count().then((num) => expect(num).to.equal(1))
+              })
+          })
+      })
+      it('accepts a Group', function () {
+        return Promise.all([fakeUser(), fakeShow()])
+          .then((models) => {
+            const user = models[0]
+            const show = models[1]
+            const args = {
+              input: {
                 entry: {
-                  studentUsername: user.username,
+                  group: {
+                    name: 'mygroup1',
+                    creatorUsername: user.username,
+                    participants: 'uncle jimmy'
+                  },
                   showId: show.id,
                   title: 'mytitle',
                   comment: 'this is my comment',
@@ -31,9 +68,14 @@ describe('Entry Mutations', function () {
               }
             }
             return createPhoto({}, args, {auth: {type: 'ADMIN'}})
-              .then(() => {
-                // make sure an Entry was created
-                return Entry.count().then((num) => expect(num).to.equal(1))
+              .then((photoEntry) => {
+                // make sure a Group was created
+                return Group.findOne().then(group => {
+                  expect(group.participants).to.equal('uncle jimmy')
+                  expect(group.creatorUsername).to.equal(user.username)
+                  expect(group.name).to.equal('mygroup1')
+                  expect(group.id).to.equal(photoEntry.groupId)
+                })
               })
           })
       })
@@ -153,16 +195,7 @@ describe('Entry Mutations', function () {
             const show = models[1]
             const args = {
               input: {
-                entry: {
-                  studentUsername: user.username,
-                  showId: show.id,
-                  title: 'mytitle',
-                  comment: 'this is my comment',
-                  forSale: true,
-                  yearLevel: 'third',
-                  academicProgram: 'learning',
-                  moreCopies: false
-                },
+                entry: standardEntry(user, show),
                 url: 'https://vimeo.com/45196609'
               }
             }
@@ -171,7 +204,7 @@ describe('Entry Mutations', function () {
                 return Promise.all([
                   expect(video.provider).to.equal('vimeo'),
                   expect(video.videoId).to.equal('45196609'),
-                  expect(video.yearLevel).to.equal('third'),
+                  expect(video.yearLevel).to.equal('second'),
                   Promise.resolve()
                 ])
               })
@@ -184,16 +217,7 @@ describe('Entry Mutations', function () {
             const show = models[1]
             const args = {
               input: {
-                entry: {
-                  studentUsername: user.username,
-                  showId: show.id,
-                  title: 'mytitle',
-                  comment: 'this is my comment',
-                  forSale: true,
-                  yearLevel: 'third',
-                  academicProgram: 'learning',
-                  moreCopies: false
-                },
+                entry: standardEntry(user, show),
                 url: 'https://www.youtube.com/watch?v=JHAReoWi-nE'
               }
             }
@@ -308,16 +332,7 @@ describe('Entry Mutations', function () {
           .then(([user, show]) => {
             const args = {
               input: {
-                entry: {
-                  studentUsername: user.username,
-                  showId: show.id,
-                  title: 'mytitle',
-                  comment: 'this is my comment',
-                  forSale: true,
-                  yearLevel: 'third',
-                  academicProgram: 'learning',
-                  moreCopies: false
-                },
+                entry: standardEntry(user, show),
                 path: 'foo.jpg'
               }
             }

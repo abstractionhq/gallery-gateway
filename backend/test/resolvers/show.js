@@ -7,6 +7,11 @@ import { fakeShow, fakeUser } from '../factories'
 
 describe('Show Resolvers', function () {
   describe('Create a show', function () {
+    it('Does not allow non-admins', function () {
+      expect(() =>
+        createShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
     it('Does not allow null values', function (done) {
       createShow('', {}, {auth: {type: 'ADMIN'}})
         .catch((err) => {
@@ -51,6 +56,11 @@ describe('Show Resolvers', function () {
     })
   })
   describe('Assign to show', function () {
+    it('Does not allow non-admins', function () {
+      expect(() =>
+        assignToShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
     it('Notifies when show does not exist', function (done) {
       const input = {show: 50, usernames: ['user1']}
       assignToShow('', input, {auth: {type: 'ADMIN'}})
@@ -97,6 +107,11 @@ describe('Show Resolvers', function () {
     })
   })
   describe('Unassign from show', function () {
+    it('Does not allow non-admins', function () {
+      expect(() =>
+        removeFromShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
     it('Notifies when show does not exist', function (done) {
       const input = {show: 50, usernames: ['user1']}
       removeFromShow('', input, {auth: {type: 'ADMIN'}})

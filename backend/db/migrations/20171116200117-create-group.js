@@ -22,5 +22,5 @@ export function up (queryInterface, Sequelize) {
 }
 
 export function down (queryInterface) {
-  return queryInterface.dropTable('group')
+  return queryInterface.dropTable('groups')
 }

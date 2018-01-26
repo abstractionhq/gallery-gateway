@@ -2,6 +2,9 @@ import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
 
 export default {
   Entry: {
+    group (entry) {
+      return entry.getGroup()
+    },
     __resolveType (data, context, info) {
       if (data.entryType === IMAGE_ENTRY) {
         return info.schema.getType('Photo')

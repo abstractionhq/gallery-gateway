@@ -3,7 +3,7 @@ import { UserError } from 'graphql-errors'
 import { STUDENT, ADMIN, JUDGE } from '../../constants'
 
 export function user (_, args, req) {
-  const isRequestingOwnUser = req.auth.id !== undefined && req.auth.id === args.id
+  const isRequestingOwnUser = req.auth.username !== undefined && req.auth.username === args.id
   if (req.auth.type !== ADMIN && !isRequestingOwnUser) {
     throw new UserError('Permission Denied')
   }
