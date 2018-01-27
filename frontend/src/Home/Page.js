@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap'
 import { Flex } from 'rebass'
 import styled from 'styled-components'
 
@@ -37,21 +37,22 @@ const LoginButton = styled.a`
     text-decoration: none;
   }
 `
-
+// .col .col-sm-12 .col-md-6 .col-md-offset-3
+// md='7'
 const Home = () => (
-  <Row>
-    <Col md='7'>
-      <Flex column align='center' justify='center' style={{minHeight: '75vh'}}>
+  <Container >
+    <Row style={{justifyContent:'center'}}>
+      <Col style={{minHeight: '75vh', }}>
         <PageTitle>Gallery Gateway</PageTitle>
         <ButtonContainer>
           <LoginButton href='http://localhost:3000/auth/login'>Login</LoginButton>
         </ButtonContainer>
-      </Flex>
-    </Col>
-    <Col>
-      <SplashImage src={splash} />
-    </Col>
-  </Row>
+      </Col>
+      <Col>
+        <SplashImage src={splash} />
+      </Col>
+    </Row>
+  </Container>
 )
 
 export default Home
