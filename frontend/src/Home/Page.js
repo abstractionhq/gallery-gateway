@@ -22,6 +22,12 @@ const ButtonContainer = styled.div`
   text-align: center;
   width: 250px;
 `
+const LoginContainer = styled.div`
+  justify-content: center;
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+`
 
 const LoginButton = styled.a`
   background-color: #ee6e73;
@@ -40,19 +46,19 @@ const LoginButton = styled.a`
 // .col .col-sm-12 .col-md-6 .col-md-offset-3
 // md='7'
 const Home = () => (
-  <Container >
-    <Row style={{justifyContent:'center'}}>
-      <Col style={{minHeight: '75vh', }}>
+  <Row>
+    <Col md='7'>
+      <LoginContainer>
         <PageTitle>Gallery Gateway</PageTitle>
         <ButtonContainer>
           <LoginButton href='http://localhost:3000/auth/login'>Login</LoginButton>
         </ButtonContainer>
-      </Col>
-      <Col>
-        <SplashImage src={splash} />
-      </Col>
-    </Row>
-  </Container>
+      </LoginContainer>
+    </Col>
+    <Col>
+      <SplashImage src={splash} />
+    </Col>
+  </Row>
 )
 
 export default Home
