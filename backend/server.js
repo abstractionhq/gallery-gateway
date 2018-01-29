@@ -11,7 +11,8 @@ import models from './models'
 import router from './routes'
 import schema from './schema'
 import parseJwtUser from './middleware/parseJwtUser'
-import imageUploader from './upload'
+import { imageUploader, pdfUploader } from './upload'
+import { allowedToSubmit } from './helpers/submission'
 
 const app = express()
 
@@ -35,6 +36,8 @@ if (config.get('NODE_ENV') !== 'production') {
 }
 
 app.use('/static', express.static(path.join(__dirname, 'images')))
-router.post('/static/upload', imageUploader) // TODO: Require Authentication
+
+router.post('/static/upload/image', imageUploader) // TODO: Require Authentication
+router.post('/static/upload/pdf', pdfUploader) // TODO: Require Authentication
 
 export default app // for testing
