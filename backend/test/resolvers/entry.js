@@ -40,6 +40,33 @@ describe('Entry Mutations', function () {
               })
           })
       })
+      it('accepts a standard Entry with only the schema required input', function () {
+        return Promise.all([fakeUser(), fakeShow()])
+        .then((models) => {
+          const user = models[0]
+          const show = models[1]
+          const args = {
+            input: {
+              entry: {
+                studentUsername: user.username,
+                showId: show.id,
+              },
+              path: 'a/path.jpg',
+              horizDimInch: 1.2,
+              vertDimInch: 1.3,
+              mediaType: 'mymedia'
+            }
+          }
+          return createPhoto({}, args, {auth: {type: 'ADMIN'}})
+            .then((entry) => {
+              expect(entry.title).to.equal('untitled')
+              expect(entry.moreCopies).to.equal(false)
+              // make sure an Entry was created
+              return Entry.count().then((num) => expect(num).to.equal(1))
+
+            })
+        })
+      })
       it('accepts a Group', function () {
         return Promise.all([fakeUser(), fakeShow()])
           .then((models) => {
