@@ -45,7 +45,8 @@ function uploadAuth(req, res, next) {
   }
 
 }
-app.use('/static', express.static(path.join(__dirname, 'images')))
+app.use('/static/uploads', express.static(path.join(__dirname, 'images')))
+app.use('/static/uploads', express.static(path.join(__dirname, 'pdfs')))
 
 router.post('/static/upload/image', uploadAuth, imageUploader) 
 router.post('/static/upload/pdf', uploadAuth, pdfUploader)

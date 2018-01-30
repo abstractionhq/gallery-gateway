@@ -107,4 +107,20 @@ describe('PDF upload', function(){
             .end(done) 
         })
     })
+
+    it('filters for pdf files', function(done) {
+        fakeUser({username: 'user2', type: 'ADMIN'})
+        .then((user) => {
+            const token = signUserToken(user)
+            request(server)
+            .post('/static/upload/pdf')
+            .set('Authorization', 'Bearer ' + token)
+            .attach('pdf', 'test/resources/150x150.png')
+            .expect((res) => {
+                expect(res.body.error).to.equal('No PDF Provided')
+            })
+            .expect(400)
+            .end(done) 
+        })
+    })
 })
