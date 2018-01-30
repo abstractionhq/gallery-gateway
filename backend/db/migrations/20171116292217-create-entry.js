@@ -43,6 +43,7 @@ export function up (queryInterface, Sequelize) {
     },
     title: {
       type: Sequelize.STRING,
+      defaultValue: 'untitled',
       allowNull: false
     },
     comment: {
@@ -50,10 +51,12 @@ export function up (queryInterface, Sequelize) {
     },
     moreCopies: {
       allowNull: false,
+      defaultValue: false,
       type: Sequelize.BOOLEAN
     },
     forSale: {
       allowNull: false,
+      defaultValue: false,
       type: Sequelize.BOOLEAN
     },
     awardWon: {
@@ -73,6 +76,7 @@ export function up (queryInterface, Sequelize) {
     },
     excludeFromJudging: {
       allowNull: false,
+      defaultValue: false,
       type: Sequelize.BOOLEAN
     },
     createdAt: {

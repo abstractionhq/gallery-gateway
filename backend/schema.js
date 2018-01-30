@@ -124,7 +124,7 @@ input PhotoInput {
     path: String!
     horizDimInch: Float!
     vertDimInch: Float!
-    mediaType: String
+    mediaType: String!
 }
 
 type Video implements Entry {
