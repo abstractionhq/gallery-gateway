@@ -63,6 +63,8 @@ function handleRes(req, res, err, fileType){
   return res.status(201).json({path: req.file.filename})
 }
 
+
+
 export function imageUploader (req, res) {
   imageUpload(req, res, (err) => {
     return handleRes(req, res, err, 'JPEG')
@@ -70,7 +72,6 @@ export function imageUploader (req, res) {
 }
 
 export function  pdfUploader(req, res) {
-
   pdfUpload(req, res, (err) => {
     return handleRes(req, res, err, 'PDF')
   })
