@@ -3,8 +3,8 @@ import { Route, Switch } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 
 import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'
-import VideoSubmissionForm from '../components/VideoSubmissionForm'
-import OtherMediaSubmissionForm from '../components/OtherMediaSubmissionForm'
+import VideoSubmissionForm from '../containers/VideoSubmissionForm'
+import OtherMediaSubmissionForm from '../containers/OtherMediaSubmissionForm'
 
 const renderChooser = () => {
   return (
