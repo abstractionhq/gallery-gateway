@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { uploadImage } from '../actions'
 
-import SubmissionForm from '../components/SubmissionForm'
+import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
 
 const mapStateToProps = (state) => ({
@@ -14,9 +14,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   done: () => dispatch(push('/')),
   handleUpload: (file) => dispatch(uploadImage(file))
+  // TODO: Removing an image -> you upload, but change your mind; put a 'x' on the top right corner
 })
 
-const withRedux = connect(mapStateToProps, mapDispatchToProps)(SubmissionForm)
+const withRedux = connect(mapStateToProps, mapDispatchToProps)(PhotoSubmissionForm)
 
 const withMutations = compose(
   graphql(CreatePhotoEntry, {
@@ -26,7 +27,6 @@ const withMutations = compose(
       })
     })
   })
-  // TODO: Video and Physical Object Mutations
 )(withRedux)
 
 export default withMutations
