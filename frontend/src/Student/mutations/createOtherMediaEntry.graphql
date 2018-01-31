@@ -1,0 +1,5 @@
+mutation createOtherMediaEntry($input: OtherMediaInput!) {
+  createOtherMedia(input: $input) {
+    id
+  }
+}
