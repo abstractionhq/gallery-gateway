@@ -35,6 +35,7 @@
     "bluebird": "^3.5.1",
     "bootstrap": "^4.0.0-beta",
     "connected-react-router": "^4.2.3",
+    "formik": "^0.10.5",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
     "history": "^4.7.2",
@@ -60,7 +61,8 @@
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^2.2.3"
+    "styled-components": "^2.2.3",
+    "yup": "^0.24.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
