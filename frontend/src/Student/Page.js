@@ -11,7 +11,7 @@ const Student = () => (
   <Layout>
     <Switch>
       <Route exact path='/' component={Dashboard} />
-      <Route exact path='/submit' component={Submit} />
+      <Route path='/submit' component={Submit} />
       <Route component={NotFound} />
     </Switch>
   </Layout>

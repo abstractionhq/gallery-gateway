@@ -7,6 +7,7 @@ import { compose } from 'recompose'
 import { shouldLogin, login } from '../actions'
 import HomePage from '../../Home/Page'
 import AdminPage from '../../Admin/Page'
+import StudentPage from '../../Student/Page'
 
 // Displays the splash page when logged out, otherwise
 // loads the correct app component for this user.
@@ -18,7 +19,7 @@ class LoginSwitch extends Component {
   }
 
   static defaultProps = {
-    user: null
+    user: {}
   }
 
   componentDidMount () {
@@ -39,6 +40,8 @@ class LoginSwitch extends Component {
     switch (user.type) {
       case 'ADMIN':
         return <AdminPage />
+      case 'STUDENT':
+        return <StudentPage />
       default:
         // If for some reason, we receive an unknown user type, render the splash page
         // TODO: Make an error page that says:
