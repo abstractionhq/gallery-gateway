@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'reactstrap'
 
 import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'
 import VideoSubmissionForm from '../components/VideoSubmissionForm'
-import OtherSubmissionForm from '../components/OtherSubmissionForm'
+import OtherMediaSubmissionForm from '../components/OtherMediaSubmissionForm'
 
 const renderChooser = () => {
   return (
@@ -21,7 +21,7 @@ const Submit = () => (
           <Route exact path='/submit' render={renderChooser} />
           <Route exact path='/submit/photo' component={PhotoSubmissionForm} />
           <Route exact path='/submit/video' component={VideoSubmissionForm} />
-          <Route exact path='/submit/other' component={OtherSubmissionForm} />
+          <Route exact path='/submit/other' component={OtherMediaSubmissionForm} />
         </Switch>
       </Col>
     </Row>
