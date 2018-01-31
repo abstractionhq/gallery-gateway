@@ -1,30 +1,26 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { Container, Row, Col } from 'reactstrap'
+import { Container } from 'reactstrap'
+import styled from 'styled-components'
 
+import SubmissionFormChooser from '../components/SubmissionFormChooser'
 import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'
 import VideoSubmissionForm from '../containers/VideoSubmissionForm'
 import OtherMediaSubmissionForm from '../containers/OtherMediaSubmissionForm'
 
-const renderChooser = () => {
-  return (
-    <div>What Type of Submission?</div> // TODO
-  )
-}
+const Header = styled.h1`
+  margin-bottom: 25px;
+`
 
 const Submit = () => (
   <Container>
-    <Row>
-      <Col>
-        <h1>New Submission</h1>
-        <Switch>
-          <Route exact path='/submit' render={renderChooser} />
-          <Route exact path='/submit/photo' component={PhotoSubmissionForm} />
-          <Route exact path='/submit/video' component={VideoSubmissionForm} />
-          <Route exact path='/submit/other' component={OtherMediaSubmissionForm} />
-        </Switch>
-      </Col>
-    </Row>
+    <Header>New Submission</Header>
+    <Switch>
+      <Route exact path='/submit' component={SubmissionFormChooser} />
+      <Route exact path='/submit/photo' component={PhotoSubmissionForm} />
+      <Route exact path='/submit/video' component={VideoSubmissionForm} />
+      <Route exact path='/submit/other' component={OtherMediaSubmissionForm} />
+    </Switch>
   </Container>
 )
 
