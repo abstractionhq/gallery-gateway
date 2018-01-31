@@ -35,7 +35,7 @@ $config = array(
             'eduPersonAffiliation' => array('group6'),
             'email' => 'user6@example.com',
         ),
-        'user7:user6pass' => array(
+        'user7:user7pass' => array(
             'uid' => array('7'),
             'eduPersonAffiliation' => array('group7'),
             'email' => 'user7@example.com',
