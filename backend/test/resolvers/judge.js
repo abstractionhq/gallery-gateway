@@ -7,6 +7,11 @@ import { fakeUser } from '../factories'
 
 describe('Judge Resolvers', function () {
   describe('Judge Creation Resolver', function () {
+    it('Does now allow non-admins to add judge', function () {
+      expect(() =>
+        createJudge('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
     it('Does not allow duplicate usernames', function (done) {
       fakeUser({type: 'ADMIN'})
         .then((me) => {
@@ -52,6 +57,22 @@ describe('Judge Resolvers', function () {
   })
 
   describe('Update Permissions Resolver', function () {
+    it('Does now allow non-admins to update permissions', function () {
+      expect(() =>
+        updatePermissions('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
+
+    it('Fails with non-existent users', function () {
+      return updatePermissions(
+        '',
+        {input: {username: 'comeonandslam'}},
+        {auth: {type: 'ADMIN'}}
+      )
+        .then(() => { throw new Error('should have rejected promise') })
+        .catch((e) => expect(e.message).to.match(/User Not Found/))
+    })
+
     it('Changes a Student to a Judge', function (done) {
       const input = {input: {
         username: 'user3'

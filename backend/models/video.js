@@ -13,6 +13,14 @@ export default sequelize.define('video', {
     type: DataTypes.STRING,
     allowNull: false,
     notEmpty: true
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.DATE
   }
 },
 {

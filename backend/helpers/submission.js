@@ -1,6 +1,17 @@
 export function allowedToSubmit (args, req) {
-  // TODO update the below to account for group submission rights
-  return req.auth.username !== undefined && req.auth.username === args.input.entry.studentUsername
+  if (req.auth.username === undefined) {
+    // this seems ... odd
+    return false
+  } else if (args.input.entry.studentUsername) {
+    // if submitting individually, ensure you submit your own
+    return req.auth.username === args.input.entry.studentUsername
+  } else if (args.input.entry.group.creatorUsername) {
+    // if submitting as a group, ensure that you are the creator
+    return req.auth.username === args.input.entry.group.creatorUsername
+  } else {
+    // dunno what this is, might as well deny it
+    return false
+  }
 }
 
 export function parseVideo (url) {

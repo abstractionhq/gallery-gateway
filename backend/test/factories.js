@@ -1,5 +1,6 @@
 import faker from 'faker'
 import User from '../models/user'
+import Group from '../models/group';
 import Show from '../models/show'
 import Image from '../models/image'
 import Entry from '../models/entry'
@@ -24,6 +25,19 @@ export function fakeUser (opts) {
     lastName: faker.name.lastName(),
     type: opts.type
   })
+}
+
+export function fakeGroup (opts) {
+  opts = opts || {}
+  opts.name = opts.name !== undefined ? opts.name : faker.company.companyName()
+  opts.participants = opts.participants !== undefined ? opts.participants : faker.lorem.words(5)
+  const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
+  return userPromise.then(user =>
+    Group.create({
+      name: opts.name,
+      participants: opts.participants,
+      creatorUsername: user.username
+    }))
 }
 
 export function fakeShow (opts) {

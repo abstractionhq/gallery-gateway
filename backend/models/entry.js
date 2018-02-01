@@ -1,6 +1,8 @@
 import Image from './image'
 import Video from './video'
 import Other from './other'
+import Group from './group'
+import User from './user'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
@@ -28,6 +30,7 @@ const Entry = sequelize.define('entry', {
   },
   title: {
     type: DataTypes.STRING,
+    defaultValue: 'Untitled',
     allowNull: false
   },
   comment: {
@@ -35,10 +38,12 @@ const Entry = sequelize.define('entry', {
   },
   moreCopies: {
     allowNull: false,
+    defaultValue: false,
     type: DataTypes.BOOLEAN
   },
   forSale: {
     allowNull: false,
+    defaultValue: false,
     type: DataTypes.BOOLEAN
   },
   awardWon: {
@@ -47,7 +52,6 @@ const Entry = sequelize.define('entry', {
   invited: {
     allowNull: true,
     type: DataTypes.BOOLEAN,
-    defaultValue: false
   },
   yearLevel: {
     allowNull: true,
@@ -103,6 +107,28 @@ Entry.prototype.getOther = function getOther () {
     return Promise.resolve(null)
   }
   return Other.findOne({ where: {id: this.entryId} })
+}
+
+Entry.prototype.getGroup = function getGroup () {
+  if (!this.isGroupSubmission()) {
+    return Promise.resolve(null)
+  }
+  return Group.findById(this.groupId)
+}
+
+Entry.prototype.getStudent = function getUser () {
+  if (!this.isStudentSubmission()) {
+    return Promise.resolve(null)
+  }
+  return User.findById(this.studentUsername)
+}
+
+Entry.prototype.isGroupSubmission = function () {
+  return Number.isInteger(this.groupId)
+}
+
+Entry.prototype.isStudentSubmission = function () {
+  return !!this.studentUsername
 }
 
 export default Entry

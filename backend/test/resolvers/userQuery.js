@@ -10,7 +10,7 @@ describe('User Queries', function () {
   describe('User query', function () {
     it('Allows users to find themeselves', function (done) {
       fakeUser({username: 'user1'}).then((u) => {
-        user('', {id: u.username}, {auth: {type: 'STUDENT', id: 'user1'}})
+        user('', {id: u.username}, {auth: {type: 'STUDENT', username: 'user1'}})
           .then((result) => {
             expect(result.username).to.equal(u.username)
             done()
@@ -20,7 +20,7 @@ describe('User Queries', function () {
     it('Does not allow non admins to find other users by username', function (done) {
       fakeUser({username: 'user1'}).then((u) => {
         expect(() => user('', {id: 'anotheruser'},
-          {auth: { type: 'STUDENT', id: 'user1' }})).to.throw(/Permission Denied/)
+          {auth: { type: 'STUDENT', username: 'user1' }})).to.throw(/Permission Denied/)
         done()
       })
     })
