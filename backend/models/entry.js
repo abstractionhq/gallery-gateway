@@ -29,6 +29,7 @@ const Entry = sequelize.define('entry', {
   },
   title: {
     type: DataTypes.STRING,
+    defaultValue: 'Untitled',
     allowNull: false
   },
   comment: {
@@ -36,10 +37,12 @@ const Entry = sequelize.define('entry', {
   },
   moreCopies: {
     allowNull: false,
+    defaultValue: false,
     type: DataTypes.BOOLEAN
   },
   forSale: {
     allowNull: false,
+    defaultValue: false,
     type: DataTypes.BOOLEAN
   },
   awardWon: {
@@ -48,7 +51,6 @@ const Entry = sequelize.define('entry', {
   invited: {
     allowNull: true,
     type: DataTypes.BOOLEAN,
-    defaultValue: false
   },
   yearLevel: {
     allowNull: true,
