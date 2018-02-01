@@ -2,6 +2,7 @@ import Image from './image'
 import Video from './video'
 import Other from './other'
 import Group from './group'
+import User from './user'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
@@ -109,11 +110,25 @@ Entry.prototype.getOther = function getOther () {
 }
 
 Entry.prototype.getGroup = function getGroup () {
-  if (this.groupId === null || this.groupId === undefined) {
-    // the above oddness is due to the fact that groupId == 0 is valid
+  if (!this.isGroupSubmission()) {
     return Promise.resolve(null)
   }
   return Group.findById(this.groupId)
+}
+
+Entry.prototype.getStudent = function getUser () {
+  if (!this.isStudentSubmission()) {
+    return Promise.resolve(null)
+  }
+  return User.findById(this.studentUsername)
+}
+
+Entry.prototype.isGroupSubmission = function () {
+  return Number.isInteger(this.groupId)
+}
+
+Entry.prototype.isStudentSubmission = function () {
+  return !!this.studentUsername
 }
 
 export default Entry
