@@ -94,7 +94,7 @@ class VideoSubmissionForm extends Component {
           handleSubmit,
           isSubmitting
         }) => (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} style={{marginBottom: '75px'}}>
             <Row>
               <Col xs='12' md='8' style={{margin: '0 auto'}}>
                 <Header>New Video Submission</Header>
