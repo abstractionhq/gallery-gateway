@@ -59,6 +59,10 @@ module.exports = {
       {
         test: /\.(gif|png|jpg|jpeg)(\?[a-z0-9]+)?$/,
         loader: 'url-loader?limit=8192'
+      },
+      {
+        test: /\.svg(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader'
       }
     ]
   }
