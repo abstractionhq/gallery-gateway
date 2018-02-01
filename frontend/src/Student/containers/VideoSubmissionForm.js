@@ -5,11 +5,15 @@ import { connect } from 'react-redux'
 import VideoSubmissionForm from '../components/VideoSubmissionForm'
 import CreateVideoEntry from '../mutations/createVideoEntry.graphql'
 
+const mapStateToProps = (state) => ({
+  user: state.shared.auth.user
+})
+
 const mapDispatchToProps = (dispatch) => ({
   done: () => dispatch(push('/'))
 })
 
-const withRedux = connect(null, mapDispatchToProps)(VideoSubmissionForm)
+const withRedux = connect(mapStateToProps, mapDispatchToProps)(VideoSubmissionForm)
 
 const withMutations = compose(
   graphql(CreateVideoEntry, {
