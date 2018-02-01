@@ -4,8 +4,17 @@ import { Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 
 const Header = styled.h2`
+  margin-top: 25px;
   margin-bottom: 25px;
   text-align: center;
+
+  @media (min-width: 576px) {
+    margin-top: 75px;
+  }
+
+  @media (min-width: 768px) {
+    margin-top: 150px;
+  }
 `
 
 const SubmissionContainer = styled.section`
