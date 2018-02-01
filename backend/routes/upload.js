@@ -1,7 +1,11 @@
 import multer from 'multer'
 import mkdirp from 'mkdirp'
 import uuidv1 from 'uuid/v1'
-import nconf from './config'
+import nconf from '../config'
+import { Router } from 'express'
+import { ADMIN, STUDENT } from '../constants'
+
+const router = Router()
 
 const image_dir = nconf.get('upload:imageDir')
 const pdf_dir = nconf.get('upload:pdfDir')
@@ -42,7 +46,7 @@ function imageTypeFilter (req, file, cb, mimetype) {
 }
 
 function pdfTypeFilter (req, file, cb, mimetype) {
-  if (file.mimetype !== 'application/pdf') { // verify image is a jpg
+  if (file.mimetype !== 'application/pdf') { // verify file is a pdf
     return cb(null, false);
    }
    cb(null, true);
@@ -63,16 +67,30 @@ function handleRes(req, res, err, fileType){
   return res.status(201).json({path: req.file.filename})
 }
 
-
-
-export function imageUploader (req, res) {
-  imageUpload(req, res, (err) => {
-    return handleRes(req, res, err, 'JPEG')
-  })
+function uploadAuth(req, res, next) {
+  const authType = req.auth.type
+  if (authType !== ADMIN && authType !== STUDENT) { 
+    return res.status(401).send('Permission Denied')
+  } else {
+    next()
+  }
 }
 
-export function  pdfUploader(req, res) {
-  pdfUpload(req, res, (err) => {
-    return handleRes(req, res, err, 'PDF')
-  })
-}
+// Routers
+router.route('/static/upload/image')
+  .post(
+    uploadAuth,
+    (req, res, next) => imageUpload(req, res, (err) => {
+      return handleRes(req, res, err, 'JPEG')
+    })
+  ) 
+
+router.route('/static/upload/pdf')
+  .post(
+    uploadAuth,
+    (req, res, next) => pdfUpload(req, res, (err) => {
+      return handleRes(req, res, err, 'PDF')
+    })
+  )
+
+export default router

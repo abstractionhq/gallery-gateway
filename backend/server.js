@@ -11,9 +11,6 @@ import models from './models'
 import router from './routes'
 import schema from './schema'
 import parseJwtUser from './middleware/parseJwtUser'
-import { imageUploader, pdfUploader } from './upload'
-import { allowedToSubmit } from './helpers/submission'
-import { ADMIN, STUDENT } from './constants'
 
 const app = express()
 
@@ -36,19 +33,7 @@ if (config.get('NODE_ENV') !== 'production') {
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 }
 
-function uploadAuth(req, res, next) {
-  const authType = req.auth.type
-  if (authType !== ADMIN && authType !== STUDENT) { 
-    return res.status(401).send('Permission Denied')
-  } else {
-    next()
-  }
-
-}
 app.use('/static/uploads', express.static(path.join(__dirname, 'images')))
 app.use('/static/uploads', express.static(path.join(__dirname, 'pdfs')))
-
-router.post('/static/upload/image', uploadAuth, imageUploader) 
-router.post('/static/upload/pdf', uploadAuth, pdfUploader)
 
 export default app // for testing
