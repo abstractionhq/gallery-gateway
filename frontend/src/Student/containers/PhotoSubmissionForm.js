@@ -8,7 +8,7 @@ import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
 
 const mapStateToProps = (state) => ({
-  previewImage: state.student.ui.submission.previewImage || {},
+  previewImage: state.student.ui.submission.previewFile || {},
   user: state.shared.auth.user
 })
 

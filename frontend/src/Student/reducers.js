@@ -14,6 +14,7 @@ const ui = (state = {
 }, action) => {
   switch (action.type) {
     case actions.UPLOAD_IMAGE:
+    case actions.UPLOAD_PDF:
       if (!action.payload.path) {
         return state
       }
@@ -22,7 +23,7 @@ const ui = (state = {
         ...state,
         submission: {
           ...state.submission,
-          previewImage: action.payload
+          previewFile: action.payload
         }
       }
     default:
