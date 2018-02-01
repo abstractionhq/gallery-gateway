@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { Form, FormGroup, FormFeedback, Label, Button, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
+
+const Header = styled.h1`
+  margin-bottom: 25px;
+`
 
 const PreviewImage = styled.img`
   height: 100%;
@@ -12,6 +17,9 @@ const PreviewImage = styled.img`
 
 class PhotoSubmissionForm extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      username: PropTypes.string
+    }).isRequired,
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
@@ -87,29 +95,36 @@ class PhotoSubmissionForm extends Component {
   render () {
     const {
       create,
-      done
+      done,
+      user
     } = this.props
 
     return (
       <Formik
         initialValues={{
+          yearLevel: '',
+          academicProgram: '',
           title: 'Untitled',
-          mediaType: '',
           comment: '',
+          mediaType: '',
           horizDimInch: '',
           vertDimInch: '',
           forSale: '',
+          moreCopies: '',
           path: ''
         }}
         validationSchema={
           yup.object()
             .shape({
+              academicProgram: yup.string().required('Required'),
+              yearLevel: yup.string().required('Required'),
               title: yup.string().required('Required'),
-              mediaType: yup.string().required('Required'),
               comment: yup.string(),
+              mediaType: yup.string().required('Required'),
               horizDimInch: yup.number().required('Required').positive('Width Must be Positive'),
               vertDimInch: yup.number().required('Required').positive('Height Must be Positive'),
               forSale: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
+              moreCopies: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
               path: yup.string().required('Required')
             })}
         onSubmit={(
@@ -117,20 +132,24 @@ class PhotoSubmissionForm extends Component {
         ) => {
           const input = {
             entry: {
-              // groupId: ''
-              // studentUsername: ''
+              group: {
+                name: '',
+                creatorUsername: '',
+                participants: ''
+              },
+              studentUsername: user.username,
               showId: 1, // TODO: Update to dynamic
+              academicProgram: values.academicProgram,
+              yearLevel: values.yearLevel,
               title: values.title,
               comment: values.comment,
-              forSale: values.forSale === 'yes'
-              // yearLevel: '',
-              // academicProgram: '',
-              // moreCopies: ''
+              forSale: values.forSale === 'yes',
+              moreCopies: values.moreCopies === 'yes'
             },
-            path: values.path,
+            mediaType: values.mediaType,
             horizDimInch: values.horizDimInch,
             vertDimInch: values.vertDimInch,
-            mediaType: values.mediaType
+            path: values.path
           }
 
           create(input).then(done())
@@ -143,9 +162,32 @@ class PhotoSubmissionForm extends Component {
           handleSubmit,
           isSubmitting
         }) => (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} style={{marginBottom: '75px'}}>
             <Row>
-              <Col md='6' xs='12'>
+              <Col xs='12' md='8' style={{margin: '0 auto'}}>
+                <Header>New Photo Submission</Header>
+                <FormGroup>
+                  <Label>Academic Program</Label>
+                  <Field
+                    type='text'
+                    id='academicProgram'
+                    name='academicProgram'
+                    className='form-control'
+                    required
+                  />
+                  {this.renderErrors(touched, errors, 'academicProgram')}
+                </FormGroup>
+                <FormGroup>
+                  <Label>Year Level</Label>
+                  <Field
+                    type='text'
+                    id='yearLevel'
+                    name='yearLevel'
+                    className='form-control'
+                    required
+                  />
+                  {this.renderErrors(touched, errors, 'yearLevel')}
+                </FormGroup>
                 <FormGroup>
                   <Label>Title</Label>
                   <Field
@@ -156,6 +198,17 @@ class PhotoSubmissionForm extends Component {
                     required
                   />
                   {this.renderErrors(touched, errors, 'title')}
+                </FormGroup>
+                <FormGroup>
+                  <Label for='comment'>Artist Comment</Label>
+                  <Field
+                    component='textarea'
+                    id='comment'
+                    name='comment'
+                    className='form-control'
+                    rows={4}
+                  />
+                  {this.renderErrors(touched, errors, 'comment')}
                 </FormGroup>
                 <FormGroup>
                   {/* TODO: Make this a Select w/ Input Element */}
@@ -169,19 +222,6 @@ class PhotoSubmissionForm extends Component {
                   />
                   {this.renderErrors(touched, errors, 'mediaType')}
                 </FormGroup>
-                <FormGroup>
-                  <Label for='comment'>Artist Comment</Label>
-                  <Field
-                    component='textarea'
-                    id='comment'
-                    name='comment'
-                    className='form-control'
-                    rows={4}
-                  />
-                  {this.renderErrors(touched, errors, 'comment')}
-                </FormGroup>
-              </Col>
-              <Col md='6' xs='12'>
                 <FormGroup>
                   <Label>Dimensions (inches)</Label>
                   <div className='input-group'>
@@ -239,24 +279,61 @@ class PhotoSubmissionForm extends Component {
                   </FormGroup>
                   {this.renderErrors(touched, errors, 'forSale')}
                 </FormGroup>
+                <FormGroup>
+                  <Label>Will you print more copies of your artwork?</Label>
+                  <FormGroup check>
+                    <Label check>
+                      <Field
+                        type='radio'
+                        id='moreCopies'
+                        name='moreCopies'
+                        value='no'
+                        required
+                      />
+                      <span className='ml-2'>No, I will not print more copies.</span>
+                    </Label>
+                  </FormGroup>
+                  <FormGroup check>
+                    <Label check>
+                      <Field
+                        type='radio'
+                        id='moreCopies'
+                        name='moreCopies'
+                        value='yes'
+                        required
+                      />
+                      <span className='ml-2'>Yes, I will print more copiesk.</span>
+                    </Label>
+                  </FormGroup>
+                  {this.renderErrors(touched, errors, 'moreCopies')}
+                </FormGroup>
+                <FormGroup>
+                  <Label for='path'>Photo</Label>
+                  <Field
+                    id='path'
+                    name='path'
+                    render={({ field, form }) => this.renderFileUpload(field, form)}
+                  />
+                </FormGroup>
+                <Link to='/submit'>
+                  <Button
+                    type='button'
+                    color='danger'
+                    style={{cursor: 'pointer', width: '80px'}}
+                  >
+                    Back
+                  </Button>
+                </Link>
+                <Button
+                  type='submit'
+                  color='primary'
+                  style={{cursor: 'pointer', float: 'right', width: '80px'}}
+                  disabled={isSubmitting}
+                >
+                  Submit
+                </Button>
               </Col>
             </Row>
-            <FormGroup>
-              <Label for='path'>Image</Label>
-              <Field
-                id='path'
-                name='path'
-                render={({ field, form }) => this.renderFileUpload(field, form)}
-              />
-            </FormGroup>
-            <Button
-              type='submit'
-              color='primary'
-              style={{cursor: 'pointer'}}
-              disabled={isSubmitting}
-            >
-              Submit
-            </Button>
           </Form>
         )}
       />
