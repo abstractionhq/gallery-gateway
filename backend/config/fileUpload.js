@@ -1,10 +1,15 @@
 var imageDirPath
+var pdfDirPath
+
 if (process.env.NODE_ENV === 'test'){
-    imageDirPath = './test/images'
+    imageDirPath = './test/uploads/images'
+    pdfDirPath = './test/uploads/pdfs'
   } else {
-    imageDirPath = './images'
+    imageDirPath = './uploads/images'
+    pdfDirPath = './uploads/pdfs'
   }
 
   export default {
-      imageDir: imageDirPath
+      imageDir: imageDirPath,
+      pdfDir: pdfDirPath
   }

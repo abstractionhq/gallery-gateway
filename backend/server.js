@@ -11,7 +11,6 @@ import models from './models'
 import router from './routes'
 import schema from './schema'
 import parseJwtUser from './middleware/parseJwtUser'
-import imageUploader from './upload'
 
 const app = express()
 
@@ -34,7 +33,7 @@ if (config.get('NODE_ENV') !== 'production') {
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 }
 
-app.use('/static', express.static(path.join(__dirname, 'images')))
-router.post('/static/upload', imageUploader) // TODO: Require Authentication
+app.use('/static/uploads', express.static(path.join(__dirname, 'images')))
+app.use('/static/uploads', express.static(path.join(__dirname, 'pdfs')))
 
 export default app // for testing
