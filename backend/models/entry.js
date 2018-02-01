@@ -29,7 +29,7 @@ const Entry = sequelize.define('entry', {
   },
   title: {
     type: DataTypes.STRING,
-    defaultValue: 'untitled',
+    defaultValue: 'Untitled',
     allowNull: false
   },
   comment: {

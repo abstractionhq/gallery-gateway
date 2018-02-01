@@ -59,7 +59,7 @@ describe('Entry Mutations', function () {
           }
           return createPhoto({}, args, {auth: {type: 'ADMIN'}})
             .then((entry) => {
-              expect(entry.title).to.equal('untitled')
+              expect(entry.title).to.equal('Untitled')
               expect(entry.moreCopies).to.equal(false)
               // make sure an Entry was created
               return Entry.count().then((num) => expect(num).to.equal(1))

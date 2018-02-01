@@ -43,7 +43,7 @@ export function up (queryInterface, Sequelize) {
     },
     title: {
       type: Sequelize.STRING,
-      defaultValue: 'untitled',
+      defaultValue: 'Untitled',
       allowNull: false
     },
     comment: {
