@@ -15,6 +15,10 @@ const PreviewImage = styled.img`
   height: 100%;
 `
 
+const ButtonContainer = styled.div`
+  margin-top: 50px;
+`
+
 class PhotoSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
@@ -109,8 +113,8 @@ class PhotoSubmissionForm extends Component {
           mediaType: '',
           horizDimInch: '',
           vertDimInch: '',
-          forSale: '',
-          moreCopies: '',
+          forSale: 'no',
+          moreCopies: 'no',
           path: ''
         }}
         validationSchema={
@@ -261,6 +265,7 @@ class PhotoSubmissionForm extends Component {
                         name='forSale'
                         value='no'
                         required
+                        checked={values.forSale === 'no'}
                       />
                       <span className='ml-2'>No, I will not sell my artwork.</span>
                     </Label>
@@ -273,6 +278,7 @@ class PhotoSubmissionForm extends Component {
                         name='forSale'
                         value='yes'
                         required
+                        checked={values.forSale === 'yes'}
                       />
                       <span className='ml-2'>Yes, I will sell my artwork.</span>
                     </Label>
@@ -289,6 +295,7 @@ class PhotoSubmissionForm extends Component {
                         name='moreCopies'
                         value='no'
                         required
+                        checked={values.moreCopies === 'no'}
                       />
                       <span className='ml-2'>No, I will not print more copies.</span>
                     </Label>
@@ -301,8 +308,9 @@ class PhotoSubmissionForm extends Component {
                         name='moreCopies'
                         value='yes'
                         required
+                        checked={values.moreCopies === 'yes'}
                       />
-                      <span className='ml-2'>Yes, I will print more copiesk.</span>
+                      <span className='ml-2'>Yes, I will print more copies.</span>
                     </Label>
                   </FormGroup>
                   {this.renderErrors(touched, errors, 'moreCopies')}
@@ -314,24 +322,27 @@ class PhotoSubmissionForm extends Component {
                     name='path'
                     render={({ field, form }) => this.renderFileUpload(field, form)}
                   />
+                  {this.renderErrors(touched, errors, 'path')}
                 </FormGroup>
-                <Link to='/submit'>
+                <ButtonContainer>
+                  <Link to='/submit'>
+                    <Button
+                      type='button'
+                      color='danger'
+                      style={{cursor: 'pointer', width: '80px'}}
+                    >
+                      Back
+                    </Button>
+                  </Link>
                   <Button
-                    type='button'
-                    color='danger'
-                    style={{cursor: 'pointer', width: '80px'}}
+                    type='submit'
+                    color='primary'
+                    style={{cursor: 'pointer', float: 'right', width: '80px'}}
+                    disabled={isSubmitting}
                   >
-                    Back
+                    Submit
                   </Button>
-                </Link>
-                <Button
-                  type='submit'
-                  color='primary'
-                  style={{cursor: 'pointer', float: 'right', width: '80px'}}
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </Button>
+                </ButtonContainer>
               </Col>
             </Row>
           </Form>

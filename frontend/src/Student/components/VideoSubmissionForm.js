@@ -10,6 +10,10 @@ const Header = styled.h1`
   margin-bottom: 25px;
 `
 
+const ButtonContainer = styled.div`
+  margin-top: 50px;
+`
+
 class VideoSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
@@ -43,7 +47,7 @@ class VideoSubmissionForm extends Component {
           yearLevel: '',
           title: 'Untitled',
           comment: '',
-          forSale: '',
+          forSale: 'no',
           moreCopies: '', // TODO: Do we need this for Videos?
           url: ''
         }}
@@ -160,6 +164,7 @@ class VideoSubmissionForm extends Component {
                         name='forSale'
                         value='no'
                         required
+                        checked={values.forSale === 'no'}
                       />
                       <span className='ml-2'>No, I will not sell my artwork.</span>
                     </Label>
@@ -172,29 +177,32 @@ class VideoSubmissionForm extends Component {
                         name='forSale'
                         value='yes'
                         required
+                        checked={values.forSale === 'yes'}
                       />
                       <span className='ml-2'>Yes, I will sell my artwork.</span>
                     </Label>
                   </FormGroup>
                   {this.renderErrors(touched, errors, 'forSale')}
                 </FormGroup>
-                <Link to='/submit'>
+                <ButtonContainer>
+                  <Link to='/submit'>
+                    <Button
+                      type='button'
+                      color='danger'
+                      style={{cursor: 'pointer', width: '80px'}}
+                    >
+                      Back
+                    </Button>
+                  </Link>
                   <Button
-                    type='button'
-                    color='danger'
-                    style={{cursor: 'pointer', width: '80px'}}
+                    type='submit'
+                    color='primary'
+                    style={{cursor: 'pointer', float: 'right', width: '80px'}}
+                    disabled={isSubmitting}
                   >
-                    Back
+                    Submit
                   </Button>
-                </Link>
-                <Button
-                  type='submit'
-                  color='primary'
-                  style={{cursor: 'pointer', float: 'right', width: '80px'}}
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </Button>
+                </ButtonContainer>
               </Col>
             </Row>
           </Form>
