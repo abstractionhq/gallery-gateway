@@ -70,9 +70,8 @@ input ShowInput {
 
 type Vote {
     id: ID!
-    judge: User!
-    entry: Entry!
-    value: Int!
+    judge: User
+    entry: Entry
 }
 
 interface Entry {
@@ -185,7 +184,7 @@ type Query {
     vote(id: ID!): Vote
     groups: [Group]
     shows(orderBy: OrderByItem): [Show]
-    votes(showId: ID!, judgeUsername: String): [Vote]
+    votes: [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
