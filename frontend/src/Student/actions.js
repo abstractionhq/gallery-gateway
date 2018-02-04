@@ -10,7 +10,10 @@ export const uploadImage = (file) => (dispatch, getState, client) => {
   const formData = new FormData()
   formData.append('image', file)
 
-  return axios.post('http://localhost:3000/static/upload/image', formData) // TODO: Extract URL
+  return axios
+    .post('http://localhost:3000/static/upload/image', formData, { // TODO: Extract URL
+      headers: { 'Authorization': `Bearer ${getState().shared.auth.token}` }
+    })
     .then(({data}) => dispatch({
       type: UPLOAD_IMAGE,
       payload: {
@@ -27,7 +30,10 @@ export const uploadPDF = (file) => (dispatch, getState, client) => {
   const formData = new FormData()
   formData.append('pdf', file)
 
-  return axios.post('http://localhost:3000/static/upload/pdf', formData) // TODO: Extract URL
+  return axios
+    .post('http://localhost:3000/static/upload/pdf', formData, { // TODO: Extract URL
+      headers: { 'Authorization': `Bearer ${getState().shared.auth.token}` }
+    })
     .then(({data}) => dispatch({
       type: UPLOAD_PDF,
       payload: {
