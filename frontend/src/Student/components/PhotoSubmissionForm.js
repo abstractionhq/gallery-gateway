@@ -106,8 +106,10 @@ class PhotoSubmissionForm extends Component {
     return (
       <Formik
         initialValues={{
-          yearLevel: '',
           academicProgram: '',
+          yearLevel: '',
+          submittingAsGroup: 'no',
+          groupParticipants: '',
           title: 'Untitled',
           comment: '',
           mediaType: '',
@@ -122,6 +124,12 @@ class PhotoSubmissionForm extends Component {
             .shape({
               academicProgram: yup.string().required('Required'),
               yearLevel: yup.string().required('Required'),
+              submittingAsGroup: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
+              groupParticipants: yup.string()
+                .when('submittingAsGroup', {
+                  is: 'yes',
+                  then: yup.string().required('Required')
+                }),
               title: yup.string().required('Required'),
               comment: yup.string(),
               mediaType: yup.string().required('Required'),
@@ -138,8 +146,8 @@ class PhotoSubmissionForm extends Component {
             entry: {
               group: {
                 name: '',
-                creatorUsername: '',
-                participants: ''
+                creatorUsername: user.username,
+                participants: values.submittingAsGroup === 'yes' ? values.groupParticipants : ''
               },
               studentUsername: user.username,
               showId: 1, // TODO: Update to dynamic
@@ -194,6 +202,49 @@ class PhotoSubmissionForm extends Component {
                   />
                   {this.renderErrors(touched, errors, 'yearLevel')}
                 </FormGroup>
+                <FormGroup>
+                  <Label>Is this a group submission?</Label>
+                  <FormGroup check>
+                    <Label check>
+                      <Field
+                        type='radio'
+                        id='submittingAsGroup'
+                        name='submittingAsGroup'
+                        value='no'
+                        required
+                        checked={values.submittingAsGroup === 'no'}
+                      />
+                      <span className='ml-2'>No</span>
+                    </Label>
+                  </FormGroup>
+                  <FormGroup check>
+                    <Label check>
+                      <Field
+                        type='radio'
+                        id='submittingAsGroup'
+                        name='submittingAsGroup'
+                        value='yes'
+                        required
+                        checked={values.submittingAsGroup === 'yes'}
+                      />
+                      <span className='ml-2'>Yes</span>
+                    </Label>
+                  </FormGroup>
+                  {this.renderErrors(touched, errors, 'submittingAsGroup')}
+                </FormGroup>
+                {values.submittingAsGroup === 'yes'
+                  ? <FormGroup>
+                    <Label>List the names of your other group members.</Label>
+                    <Field
+                      type='text'
+                      id='groupParticipants'
+                      name='groupParticipants'
+                      className='form-control'
+                      required
+                    />
+                    {this.renderErrors(touched, errors, 'groupParticipants')}
+                  </FormGroup>
+                  : null}
                 <FormGroup>
                   <Label>Title</Label>
                   <Field
