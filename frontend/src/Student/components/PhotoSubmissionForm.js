@@ -148,7 +148,9 @@ class PhotoSubmissionForm extends Component {
               title: values.title,
               comment: values.comment,
               forSale: values.forSale === 'yes',
-              moreCopies: values.moreCopies === 'yes'
+              // Must select 'forSale = yes' first
+              // So, if you select 'forSale = yes', 'moreCopies = yes', 'forSale = no' => 'moreCopies' will be false
+              moreCopies: values.forSale === 'yes' && values.moreCopies === 'yes'
             },
             mediaType: values.mediaType,
             horizDimInch: values.horizDimInch,
@@ -256,7 +258,7 @@ class PhotoSubmissionForm extends Component {
                   {this.renderErrors(touched, errors, 'vertDimInch')}
                 </FormGroup>
                 <FormGroup>
-                  <Label>Will you sell your artwork?</Label>
+                  <Label>Is this work available for purchase if selected for a purchase award?</Label>
                   <FormGroup check>
                     <Label check>
                       <Field
@@ -267,7 +269,7 @@ class PhotoSubmissionForm extends Component {
                         required
                         checked={values.forSale === 'no'}
                       />
-                      <span className='ml-2'>No, I will not sell my artwork.</span>
+                      <span className='ml-2'>No</span>
                     </Label>
                   </FormGroup>
                   <FormGroup check>
@@ -280,41 +282,43 @@ class PhotoSubmissionForm extends Component {
                         required
                         checked={values.forSale === 'yes'}
                       />
-                      <span className='ml-2'>Yes, I will sell my artwork.</span>
+                      <span className='ml-2'>Yes</span>
                     </Label>
                   </FormGroup>
                   {this.renderErrors(touched, errors, 'forSale')}
                 </FormGroup>
-                <FormGroup>
-                  <Label>Will you print more copies of your artwork?</Label>
-                  <FormGroup check>
-                    <Label check>
-                      <Field
-                        type='radio'
-                        id='moreCopies'
-                        name='moreCopies'
-                        value='no'
-                        required
-                        checked={values.moreCopies === 'no'}
-                      />
-                      <span className='ml-2'>No, I will not print more copies.</span>
-                    </Label>
+                {values.forSale === 'yes'
+                  ? <FormGroup>
+                    <Label>If selected for multiple purchase awards, are you willing to sell multiple copies?</Label>
+                    <FormGroup check>
+                      <Label check>
+                        <Field
+                          type='radio'
+                          id='moreCopies'
+                          name='moreCopies'
+                          value='no'
+                          required
+                          checked={values.moreCopies === 'no'}
+                        />
+                        <span className='ml-2'>No</span>
+                      </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                      <Label check>
+                        <Field
+                          type='radio'
+                          id='moreCopies'
+                          name='moreCopies'
+                          value='yes'
+                          required
+                          checked={values.moreCopies === 'yes'}
+                        />
+                        <span className='ml-2'>Yes</span>
+                      </Label>
+                    </FormGroup>
+                    {this.renderErrors(touched, errors, 'moreCopies')}
                   </FormGroup>
-                  <FormGroup check>
-                    <Label check>
-                      <Field
-                        type='radio'
-                        id='moreCopies'
-                        name='moreCopies'
-                        value='yes'
-                        required
-                        checked={values.moreCopies === 'yes'}
-                      />
-                      <span className='ml-2'>Yes, I will print more copies.</span>
-                    </Label>
-                  </FormGroup>
-                  {this.renderErrors(touched, errors, 'moreCopies')}
-                </FormGroup>
+                  : null}
                 <FormGroup>
                   <Label for='path'>Photo</Label>
                   <Field
