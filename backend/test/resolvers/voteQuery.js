@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 
 import { votes } from '../../resolvers/queries/voteQuery'
-import Vote from '../../models/Vote'
 import {
   fakeVoteReturnShowId, fakeUser,
   fakeImageEntry, fakeShow
