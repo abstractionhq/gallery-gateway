@@ -40,7 +40,7 @@ describe('Vote Mutation', function () {
         .then((models) => {
           const user = models[0]
           const entry = models[1]
-          return user.addShow(entry.showId).then((_ => {
+          return user.addShow(entry.showId).then(() => {
             const args = {
               input: {
                 judgeUsername: user.username,
@@ -54,7 +54,7 @@ describe('Vote Mutation', function () {
                 expect(vote.entryId).to.equal(entry.id)
                 expect(vote.value).to.equal(2)
               })
-          }))
+          })
         })
     })
   })
@@ -76,7 +76,7 @@ describe('Vote Mutation', function () {
           }).to.throw('Permission Denied')
         })
     })
-    it('produces a user error when the entry to vote on is not found' , function () {
+    it('produces a user error when the entry to vote on is not found', function () {
       return fakeUser({ type: 'JUDGE' }).then((judge) => {
         var args = {
           input: {
@@ -86,9 +86,9 @@ describe('Vote Mutation', function () {
           }
         }
         return vote({}, args, { auth: { username: judge.username, type: 'JUDGE' } })
-        .catch((err) => {
-          expect(err.message).to.equal('Cannot find entry')
-        })
+          .catch((err) => {
+            expect(err.message).to.equal('Cannot find entry')
+          })
       })
     })
     it('only allows invited judges to vote', function () {
@@ -104,9 +104,29 @@ describe('Vote Mutation', function () {
             }
           }
           return vote({}, args, { auth: { username: user.username, type: 'JUDGE' } })
-          .catch((err) => {
-            expect(err.message).to.equal('Judge is not allowed to vote on this entry')
-          })
+            .catch((err) => {
+              expect(err.message).to.equal('Judge is not allowed to vote on this entry')
+            })
+        })
+    })
+    it('does not allow out of range votes', function () {
+      return Promise.all([fakeUser({ type: 'JUDGE' }), fakeImageEntry()])
+        .then((models) => {
+          const user = models[0]
+          const entry = models[1]
+          return user.addShow(entry.showId).then((_ => {
+            const args = {
+              input: {
+                judgeUsername: user.username,
+                entryId: entry.id,
+                value: 9
+              }
+            }
+            return vote({}, args, { auth: { username: user.username, type: 'JUDGE' } })
+              .catch((err) => {
+                expect(err.message).to.equal('Validation error: Vote value must be 0, 1, or 2')
+              })
+          }))
         })
     })
   })

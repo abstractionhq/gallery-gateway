@@ -20,8 +20,7 @@ export default sequelize.define('vote', {
   validate: {
     voteValueValidation () {
       if(!ALLOWED_VOTE_VALUES.has(this.value)){
-        throw new Error(`Vote value must be 
-        one of the following values: ${ALLOWED_VOTE_VALUES.toString()}`)
+        throw new Error(`Vote value must be 0, 1, or 2`)
       }
     }
   }

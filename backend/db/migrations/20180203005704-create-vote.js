@@ -38,12 +38,6 @@ export function up (queryInterface, Sequelize) {
       allowNull: false,
       type: Sequelize.DATE
     }
-  }, 
-  {
-    uniqueKeys: [{
-      name: 'vote_unique',
-      fields: ['judgeUsername', 'entryId']
-    }]
   })
 }
 
