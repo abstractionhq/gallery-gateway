@@ -6,6 +6,7 @@ import Image from '../models/image'
 import Entry from '../models/entry'
 import Video from '../models/video'
 import Other from '../models/other'
+import Vote from '../models/vote';
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
 /**
@@ -158,4 +159,24 @@ export function fakeOtherEntry (opts) {
       opts.other = other
       return fakeEntry(opts)
     })
+}
+
+export function fakeVoteReturnShowId(opts) {
+  opts = opts || {}
+  opts.value = opts.value || 1
+  const entryPromise = opts.entry ? Promise.resolve(opts.entry) : fakeImageEntry()
+  const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
+  return Promise.all([entryPromise, userPromise])
+  .then((models) => {
+    const entry = models[0]
+    const user = models[1]
+    return user.addShow(entry.showId).then(() => {
+      Vote.create({
+        judgeUsername: user.username,
+        entryId: entry.id,
+        value: 2
+      })
+      return entry.showId
+    })
+  })
 }

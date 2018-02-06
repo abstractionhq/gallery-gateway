@@ -74,6 +74,12 @@ type Vote {
     entry: Entry
 }
 
+input VoteInput {
+    judgeUsername: String!
+    entryId: Int!
+    value: Int!
+}
+
 interface Entry {
     id: ID!
     group: Group
@@ -181,7 +187,6 @@ type Query {
     users(type: UserType): [User]
     group(id: ID!): Group
     show(id: ID!): Show
-    vote(id: ID!): Vote
     groups: [Group]
     shows(orderBy: OrderByItem): [Show]
     votes: [Vote]
@@ -209,6 +214,8 @@ type Mutation {
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia
+
+    vote(input: VoteInput): Vote
 }
 
 enum SortDirection {
