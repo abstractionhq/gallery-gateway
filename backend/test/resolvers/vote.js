@@ -26,10 +26,7 @@ describe('Vote Mutation', function () {
                 args.input.value = 0
                 return vote({}, args, { auth: { username: user.username, type: 'JUDGE' } })
                   .then((v) => {
-                    return Vote.count().then((num) => {
-                      expect(v.value).to.equal(0)
-                      expect(num).to.equal(1)
-                    })
+                    expect(v.value).to.equal(0)
                   })
               })
           }))

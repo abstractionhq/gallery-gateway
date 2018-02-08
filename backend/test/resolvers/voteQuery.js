@@ -25,9 +25,40 @@ describe('Vote Queries', function () {
         .then((showId) => {
           expect(() => {
             votes({}, { judgeUsername: 'adifferetuser', showId: showId },
-            { auth: { type: 'JUDGE', username: 'user100' } })
+              { auth: { type: 'JUDGE', username: 'user100' } })
           }).to.throw(/Permission Denied/)
           done()
+        })
+    })
+    it('lets admins see all votes if no judge username is given', function (done) {
+      fakeShow().then((s) => {
+        fakeVoteReturnShowId({ entry: fakeImageEntry({ show: s }) })
+          .then(() => {
+            fakeVoteReturnShowId({ entry: fakeImageEntry({ show: s }) })
+              .then((showId) => {
+                votes({}, { showId: showId },
+                  { auth: { type: 'ADMIN', username: 'abc123' } })
+                  .then(result => {
+                    expect(result.length).to.equal(2)
+                    expect(result[0].judgeUsername).to.not.equal(result[1].judgeUsername)
+                    expect(result[0].entryId).to.not.equal(result[1].entryId)
+                    done()
+                  })
+              })
+          })
+      })
+    })
+    it('lets admins see the vote from a specific judge', function (done) {
+      const username = 'user77'
+      fakeVoteReturnShowId({ user: fakeUser({ username: username }) })
+        .then((showId) => {
+          votes({}, { judgeUsername: username, showId: showId },
+            { auth: { type: 'ADMIN', username: "abc123" } })
+            .then(result => {
+              expect(result.length).to.equal(1)
+              expect(result[0].judgeUsername).to.equal(username)
+              done()
+            })
         })
     })
   })

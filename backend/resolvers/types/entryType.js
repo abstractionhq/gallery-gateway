@@ -5,6 +5,9 @@ export default {
     group (entry) {
       return entry.getGroup()
     },
+    score(entry) {
+      return entry.getScore()
+    },
     __resolveType (data, context, info) {
       if (data.entryType === IMAGE_ENTRY) {
         return info.schema.getType('Photo')

@@ -174,7 +174,7 @@ export function fakeVoteReturnShowId(opts) {
       Vote.create({
         judgeUsername: user.username,
         entryId: entry.id,
-        value: 2
+        value: opts.value
       })
       return entry.showId
     })

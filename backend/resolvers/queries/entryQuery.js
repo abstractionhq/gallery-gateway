@@ -9,6 +9,7 @@ export function entries (_, args, req) {
   return Entry.findAll({where: args}).each((entry) => {
     entry.student = entry.getUser()
     entry.group = entry.getGroup()
+    entry.score = entry.getScore()
 
     if (entry.entryType === IMAGE_ENTRY) {
       return entry.getImage().then((image) => {

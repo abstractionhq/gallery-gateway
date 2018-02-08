@@ -3,7 +3,8 @@
 import { expect } from 'chai'
 
 import { entries } from '../../resolvers/queries/entryQuery'
-import { fakeImageEntry, fakeVideoEntry, fakeOtherEntry } from '../factories'
+import { fakeImageEntry, fakeVideoEntry, 
+  fakeOtherEntry, fakeVoteReturnShowId } from '../factories'
 
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
@@ -80,6 +81,36 @@ describe('Entry Queries', function () {
               expect(resultEntries[0].id).to.equal(originalEntries[0].id)
             })
         })
+    })
+    it('Can return a score on an entry that has votes', function () {
+      return fakeImageEntry()
+      .then((e) => {
+        return Promise.all([fakeVoteReturnShowId({entry: e, value: 1}),
+          fakeVoteReturnShowId({entry: e, value: 2})])
+          .then(() => {
+            return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
+            .then((resultEntries) => {
+              expect(resultEntries).to.be.length(1)
+              return resultEntries[0].score
+              .then(score => {
+                expect(score).to.equal(1.5)
+              })
+            })
+          })
+      })
+    })
+    it('returns a zero on a score with no votes', function () {
+      return fakeImageEntry()
+      .then(e => {
+        return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
+        .then((resultEntries) => { 
+          expect(resultEntries).to.be.length(1)
+          return resultEntries[0].score
+          .then(score => {
+            expect(score).to.equal(0)
+          })
+        })
+      })
     })
   })
 })

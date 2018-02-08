@@ -92,6 +92,7 @@ interface Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    score: Float
 }
 
 input EntryInput {
@@ -111,13 +112,14 @@ type Photo implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    score: Float
     
     path: String!
     horizDimInch: Float
@@ -138,14 +140,15 @@ type Video implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    
+    score: Float
+
     provider: String!
     videoId: String!
 }
@@ -160,14 +163,15 @@ type OtherMedia implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    
+    score: Float
+
     photoPath: String!
 }
 
