@@ -9,15 +9,15 @@ function judgeIsAllowedToVote(input) {
   return User.findById(input.judgeUsername).then(judge => {
     return Entry.findById(input.entryId).then(entry => {
       if (!entry) {
-        return [false, 'Cannot find entry']
+        return Promise.reject(new UserError('Cannot find entry'))
       }
       return judge.getShows().then(assignedShows => {
         // Make sure the array contains the show this entry is part of
         const allowedToVote = assignedShows.filter(show => show.id === entry.showId)
         if (allowedToVote.length === 0) {
-          return [false, 'Judge is not allowed to vote on this entry']
+          return Promise.reject(new UserError('Judge is not allowed to vote on this entry'))
         }
-        return [true, null]
+        return Promise.resolve()
       })
     })
   })
@@ -31,11 +31,8 @@ export function vote(_, args, req) {
   }
   // Make sure judge is allowed to vote on this entry
   const input = args.input
-  return judgeIsAllowedToVote(input).spread((allowedToVote, errMsg) => {
-    if (errMsg) {
-      throw new UserError(errMsg)
-    }
-    if (allowedToVote) {
+  return judgeIsAllowedToVote(input)
+    .then(() => {
       return Vote
         .findOrCreate({
           where: {
@@ -47,12 +44,11 @@ export function vote(_, args, req) {
           }
         })
         .spread((vote, created) => {
-          if(created){
+          if (created) {
             return vote
           } else {
-            return vote.update({value: input.value})
+            return vote.update({ value: input.value })
           }
         })
-    }
-  })
+    })
 }

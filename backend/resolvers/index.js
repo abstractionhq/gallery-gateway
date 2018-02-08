@@ -3,6 +3,7 @@ import User from './types/userType'
 import DateScalar from './types/dateScalar'
 import Group from './types/groupType'
 import Show from './types/showType'
+import Vote from './types/voteType'
 import * as EntryMutations from './mutations/entry'
 import * as EntryQuery from './queries/entryQuery'
 import * as ShowMutations from './mutations/show'
@@ -18,6 +19,7 @@ export default {
   ...DateScalar,
   ...Group,
   ...Show,
+  ...Vote,
   Query: {
     ...EntryQuery,
     ...UserQuery,

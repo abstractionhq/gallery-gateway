@@ -5,9 +5,9 @@ import Entry from '../../models/entry'
 import { UserError } from 'graphql-errors'
 import { ADMIN, JUDGE } from '../../constants'
 
-export function votes (_, args, req) {
+export function votes(_, args, req) {
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-  req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+    req.auth.type === JUDGE && req.auth.username === args.judgeUsername
   if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }
@@ -21,10 +21,10 @@ export function votes (_, args, req) {
   })
 }
 
-function getVotes(username, authType, entryIds){
+function getVotes(username, authType, entryIds) {
   // Give all votes on the show if the user 
   // is an admin and username was not given
-  if (authType === ADMIN && !username){
+  if (authType === ADMIN && !username) {
     return Vote.findAll({
       where: { entryId: entryIds }
     })

@@ -72,6 +72,7 @@ type Vote {
     id: ID!
     judge: User
     entry: Entry
+    value: Int!
 }
 
 input VoteInput {
