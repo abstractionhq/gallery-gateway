@@ -189,7 +189,7 @@ type Query {
     show(id: ID!): Show
     groups: [Group]
     shows(orderBy: OrderByItem): [Show]
-    votes: [Vote]
+    votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
