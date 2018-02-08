@@ -11,6 +11,8 @@ import server from '../../server'
 import config from '../../config'
 import { fakeShow, fakeImageEntry, fakeGroup, fakeUser } from '../factories'
 import User from '../../models/user'
+import { signToken } from '../../helpers/jwt';
+import { ADMIN, STUDENT } from '../../constants';
 
 const binaryParser = (res, callback) => {
   // taken from https://stackoverflow.com/q/13573315
@@ -31,6 +33,7 @@ describe('downloading a zip file', () => {
   const fileBPath = path.join(config.get('upload:imageDir'), 'imageB.jpg')
   const fileAHash = hash(fs.readFileSync(path.join(__filename, '../../resources/validTest.jpg')))
   const fileBHash = hash(fs.readFileSync(path.join(__filename, '../../resources/validTest2.jpg')))
+  const token = signToken({type: ADMIN, username: 'myuser1'})
 
   before(() => {
     // move the test resources into place, as if they were uploaded
@@ -49,11 +52,21 @@ describe('downloading a zip file', () => {
     fs.unlinkSync(fileBPath)
   })
 
-  xit('forbids non-admins') // TODO (rob) figure out how this works
+  it('forbids non-admins', () =>
+    request(server)
+      .get(`/zips/1?token=${signToken({type: STUDENT, username: 'myuser2'})}`)
+      .expect(401)
+  )
+
+  it('requires a token', () =>
+    request(server)
+      .get(`/zips/1`)
+      .expect(401)
+  )
 
   it('404s on non-existing shows', () =>
     request(server)
-      .get('/zips/1')
+      .get(`/zips/1?token=${token}`)
       .expect(404)
   )
 
@@ -61,7 +74,7 @@ describe('downloading a zip file', () => {
     fakeShow({name: 'myShow'})
       .then(show =>
         request(server)
-          .get(`/zips/${show.id}`)
+          .get(`/zips/${show.id}?token=${token}`)
           .buffer()
           .parse(binaryParser)
           .expect(200)
@@ -84,7 +97,7 @@ describe('downloading a zip file', () => {
         User.findById(entry.studentUsername)
           .then(user =>
             request(server)
-              .get(`/zips/${entry.showId}`)
+              .get(`/zips/${entry.showId}?token=${token}`)
               .buffer()
               .parse(binaryParser)
               .expect(200)
@@ -114,7 +127,7 @@ describe('downloading a zip file', () => {
         fakeImageEntry({invited: true, path: 'imageB.jpg', group: group})
           .then(entry =>
             request(server)
-              .get(`/zips/${entry.showId}`)
+              .get(`/zips/${entry.showId}?token=${token}`)
               .buffer()
               .parse(binaryParser)
               .expect(200)
@@ -146,7 +159,7 @@ describe('downloading a zip file', () => {
           fakeImageEntry({title: 'Untitled', path: 'imageB.jpg', invited: true, user, show})
         ]).then(([entry1, entry2]) =>
           request(server)
-            .get(`/zips/${show.id}`)
+            .get(`/zips/${show.id}?token=${token}`)
             .buffer()
             .parse(binaryParser)
             .expect(200)
@@ -178,7 +191,7 @@ describe('downloading a zip file', () => {
     fakeImageEntry({invited: false, path: 'imageA.jpg'})
       .then(entry =>
         request(server)
-          .get(`/zips/${entry.showId}`)
+          .get(`/zips/${entry.showId}?token=${token}`)
           .buffer()
           .parse(binaryParser)
           .expect(200)

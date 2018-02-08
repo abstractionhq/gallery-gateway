@@ -10,9 +10,10 @@ import Group from '../models/group'
 import Image from '../models/image'
 import Show from '../models/show'
 import User from '../models/user'
-import { IMAGE_ENTRY } from '../constants'
+import { IMAGE_ENTRY, ADMIN } from '../constants'
 import config from '../config'
-import sequelize from '../config/sequelize';
+import sequelize from '../config/sequelize'
+import { parseToken } from '../helpers/jwt'
 
 const readFileAsync = promisify(fs.readFile)
 
@@ -20,10 +21,19 @@ const IMAGE_DIR = config.get('upload:imageDir')
 
 const router = Router()
 
-router.route('/zips/:showId')
-  .get((req, res, next) => {
-    // TODO figure out how to do auth
+const ensureAdminDownloadToken = (req, res, next) => {
+  const token = req.query.token
+  parseToken(token, (err, decoded) => {
+    if (err || decoded.type !== ADMIN) {
+      res.status(401).send('{"message": "permission denied"}')
+    } else {
+      next()
+    }
+  })
+}
 
+router.route('/zips/:showId')
+  .get(ensureAdminDownloadToken, (req, res, next) => {
     // find the show
     Show.findById(req.params.showId, {rejectOnEmpty: true})
       .then(show => {
