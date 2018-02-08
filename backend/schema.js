@@ -72,6 +72,13 @@ type Vote {
     id: ID!
     judge: User
     entry: Entry
+    value: Int!
+}
+
+input VoteInput {
+    judgeUsername: String!
+    entryId: Int!
+    value: Int!
 }
 
 interface Entry {
@@ -86,6 +93,7 @@ interface Entry {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    score: Float
 }
 
 input EntryInput {
@@ -105,13 +113,14 @@ type Photo implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+    score: Float
     
     path: String!
     horizDimInch: Float
@@ -132,14 +141,15 @@ type Video implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    
+    score: Float
+
     provider: String!
     videoId: String!
 }
@@ -154,14 +164,15 @@ type OtherMedia implements Entry {
     group: Group
     student: User
     show: Show!
-    title: String!
+    title: String
     comment: String
     forSale: Boolean
     invited: Boolean
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
-    
+    score: Float
+
     photoPath: String!
 }
 
@@ -181,10 +192,9 @@ type Query {
     users(type: UserType): [User]
     group(id: ID!): Group
     show(id: ID!): Show
-    vote(id: ID!): Vote
     groups: [Group]
     shows(orderBy: OrderByItem): [Show]
-    votes: [Vote]
+    votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
@@ -209,6 +219,8 @@ type Mutation {
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia
+
+    vote(input: VoteInput): Vote
 }
 
 enum SortDirection {

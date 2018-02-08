@@ -3,6 +3,7 @@ import Video from './video'
 import Other from './other'
 import Group from './group'
 import User from './user'
+import Vote from './vote'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
@@ -84,6 +85,22 @@ const Entry = sequelize.define('entry', {
     }
   }
 })
+
+/* 
+* Calculate the score on the entry
+*/ 
+Entry.prototype.getScore = function getScore () {
+  // Calculate score by getting all votes with this
+  // entry id and then averaging over the sum of the votes
+  return Vote.findAll ({ where: { entryId: this.id }})
+  .then((votes) => {
+    const votesValues = votes.map(vote => vote.value)
+    if (votesValues.length === 0 ){
+      return 0
+    }
+    return votesValues.reduce((acc, curr) => acc + curr) / votesValues.length
+  })
+}
 
 /*
  * Gets the associated photo as a Promise
