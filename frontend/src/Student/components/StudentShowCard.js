@@ -1,34 +1,51 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Container, Card, CardTitle, CardSubtitle, CardText, Row, Col, Button } from 'reactstrap'
+import PropTypes from 'prop-types'
+import Moment from 'react-moment'
+import { Button, Col, Row} from 'reactstrap'
 
-const CardStyle =`
+import NoSubmissions from './NoSubmissions'
+import Submission from './Submission'
+import NewSubmissionButton from './NewSubmissionButton'
+import ShowInfo from './ShowInfo'
+
+const Card = styled.div`
   background-color: #f8f9fa;
   border-radius: 5px;
   margin-top: 15px;
-  padding: 10px;
-  height: 229px;
+  padding: 10px 10px 15px 10px;
   width: 100%;
 `
-const Shows = styled.div`
-  justify-content: flex-end;
+
+const NewSubmission = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `
+// <h2><Link to={`show/${props.id}`}>{props.name}</Link></h2>
 
-const StudentShowCard = () => (
-  <Container style={{padding:'20px 0 20px 0'}}>
+const StudentShowCard = (props) => (
+  <Card>
+    <Row style={{justifyContent:'space-between'}}>
+      <h2>Show1</h2>
+      <ShowInfo></ShowInfo>
+    </Row>
     <Row>
       <Col>
-       <Card body>
-         <CardTitle>Show 1</CardTitle>
-         <CardSubtitle>With supporting text below as a natural lead-in to additional content.</CardSubtitle>
-         <Button>Make a Submission</Button>
-       </Card>
-     </Col>
+        <Submission></Submission>
+      </Col>
+      <Col>
+        <NewSubmission>
+          <NewSubmissionButton></NewSubmissionButton>
+        </NewSubmission>
+      </Col>
     </Row>
-  </Container>
+  </Card>
 )
+
+StudentShowCard.propTypes = {
+  entryEnd: PropTypes.string.isRequired,
+}
 
 export default StudentShowCard
