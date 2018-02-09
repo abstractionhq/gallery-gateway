@@ -42,11 +42,11 @@ router.route('/Shibboleth.sso/Metadata')
 
 router.route('/auth/downloadToken')
   .post((req, res) => {
-    if (!req.auth) {
+    if (!req.auth || !req.auth.username || !req.auth.type) {
       return res
         .status(401)
         .type('json')
-        .send('{"error": "no authentication provided"}')
+        .send({error: 'no authentication provided'})
     }
     const expiryInMillis = jwtConfig.downloadTokenExpiresInMinutes * 60000
     const token = signToken(

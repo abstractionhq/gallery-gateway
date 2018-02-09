@@ -25,7 +25,9 @@ const ensureAdminDownloadToken = (req, res, next) => {
   const token = req.query.token
   parseToken(token, (err, decoded) => {
     if (err || decoded.type !== ADMIN) {
-      res.status(401).send('{"message": "permission denied"}')
+      res.status(401)
+        .type('html')
+        .send('permission denied')
     } else {
       next()
     }
