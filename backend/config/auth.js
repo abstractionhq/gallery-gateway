@@ -9,7 +9,8 @@ export default {
   jwt: {
     secret: privateCert.toString(),
     pub: publicCert.toString(),
-    expiresInMinutes: 60 * 24 * 2
+    expiresInMinutes: 60 * 24 * 2,
+    downloadTokenExpiresInMinutes: 5
   },
   saml: {
     // URL that goes to the front-end on successful SAML finalize

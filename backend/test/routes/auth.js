@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import { expect } from 'chai'
 import request from 'supertest'
 
@@ -6,6 +8,7 @@ import User from '../../models/user'
 import config from '../../config'
 import { fakeUser } from '../factories'
 import { decodeUserToken } from '../util'
+import { signToken, parseToken } from '../../helpers/jwt';
 
 describe('Authentication', () => {
   describe('/auth/login', () => {
@@ -81,5 +84,35 @@ describe('Authentication', () => {
             .end(done)
         })
     })
+  })
+
+  describe('/auth/downloadToken', () => {
+    it('generates a temporary token', () =>
+      fakeUser({type: 'ADMIN'})
+        .then(user => {
+          const token = signToken(user.dataValues)
+          return request(server)
+            .post('/auth/downloadToken')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200)
+            .then(res => {
+              expect(res.body).to.not.be.empty
+              expect(res.body.token).to.exist
+              return new Promise((resolve, reject) => {
+                parseToken(res.body.token, (err, payload) => {
+                  if (err) {
+                    reject(err)
+                  } else {
+                    resolve(payload)
+                  }
+                })
+              })
+            })
+            .then(payload => {
+              expect(payload.username).to.eq(user.username)
+              expect(payload.type).to.eq('ADMIN')
+            })
+        })
+    )
   })
 })
