@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
 
+import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
 
 const Header = styled.h1`
@@ -151,7 +152,7 @@ class PhotoSubmissionForm extends Component {
                   }),
                 title: yup.string().required('Required'),
                 comment: yup.string(),
-                mediaType: yup.string().required('Required'),
+                mediaType: yup.string().required('Required').nullable(), // react-select uses 'null' to represent when the value is cleared
                 horizDimInch: yup.number().required('Required').positive('Width Must be Positive'),
                 vertDimInch: yup.number().required('Required').positive('Height Must be Positive'),
                 forSale: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
@@ -198,6 +199,8 @@ class PhotoSubmissionForm extends Component {
             values,
             errors,
             touched,
+            setFieldValue,
+            setFieldTouched,
             handleSubmit,
             isSubmitting
           }) => (
@@ -294,13 +297,21 @@ class PhotoSubmissionForm extends Component {
                     {this.renderErrors(touched, errors, 'comment')}
                   </FormGroup>
                   <FormGroup>
-                    {/* TODO: Make this a Select w/ Input Element */}
                     <Label>Type of Media</Label>
-                    <Field
-                      type='text'
+                    <FormikSelectInput
                       id='mediaType'
                       name='mediaType'
-                      className='form-control'
+                      field='mediaType'
+                      input={{
+                        onChange: setFieldValue,
+                        onBlur: setFieldTouched,
+                        value: values.mediaType
+                      }}
+                      options={[
+                        {value: 'Chromogenic Print', label: 'Chromogenic Print'},
+                        {value: 'Inkjet Print', label: 'Inkjet Print'}
+                      ]}
+                      placeholder={'Select or create option...'}
                       required
                     />
                     {this.renderErrors(touched, errors, 'mediaType')}
