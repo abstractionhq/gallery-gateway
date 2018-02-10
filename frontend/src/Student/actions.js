@@ -4,6 +4,7 @@ import pdf from 'assets/pdf.svg'
 
 export const UPLOAD_IMAGE = 'UPLOAD_IMAGE'
 export const UPLOAD_PDF = 'UPLOAD_PDF'
+export const CLEAR_PREVIEW = 'CLEAR_PREVIEW'
 
 export const uploadImage = (file) => (dispatch, getState, client) => {
   // Endpoint expects 'multipart/form-data' w/ key 'image'
@@ -43,4 +44,10 @@ export const uploadPDF = (file) => (dispatch, getState, client) => {
       }
     }))
     .catch(console.error) // TODO: Handle the error
+}
+
+export const clearPreview = () => (dispatch, getState, client) => {
+  dispatch({
+    type: CLEAR_PREVIEW
+  })
 }

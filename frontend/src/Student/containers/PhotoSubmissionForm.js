@@ -2,7 +2,7 @@ import { graphql, compose } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 
-import { uploadImage } from '../actions'
+import { uploadImage, clearPreview } from '../actions'
 
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
@@ -14,7 +14,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   done: () => dispatch(push('/')),
-  handleUpload: (file) => dispatch(uploadImage(file))
+  handleUpload: (file) => dispatch(uploadImage(file)),
+  clearPreview: () => dispatch(clearPreview())
   // TODO: Removing an image -> you upload, but change your mind; put a 'x' on the top right corner
 })
 
