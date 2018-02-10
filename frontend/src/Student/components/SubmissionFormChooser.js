@@ -4,7 +4,7 @@ import { Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import FaImage from 'babel-loader!react-icons/fa/image'
 import FaVideo from 'babel-loader!react-icons/fa/video-camera'
-import FaLightbulb from 'babel-loader!react-icons/fa/lightbulb-o'
+import FaBook from 'babel-loader!react-icons/fa/book'
 
 const Header = styled.h2`
   margin-top: 25px;
@@ -57,9 +57,9 @@ const SubmissionFormChooser = (props) => (
           style={{textDecoration: 'none', display: 'block'}}
           className="bg-light">
           <SubmissionContainer className='text-dark'>
-            <FaLightbulb size="4em" />
+            <FaBook size="4em" />
             <h3>Other</h3>
-            <p>(eg. A book or physical object)</p>
+            <p>(eg. A book or physical art)</p>
           </SubmissionContainer>
         </Link>
       </Col>

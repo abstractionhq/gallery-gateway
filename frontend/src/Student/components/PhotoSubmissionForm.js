@@ -283,7 +283,7 @@ class PhotoSubmissionForm extends Component {
                     {this.renderErrors(touched, errors, 'title')}
                   </FormGroup>
                   <FormGroup>
-                    <Label for='comment'>Artist Comment</Label>
+                    <Label for='comment'>Artist Comment (Optional)</Label>
                     <Field
                       component='textarea'
                       id='comment'
