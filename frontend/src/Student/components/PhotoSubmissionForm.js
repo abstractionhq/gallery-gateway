@@ -10,6 +10,10 @@ import yup from 'yup'
 import SuccessModal from './SuccessModal'
 
 const Header = styled.h1`
+  margin-bottom: 10px;
+`
+
+const SubHeader = styled.h3`
   margin-bottom: 25px;
 `
 
@@ -25,6 +29,10 @@ class PhotoSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
       username: PropTypes.string
+    }).isRequired,
+    forShow: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
     }).isRequired,
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
@@ -109,7 +117,8 @@ class PhotoSubmissionForm extends Component {
     const {
       create,
       done,
-      user
+      user,
+      forShow
     } = this.props
 
     return (
@@ -160,7 +169,7 @@ class PhotoSubmissionForm extends Component {
                   participants: values.submittingAsGroup === 'yes' ? values.groupParticipants : ''
                 },
                 studentUsername: user.username,
-                showId: 1, // TODO: Update to dynamic
+                showId: forShow.id,
                 academicProgram: values.academicProgram,
                 yearLevel: values.yearLevel,
                 title: values.title,
@@ -196,6 +205,7 @@ class PhotoSubmissionForm extends Component {
               <Row>
                 <Col xs='12' md='8' style={{margin: '0 auto'}}>
                   <Header>New Photo Submission</Header>
+                  <SubHeader>{forShow.name}</SubHeader>
                   <FormGroup>
                     <Label>Academic Program</Label>
                     <Field
