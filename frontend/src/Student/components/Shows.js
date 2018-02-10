@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ShowCard from '../components/ShowCard'
+import StudentShowCard from '../components/StudentShowCard'
 
 const Shows = ({shows, loading}) => (
   <div>
     {loading ? null : shows.map((show) => (
-      <ShowCard key={show.id} {...show} />
+      <StudentShowCard key={show.id} {...show} />
     ))}
   </div>
 )

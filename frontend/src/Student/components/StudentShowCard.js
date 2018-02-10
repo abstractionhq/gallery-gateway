@@ -9,6 +9,7 @@ import NoSubmissions from './NoSubmissions'
 import Submission from './Submission'
 import NewSubmissionButton from './NewSubmissionButton'
 import ShowInfo from './ShowInfo'
+import ClosedSubmission from './ClosedSubmission'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -27,9 +28,9 @@ const NewSubmission = styled.div`
 
 const StudentShowCard = (props) => (
   <Card>
-    <Row style={{justifyContent:'space-between'}}>
+    <Row style={{justifyContent:'space-around'}}>
       <h2>Show1</h2>
-      <ShowInfo></ShowInfo>
+      <ShowInfo entryEnd={props.entryEnd}></ShowInfo>
     </Row>
     <Row>
       <Col>
@@ -40,6 +41,7 @@ const StudentShowCard = (props) => (
           <NewSubmissionButton></NewSubmissionButton>
         </NewSubmission>
       </Col>
+
     </Row>
   </Card>
 )
