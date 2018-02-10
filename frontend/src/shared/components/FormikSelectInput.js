@@ -18,7 +18,8 @@ class FormikSelectInput extends Component {
           PropTypes.shape({
             value: PropTypes.string,
             label: PropTypes.string
-          }))
+          })),
+        PropTypes.string // '' when empty
       ]),
       onChange: PropTypes.func, // setFieldValue
       onBlur: PropTypes.func // setFieldTouched

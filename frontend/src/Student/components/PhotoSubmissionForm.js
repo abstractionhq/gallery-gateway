@@ -38,7 +38,8 @@ class PhotoSubmissionForm extends Component {
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
-    done: PropTypes.func.isRequired
+    done: PropTypes.func.isRequired,
+    clearPreview: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -50,6 +51,11 @@ class PhotoSubmissionForm extends Component {
     this.state = {
       showModal: false
     }
+    // We clear any uploaded files.
+    // This resets the field if a user uploads a file, navigates to another page,
+    // and comes back to this form, or a user makes a submission and comes back to
+    // this page to make another submission.
+    props.clearPreview()
   }
 
   renderFileUpload = (field, form) => {

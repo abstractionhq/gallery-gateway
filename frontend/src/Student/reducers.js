@@ -26,6 +26,14 @@ const ui = (state = {
           previewFile: action.payload
         }
       }
+    case actions.CLEAR_PREVIEW:
+      return {
+        ...state,
+        submission: {
+          ...state.submission,
+          previewFile: {}
+        }
+      }
     default:
       return state
   }
