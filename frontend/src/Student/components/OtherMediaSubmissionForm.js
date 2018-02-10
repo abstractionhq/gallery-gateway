@@ -382,7 +382,7 @@ class OtherSubmissionForm extends Component {
           )}
         />
         <SuccessModal isOpen={this.state.showModal} />
-      <Fragment>
+      </Fragment>
     )
   }
 }

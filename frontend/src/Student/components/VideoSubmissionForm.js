@@ -25,6 +25,13 @@ class VideoSubmissionForm extends Component {
     done: PropTypes.func.isRequired
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      showModal: false
+    }
+  }
+
   renderErrors = (touched, errors, field) => {
     // Render feedback if this field's been touched and has errors
     if (touched[field] && errors[field]) {
