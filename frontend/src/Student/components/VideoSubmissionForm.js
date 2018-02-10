@@ -300,7 +300,7 @@ class VideoSubmissionForm extends Component {
                       <Button
                         type='button'
                         color='danger'
-                        style={{cursor: 'pointer', width: '80px'}}
+                        style={{cursor: 'pointer', width: '150px'}}
                       >
                         Back
                       </Button>
@@ -308,7 +308,7 @@ class VideoSubmissionForm extends Component {
                     <Button
                       type='submit'
                       color='primary'
-                      style={{cursor: 'pointer', float: 'right', width: '80px'}}
+                      style={{cursor: 'pointer', float: 'right', width: '150px'}}
                       disabled={isSubmitting}
                     >
                       Submit
