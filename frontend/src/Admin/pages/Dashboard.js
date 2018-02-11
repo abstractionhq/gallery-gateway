@@ -9,10 +9,14 @@ const Dashboard = () => (
     <Row>
       <Col>
         <h1>Dashboard</h1>
-        <Shows />
       </Col>
       <Col md='3'>
         <Button color='primary' style={{cursor: 'pointer'}} tag={Link} to='/show/new'>Create Show</Button>
+      </Col>
+    </Row>
+    <Row>
+      <Col>
+        <Shows />
       </Col>
     </Row>
   </Container>
