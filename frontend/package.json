@@ -55,7 +55,6 @@
     "react-router-dom": "^4.2.2",
     "react-table": "^6.7.4",
     "reactstrap": "^5.0.0-alpha.3",
-    "rebass": "^1.0.4",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
