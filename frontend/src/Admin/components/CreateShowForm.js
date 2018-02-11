@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Form, FormGroup, Label, Button } from 'reactstrap'
-import { Flex, Box } from 'rebass'
+import { Form, FormGroup, Label, Button, Row, Col } from 'reactstrap'
 import { Field, Fields, reduxForm } from 'redux-form'
 import styled from 'styled-components'
 
@@ -31,8 +30,8 @@ class CreateShowForm extends Component {
     return (
       <Form onSubmit={handleSubmit(this.submit)}>
         {/* TODO: There should be client-side validation on these form fields */}
-        <Flex>
-          <Box w={1/2}>
+        <Row>
+          <Col xs={7}>
             <FormGroup>
               <Label for='name'>Name</Label>
               <Field id='name' component='input' type='text' name='name' className='form-control' />
@@ -46,39 +45,50 @@ class CreateShowForm extends Component {
               <Label for='submission-limit'>Submission Limit</Label>
               <Field id='submission-limit' component='input' type='number' name='entryCap' className='form-control' />
             </FormGroup>
-          </Box>
-          <Box w={1/2}>
-            <Flex column align='center'>
-              <CalendarContainer>
-                <Label>Submission Dates</Label>
-                {/* TODO: Update the selected dates if they're manually typed */}
-                <Fields
-                  names={['entryStart', 'entryEnd']}
-                  component={props => (
-                    <DateRangePicker
-                      startDateFieldName='entryStart'
-                      endDateFieldName='entryEnd'
-                      {...props}
+          </Col>
+          <Col xs={5}>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Label>Submission Dates</Label>
+                  <CalendarContainer>
+                    {/* TODO: Update the selected dates if they're manually typed */}
+                    <Fields
+                      names={['entryStart', 'entryEnd']}
+                      component={props => (
+                        <DateRangePicker
+                          startDateFieldName='entryStart'
+                          endDateFieldName='entryEnd'
+                          className='form-control'
+                          {...props}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </CalendarContainer>
-              <CalendarContainer>
-                <Label>Judging Dates</Label>
-                <Fields
-                  names={['judgingStart', 'judgingEnd']}
-                  component={props => (
-                    <DateRangePicker
-                      startDateFieldName='judgingStart'
-                      endDateFieldName='judgingEnd'
-                      {...props}
+                  </CalendarContainer>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Label>Judging Dates</Label>
+                  <CalendarContainer>
+                    <Fields
+                      names={['judgingStart', 'judgingEnd']}
+                      component={props => (
+                        <DateRangePicker
+                          startDateFieldName='judgingStart'
+                          endDateFieldName='judgingEnd'
+                          {...props}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </CalendarContainer>
-            </Flex>
-          </Box>
-        </Flex>
+                  </CalendarContainer>
+                </FormGroup>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <Button type='submit' color='primary' style={{cursor: 'pointer'}}>Submit</Button>
       </Form>
     )
