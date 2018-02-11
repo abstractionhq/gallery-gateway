@@ -6,12 +6,19 @@ import Shows from '../containers/Shows'
 
 const Dashboard = () => (
   <Container>
-    <Row>
+    <Row className='align-items-baseline'>
       <Col>
         <h1>Dashboard</h1>
       </Col>
       <Col md='3'>
-        <Button color='primary' style={{cursor: 'pointer'}} tag={Link} to='/show/new'>Create Show</Button>
+        <Button
+          color='primary'
+          className='btn-block'
+          style={{cursor: 'pointer'}}
+          tag={Link}
+          to='/show/new'>
+            Create Show
+        </Button>
       </Col>
     </Row>
     <Row>
