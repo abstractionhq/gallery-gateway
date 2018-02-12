@@ -4,13 +4,11 @@ import styled from 'styled-components'
 
 import splash from 'assets/splash-page.jpg'
 
-const SplashImage = styled.img`
+const SplashImage = styled.div`
   background-image: url(${props => props.src});
-  object-fit: cover;
+  background-size: cover;
   height: 100vh;
-  width: 41%;
-  position: fixed;
-  right: 0;
+  width: 100%;
 `
 
 const PageTitle = styled.h1`
@@ -46,16 +44,18 @@ const LoginButton = styled.a`
 `
 
 const Home = () => (
-  <Container>
+  <Container fluid>
     <Row>
       <Col sm='7' xs='12'>
-        <SplashImage src={splash} className='d-none d-sm-block'/>
         <LoginContainer>
           <PageTitle>Gallery Gateway</PageTitle>
           <ButtonContainer>
             <LoginButton href='http://localhost:3000/auth/login'>Login</LoginButton>
           </ButtonContainer>
         </LoginContainer>
+      </Col>
+      <Col sm='5' className='p-0'>
+        <SplashImage src={splash} className='d-none d-sm-block'/>
       </Col>
     </Row>
   </Container>
