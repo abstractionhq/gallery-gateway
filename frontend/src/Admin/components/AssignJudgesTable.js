@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Row, Col, Button } from 'reactstrap'
-import { Flex, Box } from 'rebass'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left'
@@ -10,6 +9,10 @@ import JudgesTable from '../components/JudgesTable'
 
 const CenteredSubHeading = styled.h2`
   text-align: center;
+`
+
+const ReassignButtonContainer = styled.div`
+  margin-bottom: 5em;
 `
 
 class AssignJudgesTable extends Component {
@@ -98,29 +101,33 @@ class AssignJudgesTable extends Component {
           />
           {/* TODO: Form and Button to Create a new Judge */}
         </Col>
-        <Col xs='12' md='2'>
-          <Flex column align='center' justify='center' style={{minHeight: '50vh'}}>
-            <Box mb={50} w='100%'>
-              <Button
-                color='primary'
-                block
-                style={{cursor: 'pointer'}}
-                onClick={() => this.assign()}
-              >
-                Assign <FaLongArrowRight />
-              </Button>
-            </Box>
-            <Box mt={50} w='100%'>
-              <Button
-                color='primary'
-                block
-                style={{cursor: 'pointer'}}
-                onClick={() => this.unassign()}
-              >
-                <FaLongArrowLeft /> Unassign
-              </Button>
-            </Box>
-          </Flex>
+        <Col xs='12' md='2' className='align-self-center'>
+          <Row>
+            <Col xs={12}>
+              <ReassignButtonContainer>
+                <Button
+                  color='primary'
+                  block
+                  style={{cursor: 'pointer'}}
+                  onClick={() => this.assign()}
+                >
+                  Assign <FaLongArrowRight />
+                </Button>
+              </ReassignButtonContainer>
+            </Col>
+            <Col xs={12}>
+              <ReassignButtonContainer>
+                <Button
+                  color='primary'
+                  block
+                  style={{cursor: 'pointer'}}
+                  onClick={() => this.unassign()}
+                >
+                  <FaLongArrowLeft /> Unassign
+                </Button>
+              </ReassignButtonContainer>
+            </Col>
+          </Row>
         </Col>
         <Col xs='12' md='5'>
           <CenteredSubHeading>Assigned</CenteredSubHeading>
