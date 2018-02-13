@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col } from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap'
 import { Flex } from 'rebass'
 import styled from 'styled-components'
 
@@ -22,6 +22,12 @@ const ButtonContainer = styled.div`
   text-align: center;
   width: 250px;
 `
+const LoginContainer = styled.div`
+  justify-content: center;
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+`
 
 const LoginButton = styled.a`
   background-color: #ee6e73;
@@ -37,16 +43,17 @@ const LoginButton = styled.a`
     text-decoration: none;
   }
 `
-
+// .col .col-sm-12 .col-md-6 .col-md-offset-3
+// md='7'
 const Home = () => (
   <Row>
     <Col md='7'>
-      <Flex column align='center' justify='center' style={{minHeight: '75vh'}}>
+      <LoginContainer>
         <PageTitle>Gallery Gateway</PageTitle>
         <ButtonContainer>
           <LoginButton href='http://localhost:3000/auth/login'>Login</LoginButton>
         </ButtonContainer>
-      </Flex>
+      </LoginContainer>
     </Col>
     <Col>
       <SplashImage src={splash} />
