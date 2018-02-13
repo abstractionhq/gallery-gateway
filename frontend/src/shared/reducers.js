@@ -33,6 +33,18 @@ const auth = (state = {}, action) => {
   }
 }
 
+const performingRole = (state = {type: 'ADMIN'}, action) => {
+  switch (action.type) {
+    case actions.JUDGE_ROLE:
+      let newState = state
+      newState.type = 'JUDGE'
+      return newState
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
-  auth
+  auth,
+  performingRole
 })

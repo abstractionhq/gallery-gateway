@@ -1,23 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
+import JudgePage from '../../Judge/Page'
+import { switchToJudge } from '../../shared/actions'
 
 const NavBarContainer = styled.div`
   margin-bottom: 25px;
 `
 
-export default class NavBar extends Component {
+class NavBar extends Component {
   static propTypes = {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    switchToJudge: PropTypes.func.isRequired,
   }
 
   constructor (props) {
     super(props)
 
     this.state = {
-      isOpen: false
+      isOpen: false,
     }
   }
 
@@ -36,6 +40,9 @@ export default class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
+                <Link to='/' className='nav-link' onClick={this.props.switchToJudge}>Switch to: Judge</Link>
+              </NavItem>
+              <NavItem>
                 <NavLink tag={Link} to='/judges'>Judges</NavLink>
               </NavItem>
               <NavItem>
@@ -51,3 +58,13 @@ export default class NavBar extends Component {
     )
   }
 }
+
+
+const mapDispatchToProps = (dispatch) => ({
+  switchToJudge: () => dispatch(switchToJudge())
+})
+
+export default connect(
+  () => ({}),
+  mapDispatchToProps
+)(NavBar) 

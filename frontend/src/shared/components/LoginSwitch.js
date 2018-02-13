@@ -15,6 +15,7 @@ import StudentPage from '../../Student/Page'
 class LoginSwitch extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
+    performingRole: PropTypes.object.isRequired,
     shouldLogin: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired
   }
@@ -40,7 +41,12 @@ class LoginSwitch extends Component {
 
     switch (user.type) {
       case 'ADMIN':
-        return <AdminPage />
+        console.log(this.props)
+        if(this.props.performingRole.type === 'ADMIN'){
+          return <AdminPage />
+        } else { // render judge
+          return <JudgePage />
+        }
       case 'JUDGE':
         return <JudgePage />
       case 'STUDENT':
@@ -56,12 +62,14 @@ class LoginSwitch extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.shared.auth.user
+  user: state.shared.auth.user,
+  performingRole: state.shared.performingRole
 })
 
 const mapDispatchToProps = (dispatch) => ({
   shouldLogin,
-  login: () => dispatch(login())
+  login: () => dispatch(login()),
+
 })
 
 export default compose(
