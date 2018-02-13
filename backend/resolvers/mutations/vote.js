@@ -25,7 +25,8 @@ function judgeIsAllowedToVote(input) {
 export function vote(_, args, req) {
   // Make sure judge is voting as themself
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-    req.auth.type === JUDGE && req.auth.username === args.input.judgeUsername
+    (req.auth.type === JUDGE || req.auth.type === ADMIN) 
+    && req.auth.username === args.input.judgeUsername
   if (!isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }
