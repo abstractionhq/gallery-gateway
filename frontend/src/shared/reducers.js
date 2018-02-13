@@ -34,11 +34,14 @@ const auth = (state = {}, action) => {
 }
 
 const performingRole = (state = {type: 'ADMIN'}, action) => {
+  let newState = state
   switch (action.type) {
     case actions.JUDGE_ROLE:
-      let newState = state
       newState.type = 'JUDGE'
       return newState
+    case actions.ADMIN_ROLE:
+      newState.type = 'ADMIN'
+      return newState  
     default:
       return state
   }

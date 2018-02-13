@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
+import { switchToAdmin } from '../../shared/actions'
 
 const NavBarContainer = styled.div`
   margin-bottom: 25px;
 `
 
-export default class NavBar extends Component {
+class NavBar extends Component {
   static propTypes = {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    switchToAdmin: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -36,6 +39,9 @@ export default class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
+                <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>Switch to: Admin</NavLink>
+              </NavItem>
+              <NavItem>
                 <Link to='/' className='nav-link' onClick={this.props.logout}>Logout</Link>
               </NavItem>
             </Nav>
@@ -45,3 +51,12 @@ export default class NavBar extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  switchToAdmin: () => dispatch(switchToAdmin())
+})
+
+export default connect(
+  () => ({}),
+  mapDispatchToProps
+)(NavBar)

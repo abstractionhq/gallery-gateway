@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
-import JudgePage from '../../Judge/Page'
 import { switchToJudge } from '../../shared/actions'
 
 const NavBarContainer = styled.div`
@@ -40,7 +39,7 @@ class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <Link to='/' className='nav-link' onClick={this.props.switchToJudge}>Switch to: Judge</Link>
+                <NavLink tag={Link} to='/' onClick={this.props.switchToJudge}>Switch to: Judge</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to='/judges'>Judges</NavLink>

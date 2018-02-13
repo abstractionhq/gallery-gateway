@@ -34,6 +34,8 @@ class LoginSwitch extends Component {
     const {
       user
     } = this.props
+    const performingRole = this.props.performingRole.type
+
 
     if (!user) {
       return <HomePage />
@@ -41,11 +43,10 @@ class LoginSwitch extends Component {
 
     switch (user.type) {
       case 'ADMIN':
-        console.log(this.props)
-        if(this.props.performingRole.type === 'ADMIN'){
-          return <AdminPage />
-        } else { // render judge
+        if(performingRole === 'JUDGE'){
           return <JudgePage />
+        } else {
+          return <AdminPage />
         }
       case 'JUDGE':
         return <JudgePage />
