@@ -12,7 +12,8 @@ import * as actions from './actions'
 //     'type': 'ADMIN',
 //     'createdAt': '...',
 //     'iat': 1516390788 # expiry in epoch-seconds
-//   }
+//   },
+//   'performingRole': 'JUDGE'
 // }
 //
 const auth = (state = {}, action) => {
@@ -28,26 +29,21 @@ const auth = (state = {}, action) => {
       }
     case actions.LOGOUT_USER:
       return {}
-    default:
-      return state
-  }
-}
-
-const performingRole = (state = {type: 'ADMIN'}, action) => {
-  let newState = state
-  switch (action.type) {
     case actions.JUDGE_ROLE:
-      newState.type = 'JUDGE'
-      return newState
+      return {
+        ...state,
+        performingRole: 'JUDGE'
+      }
     case actions.ADMIN_ROLE:
-      newState.type = 'ADMIN'
-      return newState  
+      return {
+      ...state,
+      performingRole: 'ADMIN'
+    } 
     default:
       return state
   }
 }
 
 export default combineReducers({
-  auth,
-  performingRole
+  auth
 })

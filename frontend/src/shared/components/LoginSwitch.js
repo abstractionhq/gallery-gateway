@@ -15,13 +15,14 @@ import StudentPage from '../../Student/Page'
 class LoginSwitch extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
-    performingRole: PropTypes.object.isRequired,
+    performingRole: PropTypes.string.isRequired,
     shouldLogin: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    user: {}
+    user: {},
+    performingRole: 'ADMIN'
   }
 
   componentDidMount () {
@@ -34,7 +35,7 @@ class LoginSwitch extends Component {
     const {
       user
     } = this.props
-    const performingRole = this.props.performingRole.type
+    const performingRole = this.props.performingRole
 
 
     if (!user) {
@@ -64,13 +65,12 @@ class LoginSwitch extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.shared.auth.user,
-  performingRole: state.shared.performingRole
+  performingRole: state.shared.auth.performingRole
 })
 
 const mapDispatchToProps = (dispatch) => ({
   shouldLogin,
   login: () => dispatch(login()),
-
 })
 
 export default compose(

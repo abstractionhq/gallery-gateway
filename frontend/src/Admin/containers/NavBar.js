@@ -1,11 +1,13 @@
 import { connect } from 'react-redux'
 
 import NavBar from '../components/NavBar'
-import { logout } from '../../shared/actions'
+import { logout, switchToJudge } from '../../shared/actions'
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    switchToJudge: () => dispatch(switchToJudge())
+
   }
 }
 
