@@ -3,113 +3,138 @@
 import { expect } from 'chai'
 
 import { entries } from '../../resolvers/queries/entryQuery'
-import { fakeImageEntry, fakeVideoEntry, 
-  fakeOtherEntry, fakeVoteReturnShowId } from '../factories'
+import {
+  fakeImageEntry, fakeVideoEntry,
+  fakeOtherEntry, fakeVoteReturnShowId, fakeUser
+} from '../factories'
 
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
-    it('Rejects non-admins', function () {
-      expect(() => entries('', {}, {auth: {type: 'STUDENT'}}))
+    describe('Validation', function () {
+      it('Rejects non-admins who are searching for someone else', function () {
+        expect(() => entries('', { studentUsername: 'different' },
+          { auth: { type: 'STUDENT', username: 'abc123' } }))
+          .to.throw('Permission Denied')
+      })
+      it('Rejects non-admins who are looking for all entries', function () {
+        expect(() => entries('', {},
+        { auth: { type: 'STUDENT', username: 'abc123' } }))
         .to.throw('Permission Denied')
-    })
-    it('Gets an empty list when no entries exist', function () {
-      return entries('', {}, {auth: {type: 'ADMIN'}})
-        .then((entries) => {
-          expect(entries).to.be.length(0)
-        })
-    })
-    it('Gets an image entry when it exists', function () {
-      return fakeImageEntry({horizDimInch: 3, vertDimInch: 4})
-        .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              expect(resultEntries[0].id).to.equal(entry.id)
-              expect(resultEntries[0].title).to.equal(entry.title)
-              expect(resultEntries[0].horizDimInch).to.equal(3)
-              expect(resultEntries[0].vertDimInch).to.equal(4)
-            })
-        })
-    })
-    it('gets a video entry when it exists', function () {
-      return fakeVideoEntry({videoId: 'abc123'})
-        .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              expect(resultEntries[0].id).to.equal(entry.id)
-              expect(resultEntries[0].title).to.equal(entry.title)
-              expect(resultEntries[0].provider).to.equal('youtube')
-              expect(resultEntries[0].videoId).to.equal('abc123')
-            })
-        })
-    })
-    it('gets an other media entry when it exists', function () {
-      return fakeOtherEntry({path: 'foo.jpg'})
-        .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              expect(resultEntries[0].id).to.equal(entry.id)
-              expect(resultEntries[0].title).to.equal(entry.title)
-              expect(resultEntries[0].path).to.equal('foo.jpg')
-            })
-        })
-    })
-    it('Gets two entries when multiple exist', function () {
-      return Promise.all([fakeImageEntry(), fakeImageEntry()])
-        .then(originalEntries => {
-          originalEntries = originalEntries.sort((a, b) => a.id - b.id)
-          const entry1 = originalEntries[0]
-          const entry2 = originalEntries[1]
-          return entries('', {}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(2)
-              resultEntries = resultEntries.sort((a, b) => a.id - b.id)
-              expect(resultEntries[0].id).to.equal(entry1.id)
-              expect(resultEntries[1].id).to.equal(entry2.id)
-            })
-        })
-    })
-    it('Can limit to a certain show', function () {
-      return Promise.all([fakeImageEntry(), fakeImageEntry()])
-        .then(originalEntries => {
-          expect(originalEntries[0].showId).to.not.equal(originalEntries[1].showId)
-          return entries('', {showId: originalEntries[0].showId}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              expect(resultEntries[0].id).to.equal(originalEntries[0].id)
-            })
-        })
-    })
-    it('Can return a score on an entry that has votes', function () {
-      return fakeImageEntry()
-      .then((e) => {
-        return Promise.all([fakeVoteReturnShowId({entry: e, value: 1}),
-          fakeVoteReturnShowId({entry: e, value: 2})])
-          .then(() => {
-            return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              return resultEntries[0].score
-              .then(score => {
-                expect(score).to.equal(1.5)
-              })
-            })
+      })
+      it('Gets an empty list when no entries exist', function () {
+        return entries('', {}, { auth: { type: 'ADMIN' } })
+          .then((entries) => {
+            expect(entries).to.be.length(0)
           })
       })
     })
-    it('returns a zero on a score with no votes', function () {
-      return fakeImageEntry()
-      .then(e => {
-        return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
-        .then((resultEntries) => { 
-          expect(resultEntries).to.be.length(1)
-          return resultEntries[0].score
-          .then(score => {
-            expect(score).to.equal(0)
+    describe('Success', function () {
+      it('Gets an image entry when it exists', function () {
+        return fakeImageEntry({ horizDimInch: 3, vertDimInch: 4 })
+          .then((entry) => {
+            return entries('', {}, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                expect(resultEntries[0].id).to.equal(entry.id)
+                expect(resultEntries[0].title).to.equal(entry.title)
+                expect(resultEntries[0].horizDimInch).to.equal(3)
+                expect(resultEntries[0].vertDimInch).to.equal(4)
+              })
           })
-        })
+      })
+      it('gets a video entry when it exists', function () {
+        return fakeVideoEntry({ videoId: 'abc123' })
+          .then((entry) => {
+            return entries('', {}, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                expect(resultEntries[0].id).to.equal(entry.id)
+                expect(resultEntries[0].title).to.equal(entry.title)
+                expect(resultEntries[0].provider).to.equal('youtube')
+                expect(resultEntries[0].videoId).to.equal('abc123')
+              })
+          })
+      })
+      it('gets an other media entry when it exists', function () {
+        return fakeOtherEntry({ path: 'foo.jpg' })
+          .then((entry) => {
+            return entries('', {}, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                expect(resultEntries[0].id).to.equal(entry.id)
+                expect(resultEntries[0].title).to.equal(entry.title)
+                expect(resultEntries[0].path).to.equal('foo.jpg')
+              })
+          })
+      })
+      it('Gets two entries when multiple exist', function () {
+        return Promise.all([fakeImageEntry(), fakeImageEntry()])
+          .then(originalEntries => {
+            originalEntries = originalEntries.sort((a, b) => a.id - b.id)
+            const entry1 = originalEntries[0]
+            const entry2 = originalEntries[1]
+            return entries('', {}, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(2)
+                resultEntries = resultEntries.sort((a, b) => a.id - b.id)
+                expect(resultEntries[0].id).to.equal(entry1.id)
+                expect(resultEntries[1].id).to.equal(entry2.id)
+              })
+          })
+      })
+      it('Can limit to a certain show', function () {
+        return Promise.all([fakeImageEntry(), fakeImageEntry()])
+          .then(originalEntries => {
+            expect(originalEntries[0].showId).to.not.equal(originalEntries[1].showId)
+            return entries('', { showId: originalEntries[0].showId }, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                expect(resultEntries[0].id).to.equal(originalEntries[0].id)
+              })
+          })
+      })
+      it('allows students to search for their own entries', function () {
+        return Promise.all([fakeImageEntry(), fakeImageEntry()])
+          .then(originalEntries => {
+            return entries('', { studentUsername: originalEntries[0].studentUsername }, 
+            { auth: { type: 'STUDENT', username: originalEntries[0].studentUsername } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                expect(resultEntries[0].studentUsername).to.equal(originalEntries[0].studentUsername)
+              })
+          })
+      })
+    })
+    describe('Score', function () {
+      it('Can return a score on an entry that has votes', function () {
+        return fakeImageEntry()
+          .then((e) => {
+            return Promise.all([fakeVoteReturnShowId({ entry: e, value: 1 }),
+            fakeVoteReturnShowId({ entry: e, value: 2 })])
+              .then(() => {
+                return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
+                  .then((resultEntries) => {
+                    expect(resultEntries).to.be.length(1)
+                    return resultEntries[0].score
+                      .then(score => {
+                        expect(score).to.equal(1.5)
+                      })
+                  })
+              })
+          })
+      })
+      it('Returns a zero on a score with no votes', function () {
+        return fakeImageEntry()
+          .then(e => {
+            return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
+              .then((resultEntries) => {
+                expect(resultEntries).to.be.length(1)
+                return resultEntries[0].score
+                  .then(score => {
+                    expect(score).to.equal(0)
+                  })
+              })
+          })
       })
     })
   })

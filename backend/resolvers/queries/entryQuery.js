@@ -3,7 +3,10 @@ import { UserError } from 'graphql-errors'
 import { ADMIN, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
 
 export function entries (_, args, req) {
-  if (req.auth.type !== ADMIN) {
+  // Make sure an admin or own user is requesting
+  const isRequestingOwnUser = req.auth.username !== undefined && 
+    req.auth.username === args.studentUsername
+  if (req.auth.type !== ADMIN && !isRequestingOwnUser) {
     throw new UserError('Permission Denied')
   }
   return Entry.findAll({where: args}).each((entry) => {
