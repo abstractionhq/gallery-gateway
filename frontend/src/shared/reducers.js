@@ -12,7 +12,8 @@ import * as actions from './actions'
 //     'type': 'ADMIN',
 //     'createdAt': '...',
 //     'iat': 1516390788 # expiry in epoch-seconds
-//   }
+//   },
+//   'performingRole': 'JUDGE'
 // }
 //
 const auth = (state = {}, action) => {
@@ -28,6 +29,16 @@ const auth = (state = {}, action) => {
       }
     case actions.LOGOUT_USER:
       return {}
+    case actions.SWITCH_TO_JUDGE:
+      return {
+        ...state,
+        performingRole: 'JUDGE'
+      }
+    case actions.SWITCH_TO_ADMIN:
+      return {
+      ...state,
+      performingRole: 'ADMIN'
+    } 
     default:
       return state
   }

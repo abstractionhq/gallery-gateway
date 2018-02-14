@@ -54,9 +54,31 @@ describe('Vote Mutation', function () {
           })
         })
     })
+    it('allows admins to vote as themselves', function () {
+      return Promise.all([fakeUser({ type: 'ADMIN' }), fakeImageEntry()])
+        .then((models) => {
+          const user = models[0]
+          const entry = models[1]
+          return user.addShow(entry.showId).then(() => {
+            const args = {
+              input: {
+                judgeUsername: user.username,
+                entryId: entry.id,
+                value: 2
+              }
+            }
+            return vote({}, args, { auth: { username: user.username, type: 'ADMIN' } })
+              .then(vote => {
+                expect(vote.judgeUsername).to.equal(user.username)
+                expect(vote.entryId).to.equal(entry.id)
+                expect(vote.value).to.equal(2)
+              })
+          })
+        })
+    })
   })
   describe('Validation Failures', function () {
-    it('only allows judges to vote as themeselves', function () {
+    it('only allows judges to vote as themselves', function () {
       return Promise.all([fakeUser({ type: 'JUDGE' }), fakeImageEntry()])
         .then((models) => {
           const user = models[0]
@@ -70,6 +92,23 @@ describe('Vote Mutation', function () {
           }
           expect(() => {
             vote({}, args, { auth: { username: user.username, type: 'JUDGE' } })
+          }).to.throw('Permission Denied')
+        })
+    })
+    it('doesn\'t let admins vote for other judges', function () {
+      return Promise.all([fakeUser({ type: 'JUDGE' }), fakeImageEntry()])
+        .then((models) => {
+          const user = models[0]
+          const entry = models[1]
+          const args = {
+            input: {
+              judgeUsername: "someOtherJudge",
+              entryId: entry.id,
+              value: 2
+            }
+          }
+          expect(() => {
+            vote({}, args, { auth: { username: user.username, type: 'ADMIN' } })
           }).to.throw('Permission Denied')
         })
     })

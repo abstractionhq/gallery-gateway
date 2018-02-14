@@ -15,12 +15,14 @@ import StudentPage from '../../Student/Page'
 class LoginSwitch extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
+    performingRole: PropTypes.string.isRequired,
     shouldLogin: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    user: {}
+    user: {},
+    performingRole: 'ADMIN'
   }
 
   componentDidMount () {
@@ -31,7 +33,8 @@ class LoginSwitch extends Component {
 
   render () {
     const {
-      user
+      user,
+      performingRole
     } = this.props
 
     if (!user) {
@@ -40,7 +43,11 @@ class LoginSwitch extends Component {
 
     switch (user.type) {
       case 'ADMIN':
-        return <AdminPage />
+        if(performingRole === 'JUDGE'){
+          return <JudgePage />
+        } else {
+          return <AdminPage />
+        }
       case 'JUDGE':
         return <JudgePage />
       case 'STUDENT':
@@ -56,7 +63,8 @@ class LoginSwitch extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.shared.auth.user
+  user: state.shared.auth.user,
+  performingRole: state.shared.auth.performingRole
 })
 
 const mapDispatchToProps = (dispatch) => ({

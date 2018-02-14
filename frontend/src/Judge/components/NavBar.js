@@ -10,7 +10,8 @@ const NavBarContainer = styled.div`
 
 export default class NavBar extends Component {
   static propTypes = {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    switchToAdmin: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -35,6 +36,9 @@ export default class NavBar extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>View as Admin |</NavLink>
+              </NavItem>
               <NavItem>
                 <Link to='/' className='nav-link' onClick={this.props.logout}>Logout</Link>
               </NavItem>
