@@ -3,8 +3,8 @@ import { push } from 'connected-react-router'
 
 export const LOGIN_USER = 'LOGIN_USER'
 export const LOGOUT_USER = 'LOGOUT_USER'
-export const JUDGE_ROLE = 'JUDGE_ROLE'
-export const ADMIN_ROLE = 'ADMIN_ROLE'
+export const SWITCH_TO_JUDGE = 'SWITCH_TO_JUDGE'
+export const SWITCH_TO_ADMIN = 'SWITCH_TO_ADMIN'
 
 export const shouldLogin = () => {
   return !!window.localStorage.getItem('_token_v1')
@@ -32,12 +32,12 @@ export const logout = () => (dispatch, getState, client) => {
 
 export const switchToJudge = () => (dispatch, getState, client) => {
   dispatch({
-    type: JUDGE_ROLE
+    type: SWITCH_TO_JUDGE
   })
 }
 
 export const switchToAdmin = () => (dispatch, getState, client) => {
   dispatch({
-    type: ADMIN_ROLE
+    type: SWITCH_TO_ADMIN
   })
 }

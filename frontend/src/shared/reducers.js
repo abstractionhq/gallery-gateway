@@ -29,12 +29,12 @@ const auth = (state = {}, action) => {
       }
     case actions.LOGOUT_USER:
       return {}
-    case actions.JUDGE_ROLE:
+    case actions.SWITCH_TO_JUDGE:
       return {
         ...state,
         performingRole: 'JUDGE'
       }
-    case actions.ADMIN_ROLE:
+    case actions.SWITCH_TO_ADMIN:
       return {
       ...state,
       performingRole: 'ADMIN'

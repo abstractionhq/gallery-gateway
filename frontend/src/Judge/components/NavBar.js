@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
 
@@ -38,7 +37,7 @@ export default class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>Switch to: Admin</NavLink>
+                <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>View as Admin |</NavLink>
               </NavItem>
               <NavItem>
                 <Link to='/' className='nav-link' onClick={this.props.logout}>Logout</Link>

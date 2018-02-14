@@ -33,10 +33,9 @@ class LoginSwitch extends Component {
 
   render () {
     const {
-      user
+      user,
+      performingRole
     } = this.props
-    const performingRole = this.props.performingRole
-
 
     if (!user) {
       return <HomePage />
@@ -70,7 +69,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   shouldLogin,
-  login: () => dispatch(login()),
+  login: () => dispatch(login())
 })
 
 export default compose(

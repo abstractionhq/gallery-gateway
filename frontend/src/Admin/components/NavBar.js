@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
 import styled from 'styled-components'
 
@@ -19,7 +18,7 @@ export default class NavBar extends Component {
     super(props)
 
     this.state = {
-      isOpen: false,
+      isOpen: false
     }
   }
 
@@ -38,7 +37,7 @@ export default class NavBar extends Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink tag={Link} to='/' onClick={this.props.switchToJudge}>Switch to: Judge</NavLink>
+                <NavLink tag={Link} to='/' onClick={this.props.switchToJudge}>View as Judge |</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to='/judges'>Judges</NavLink>
