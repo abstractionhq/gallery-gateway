@@ -5,7 +5,7 @@ import { expect } from 'chai'
 import { entries } from '../../resolvers/queries/entryQuery'
 import {
   fakeImageEntry, fakeVideoEntry,
-  fakeOtherEntry, fakeVoteReturnShowId, fakeUser
+  fakeOtherEntry, fakeVoteReturnShowId, fakeUser, fakeGroup
 } from '../factories'
 
 describe('Entry Queries', function () {
@@ -18,8 +18,8 @@ describe('Entry Queries', function () {
       })
       it('Rejects non-admins who are looking for all entries', function () {
         expect(() => entries('', {},
-        { auth: { type: 'STUDENT', username: 'abc123' } }))
-        .to.throw('Permission Denied')
+          { auth: { type: 'STUDENT', username: 'abc123' } }))
+          .to.throw('Permission Denied')
       })
       it('Gets an empty list when no entries exist', function () {
         return entries('', {}, { auth: { type: 'ADMIN' } })
@@ -93,16 +93,27 @@ describe('Entry Queries', function () {
               })
           })
       })
-      it('allows students to search for their own entries', function () {
-        return Promise.all([fakeImageEntry(), fakeImageEntry()])
-          .then(originalEntries => {
-            return entries('', { studentUsername: originalEntries[0].studentUsername }, 
-            { auth: { type: 'STUDENT', username: originalEntries[0].studentUsername } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                expect(resultEntries[0].studentUsername).to.equal(originalEntries[0].studentUsername)
+      it('allows students to search for their own entries (including group)', function () {
+        return fakeUser().then((u) => {
+          return fakeGroup({ user: u }).then((g) => {
+            return Promise.all([fakeImageEntry({ user: u }), fakeImageEntry({ group: g }), fakeImageEntry()])
+              .then(originalEntries => {
+                return entries('', { studentUsername: originalEntries[0].studentUsername },
+                  { auth: { type: 'STUDENT', username: originalEntries[0].studentUsername } })
+                  .then((resultEntries) => {
+                    expect(resultEntries).to.be.length(2)
+                    if (resultEntries[0].studentUsername) {
+                      expect(resultEntries[0].studentUsername).to.equal(originalEntries[0].studentUsername)
+                      expect(resultEntries[1].groupId).to.equal(g.id)
+                    } else {
+                      expect(resultEntries[1].studentUsername).to.equal(originalEntries[0].studentUsername)
+                      expect(resultEntries[0].groupId).to.equal(g.id)
+                    }
+                  })
               })
           })
+        })
+
       })
     })
     describe('Score', function () {

@@ -40,7 +40,9 @@ function getEntriesByGroupOrStudent(groups, username) {
       where: {
         $or: [
           {
-            groupId: groupId,
+            groupId: groupIds
+          }, 
+          {
             studentUsername: username
           }
         ]
