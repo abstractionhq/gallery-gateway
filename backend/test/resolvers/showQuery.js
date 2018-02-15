@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 
 import { show, shows } from '../../resolvers/queries/showQuery'
-import { fakeShow, fakeImageEntry } from '../factories'
+import { fakeShow, fakeImageEntry, fakeUser } from '../factories'
 
 describe('Show Queries', function () {
   describe('Show query', function () {
@@ -36,6 +36,23 @@ describe('Show Queries', function () {
               expect(result.length).to.equal(2)
               expect(result[0].name).to.equal('a')
               done()
+            })
+        })
+      })
+      it('gets all shows for a user asking for their own shows', function (done) {
+        fakeUser().then((u) => {
+          return Promise.all([fakeImageEntry({ user: u }), fakeImageEntry()])
+            .then((imageEntries) => {
+              return shows('', { studentUsername: u.username },
+                { auth: { type: 'STUDENT', username: u.username } }).then((results) => {
+                  expect(results.length).to.equal(1)
+                  // make sure entries attached
+                  return results[0].entries.then(e => {
+                    expect(e.length).to.equal(1)
+                    expect(e[0].studentUsername).to.equal(u.username)
+                    done()
+                  })
+                })
             })
         })
       })

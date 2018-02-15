@@ -1,5 +1,6 @@
 import Show from '../../models/show'
 import Entry from '../../models/entry';
+import User from '../../models/user'
 import { UserError } from 'graphql-errors'
 import { ADMIN } from '../../constants'
 
@@ -24,11 +25,8 @@ export function shows(_, args, req) {
     }
     // Get all the shows the student has been on (including as group creator), through entries
     return User.findById(args.studentUsername).then((student) => {
-      console.log("found" + student)
       return student.getGroups().then((groups) => {
-        return getEntriesByGroupOrStudent(groups, args.studentUsername)
-      }).catch((err) => {
-        Promise.reject(new UserError('User or group not found'))
+        return getEntriesByGroupOrStudent(groups, args.studentUsername, args.orderBy)
       })
     })
   }
@@ -37,7 +35,7 @@ export function shows(_, args, req) {
   return Show.findAll()
 }
 
-function getEntriesByGroupOrStudent(groups, username) {
+function getEntriesByGroupOrStudent(groups, username, orderBy) {
   const groupIds = groups.map(group => group.id)
   //Get by student or group
   if (groupIds.length > 0) {
@@ -50,21 +48,21 @@ function getEntriesByGroupOrStudent(groups, username) {
           }
         ]
       }
-    }).each((entry) => {
-      return handleEntriesToReturnShows(entry)
+    }).then((entries) => {
+      return handleEntriesToReturnShows(entries, orderBy)
     })
   } else {
     return Entry.findAll({ where: { studentUsername: username } })
-      .each((entry) => {
-        return handleEntriesToReturnShows(entry)
+      .then((entries) => {
+        return handleEntriesToReturnShows(entries, orderBy)
       })
   }
 }
 
-function handleEntriesToReturnShows(entry){
-  const showIds = usernameEntries.map(entry => entry.showId)
+function handleEntriesToReturnShows(entries, orderBy){
+  const showIds = entries.map(entry => entry.showId)
   // If order doesn't matter just return all the shows
-  if (!args.orderBy) {
+  if (!orderBy) {
     return Show.findAll({ where: {id: showIds}}).each((show) => {
       show.entries = show.getEntries()
     })
