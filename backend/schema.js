@@ -193,7 +193,7 @@ type Query {
     group(id: ID!): Group
     show(id: ID!): Show
     groups: [Group]
-    shows(orderBy: OrderByItem): [Show]
+    shows(orderBy: OrderByItem, studentUsername: String): [Show]
     votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
