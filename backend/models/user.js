@@ -1,8 +1,9 @@
+import Group from './group'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { STUDENT, ADMIN, JUDGE } from '../constants'
 
-export default sequelize.define('user', {
+const User =  sequelize.define('user', {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -28,3 +29,13 @@ export default sequelize.define('user', {
     notEmpty: true
   }
 })
+
+User.prototype.getGroups = function getGroups() {
+  if(this.type !== STUDENT) {
+    return Promise.resolve([])
+  }
+  // Find all groups where the creator is this user
+  return Group.findAll({where: {creatorUsername: this.username}})
+}
+
+export default User

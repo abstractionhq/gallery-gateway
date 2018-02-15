@@ -5,6 +5,9 @@ export default {
     group (entry) {
       return entry.getGroup()
     },
+    student (entry) {
+      return entry.getStudent()
+    },
     score(entry) {
       return entry.getScore()
     },

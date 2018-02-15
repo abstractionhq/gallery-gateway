@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 
 import { show, shows } from '../../resolvers/queries/showQuery'
-import { fakeShow, fakeUser, fakeImageEntry } from '../factories'
+import { fakeShow, fakeImageEntry } from '../factories'
 
 describe('Show Queries', function () {
   describe('Show query', function () {
@@ -39,30 +39,13 @@ describe('Show Queries', function () {
             })
         })
       })
-      it('gets all shows for a user asking for their own shows', function (done) {
-        fakeUser().then((u) => {
-          Promise.all([fakeImageEntry({ user: u }), fakeImageEntry()])
-            .then((imageEntries) => {
-              shows('', { studentUsername: u.username },
-                { auth: { type: 'STUDENT', username: u.username } }).then((results) => {
-                  expect(results.length).to.equal(1)
-                  // make sure entries attached
-                  results[0].entries.then(e => {
-                    expect(e.length).to.equal(1)
-                    expect(e[0].studentUsername).to.equal(u.username)
-                    done()
-                  })
-                })
-            })
-        })
-      })
     })
-      describe('Validation', function () {
-        it('doesn\'t let a user request shows that are not their own', function () {
-          expect(() => shows('', { studentUsername: "aUsername" },
-            { auth: { type: 'STUDENT', username: 'differentName' } }))
-            .to.throw('Permission Denied')
-        })
+    describe('Validation', function () {
+      it('doesn\'t let a user request shows that are not their own', function () {
+        expect(() => shows('', { studentUsername: "aUsername" },
+          { auth: { type: 'STUDENT', username: 'differentName' } }))
+          .to.throw('Permission Denied')
       })
     })
   })
+})
