@@ -1,0 +1,15 @@
+query Shows {
+  shows(orderBy: { sort: "entryStart", direction: DESC }) {
+    id
+    name
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+    entryCap
+    entries {
+      id
+    }
+
+  }
+}
