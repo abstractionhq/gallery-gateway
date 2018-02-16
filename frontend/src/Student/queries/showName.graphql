@@ -1,0 +1,6 @@
+query Show($id: ID!) {
+  show(id: $id) {
+    id
+    name
+  }
+}

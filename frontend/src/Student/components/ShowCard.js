@@ -32,7 +32,7 @@ const ShowCard = (props) => (
     <hr />
     <Row>
       <Col className='text-center align-self-center h-100'>
-       <Link to='/submit' className='d-block w-100 h-100'>
+       <Link to={`/submit/${props.id}`} className='d-block w-100 h-100'>
          <FaPlusCircle size='3em' />
          <h5>New Submission</h5>
        </Link>
@@ -45,7 +45,7 @@ ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   entryCap: PropTypes.number.isRequired,
-  entries: PropTypes.array.isRequired,
+  entries: PropTypes.array,
   entryStart: PropTypes.string.isRequired,
   entryEnd: PropTypes.string.isRequired,
   judgingStart: PropTypes.string.isRequired,

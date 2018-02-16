@@ -30,10 +30,6 @@ class OtherSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
-    forShow: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string
-    }).isRequired,
     handleImageUpload: PropTypes.func.isRequired,
     handlePDFUpload: PropTypes.func.isRequired,
     previewFile: PropTypes.object.isRequired,
@@ -132,13 +128,15 @@ class OtherSubmissionForm extends Component {
   }
 
   render () {
+    if(this.props.data.loading) {
+      return null
+    }
     const {
       create,
       done,
-      user,
-      forShow
+      user
     } = this.props
-
+    const forShow = {id: this.props.data.show.id, name:this.props.data.show.name}
     return (
       <Fragment>
         <Formik

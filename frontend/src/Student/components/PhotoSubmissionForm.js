@@ -31,10 +31,6 @@ class PhotoSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
-    forShow: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string
-    }).isRequired,
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
@@ -121,13 +117,15 @@ class PhotoSubmissionForm extends Component {
   }
 
   render () {
+    if(this.props.data.loading) {
+      return null
+    }
     const {
       create,
       done,
-      user,
-      forShow
+      user
     } = this.props
-
+    const forShow = {id: this.props.data.show.id, name:this.props.data.show.name}
     return (
       <Fragment>
         <Formik

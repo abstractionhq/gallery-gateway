@@ -6,10 +6,11 @@ import { uploadImage, clearPreview } from '../actions'
 
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
+import ShowName from '../queries/showName.graphql'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   previewImage: state.student.ui.submission.previewFile || {},
-  user: state.shared.auth.user
+  user: state.shared.auth.user,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -27,6 +28,13 @@ const withMutations = compose(
       create: (entry) => mutate({
         variables: { input: entry }
       })
+    })
+  }),
+  graphql(ShowName, {
+    options: ( ownProps ) => ({
+      variables: {
+        id: ownProps.match.params.id
+      }
     })
   })
 )(withRedux)

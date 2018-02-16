@@ -32,7 +32,7 @@ const SubmissionFormChooser = (props) => (
     <Header>What are you submitting?</Header>
     <Row>
       <Col xs='12' sm='6' md='4'>
-        <Link to='/submit/photo'
+        <Link to={`/submit/${props.match.params.id}/photo`}
           style={{textDecoration: 'none', display: 'block'}}
           className="bg-light">
           <SubmissionContainer className='text-dark'>
@@ -42,7 +42,7 @@ const SubmissionFormChooser = (props) => (
         </Link>
       </Col>
       <Col xs='12' sm='6' md='4'>
-        <Link to='/submit/video'
+        <Link to={`/submit/${props.match.params.id}/video`}
           style={{textDecoration: 'none', display: 'block'}}
           className="bg-light">
           <SubmissionContainer className='text-dark'>
@@ -53,7 +53,7 @@ const SubmissionFormChooser = (props) => (
         </Link>
       </Col>
       <Col xs='12' md='4'>
-        <Link to='/submit/other'
+        <Link to={`/submit/${props.match.params.id}/other`}
           style={{textDecoration: 'none', display: 'block'}}
           className="bg-light">
           <SubmissionContainer className='text-dark'>
