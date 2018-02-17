@@ -65,17 +65,13 @@ function handleEntriesToReturnShows(entries, orderBy){
   const showIds = entries.map(entry => entry.showId)
   // If order doesn't matter just return all the shows
   if (!orderBy) {
-    return Show.findAll({ where: {id: showIds}}).each((show) => {
-      show.entries = show.getEntries()
-    })
+    return Show.findAll({ where: {id: showIds}})
   } else { // Order shows
     return Show.findAll({
       where: {
         id: showIds
       },
       order: [[args.orderBy.sort, args.orderBy.direction]]
-    }).each((show) => {
-      show.entries = show.getEntries()
     })
   }
 }

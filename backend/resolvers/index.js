@@ -1,4 +1,7 @@
 import Entry from './types/entryType'
+import Photo from './types/photoType'
+import Video from './types/videoType'
+import OtherMedia from './types/otherMediaType'
 import User from './types/userType'
 import DateScalar from './types/dateScalar'
 import Group from './types/groupType'
@@ -15,6 +18,9 @@ import * as VoteQuery from './queries/voteQuery'
 
 export default {
   ...Entry,
+  ...Photo,
+  ...Video,
+  ...OtherMedia,
   ...User,
   ...DateScalar,
   ...Group,

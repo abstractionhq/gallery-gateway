@@ -12,13 +12,9 @@ export function entries(_, args, req) {
   }
   // Get all entries if no args given
   if (!args.showId && !args.studentUsername) {
-    return Entry.all().each((entry) => {
-      return handleEntries(entry)
-    })
+    return Entry.all()
   } else if (args.showId) { // Get entries by show
-    return Entry.findAll({ where: { showId: args.showId } }).each((entry) => {
-      return handleEntries(entry)
-    })
+    return Entry.findAll({ where: { showId: args.showId } })
   } else if (args.studentUsername) { // get entries by username
     return User.findById(args.studentUsername).then((student) => {
       return student.getGroups().then((groups) => {
@@ -26,9 +22,7 @@ export function entries(_, args, req) {
       })
     })
   } else {
-    return Entry.findAll({ where: { args } }).each((entry) => {
-      return handleEntries(entry)
-    })
+    return Entry.findAll({ where: { args } })
   }
 }
 
@@ -47,35 +41,8 @@ function getEntriesByGroupOrStudent(groups, username) {
           }
         ]
       }
-    }).each((entry) => {
-      return handleEntries(entry)
     })
   } else {
     return Entry.findAll({ where: { studentUsername: username } })
-      .each((entry) => {
-        return handleEntries(entry)
-      })
-  }
-}
-
-function handleEntries(entry) {
-  entry.student = entry.getStudent()
-  entry.group = entry.getGroup()
-  entry.score = entry.getScore()
-
-  if (entry.entryType === IMAGE_ENTRY) {
-    return entry.getImage().then((image) => {
-      return Object.assign(entry, image.dataValues)
-    })
-  } else if (entry.entryType === VIDEO_ENTRY) {
-    return entry.getVideo().then((video) => {
-      return Object.assign(entry, video.dataValues)
-    })
-  } else if (entry.entryType === OTHER_ENTRY) {
-    return entry.getOther().then((other) => {
-      return Object.assign(entry, other.dataValues)
-    })
-  } else {
-    throw new Error('unknown entry type')
   }
 }

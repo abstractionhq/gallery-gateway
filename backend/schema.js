@@ -173,7 +173,7 @@ type OtherMedia implements Entry {
     moreCopies: Boolean
     score: Float
 
-    photoPath: String!
+    path: String!
 }
 
 input OtherMediaInput {
