@@ -8,6 +8,8 @@ import {
   fakeOtherEntry, fakeVoteReturnShowId, fakeUser, fakeGroup
 } from '../factories'
 
+import { execGraphql } from '../util'
+
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
     describe('Validation', function () {
@@ -29,124 +31,276 @@ describe('Entry Queries', function () {
       })
     })
     describe('Success', function () {
-      it('Gets an image entry when it exists', function () {
-        return fakeImageEntry({ horizDimInch: 3, vertDimInch: 4 })
-          .then((entry) => {
-            return entries('', {}, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                expect(resultEntries[0].id).to.equal(entry.id)
-                expect(resultEntries[0].title).to.equal(entry.title)
-                expect(resultEntries[0].horizDimInch).to.equal(3)
-                expect(resultEntries[0].vertDimInch).to.equal(4)
+      // GraphQL requires 'fragments' so we can get (Photo, Video, OtherMedia)
+      // -specific properties even though the return type is a generic Entry
+      const photoFragment = `
+        fragment photoFields on Photo {
+          path,
+          horizDimInch,
+          vertDimInch,
+          mediaType
+        }
+      `
+      const videoFragment = `
+        fragment videoFields on Video {
+          provider,
+          videoId
+        }
+      `
+      const otherMediaFragment = `
+        fragment otherMediaFields on OtherMedia {
+          path
+        }
+      `
+      it('Gets an image entry when it exists', () =>
+        fakeImageEntry({path: 'foo.jpg', horizDimInch: 3, vertDimInch: 4, mediaType: 'mymedia'})
+          .then(entry =>
+            execGraphql(
+              `query {
+                entries {
+                  id,
+                  title,
+                  ...photoFields
+                }
+              }
+              ${photoFragment}
+              `,
+              {type: 'ADMIN'}
+            )
+              .then(result => {
+                expect(result).to.deep.equal({
+                  data: {
+                    entries: [
+                      {
+                        id: `${entry.id}`, // must be cast to a string :(
+                        title: entry.title,
+                        path: 'foo.jpg',
+                        horizDimInch: 3,
+                        vertDimInch: 4,
+                        mediaType: 'mymedia'
+                      }
+                    ]
+                  }
+                })
               })
-          })
-      })
-      it('gets a video entry when it exists', function () {
-        return fakeVideoEntry({ videoId: 'abc123' })
-          .then((entry) => {
-            return entries('', {}, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                expect(resultEntries[0].id).to.equal(entry.id)
-                expect(resultEntries[0].title).to.equal(entry.title)
-                expect(resultEntries[0].provider).to.equal('youtube')
-                expect(resultEntries[0].videoId).to.equal('abc123')
-              })
-          })
-      })
-      it('gets an other media entry when it exists', function () {
-        return fakeOtherEntry({ path: 'foo.jpg' })
-          .then((entry) => {
-            return entries('', {}, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                expect(resultEntries[0].id).to.equal(entry.id)
-                expect(resultEntries[0].title).to.equal(entry.title)
-                expect(resultEntries[0].path).to.equal('foo.jpg')
-              })
-          })
-      })
-      it('Gets two entries when multiple exist', function () {
-        return Promise.all([fakeImageEntry(), fakeImageEntry()])
-          .then(originalEntries => {
-            originalEntries = originalEntries.sort((a, b) => a.id - b.id)
-            const entry1 = originalEntries[0]
-            const entry2 = originalEntries[1]
-            return entries('', {}, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(2)
-                resultEntries = resultEntries.sort((a, b) => a.id - b.id)
-                expect(resultEntries[0].id).to.equal(entry1.id)
-                expect(resultEntries[1].id).to.equal(entry2.id)
-              })
-          })
-      })
-      it('Can limit to a certain show', function () {
-        return Promise.all([fakeImageEntry(), fakeImageEntry()])
-          .then(originalEntries => {
-            expect(originalEntries[0].showId).to.not.equal(originalEntries[1].showId)
-            return entries('', { showId: originalEntries[0].showId }, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                expect(resultEntries[0].id).to.equal(originalEntries[0].id)
-              })
-          })
-      })
-      it('allows students to search for their own entries (including group)', function () {
-        return fakeUser().then((u) => {
-          return fakeGroup({ user: u }).then((g) => {
-            return Promise.all([fakeImageEntry({ user: u }), fakeImageEntry({ group: g }), fakeImageEntry()])
-              .then(originalEntries => {
-                return entries('', { studentUsername: originalEntries[0].studentUsername },
-                  { auth: { type: 'STUDENT', username: originalEntries[0].studentUsername } })
-                  .then((resultEntries) => {
-                    expect(resultEntries).to.be.length(2)
-                    if (resultEntries[0].studentUsername) {
-                      expect(resultEntries[0].studentUsername).to.equal(originalEntries[0].studentUsername)
-                      expect(resultEntries[1].groupId).to.equal(g.id)
-                    } else {
-                      expect(resultEntries[1].studentUsername).to.equal(originalEntries[0].studentUsername)
-                      expect(resultEntries[0].groupId).to.equal(g.id)
+          )
+      )
+      it('gets a video entry when it exists', () =>
+        fakeVideoEntry({ videoId: 'abc123', provider: 'youtube' })
+          .then(entry => execGraphql(
+            `query {
+              entries {
+                id,
+                title,
+                ...videoFields
+              }
+            }
+            ${videoFragment}
+            `,
+            {type: 'ADMIN'}
+          )
+            .then(result => {
+              expect(result).to.deep.equal({
+                data: {
+                  entries: [
+                    {
+                      id: `${entry.id}`, // must be cast to a string :(
+                      title: entry.title,
+                      videoId: 'abc123',
+                      provider: 'youtube'
                     }
-                  })
+                  ]
+                }
+              })
+            })
+          )
+      )
+      it('gets an other media entry when it exists', () =>
+        fakeOtherEntry({ path: 'foo.jpg' })
+          .then(entry => execGraphql(
+            `query {
+              entries {
+                id,
+                title,
+                ...otherMediaFields
+              }
+            }
+            ${otherMediaFragment}
+            `,
+            {type: 'ADMIN'}
+          )
+            .then(result => {
+              expect(result).to.deep.equal({
+                data: {
+                  entries: [
+                    {
+                      id: `${entry.id}`, // must be cast to a string :(
+                      title: entry.title,
+                      path: 'foo.jpg'
+                    }
+                  ]
+                }
+              })
+            })
+          )
+      )
+      it('Gets all types of entry when multiple exist', function () {
+        return Promise.all([
+          fakeImageEntry({path: 'foo1.jpg', horizDimInch: 5, vertDimInch: 6, mediaType: 'mymedia'}),
+          fakeVideoEntry({videoId: 'myvideoid', provider: 'youtube'}),
+          fakeOtherEntry({path: 'foo2.jpg'})
+        ])
+          .then(([image, video, other]) =>
+            execGraphql(
+              `query {
+                entries {
+                  id,
+                  title,
+                  ...photoFields,
+                  ...videoFields,
+                  ...otherMediaFields
+                }
+              }
+              ${photoFragment} ${videoFragment} ${otherMediaFragment}
+              `,
+              {type: 'ADMIN'}
+            )
+              .then(result => {
+                // first let's sort the returned entries by ID so we can
+                // do a stable deep equals comparison
+                result.data.entries = result.data.entries.sort((e1, e2) => parseInt(e1.id) - parseInt(e2.id))
+                expect(result).to.deep.equal({
+                  data: {
+                    entries: [
+                      {
+                        id: `${image.id}`, // must be cast to a string :(
+                        title: image.title,
+                        path: 'foo1.jpg',
+                        horizDimInch: 5,
+                        vertDimInch: 6,
+                        mediaType: 'mymedia'
+                      },
+                      {
+                        id: `${video.id}`,
+                        title: video.title,
+                        videoId: 'myvideoid',
+                        provider: 'youtube'
+                      },
+                      {
+                        id: `${other.id}`,
+                        title: other.title,
+                        path: 'foo2.jpg'
+                      }
+                    ].sort((e1, e2) => parseInt(e1.id) - parseInt(e2.id))
+                  }
+                })
+              })
+          )
+      })
+      it('Can limit to a certain show', () =>
+        Promise.all([fakeImageEntry(), fakeImageEntry()])
+          .then(([image1, image2]) => {
+            expect(image1.showId).to.not.equal(image2.showId)
+            return execGraphql(
+              `query {
+                entries(showId: ${image1.showId}) {
+                  id
+                }
+              }`,
+              {type: 'ADMIN'}
+            )
+              .then(result => {
+                expect(result.data.entries).to.have.lengthOf(1)
+                expect(result.data.entries[0].id).to.eq(`${image1.id}`)
               })
           })
-        })
-
-      })
+      )
+      it('allows students to search for their own entries (including group)', () =>
+        // first, set up a fake user, give them a group, and make three entries:
+        // one from the user, one from the group, and one from someone else
+        fakeUser().then(user =>
+          fakeGroup({user}).then(group =>
+            Promise.all([fakeImageEntry({user}), fakeImageEntry({group}), fakeImageEntry()])
+              .then(([userEntry, groupEntry, outsiderEntry]) => ({
+                user,
+                group,
+                userEntry,
+                groupEntry,
+                outsiderEntry
+              }))
+          )
+        )
+          // models are made, do the graphql query
+          .then(({user, group, userEntry, groupEntry, outsiderEntry}) =>
+            execGraphql(
+              `query {
+                entries(studentUsername: "${user.username}") {
+                  id
+                }
+              }`,
+              {type: 'STUDENT', username: user.username}
+            )
+              // ensure proper entries were returned
+              .then(result => {
+                expect(result.data.entries).to.have.lengthOf(2)
+                expect(result.data.entries).to.deep.contain({id: `${userEntry.id}`})
+                expect(result.data.entries).to.deep.contain({id: `${groupEntry.id}`})
+              })
+          )
+      )
     })
     describe('Score', function () {
-      it('Can return a score on an entry that has votes', function () {
-        return fakeImageEntry()
-          .then((e) => {
-            return Promise.all([fakeVoteReturnShowId({ entry: e, value: 1 }),
-            fakeVoteReturnShowId({ entry: e, value: 2 })])
-              .then(() => {
-                return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
-                  .then((resultEntries) => {
-                    expect(resultEntries).to.be.length(1)
-                    return resultEntries[0].score
-                      .then(score => {
-                        expect(score).to.equal(1.5)
-                      })
-                  })
+      it('Can return a score on an entry that has votes', () =>
+        // make an entry and give it two votes w/ average score 1.5
+        fakeImageEntry()
+          // 'tap' says do this block but ignore its return value, passing entry
+          // on to the next `.then()`
+          .tap(entry =>
+            Promise.all([
+              fakeVoteReturnShowId({ entry, value: 1 }),
+              fakeVoteReturnShowId({ entry, value: 2 })
+            ])
+          )
+          .then(entry =>
+            execGraphql(
+              `query {
+                entries {
+                  id,
+                  score
+                }
+              }`,
+              {type: 'ADMIN'}
+            )
+              .then(result => {
+                expect(result.data.entries).to.have.lengthOf(1)
+                expect(result.data.entries[0]).to.deep.eq({
+                  id: `${entry.id}`,
+                  score: 1.5
+                })
               })
-          })
-      })
-      it('Returns a zero on a score with no votes', function () {
-        return fakeImageEntry()
-          .then(e => {
-            return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
-              .then((resultEntries) => {
-                expect(resultEntries).to.be.length(1)
-                return resultEntries[0].score
-                  .then(score => {
-                    expect(score).to.equal(0)
-                  })
+          )
+      )
+      it('Returns a zero on a score with no votes', () =>
+        fakeImageEntry()
+          .then(entry =>
+            execGraphql(
+              `query {
+                entries {
+                  id,
+                  score
+                }
+              }`,
+              {type: 'ADMIN'}
+            )
+              .then(result => {
+                expect(result.data.entries).to.have.lengthOf(1)
+                expect(result.data.entries[0]).to.deep.eq({
+                  id: `${entry.id}`,
+                  score: 0
+                })
               })
-          })
-      })
+          )
+      )
     })
   })
 })
