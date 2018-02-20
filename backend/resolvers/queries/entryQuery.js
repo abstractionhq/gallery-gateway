@@ -17,32 +17,9 @@ export function entries(_, args, req) {
     return Entry.findAll({ where: { showId: args.showId } })
   } else if (args.studentUsername) { // get entries by username
     return User.findById(args.studentUsername).then((student) => {
-      return student.getGroups().then((groups) => {
-        return getEntriesByGroupOrStudent(groups, args.studentUsername)
-      })
+      return student.getOwnAndGroupEntries()
     })
   } else {
     return Entry.findAll({ where: { args } })
-  }
-}
-
-function getEntriesByGroupOrStudent(groups, username) {
-  const groupIds = groups.map(group => group.id)
-  //Get by student or group
-  if (groupIds.length > 0) {
-    return Entry.findAll({
-      where: {
-        $or: [
-          {
-            groupId: groupIds
-          }, 
-          {
-            studentUsername: username
-          }
-        ]
-      }
-    })
-  } else {
-    return Entry.findAll({ where: { studentUsername: username } })
   }
 }

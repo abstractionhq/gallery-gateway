@@ -23,55 +23,28 @@ export function shows(_, args, req) {
     if (req.auth.type !== ADMIN && !isRequestingOwnUser) {
       throw new UserError('Permission Denied')
     }
-    // Get all the shows the student has been on (including as group creator), through entries
+    // Get all the shows the student has been on 
+    // (including as group creator), through entries
     return User.findById(args.studentUsername).then((student) => {
-      return student.getGroups().then((groups) => {
-        return getEntriesByGroupOrStudent(groups, args.studentUsername, args.orderBy)
-      })
+      return student.getOwnAndGroupEntries()
+        // Find all connected shows
+        .then((entries) => {
+          const showIds = entries.map(entry => entry.showId)
+          // If order doesn't matter just return all the shows
+          if (!args.orderBy) {
+            return Show.findAll({ where: { id: showIds } })
+          } else { // Order shows
+            return Show.findAll({
+              where: {
+                id: showIds
+              },
+              order: [[args.orderBy.sort, args.orderBy.direction]]
+            })
+          }
+        })
     })
   }
 
   // Otherwise just show all shows, unordered
   return Show.findAll()
-}
-
-function getEntriesByGroupOrStudent(groups, username, orderBy) {
-  const groupIds = groups.map(group => group.id)
-  //Get by student or group
-  if (groupIds.length > 0) {
-    return Entry.findAll({
-      where: {
-        $or: [
-          {
-            groupId: groupIds
-          }, 
-          {
-            studentUsername: username
-          }
-        ]
-      }
-    }).then((entries) => {
-      return handleEntriesToReturnShows(entries, orderBy)
-    })
-  } else {
-    return Entry.findAll({ where: { studentUsername: username } })
-      .then((entries) => {
-        return handleEntriesToReturnShows(entries, orderBy)
-      })
-  }
-}
-
-function handleEntriesToReturnShows(entries, orderBy){
-  const showIds = entries.map(entry => entry.showId)
-  // If order doesn't matter just return all the shows
-  if (!orderBy) {
-    return Show.findAll({ where: {id: showIds}})
-  } else { // Order shows
-    return Show.findAll({
-      where: {
-        id: showIds
-      },
-      order: [[args.orderBy.sort, args.orderBy.direction]]
-    })
-  }
 }

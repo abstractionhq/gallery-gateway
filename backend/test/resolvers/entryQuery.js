@@ -215,6 +215,34 @@ describe('Entry Queries', function () {
               })
           })
       )
+      it('allows students to search for just their own entries', () =>
+      // first, set up a fake user, give them a group, and make three entries:
+      // one from the user, one from the group, and one from someone else
+      fakeUser().then(user =>
+          Promise.all([fakeImageEntry({user}), fakeImageEntry()])
+            .then(([userEntry, outsiderEntry]) => ({
+              user,
+              userEntry,
+              outsiderEntry
+            }))
+      )
+        // models are made, do the graphql query
+        .then(({user, group, userEntry, groupEntry, outsiderEntry}) =>
+          execGraphql(
+            `query {
+              entries(studentUsername: "${user.username}") {
+                id
+              }
+            }`,
+            {type: 'STUDENT', username: user.username}
+          )
+            // ensure proper entries were returned
+            .then(result => {
+              expect(result.data.entries).to.have.lengthOf(1)
+              expect(result.data.entries).to.deep.contain({id: `${userEntry.id}`})
+            })
+        )
+    )
       it('allows students to search for their own entries (including group)', () =>
         // first, set up a fake user, give them a group, and make three entries:
         // one from the user, one from the group, and one from someone else
