@@ -4,6 +4,7 @@ import { expect } from 'chai'
 
 import { show, shows } from '../../resolvers/queries/showQuery'
 import { fakeShow, fakeImageEntry, fakeUser, fakeGroup } from '../factories'
+import { execGraphql } from '../util'
 
 describe('Show Queries', function () {
   describe('Show query', function () {
@@ -44,15 +45,31 @@ describe('Show Queries', function () {
           fakeGroup({ user: u }).then((g) => {
             Promise.all([fakeImageEntry({ user: u }), fakeImageEntry({ group: g }), fakeImageEntry()])
               .then((imageEntries) => {
-                shows('', { studentUsername: u.username },
-                  { auth: { type: 'STUDENT', username: u.username } }).then((results) => {
-                    expect(results.length).to.equal(2)
-                    // make sure entries attached
-                    results[0].entries.then(e => {
-                      expect(e.length).to.equal(1)
-                      done()
-                    })
-                  })
+                execGraphql(
+                  `query {
+                    shows(studentUsername: "${u.username}"){
+                      id
+                      entries {
+                        id
+                      }
+                    }
+                  }
+                  `, 
+                  {type: 'STUDENT', username: u.username}
+                ).then(result => {
+                  expect(result.data.shows.length).to.equal(2)
+                  expect(result.data.shows[0].entries.length).to.equal(1)
+                  done()
+                })
+                // shows('', { studentUsername: u.username },
+                //   { auth: { type: 'STUDENT', username: u.username } }).then((results) => {
+                //     expect(results.length).to.equal(2)
+                //     // make sure entries attached
+                //     results[0].entries.then(e => {
+                //       expect(e.length).to.equal(1)
+                //       done()
+                //     })
+                //   })
               })
           })
         })
