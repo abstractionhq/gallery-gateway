@@ -202,7 +202,6 @@ type Query {
     videos: [Video]
     otherMedia: [OtherMedia]
     entries(showId: ID, studentUsername: String): [Entry]
-    
 }
 
 type Mutation {
