@@ -10,7 +10,7 @@ import ShowName from '../queries/showName.graphql'
 
 const mapStateToProps = (state, ownProps) => ({
   previewImage: state.student.ui.submission.previewFile || {},
-  user: state.shared.auth.user,
+  user: state.shared.auth.user
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -33,7 +33,7 @@ const withMutations = compose(
   graphql(ShowName, {
     options: ( ownProps ) => ({
       variables: {
-        id: ownProps.match.params.id
+        id: ownProps.id
       }
     })
   })

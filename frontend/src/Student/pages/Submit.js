@@ -8,13 +8,17 @@ import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'
 import VideoSubmissionForm from '../containers/VideoSubmissionForm'
 import OtherMediaSubmissionForm from '../containers/OtherMediaSubmissionForm'
 
+const addIdPropFromQueryParams = () => {
+  return window.location.search.split('=')[1]
+}
+
 const Submit = (props) => (
   <Container>
     <Switch>
-      <Route exact path='/submit/:id' component={SubmissionFormChooser} />
-      <Route exact path='/submit/:id/photo' component={PhotoSubmissionForm} />
-      <Route exact path='/submit/:id/video' component={VideoSubmissionForm}/>
-      <Route exact path='/submit/:id/other' component={OtherMediaSubmissionForm} />
+      <Route exact path='/submit' render={() => <SubmissionFormChooser id={addIdPropFromQueryParams()} /> }/>
+      <Route exact path='/submit/photo' render={() => <PhotoSubmissionForm id={addIdPropFromQueryParams()} /> }/>
+      <Route exact path='/submit/video' render={() => <VideoSubmissionForm id={addIdPropFromQueryParams()} /> }/>
+      <Route exact path='/submit/other' render={() => <OtherMediaSubmissionForm id={addIdPropFromQueryParams()} /> }/>
     </Switch>
   </Container>
 )

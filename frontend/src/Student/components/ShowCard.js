@@ -25,14 +25,14 @@ const ShowCard = (props) => (
         <h5>{props.entries ? props.entries.length : 0}/{props.entryCap} submissions</h5>
       </div>
       <div>
-        Submission Ends: <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
+        Accepting Admissions until: <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
       </div>
       </Col>
     </Row>
     <hr />
     <Row>
       <Col className='text-center align-self-center h-100'>
-       <Link to={`/submit/${props.id}`} className='d-block w-100 h-100'>
+       <Link to={`/submit?to=${props.id}`} className='d-block w-100 h-100'>
          <FaPlusCircle size='3em' />
          <h5>New Submission</h5>
        </Link>
