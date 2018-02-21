@@ -294,7 +294,7 @@ class VideoSubmissionForm extends Component {
                     </FormGroup>
                     : null}
                   <ButtonContainer>
-                    <Link to='/submit'>
+                    <Link to={`/submit?to=${forShow.id}`}>
                       <Button
                         type='button'
                         color='danger'

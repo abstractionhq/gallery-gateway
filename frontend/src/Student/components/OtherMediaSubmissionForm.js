@@ -372,7 +372,7 @@ class OtherSubmissionForm extends Component {
                     {this.renderErrors(touched, errors, 'path')}
                   </FormGroup>
                   <ButtonContainer>
-                    <Link to='/submit'>
+                    <Link to={`/submit?to=${forShow.id}`}>
                       <Button
                         type='button'
                         color='danger'

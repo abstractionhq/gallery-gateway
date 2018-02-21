@@ -11,8 +11,12 @@ const Shows = ({shows, loading}) => (
   </div>
 )
 
+Shows.defaultProps = {
+  shows: []
+};
+
 Shows.propTypes = {
-  shows: PropTypes.array,
+  shows: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired
 }
 

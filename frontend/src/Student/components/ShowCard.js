@@ -22,7 +22,7 @@ const ShowCard = (props) => (
       </Col>
       <Col className="text-right">
       <div>
-        <h5>{props.entries ? props.entries.length : 0}/{props.entryCap} submissions</h5>
+        <h5>{props.entries.length}/{props.entryCap} submissions</h5>
       </div>
       <div>
         Accepting Admissions until: <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
@@ -41,11 +41,15 @@ const ShowCard = (props) => (
   </Card>
 )
 
+ShowCard.defaultProps = {
+  entries: []
+};
+
 ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   entryCap: PropTypes.number.isRequired,
-  entries: PropTypes.array,
+  entries: PropTypes.array.isRequired,
   entryStart: PropTypes.string.isRequired,
   entryEnd: PropTypes.string.isRequired,
   judgingStart: PropTypes.string.isRequired,
