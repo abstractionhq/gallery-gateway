@@ -36,9 +36,9 @@ const auth = (state = {}, action) => {
       }
     case actions.SWITCH_TO_ADMIN:
       return {
-      ...state,
-      performingRole: 'ADMIN'
-    } 
+        ...state,
+        performingRole: 'ADMIN'
+      }
     default:
       return state
   }
