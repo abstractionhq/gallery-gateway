@@ -4,7 +4,7 @@ import sequelize from '../config/sequelize'
 import { STUDENT, ADMIN, JUDGE } from '../constants'
 import Entry from './entry';
 
-const User =  sequelize.define('user', {
+const User = sequelize.define('user', {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -32,36 +32,25 @@ const User =  sequelize.define('user', {
 })
 
 User.prototype.getGroups = function getGroups() {
-  if(this.type !== STUDENT) {
+  if (this.type !== STUDENT) {
     return Promise.resolve([])
   }
   // Find all groups where the creator is this user
-  return Group.findAll({where: {creatorUsername: this.username}})
+  return Group.findAll({ where: { creatorUsername: this.username } })
 }
 
-User.prototype.getOwnAndGroupEntries = function getOwnAndGroupEntries() {
-  if(this.type !== STUDENT) {
+User.prototype.getOwnAndGroupEntries = function getOwnAndGroupEntries(showIds = null) {
+  if (this.type !== STUDENT) {
     return Promise.resolve([])
   }
   // Find all entries where this user is the submitter (group and self)
   return this.getGroups()
     .then((groups) => {
       const groupIds = groups.map(group => group.id)
-      if (groupIds.length > 0) {
-        return Entry.findAll({
-          where: {
-            $or: [
-              {
-                groupId: groupIds
-              }, 
-              {
-                studentUsername: this.username
-              }
-            ]
-          }
-        })
+      if (showIds) {
+        return Entry.findAll({ where: { $or: [{ groupId: groupIds }, { studentUsername: this.username }], showId: showIds } })
       } else {
-        return Entry.findAll({ where: { studentUsername: this.username } })
+        return Entry.findAll({ where: { $or: [{ groupId: groupIds }, { studentUsername: this.username }] } })
       }
     })
 }

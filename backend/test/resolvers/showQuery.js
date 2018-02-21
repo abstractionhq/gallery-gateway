@@ -61,15 +61,6 @@ describe('Show Queries', function () {
                   expect(result.data.shows[0].entries.length).to.equal(1)
                   done()
                 })
-                // shows('', { studentUsername: u.username },
-                //   { auth: { type: 'STUDENT', username: u.username } }).then((results) => {
-                //     expect(results.length).to.equal(2)
-                //     // make sure entries attached
-                //     results[0].entries.then(e => {
-                //       expect(e.length).to.equal(1)
-                //       done()
-                //     })
-                //   })
               })
           })
         })

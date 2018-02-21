@@ -227,19 +227,28 @@ describe('Entry Queries', function () {
             }))
       )
         // models are made, do the graphql query
-        .then(({user, group, userEntry, groupEntry, outsiderEntry}) =>
+        .then(({user, userEntry, outsiderEntry}) =>
           execGraphql(
             `query {
               entries(studentUsername: "${user.username}") {
                 id
+                student {
+                  username
+                }
               }
             }`,
             {type: 'STUDENT', username: user.username}
           )
             // ensure proper entries were returned
             .then(result => {
+              console.log(JSON.stringify(result))
               expect(result.data.entries).to.have.lengthOf(1)
-              expect(result.data.entries).to.deep.contain({id: `${userEntry.id}`})
+              expect(result.data.entries[0]).to.deep.eq({
+                id: `${userEntry.id}`,
+                student: {
+                  username:  `${user.username}`
+                }
+              })
             })
         )
     )
