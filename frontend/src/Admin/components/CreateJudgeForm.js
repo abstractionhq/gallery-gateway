@@ -28,7 +28,9 @@ class CreateJudgeForm extends Component {
                   className='form-control'
                   required
                 />
-                <span className='input-group-addon'>@rit.edu</span>
+                <div className='input-group-append'>
+                  <span className='input-group-text'>@rit.edu</span>
+                </div>
               </div>
             </FormGroup>
             <Row>
