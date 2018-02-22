@@ -2,7 +2,7 @@ import Group from './group'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { STUDENT, ADMIN, JUDGE } from '../constants'
-import Entry from './entry';
+import Entry from './entry'
 
 const User = sequelize.define('user', {
   username: {
@@ -31,7 +31,7 @@ const User = sequelize.define('user', {
   }
 })
 
-User.prototype.getGroups = function getGroups() {
+User.prototype.getGroups = function getGroups () {
   if (this.type !== STUDENT) {
     return Promise.resolve([])
   }
@@ -39,7 +39,7 @@ User.prototype.getGroups = function getGroups() {
   return Group.findAll({ where: { creatorUsername: this.username } })
 }
 
-User.prototype.getOwnAndGroupEntries = function getOwnAndGroupEntries(showIds = null) {
+User.prototype.getOwnAndGroupEntries = function getOwnAndGroupEntries (showIds = null) {
   if (this.type !== STUDENT) {
     return Promise.resolve([])
   }

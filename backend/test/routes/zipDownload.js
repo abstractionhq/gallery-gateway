@@ -11,8 +11,8 @@ import server from '../../server'
 import config from '../../config'
 import { fakeShow, fakeImageEntry, fakeGroup, fakeUser } from '../factories'
 import User from '../../models/user'
-import { signToken } from '../../helpers/jwt';
-import { ADMIN, STUDENT } from '../../constants';
+import { signToken } from '../../helpers/jwt'
+import { ADMIN, STUDENT } from '../../constants'
 
 const binaryParser = (res, callback) => {
   // taken from https://stackoverflow.com/q/13573315

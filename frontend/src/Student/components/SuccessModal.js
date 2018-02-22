@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, ModalBody } from 'reactstrap'
 import FaCheckCircle from 'babel-loader!react-icons/fa/check-circle'
 
-const SuccessModal = (props) => (
+const SuccessModal = props => (
   <Modal
     isOpen={props.isOpen}
     style={{
@@ -19,10 +19,7 @@ const SuccessModal = (props) => (
         height: '100px'
       }}
     >
-      <h4
-        className='modal-title'
-        style={{ width: '100%' }}
-      >
+      <h4 className='modal-title' style={{ width: '100%' }}>
         <FaCheckCircle size='3em' style={{ margin: '0 auto' }} />
       </h4>
     </div>

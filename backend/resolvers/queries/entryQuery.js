@@ -1,9 +1,9 @@
 import Entry from '../../models/entry'
 import User from '../../models/user'
 import { UserError } from 'graphql-errors'
-import { ADMIN, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
+import { ADMIN } from '../../constants'
 
-export function entries(_, args, req) {
+export function entries (_, args, req) {
   // Make sure an admin or own user is requesting
   const isRequestingOwnUser = req.auth.username !== undefined &&
     req.auth.username === args.studentUsername

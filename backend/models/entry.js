@@ -52,7 +52,7 @@ const Entry = sequelize.define('entry', {
   },
   invited: {
     allowNull: true,
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.BOOLEAN
   },
   yearLevel: {
     allowNull: true,
@@ -86,47 +86,48 @@ const Entry = sequelize.define('entry', {
   }
 })
 
-/* 
+/*
 * Calculate the score on the entry
-*/ 
+*/
 Entry.prototype.getScore = function getScore () {
   // Calculate score by getting all votes with this
   // entry id and then averaging over the sum of the votes
-  return Vote.findAll ({ where: { entryId: this.id }})
-  .then((votes) => {
-    const votesValues = votes.map(vote => vote.value)
-    if (votesValues.length === 0 ){
-      return 0
-    }
-    return votesValues.reduce((acc, curr) => acc + curr) / votesValues.length
-  })
+  return Vote.findAll({ where: { entryId: this.id } })
+    .then((votes) => {
+      const votesValues = votes.map(vote => vote.value)
+      if (votesValues.length === 0) {
+        return 0
+      }
+      return votesValues.reduce((acc, curr) => acc + curr) / votesValues.length
+    })
 }
 
 /*
  * Gets the associated photo as a Promise
  */
 Entry.prototype.getImage = function getImage () {
-  if (this.entryType !== IMAGE_ENTRY) { 
+  if (this.entryType !== IMAGE_ENTRY) {
     return Promise.resolve(null)
-  } 
-  return this.imagePromise ? this.imagePromise : 
-    (this.imagePromise = Image.findOne({ where: {id: this.entryId} }))
+  }
+  return this.imagePromise ? this.imagePromise
+    : (this.imagePromise = Image.findOne({ where: { id: this.entryId } }))
 }
 
 Entry.prototype.getVideo = function getVideo () {
   if (this.entryType !== VIDEO_ENTRY) {
     return Promise.resolve(null)
   }
-  return this.videoPromise ? this.videoPromise : 
-    (this.videoPromise = Video.findOne({ where: {id: this.entryId} }))
+  return this.videoPromise ? this.videoPromise
+    : (this.videoPromise = Video.findOne({ where: { id: this.entryId } }))
 }
 
 Entry.prototype.getOther = function getOther () {
   if (this.entryType !== OTHER_ENTRY) {
     return Promise.resolve(null)
   }
-  return this.otherPromise ? this.otherPromise : 
-    (this.otherPromise = Other.findOne({ where: {id: this.entryId} }))}
+  return this.otherPromise ? this.otherPromise
+    : (this.otherPromise = Other.findOne({ where: { id: this.entryId } }))
+}
 
 Entry.prototype.getGroup = function getGroup () {
   if (!this.isGroupSubmission()) {

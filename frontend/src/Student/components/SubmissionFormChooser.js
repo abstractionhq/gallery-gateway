@@ -27,37 +27,43 @@ const SubmissionContainer = styled.section`
   text-align: center;
 `
 
-const SubmissionFormChooser = (props) => (
+const SubmissionFormChooser = props => (
   <Fragment>
     <Header>What are you submitting?</Header>
     <Row>
       <Col xs='12' sm='6' md='4'>
-        <Link to='/submit/photo'
-          style={{textDecoration: 'none', display: 'block'}}
-          className="bg-light">
+        <Link
+          to='/submit/photo'
+          style={{ textDecoration: 'none', display: 'block' }}
+          className='bg-light'
+        >
           <SubmissionContainer className='text-dark'>
-            <FaImage size="4em" />
+            <FaImage size='4em' />
             <h3>Photo</h3>
           </SubmissionContainer>
         </Link>
       </Col>
       <Col xs='12' sm='6' md='4'>
-        <Link to='/submit/video'
-          style={{textDecoration: 'none', display: 'block'}}
-          className="bg-light">
+        <Link
+          to='/submit/video'
+          style={{ textDecoration: 'none', display: 'block' }}
+          className='bg-light'
+        >
           <SubmissionContainer className='text-dark'>
-            <FaVideo size="4em" />
+            <FaVideo size='4em' />
             <h3>Video</h3>
             <p>(YouTube or Vimeo)</p>
           </SubmissionContainer>
         </Link>
       </Col>
       <Col xs='12' md='4'>
-        <Link to='/submit/other'
-          style={{textDecoration: 'none', display: 'block'}}
-          className="bg-light">
+        <Link
+          to='/submit/other'
+          style={{ textDecoration: 'none', display: 'block' }}
+          className='bg-light'
+        >
           <SubmissionContainer className='text-dark'>
-            <FaBook size="4em" />
+            <FaBook size='4em' />
             <h3>Other</h3>
             <p>(eg. A book or physical art)</p>
           </SubmissionContainer>

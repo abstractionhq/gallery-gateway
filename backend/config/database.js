@@ -6,8 +6,8 @@ const USER = config.get('ABSTRACTION_DB_USER')
 const PASSWORD = config.get('ABSTRACTION_DB_PASS')
 const HOST = config.get('ABSTRACTION_DB_HOST')
 
-const Op = Sequelize.Op;
-const operatorAliases =  {
+const Op = Sequelize.Op
+const operatorAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
   $gte: Op.gte,

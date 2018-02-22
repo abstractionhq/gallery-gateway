@@ -53,7 +53,7 @@ describe('Entry Queries', function () {
         }
       `
       it('Gets an image entry when it exists', () =>
-        fakeImageEntry({path: 'foo.jpg', horizDimInch: 3, vertDimInch: 4, mediaType: 'mymedia'})
+        fakeImageEntry({ path: 'foo.jpg', horizDimInch: 3, vertDimInch: 4, mediaType: 'mymedia' })
           .then(entry =>
             execGraphql(
               `query {
@@ -65,7 +65,7 @@ describe('Entry Queries', function () {
               }
               ${photoFragment}
               `,
-              {type: 'ADMIN'}
+              { type: 'ADMIN' }
             )
               .then(result => {
                 expect(result).to.deep.equal({
@@ -97,7 +97,7 @@ describe('Entry Queries', function () {
             }
             ${videoFragment}
             `,
-            {type: 'ADMIN'}
+            { type: 'ADMIN' }
           )
             .then(result => {
               expect(result).to.deep.equal({
@@ -127,7 +127,7 @@ describe('Entry Queries', function () {
             }
             ${otherMediaFragment}
             `,
-            {type: 'ADMIN'}
+            { type: 'ADMIN' }
           )
             .then(result => {
               expect(result).to.deep.equal({
@@ -146,9 +146,9 @@ describe('Entry Queries', function () {
       )
       it('Gets all types of entry when multiple exist', function () {
         return Promise.all([
-          fakeImageEntry({path: 'foo1.jpg', horizDimInch: 5, vertDimInch: 6, mediaType: 'mymedia'}),
-          fakeVideoEntry({videoId: 'myvideoid', provider: 'youtube'}),
-          fakeOtherEntry({path: 'foo2.jpg'})
+          fakeImageEntry({ path: 'foo1.jpg', horizDimInch: 5, vertDimInch: 6, mediaType: 'mymedia' }),
+          fakeVideoEntry({ videoId: 'myvideoid', provider: 'youtube' }),
+          fakeOtherEntry({ path: 'foo2.jpg' })
         ])
           .then(([image, video, other]) =>
             execGraphql(
@@ -163,7 +163,7 @@ describe('Entry Queries', function () {
               }
               ${photoFragment} ${videoFragment} ${otherMediaFragment}
               `,
-              {type: 'ADMIN'}
+              { type: 'ADMIN' }
             )
               .then(result => {
                 // first let's sort the returned entries by ID so we can
@@ -207,7 +207,7 @@ describe('Entry Queries', function () {
                   id
                 }
               }`,
-              {type: 'ADMIN'}
+              { type: 'ADMIN' }
             )
               .then(result => {
                 expect(result.data.entries).to.have.lengthOf(1)
@@ -216,20 +216,20 @@ describe('Entry Queries', function () {
           })
       )
       it('allows students to search for just their own entries', () =>
-      // first, set up a fake user, give them a group, and make three entries:
-      // one from the user, one from the group, and one from someone else
-      fakeUser().then(user =>
-          Promise.all([fakeImageEntry({user}), fakeImageEntry()])
+        // first, set up a fake user, give them a group, and make three entries:
+        // one from the user, one from the group, and one from someone else
+        fakeUser().then(user =>
+          Promise.all([fakeImageEntry({ user }), fakeImageEntry()])
             .then(([userEntry, outsiderEntry]) => ({
               user,
               userEntry,
               outsiderEntry
             }))
-      )
-        // models are made, do the graphql query
-        .then(({user, userEntry, outsiderEntry}) =>
-          execGraphql(
-            `query {
+        )
+          // models are made, do the graphql query
+          .then(({ user, userEntry, outsiderEntry }) =>
+            execGraphql(
+              `query {
               entries(studentUsername: "${user.username}") {
                 id
                 student {
@@ -237,27 +237,26 @@ describe('Entry Queries', function () {
                 }
               }
             }`,
-            {type: 'STUDENT', username: user.username}
-          )
-            // ensure proper entries were returned
-            .then(result => {
-              console.log(JSON.stringify(result))
-              expect(result.data.entries).to.have.lengthOf(1)
-              expect(result.data.entries[0]).to.deep.eq({
-                id: `${userEntry.id}`,
-                student: {
-                  username:  `${user.username}`
-                }
+              { type: 'STUDENT', username: user.username }
+            )
+              // ensure proper entries were returned
+              .then(result => {
+                expect(result.data.entries).to.have.lengthOf(1)
+                expect(result.data.entries[0]).to.deep.eq({
+                  id: `${userEntry.id}`,
+                  student: {
+                    username: `${user.username}`
+                  }
+                })
               })
-            })
-        )
-    )
+          )
+      )
       it('allows students to search for their own entries (including group)', () =>
         // first, set up a fake user, give them a group, and make three entries:
         // one from the user, one from the group, and one from someone else
         fakeUser().then(user =>
-          fakeGroup({user}).then(group =>
-            Promise.all([fakeImageEntry({user}), fakeImageEntry({group}), fakeImageEntry()])
+          fakeGroup({ user }).then(group =>
+            Promise.all([fakeImageEntry({ user }), fakeImageEntry({ group }), fakeImageEntry()])
               .then(([userEntry, groupEntry, outsiderEntry]) => ({
                 user,
                 group,
@@ -268,20 +267,20 @@ describe('Entry Queries', function () {
           )
         )
           // models are made, do the graphql query
-          .then(({user, group, userEntry, groupEntry, outsiderEntry}) =>
+          .then(({ user, group, userEntry, groupEntry, outsiderEntry }) =>
             execGraphql(
               `query {
                 entries(studentUsername: "${user.username}") {
                   id
                 }
               }`,
-              {type: 'STUDENT', username: user.username}
+              { type: 'STUDENT', username: user.username }
             )
               // ensure proper entries were returned
               .then(result => {
                 expect(result.data.entries).to.have.lengthOf(2)
-                expect(result.data.entries).to.deep.contain({id: `${userEntry.id}`})
-                expect(result.data.entries).to.deep.contain({id: `${groupEntry.id}`})
+                expect(result.data.entries).to.deep.contain({ id: `${userEntry.id}` })
+                expect(result.data.entries).to.deep.contain({ id: `${groupEntry.id}` })
               })
           )
       )
@@ -306,7 +305,7 @@ describe('Entry Queries', function () {
                   score
                 }
               }`,
-              {type: 'ADMIN'}
+              { type: 'ADMIN' }
             )
               .then(result => {
                 expect(result.data.entries).to.have.lengthOf(1)
@@ -327,7 +326,7 @@ describe('Entry Queries', function () {
                   score
                 }
               }`,
-              {type: 'ADMIN'}
+              { type: 'ADMIN' }
             )
               .then(result => {
                 expect(result.data.entries).to.have.lengthOf(1)

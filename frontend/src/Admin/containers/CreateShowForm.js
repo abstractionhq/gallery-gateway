@@ -15,10 +15,11 @@ function mapDispatchToProps (dispatch) {
 const withRedux = connect(null, mapDispatchToProps)(CreateShowForm)
 
 export default graphql(CreateShowMutation, {
-  props: ({mutate}) => ({
-    create: (show) => mutate({
-      variables: { input: show }
-    })
+  props: ({ mutate }) => ({
+    create: show =>
+      mutate({
+        variables: { input: show }
+      })
   }),
   options: () => ({
     refetchQueries: [

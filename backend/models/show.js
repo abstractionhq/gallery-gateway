@@ -1,6 +1,6 @@
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
-import Entry from './entry';
+import Entry from './entry'
 
 const Show = sequelize.define('show', {
   name: {
@@ -54,9 +54,8 @@ const Show = sequelize.define('show', {
   }
 })
 
-
-Show.prototype.getEntries = function getEntries() {
-  return Entry.findAll({where: {showId: this.id}})
+Show.prototype.getEntries = function getEntries () {
+  return Entry.findAll({ where: { showId: this.id } })
 }
 
-export default Show 
+export default Show

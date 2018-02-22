@@ -1,7 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Form, FormGroup, FormFeedback, Label, Button, Row, Col } from 'reactstrap'
+import {
+  Form,
+  FormGroup,
+  FormFeedback,
+  Label,
+  Button,
+  Row,
+  Col
+} from 'reactstrap'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
 import { Formik, Field } from 'formik'
@@ -61,10 +69,7 @@ class PhotoSubmissionForm extends Component {
   renderFileUpload = (field, form) => {
     const { name } = field
     const { setFieldValue } = form
-    const {
-      handleUpload,
-      previewImage
-    } = this.props
+    const { handleUpload, previewImage } = this.props
 
     return (
       <Dropzone
@@ -88,7 +93,7 @@ class PhotoSubmissionForm extends Component {
           backgroundColor: '#eee'
         }}
         className='form-control'
-        onDrop={(acceptedFiles) => {
+        onDrop={acceptedFiles => {
           const image = acceptedFiles[0] // Only 1 image per submission
           handleUpload(image).then(() => {
             // Need to use 'this.props' here to get the most up-to-date value – 'previewImage' above will be out-of-date
@@ -98,14 +103,14 @@ class PhotoSubmissionForm extends Component {
           // TODO: If there was previously an image, and someone uploads a new image, send a delete request to the old image before uploading the new image
         }}
       >
-        {previewImage.preview
-          ? (<PreviewImage src={previewImage.preview} />)
-          : (
-            <span>
-              <p>Click or drop to upload your file.</p>
-              <p>Only *.jpg and *.jpeg images will be accepted.</p>
-            </span>
-          )}
+        {previewImage.preview ? (
+          <PreviewImage src={previewImage.preview} />
+        ) : (
+          <span>
+            <p>Click or drop to upload your file.</p>
+            <p>Only *.jpg and *.jpeg images will be accepted.</p>
+          </span>
+        )}
       </Dropzone>
     )
   }
@@ -113,7 +118,11 @@ class PhotoSubmissionForm extends Component {
   renderErrors = (touched, errors, field) => {
     // Render feedback if this field's been touched and has errors
     if (touched[field] && errors[field]) {
-      return <FormFeedback style={{ display: 'block' }}>{errors[field]}</FormFeedback>
+      return (
+        <FormFeedback style={{ display: 'block' }}>
+          {errors[field]}
+        </FormFeedback>
+      )
     }
 
     // Otherwise, don't render anything
@@ -121,12 +130,7 @@ class PhotoSubmissionForm extends Component {
   }
 
   render () {
-    const {
-      create,
-      done,
-      user,
-      forShow
-    } = this.props
+    const { create, done, user, forShow } = this.props
 
     return (
       <Fragment>
@@ -145,35 +149,51 @@ class PhotoSubmissionForm extends Component {
             moreCopies: 'no',
             path: ''
           }}
-          validationSchema={
-            yup.object()
-              .shape({
-                academicProgram: yup.string().required('Required'),
-                yearLevel: yup.string().required('Required'),
-                submittingAsGroup: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                groupParticipants: yup.string()
-                  .when('submittingAsGroup', {
-                    is: 'yes',
-                    then: yup.string().required('Required')
-                  }),
-                title: yup.string().required('Required'),
-                comment: yup.string(),
-                mediaType: yup.string().required('Required').nullable(), // react-select uses 'null' to represent when the value is cleared
-                horizDimInch: yup.number().required('Required').positive('Width Must be Positive'),
-                vertDimInch: yup.number().required('Required').positive('Height Must be Positive'),
-                forSale: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                moreCopies: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                path: yup.string().required('Required')
-              })}
-          onSubmit={(
-            values
-          ) => {
+          validationSchema={yup.object().shape({
+            academicProgram: yup.string().required('Required'),
+            yearLevel: yup.string().required('Required'),
+            submittingAsGroup: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            groupParticipants: yup.string().when('submittingAsGroup', {
+              is: 'yes',
+              then: yup.string().required('Required')
+            }),
+            title: yup.string().required('Required'),
+            comment: yup.string(),
+            mediaType: yup
+              .string()
+              .required('Required')
+              .nullable(), // react-select uses 'null' to represent when the value is cleared
+            horizDimInch: yup
+              .number()
+              .required('Required')
+              .positive('Width Must be Positive'),
+            vertDimInch: yup
+              .number()
+              .required('Required')
+              .positive('Height Must be Positive'),
+            forSale: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            moreCopies: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            path: yup.string().required('Required')
+          })}
+          onSubmit={values => {
             const input = {
               entry: {
                 group: {
                   name: '',
                   creatorUsername: user.username,
-                  participants: values.submittingAsGroup === 'yes' ? values.groupParticipants : ''
+                  participants:
+                    values.submittingAsGroup === 'yes'
+                      ? values.groupParticipants
+                      : ''
                 },
                 studentUsername: user.username,
                 showId: forShow.id,
@@ -184,7 +204,8 @@ class PhotoSubmissionForm extends Component {
                 forSale: values.forSale === 'yes',
                 // Must select 'forSale = yes' first
                 // So, if you select 'forSale = yes', 'moreCopies = yes', 'forSale = no' => 'moreCopies' will be false
-                moreCopies: values.forSale === 'yes' && values.moreCopies === 'yes'
+                moreCopies:
+                  values.forSale === 'yes' && values.moreCopies === 'yes'
               },
               mediaType: values.mediaType,
               horizDimInch: values.horizDimInch,
@@ -193,13 +214,12 @@ class PhotoSubmissionForm extends Component {
             }
 
             // Create an entry, show the success modal, and then go to the dashboard
-            create(input)
-              .then(() => {
-                this.setState({showModal: true}, () => {
-                  setTimeout(done, 2000)
-                })
+            create(input).then(() => {
+              this.setState({ showModal: true }, () => {
+                setTimeout(done, 2000)
               })
-              // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
+            })
+            // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
           }}
           render={({
             values,
@@ -210,9 +230,9 @@ class PhotoSubmissionForm extends Component {
             handleSubmit,
             isSubmitting
           }) => (
-            <Form onSubmit={handleSubmit} style={{marginBottom: '75px'}}>
+            <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>
               <Row>
-                <Col xs='12' md='8' style={{margin: '0 auto'}}>
+                <Col xs='12' md='8' style={{ margin: '0 auto' }}>
                   <Header>New Photo Submission</Header>
                   <SubHeader>{forShow.name}</SubHeader>
                   <FormGroup>
@@ -267,8 +287,8 @@ class PhotoSubmissionForm extends Component {
                     </FormGroup>
                     {this.renderErrors(touched, errors, 'submittingAsGroup')}
                   </FormGroup>
-                  {values.submittingAsGroup === 'yes'
-                    ? <FormGroup>
+                  {values.submittingAsGroup === 'yes' ? (
+                    <FormGroup>
                       <Label>List the names of your other group members.</Label>
                       <Field
                         type='text'
@@ -279,7 +299,7 @@ class PhotoSubmissionForm extends Component {
                       />
                       {this.renderErrors(touched, errors, 'groupParticipants')}
                     </FormGroup>
-                    : null}
+                  ) : null}
                   <FormGroup>
                     <Label>Title</Label>
                     <Field
@@ -314,8 +334,11 @@ class PhotoSubmissionForm extends Component {
                         value: values.mediaType
                       }}
                       options={[
-                        {value: 'Chromogenic Print', label: 'Chromogenic Print'},
-                        {value: 'Inkjet Print', label: 'Inkjet Print'}
+                        {
+                          value: 'Chromogenic Print',
+                          label: 'Chromogenic Print'
+                        },
+                        { value: 'Inkjet Print', label: 'Inkjet Print' }
                       ]}
                       placeholder={'Select or create option...'}
                       required
@@ -325,7 +348,9 @@ class PhotoSubmissionForm extends Component {
                   <FormGroup>
                     <Label>Dimensions (inches)</Label>
                     <div className='input-group'>
-                      <Label for='horizDimInch' hidden>Width</Label>
+                      <Label for='horizDimInch' hidden>
+                        Width
+                      </Label>
                       <Field
                         type='number'
                         id='horizDimInch'
@@ -333,12 +358,17 @@ class PhotoSubmissionForm extends Component {
                         className='form-control'
                         placeholder='width'
                         required
-                        style={{ 'borderTopLeftRadius': '0.25rem', 'borderBottomLeftRadius': '0.25rem' }}
+                        style={{
+                          borderTopLeftRadius: '0.25rem',
+                          borderBottomLeftRadius: '0.25rem'
+                        }}
                       />
                       <div className='input-group-prepend input-group-append'>
                         <span className='input-group-text'>x</span>
                       </div>
-                      <Label for='vertDimInch' hidden>Height</Label>
+                      <Label for='vertDimInch' hidden>
+                        Height
+                      </Label>
                       <Field
                         type='number'
                         id='vertDimInch'
@@ -352,7 +382,10 @@ class PhotoSubmissionForm extends Component {
                     {this.renderErrors(touched, errors, 'vertDimInch')}
                   </FormGroup>
                   <FormGroup>
-                    <Label>Is this work available for purchase if selected for a purchase award?</Label>
+                    <Label>
+                      Is this work available for purchase if selected for a
+                      purchase award?
+                    </Label>
                     <FormGroup check>
                       <Label check>
                         <Field
@@ -381,9 +414,12 @@ class PhotoSubmissionForm extends Component {
                     </FormGroup>
                     {this.renderErrors(touched, errors, 'forSale')}
                   </FormGroup>
-                  {values.forSale === 'yes'
-                    ? <FormGroup>
-                      <Label>If selected for multiple purchase awards, are you willing to sell multiple copies?</Label>
+                  {values.forSale === 'yes' ? (
+                    <FormGroup>
+                      <Label>
+                        If selected for multiple purchase awards, are you
+                        willing to sell multiple copies?
+                      </Label>
                       <FormGroup check>
                         <Label check>
                           <Field
@@ -412,13 +448,15 @@ class PhotoSubmissionForm extends Component {
                       </FormGroup>
                       {this.renderErrors(touched, errors, 'moreCopies')}
                     </FormGroup>
-                    : null}
+                  ) : null}
                   <FormGroup>
                     <Label for='path'>Photo</Label>
                     <Field
                       id='path'
                       name='path'
-                      render={({ field, form }) => this.renderFileUpload(field, form)}
+                      render={({ field, form }) =>
+                        this.renderFileUpload(field, form)
+                      }
                     />
                     {this.renderErrors(touched, errors, 'path')}
                   </FormGroup>
@@ -427,7 +465,7 @@ class PhotoSubmissionForm extends Component {
                       <Button
                         type='button'
                         color='danger'
-                        style={{cursor: 'pointer', width: '150px'}}
+                        style={{ cursor: 'pointer', width: '150px' }}
                       >
                         Back
                       </Button>
@@ -435,7 +473,11 @@ class PhotoSubmissionForm extends Component {
                     <Button
                       type='submit'
                       color='primary'
-                      style={{cursor: 'pointer', float: 'right', width: '150px'}}
+                      style={{
+                        cursor: 'pointer',
+                        float: 'right',
+                        width: '150px'
+                      }}
                       disabled={isSubmitting}
                     >
                       Submit

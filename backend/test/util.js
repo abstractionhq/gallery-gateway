@@ -41,6 +41,6 @@ export function decodeUserToken (token) {
   return decoded
 }
 
-export function execGraphql(query, auth) {
+export function execGraphql (query, auth) {
   return graphql(schema, query, null, {auth})
 }

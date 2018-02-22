@@ -18,7 +18,7 @@ const columns = [
   }
 ]
 
-const JudgesTable = (props) => (
+const JudgesTable = props => (
   <CheckboxTable
     columns={columns}
     data={props.judges}

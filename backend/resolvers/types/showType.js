@@ -1,12 +1,12 @@
-import User from "../../models/user";
-import { ADMIN, JUDGE } from "../../constants";
+import User from '../../models/user'
+import { ADMIN, JUDGE } from '../../constants'
 
 export default {
   Show: {
-    judges(show) {
+    judges (show) {
       return show.getUsers()
     },
-    entries(show, _, req) {
+    entries (show, _, req) {
       // Admins and judges should see all entries on a show
       if (req.auth.type === ADMIN || req.auth.type === JUDGE) {
         return show.getEntries()

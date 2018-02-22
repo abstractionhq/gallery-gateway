@@ -30,15 +30,15 @@ describe('Show Queries', function () {
         })
       })
       it('Gets all shows in order if requested', function (done) {
-        Promise.all([fakeShow({ name: 'a', entryStart: '2001-11-20' }),
-        fakeShow({ name: 'b', entryStart: '2001-11-15' })]).then(() => {
-          shows('', { orderBy: { sort: 'entryStart', direction: 'DESC' } },
-            { auth: { type: 'ADMIN' } }).then((result) => {
+        Promise.all([fakeShow({ name: 'a', entryStart: '2001-11-20' }), fakeShow({ name: 'b', entryStart: '2001-11-15' })])
+          .then(() => {
+            shows('', { orderBy: { sort: 'entryStart', direction: 'DESC' } },
+              { auth: { type: 'ADMIN' } }).then((result) => {
               expect(result.length).to.equal(2)
               expect(result[0].name).to.equal('a')
               done()
             })
-        })
+          })
       })
       it('gets all shows for a user asking for shows they\'ve made entries on (including group)', function (done) {
         fakeUser().then((u) => {
@@ -54,8 +54,8 @@ describe('Show Queries', function () {
                       }
                     }
                   }
-                  `, 
-                  {type: 'STUDENT', username: u.username}
+                  `,
+                  { type: 'STUDENT', username: u.username }
                 ).then(result => {
                   expect(result.data.shows.length).to.equal(2)
                   expect(result.data.shows[0].entries.length).to.equal(1)
@@ -68,7 +68,7 @@ describe('Show Queries', function () {
     })
     describe('Validation', function () {
       it('doesn\'t let a user request shows that are not their own', function () {
-        expect(() => shows('', { studentUsername: "aUsername" },
+        expect(() => shows('', { studentUsername: 'aUsername' },
           { auth: { type: 'STUDENT', username: 'differentName' } }))
           .to.throw('Permission Denied')
       })

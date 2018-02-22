@@ -11,37 +11,37 @@ const Vote = sequelize.define('vote', {
   },
   entryId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false
   },
   value: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false
   }
 },
 {
   validate: {
     voteValueValidation () {
-      if(!ALLOWED_VOTE_VALUES.has(this.value)){
+      if (!ALLOWED_VOTE_VALUES.has(this.value)) {
         throw new Error('Vote value must be 0, 1, or 2')
       }
     }
   }
 })
 
-/** 
+/**
  * Gets the judge for the vote as a Promise
  */
-Vote.prototype.getJudge = function getJudge() {
+Vote.prototype.getJudge = function getJudge () {
   if (!this.judgeUsername) {
     return Promise.resolve(null)
   }
   return User.findById(this.judgeUsername)
 }
 
-/** 
+/**
  * Gets the entry for the vote as a Promise
  */
-Vote.prototype.getEntry = function getEntry() {
+Vote.prototype.getEntry = function getEntry () {
   if (!this.entryId) {
     return Promise.resolve(null)
   }

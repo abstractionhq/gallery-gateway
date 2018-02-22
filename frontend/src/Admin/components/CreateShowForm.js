@@ -14,18 +14,15 @@ const CalendarContainer = styled.div`
 `
 
 class CreateShowForm extends Component {
-  submit = (values) => {
+  submit = values => {
     const { create, done } = this.props
 
-    create(values)
-      .then(done())
-      // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
+    create(values).then(done())
+    // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
   }
 
   render () {
-    const {
-      handleSubmit
-    } = this.props
+    const { handleSubmit } = this.props
 
     return (
       <Form onSubmit={handleSubmit(this.submit)}>
@@ -34,16 +31,34 @@ class CreateShowForm extends Component {
           <Col xs={7}>
             <FormGroup>
               <Label for='name'>Name</Label>
-              <Field id='name' component='input' type='text' name='name' className='form-control' />
+              <Field
+                id='name'
+                component='input'
+                type='text'
+                name='name'
+                className='form-control'
+              />
             </FormGroup>
             <FormGroup>
               <Label for='description'>Description</Label>
-              <Field id='description' component='textarea' name='description' rows={3} className='form-control' />
+              <Field
+                id='description'
+                component='textarea'
+                name='description'
+                rows={3}
+                className='form-control'
+              />
             </FormGroup>
             <FormGroup>
               {/* TODO: Should validate positive */}
               <Label for='submission-limit'>Submission Limit</Label>
-              <Field id='submission-limit' component='input' type='number' name='entryCap' className='form-control' />
+              <Field
+                id='submission-limit'
+                component='input'
+                type='number'
+                name='entryCap'
+                className='form-control'
+              />
             </FormGroup>
           </Col>
           <Col xs={5}>
@@ -89,7 +104,9 @@ class CreateShowForm extends Component {
             </Row>
           </Col>
         </Row>
-        <Button type='submit' color='primary' style={{cursor: 'pointer'}}>Submit</Button>
+        <Button type='submit' color='primary' style={{ cursor: 'pointer' }}>
+          Submit
+        </Button>
       </Form>
     )
   }

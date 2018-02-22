@@ -1,12 +1,12 @@
 import faker from 'faker'
 import User from '../models/user'
-import Group from '../models/group';
+import Group from '../models/group'
 import Show from '../models/show'
 import Image from '../models/image'
 import Entry from '../models/entry'
 import Video from '../models/video'
 import Other from '../models/other'
-import Vote from '../models/vote';
+import Vote from '../models/vote'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
 /**
@@ -67,8 +67,8 @@ export function fakeShow (opts) {
 
 function fakeImage (opts) {
   opts.path = opts.path || faker.system.commonFileName('.jpg')
-  opts.horizDimInch = opts.horizDimInch || faker.random.number({min: 1, max: 100})
-  opts.vertDimInch = opts.vertDimInch || faker.random.number({min: 1, max: 100})
+  opts.horizDimInch = opts.horizDimInch || faker.random.number({ min: 1, max: 100 })
+  opts.vertDimInch = opts.vertDimInch || faker.random.number({ min: 1, max: 100 })
   opts.mediaType = opts.mediaType || faker.lorem.word()
   return Image.create({
     path: opts.path,
@@ -161,22 +161,22 @@ export function fakeOtherEntry (opts) {
     })
 }
 
-export function fakeVoteReturnShowId(opts) {
+export function fakeVoteReturnShowId (opts) {
   opts = opts || {}
   opts.value = opts.value || 1
   const entryPromise = opts.entry ? Promise.resolve(opts.entry) : fakeImageEntry()
   const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
   return Promise.all([entryPromise, userPromise])
-  .then((models) => {
-    const entry = models[0]
-    const user = models[1]
-    return user.addShow(entry.showId).then(() => {
-      Vote.create({
-        judgeUsername: user.username,
-        entryId: entry.id,
-        value: opts.value
+    .then((models) => {
+      const entry = models[0]
+      const user = models[1]
+      return user.addShow(entry.showId).then(() => {
+        Vote.create({
+          judgeUsername: user.username,
+          entryId: entry.id,
+          value: opts.value
+        })
+        return entry.showId
       })
-      return entry.showId
     })
-  })
 }

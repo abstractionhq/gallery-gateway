@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Collapse, Navbar, NavbarToggler, Nav, NavItem, NavLink } from 'reactstrap'
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  Nav,
+  NavItem,
+  NavLink
+} from 'reactstrap'
 import styled from 'styled-components'
 
 const NavBarContainer = styled.div`
@@ -34,7 +41,9 @@ export default class NavBar extends Component {
   renderSwitchToAdmin = () => {
     return (
       <NavItem>
-        <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>View as Admin |</NavLink>
+        <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>
+          View as Admin |
+        </NavLink>
       </NavItem>
     )
   }
@@ -45,13 +54,17 @@ export default class NavBar extends Component {
     return (
       <NavBarContainer>
         <Navbar color='dark' dark expand='md'>
-          <Link to='/' className='navbar-brand'>Gallery Gateway</Link>
+          <Link to='/' className='navbar-brand'>
+            Gallery Gateway
+          </Link>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
+            <Nav className='ml-auto' navbar>
               {isAdmin ? this.renderSwitchToAdmin() : null}
               <NavItem>
-                <Link to='/' className='nav-link' onClick={this.props.logout}>Logout</Link>
+                <Link to='/' className='nav-link' onClick={this.props.logout}>
+                  Logout
+                </Link>
               </NavItem>
             </Nav>
           </Collapse>
