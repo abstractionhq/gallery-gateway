@@ -12,14 +12,14 @@ class DateRangePickerWrapper extends Component {
     }
   }
 
-  handleDatesChange = (dates) => {
+  handleDatesChange = dates => {
     const startField = this.props[this.props.startDateFieldName]
     const endField = this.props[this.props.endDateFieldName]
     startField.input.onChange(dates.startDate)
     endField.input.onChange(dates.endDate)
   }
 
-  handleFocusChange = (focusedInput) => {
+  handleFocusChange = focusedInput => {
     this.setState({ focusedInput })
     if (focusedInput === START_DATE) {
       this.props[this.props.startDateFieldName].input.onFocus()
@@ -31,18 +31,19 @@ class DateRangePickerWrapper extends Component {
   }
 
   render () {
-    const startDate = this.props[this.props.startDateFieldName].input.value || null
+    const startDate =
+      this.props[this.props.startDateFieldName].input.value || null
     const endDate = this.props[this.props.endDateFieldName].input.value || null
 
     return (
       <DateRangePicker
         endDate={endDate}
-        endDatePlaceholderText="End Date"
+        endDatePlaceholderText='End Date'
         focusedInput={this.state.focusedInput}
         onDatesChange={this.handleDatesChange}
         onFocusChange={this.handleFocusChange}
         startDate={startDate}
-        startDatePlaceholderText="Start Date"
+        startDatePlaceholderText='Start Date'
         isOutsideRange={() => false} // Allows any past date to be chosen
       />
     )

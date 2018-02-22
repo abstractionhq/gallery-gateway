@@ -50,12 +50,14 @@ const Home = () => (
         <LoginContainer>
           <PageTitle>Gallery Gateway</PageTitle>
           <ButtonContainer>
-            <LoginButton href='http://localhost:3000/auth/login'>Login</LoginButton>
+            <LoginButton href='http://localhost:3000/auth/login'>
+              Login
+            </LoginButton>
           </ButtonContainer>
         </LoginContainer>
       </Col>
       <Col sm='5' className='p-0'>
-        <SplashImage src={splash} className='d-none d-sm-block'/>
+        <SplashImage src={splash} className='d-none d-sm-block' />
       </Col>
     </Row>
   </Container>

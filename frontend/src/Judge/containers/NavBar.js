@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import NavBar from '../components/NavBar'
 import { logout, switchToAdmin } from '../../shared/actions'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.shared.auth.user
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout()),
   switchToAdmin: () => dispatch(switchToAdmin())
 })

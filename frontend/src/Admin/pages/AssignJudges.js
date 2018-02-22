@@ -48,12 +48,12 @@ class AssignJudges extends Component {
   }
 }
 
-const mapStateToProps = ({admin}, ownProps) => ({
+const mapStateToProps = ({ admin }, ownProps) => ({
   show: admin.shows[ownProps.match.params.id]
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchData: (showId) => dispatch(fetchShow(showId))
+const mapDispatchToProps = dispatch => ({
+  fetchData: showId => dispatch(fetchShow(showId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignJudges)

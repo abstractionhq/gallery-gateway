@@ -14,11 +14,13 @@ class FormikSelectInput extends Component {
           value: PropTypes.string,
           label: PropTypes.string
         }),
-        PropTypes.arrayOf( // If 'multi' select
+        PropTypes.arrayOf(
+          // If 'multi' select
           PropTypes.shape({
             value: PropTypes.string,
             label: PropTypes.string
-          })),
+          })
+        ),
         PropTypes.string // '' when empty
       ]),
       onChange: PropTypes.func, // setFieldValue
@@ -27,7 +29,7 @@ class FormikSelectInput extends Component {
     options: PropTypes.array.isRequired
   }
 
-  handleChange = (value) => {
+  handleChange = value => {
     this.props.input.onChange(this.props.field, value)
   }
 
