@@ -106,25 +106,27 @@ Entry.prototype.getScore = function getScore () {
  * Gets the associated photo as a Promise
  */
 Entry.prototype.getImage = function getImage () {
-  if (this.entryType !== IMAGE_ENTRY) {
+  if (this.entryType !== IMAGE_ENTRY) { 
     return Promise.resolve(null)
-  }
-  return Image.findOne({ where: {id: this.entryId} })
+  } 
+  return this.imagePromise ? this.imagePromise : 
+    (this.imagePromise = Image.findOne({ where: {id: this.entryId} }))
 }
 
 Entry.prototype.getVideo = function getVideo () {
   if (this.entryType !== VIDEO_ENTRY) {
     return Promise.resolve(null)
   }
-  return Video.findOne({ where: {id: this.entryId} })
+  return this.videoPromise ? this.videoPromise : 
+    (this.videoPromise = Video.findOne({ where: {id: this.entryId} }))
 }
 
 Entry.prototype.getOther = function getOther () {
   if (this.entryType !== OTHER_ENTRY) {
     return Promise.resolve(null)
   }
-  return Other.findOne({ where: {id: this.entryId} })
-}
+  return this.otherPromise ? this.otherPromise : 
+    (this.otherPromise = Other.findOne({ where: {id: this.entryId} }))}
 
 Entry.prototype.getGroup = function getGroup () {
   if (!this.isGroupSubmission()) {

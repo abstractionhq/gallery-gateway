@@ -56,7 +56,6 @@ export function createPhoto (_, args, req) {
     }, {transaction: t})
       .then(image =>
         createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
-          .then(entry => Object.assign(entry, image.dataValues))
       )
   })
 }
@@ -77,7 +76,6 @@ export function createVideo (_, args, req) {
     }, {transaction: t})
       .then(video =>
         createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
-          .then(entry => Object.assign(entry, video.dataValues))
       )
   })
 }
@@ -93,7 +91,6 @@ export function createOtherMedia (_, args, req) {
     }, {transaction: t})
       .then(other =>
         createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
-          .then(entry => Object.assign(entry, other.dataValues))
       )
   })
 }

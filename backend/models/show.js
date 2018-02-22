@@ -1,7 +1,8 @@
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
+import Entry from './entry';
 
-export default sequelize.define('show', {
+const Show = sequelize.define('show', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -52,3 +53,10 @@ export default sequelize.define('show', {
     }
   }
 })
+
+
+Show.prototype.getEntries = function getEntries() {
+  return Entry.findAll({where: {showId: this.id}})
+}
+
+export default Show 

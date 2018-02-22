@@ -49,4 +49,3 @@ Vote.prototype.getEntry = function getEntry() {
 }
 
 export default Vote
-
