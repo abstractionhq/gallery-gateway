@@ -175,7 +175,7 @@ type OtherMedia implements Entry {
     moreCopies: Boolean
     score: Float
 
-    photoPath: String!
+    path: String!
 }
 
 input OtherMediaInput {
@@ -195,7 +195,7 @@ type Query {
     group(id: ID!): Group
     show(id: ID!): Show
     groups: [Group]
-    shows(orderBy: OrderByItem): [Show]
+    shows(orderBy: OrderByItem, studentUsername: String): [Show]
     votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
@@ -203,7 +203,7 @@ type Query {
     photos: [Photo]
     videos: [Video]
     otherMedia: [OtherMedia]
-    entries(showId: ID): [Entry]
+    entries(showId: ID, studentUsername: String): [Entry]
 }
 
 type Mutation {

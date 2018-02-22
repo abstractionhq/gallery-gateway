@@ -10,6 +10,9 @@ const NavBarContainer = styled.div`
 
 export default class NavBar extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      type: PropTypes.string
+    }).isRequired,
     logout: PropTypes.func.isRequired,
     switchToAdmin: PropTypes.func.isRequired
   }
@@ -28,7 +31,17 @@ export default class NavBar extends Component {
     })
   }
 
+  renderSwitchToAdmin = () => {
+    return (
+      <NavItem>
+        <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>View as Admin |</NavLink>
+      </NavItem>
+    )
+  }
+
   render () {
+    const isAdmin = this.props.user.type === 'ADMIN'
+
     return (
       <NavBarContainer>
         <Navbar color='dark' dark expand='md'>
@@ -36,9 +49,7 @@ export default class NavBar extends Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>View as Admin |</NavLink>
-              </NavItem>
+              {isAdmin ? this.renderSwitchToAdmin() : null}
               <NavItem>
                 <Link to='/' className='nav-link' onClick={this.props.logout}>Logout</Link>
               </NavItem>

@@ -1,14 +1,23 @@
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
 
+// For Convenience: the 'base class' of functions for Photo / Video / OtherMedia
+// entry type fields, which they share.
+export const EntryBase = {
+  group (entry) {
+    return entry.getGroup()
+  },
+  student (entry) {
+    return entry.getStudent()
+  },
+  score (entry) {
+    return entry.getScore()
+  }
+}
+
 export default {
   Entry: {
-    group (entry) {
-      return entry.getGroup()
-    },
-    score (entry) {
-      return entry.getScore()
-    },
     __resolveType (data, context, info) {
+      // Identifies for GraphQL which concrete instance of Entry this object is.
       if (data.entryType === IMAGE_ENTRY) {
         return info.schema.getType('Photo')
       } else if (data.entryType === VIDEO_ENTRY) {
