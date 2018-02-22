@@ -1,5 +1,9 @@
-import nconf from '../config'
+
 import jwt from 'jsonwebtoken'
+import { graphql } from 'graphql'
+
+import nconf from '../config'
+import schema from '../schema'
 
 function sign (payload) {
   return jwt.sign(
@@ -35,4 +39,8 @@ export function decodeUserToken (token) {
       }
     })
   return decoded
+}
+
+export function execGraphql(query, auth) {
+  return graphql(schema, query, null, {auth})
 }
