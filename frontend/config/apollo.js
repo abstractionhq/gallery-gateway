@@ -23,9 +23,9 @@ const client = new ApolloClient({
       switch (o.__typename) {
         case 'User':
           // The primary key of 'User' is 'username'
-          return o.username
+          return `User:${o.username}`
         default:
-          return o.id
+          return `${o.__typename}:${o.id}`
       }
     }
   })
