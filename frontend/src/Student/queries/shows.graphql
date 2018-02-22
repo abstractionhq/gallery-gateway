@@ -1,0 +1,26 @@
+query Shows {
+  shows(orderBy: { sort: "entryStart", direction: DESC }) {
+    id
+    name
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+    entryCap
+    entries {
+      id,
+      title,
+      ... photoFields,
+      ... videoFields
+    }
+  }
+}
+
+fragment photoFields on Photo {
+  path
+}
+
+fragment videoFields on Video {
+  provider,
+  videoId
+}
