@@ -33,7 +33,7 @@ describe('Entry Mutations', function () {
                 mediaType: 'mymedia'
               }
             }
-            return createPhoto({}, args, {auth: {type: 'ADMIN'}})
+            return createPhoto({}, args, { auth: { type: 'ADMIN' } })
               .then(() => {
                 // make sure an Entry was created
                 return Entry.count().then((num) => expect(num).to.equal(1))
@@ -42,30 +42,29 @@ describe('Entry Mutations', function () {
       })
       it('accepts a standard Entry with only the schema required input', function () {
         return Promise.all([fakeUser(), fakeShow()])
-        .then((models) => {
-          const user = models[0]
-          const show = models[1]
-          const args = {
-            input: {
-              entry: {
-                studentUsername: user.username,
-                showId: show.id,
-              },
-              path: 'a/path.jpg',
-              horizDimInch: 1.2,
-              vertDimInch: 1.3,
-              mediaType: 'mymedia'
+          .then((models) => {
+            const user = models[0]
+            const show = models[1]
+            const args = {
+              input: {
+                entry: {
+                  studentUsername: user.username,
+                  showId: show.id
+                },
+                path: 'a/path.jpg',
+                horizDimInch: 1.2,
+                vertDimInch: 1.3,
+                mediaType: 'mymedia'
+              }
             }
-          }
-          return createPhoto({}, args, {auth: {type: 'ADMIN'}})
-            .then((entry) => {
-              expect(entry.title).to.equal('Untitled')
-              expect(entry.moreCopies).to.equal(false)
-              // make sure an Entry was created
-              return Entry.count().then((num) => expect(num).to.equal(1))
-
-            })
-        })
+            return createPhoto({}, args, { auth: { type: 'ADMIN' } })
+              .then((entry) => {
+                expect(entry.title).to.equal('Untitled')
+                expect(entry.moreCopies).to.equal(false)
+                // make sure an Entry was created
+                return Entry.count().then((num) => expect(num).to.equal(1))
+              })
+          })
       })
       it('accepts a Group', function () {
         return Promise.all([fakeUser(), fakeShow()])
@@ -94,7 +93,7 @@ describe('Entry Mutations', function () {
                 mediaType: 'mymedia'
               }
             }
-            return createPhoto({}, args, {auth: {type: 'ADMIN'}})
+            return createPhoto({}, args, { auth: { type: 'ADMIN' } })
               .then((photoEntry) => {
                 // make sure a Group was created
                 return Group.findOne().then(group => {
@@ -128,7 +127,7 @@ describe('Entry Mutations', function () {
           }
         }
         expect(() => {
-          createPhoto({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+          createPhoto({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
         }).to.throw('Permission Denied')
       })
 
@@ -151,7 +150,7 @@ describe('Entry Mutations', function () {
             mediaType: 'mymedia'
           }
         }
-        return createPhoto({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+        return createPhoto({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
           .then(() => Promise.reject(new Error('should have rejected')))
           .catch((e) => {
             expect(e.message).to.match(/must be positive/)
@@ -178,7 +177,7 @@ describe('Entry Mutations', function () {
             mediaType: 'mymedia'
           }
         }
-        return createPhoto({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+        return createPhoto({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
           .then(() => Promise.reject(new Error('should have rejected')))
           .catch((e) => {
             expect(e.message).to.not.equal('should have rejected')
@@ -204,7 +203,7 @@ describe('Entry Mutations', function () {
             mediaType: 'mymedia'
           }
         }
-        return createPhoto({}, args, {auth: {type: 'ADMIN'}})
+        return createPhoto({}, args, { auth: { type: 'ADMIN' } })
           .then(() => Promise.reject(new Error('should have rejected')))
           .catch((e) => {
             expect(e.message).to.match(/Entry must have an entrant/)
@@ -226,7 +225,7 @@ describe('Entry Mutations', function () {
                 url: 'https://vimeo.com/45196609'
               }
             }
-            return createVideo({}, args, {auth: {type: 'ADMIN'}})
+            return createVideo({}, args, { auth: { type: 'ADMIN' } })
               .then((video) => {
                 return Promise.all([
                   expect(video.provider).to.equal('vimeo'),
@@ -248,7 +247,7 @@ describe('Entry Mutations', function () {
                 url: 'https://www.youtube.com/watch?v=JHAReoWi-nE'
               }
             }
-            return createVideo({}, args, {auth: {type: 'ADMIN'}})
+            return createVideo({}, args, { auth: { type: 'ADMIN' } })
               .then((video) => {
                 return Promise.all([
                   expect(video.provider).to.equal('youtube'),
@@ -281,7 +280,7 @@ describe('Entry Mutations', function () {
               }
             }
             expect(() => {
-              createVideo({}, args, {auth: {type: 'STUDENT', username: user.username}})
+              createVideo({}, args, { auth: { type: 'STUDENT', username: user.username } })
             }).to.throw('The video URL must be a valid URL from Youtube or Vimeo')
           })
       })
@@ -301,7 +300,7 @@ describe('Entry Mutations', function () {
             url: 'https://vimeo.com/45196609'
           }
         }
-        return createVideo({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+        return createVideo({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
           .then(() => Promise.reject(new Error('should have rejected')))
           .catch((e) => {
             expect(e.message).to.not.equal('should have rejected')
@@ -323,7 +322,7 @@ describe('Entry Mutations', function () {
             url: 'https://vimeo.com/45196609'
           }
         }
-        return createVideo({}, args, {auth: {type: 'ADMIN'}})
+        return createVideo({}, args, { auth: { type: 'ADMIN' } })
           .then(() => Promise.reject(new Error('should have rejected')))
           .catch((e) => {
             expect(e.message).to.match(/Entry must have an entrant/)
@@ -347,7 +346,7 @@ describe('Entry Mutations', function () {
           }
         }
         expect(() => {
-          createVideo({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+          createVideo({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
         }).to.throw('Permission Denied')
       })
     })
@@ -363,7 +362,7 @@ describe('Entry Mutations', function () {
                 path: 'foo.jpg'
               }
             }
-            return createOtherMedia({}, args, {auth: {type: 'ADMIN'}})
+            return createOtherMedia({}, args, { auth: { type: 'ADMIN' } })
               .then((other) => {
                 expect(other.path).to.equal('foo.jpg')
                 return Promise.resolve()
@@ -389,7 +388,7 @@ describe('Entry Mutations', function () {
           }
         }
         expect(() => {
-          createOtherMedia({}, args, {auth: {type: 'STUDENT', username: 'user1'}})
+          createOtherMedia({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
         }).to.throw('Permission Denied')
       })
     })

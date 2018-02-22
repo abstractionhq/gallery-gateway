@@ -1,9 +1,9 @@
 export default {
   Vote: {
-    judge(vote) {
+    judge (vote) {
       return vote.getJudge()
     },
-    entry(vote) {
+    entry (vote) {
       return vote.getEntry()
     }
   }

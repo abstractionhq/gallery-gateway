@@ -3,25 +3,27 @@
 import { expect } from 'chai'
 
 import { entries } from '../../resolvers/queries/entryQuery'
-import { fakeImageEntry, fakeVideoEntry, 
-  fakeOtherEntry, fakeVoteReturnShowId } from '../factories'
+import {
+  fakeImageEntry, fakeVideoEntry,
+  fakeOtherEntry, fakeVoteReturnShowId
+} from '../factories'
 
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
     it('Rejects non-admins', function () {
-      expect(() => entries('', {}, {auth: {type: 'STUDENT'}}))
+      expect(() => entries('', {}, { auth: { type: 'STUDENT' } }))
         .to.throw('Permission Denied')
     })
     it('Gets an empty list when no entries exist', function () {
-      return entries('', {}, {auth: {type: 'ADMIN'}})
+      return entries('', {}, { auth: { type: 'ADMIN' } })
         .then((entries) => {
           expect(entries).to.be.length(0)
         })
     })
     it('Gets an image entry when it exists', function () {
-      return fakeImageEntry({horizDimInch: 3, vertDimInch: 4})
+      return fakeImageEntry({ horizDimInch: 3, vertDimInch: 4 })
         .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
+          return entries('', {}, { auth: { type: 'ADMIN' } })
             .then((resultEntries) => {
               expect(resultEntries).to.be.length(1)
               expect(resultEntries[0].id).to.equal(entry.id)
@@ -32,9 +34,9 @@ describe('Entry Queries', function () {
         })
     })
     it('gets a video entry when it exists', function () {
-      return fakeVideoEntry({videoId: 'abc123'})
+      return fakeVideoEntry({ videoId: 'abc123' })
         .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
+          return entries('', {}, { auth: { type: 'ADMIN' } })
             .then((resultEntries) => {
               expect(resultEntries).to.be.length(1)
               expect(resultEntries[0].id).to.equal(entry.id)
@@ -45,9 +47,9 @@ describe('Entry Queries', function () {
         })
     })
     it('gets an other media entry when it exists', function () {
-      return fakeOtherEntry({path: 'foo.jpg'})
+      return fakeOtherEntry({ path: 'foo.jpg' })
         .then((entry) => {
-          return entries('', {}, {auth: {type: 'ADMIN'}})
+          return entries('', {}, { auth: { type: 'ADMIN' } })
             .then((resultEntries) => {
               expect(resultEntries).to.be.length(1)
               expect(resultEntries[0].id).to.equal(entry.id)
@@ -62,7 +64,7 @@ describe('Entry Queries', function () {
           originalEntries = originalEntries.sort((a, b) => a.id - b.id)
           const entry1 = originalEntries[0]
           const entry2 = originalEntries[1]
-          return entries('', {}, {auth: {type: 'ADMIN'}})
+          return entries('', {}, { auth: { type: 'ADMIN' } })
             .then((resultEntries) => {
               expect(resultEntries).to.be.length(2)
               resultEntries = resultEntries.sort((a, b) => a.id - b.id)
@@ -75,7 +77,7 @@ describe('Entry Queries', function () {
       return Promise.all([fakeImageEntry(), fakeImageEntry()])
         .then(originalEntries => {
           expect(originalEntries[0].showId).to.not.equal(originalEntries[1].showId)
-          return entries('', {showId: originalEntries[0].showId}, {auth: {type: 'ADMIN'}})
+          return entries('', { showId: originalEntries[0].showId }, { auth: { type: 'ADMIN' } })
             .then((resultEntries) => {
               expect(resultEntries).to.be.length(1)
               expect(resultEntries[0].id).to.equal(originalEntries[0].id)
@@ -84,33 +86,32 @@ describe('Entry Queries', function () {
     })
     it('Can return a score on an entry that has votes', function () {
       return fakeImageEntry()
-      .then((e) => {
-        return Promise.all([fakeVoteReturnShowId({entry: e, value: 1}),
-          fakeVoteReturnShowId({entry: e, value: 2})])
-          .then(() => {
-            return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
-            .then((resultEntries) => {
-              expect(resultEntries).to.be.length(1)
-              return resultEntries[0].score
-              .then(score => {
-                expect(score).to.equal(1.5)
-              })
+        .then((e) => {
+          return Promise.all([fakeVoteReturnShowId({ entry: e, value: 1 }), fakeVoteReturnShowId({ entry: e, value: 2 })])
+            .then(() => {
+              return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
+                .then((resultEntries) => {
+                  expect(resultEntries).to.be.length(1)
+                  return resultEntries[0].score
+                    .then(score => {
+                      expect(score).to.equal(1.5)
+                    })
+                })
             })
-          })
-      })
+        })
     })
     it('returns a zero on a score with no votes', function () {
       return fakeImageEntry()
-      .then(e => {
-        return entries('', {showId: e.showId}, {auth: {type: 'ADMIN'}})
-        .then((resultEntries) => { 
-          expect(resultEntries).to.be.length(1)
-          return resultEntries[0].score
-          .then(score => {
-            expect(score).to.equal(0)
-          })
+        .then(e => {
+          return entries('', { showId: e.showId }, { auth: { type: 'ADMIN' } })
+            .then((resultEntries) => {
+              expect(resultEntries).to.be.length(1)
+              return resultEntries[0].score
+                .then(score => {
+                  expect(score).to.equal(0)
+                })
+            })
         })
-      })
     })
   })
 })

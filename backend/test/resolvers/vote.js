@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai'
-
-import Vote from '../../models/vote'
 import { fakeUser, fakeImageEntry } from '../factories'
 import { vote } from '../../resolvers/mutations/vote'
 
@@ -13,7 +11,7 @@ describe('Vote Mutation', function () {
         .then((models) => {
           const user = models[0]
           const entry = models[1]
-          return user.addShow(entry.showId).then((_ => {
+          return user.addShow(entry.showId).then(_ => {
             var args = {
               input: {
                 judgeUsername: user.username,
@@ -29,7 +27,7 @@ describe('Vote Mutation', function () {
                     expect(v.value).to.equal(0)
                   })
               })
-          }))
+          })
         })
     })
     it('creates a valid vote', function () {
@@ -85,7 +83,7 @@ describe('Vote Mutation', function () {
           const entry = models[1]
           const args = {
             input: {
-              judgeUsername: "someOtherJudge",
+              judgeUsername: 'someOtherJudge',
               entryId: entry.id,
               value: 2
             }
@@ -102,7 +100,7 @@ describe('Vote Mutation', function () {
           const entry = models[1]
           const args = {
             input: {
-              judgeUsername: "someOtherJudge",
+              judgeUsername: 'someOtherJudge',
               entryId: entry.id,
               value: 2
             }
@@ -150,7 +148,7 @@ describe('Vote Mutation', function () {
         .then((models) => {
           const user = models[0]
           const entry = models[1]
-          return user.addShow(entry.showId).then((_ => {
+          return user.addShow(entry.showId).then(_ => {
             const args = {
               input: {
                 judgeUsername: user.username,
@@ -162,7 +160,7 @@ describe('Vote Mutation', function () {
               .catch((err) => {
                 expect(err.message).to.equal('Validation error: Vote value must be 0, 1, or 2')
               })
-          }))
+          })
         })
     })
   })

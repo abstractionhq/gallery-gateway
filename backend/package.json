@@ -15,6 +15,14 @@
     "sourceMap": false,
     "instrument": false
   },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "mocha": true,
+      "es6": true
+    }
+  },
   "scripts": {
     "start": "nodemon ./bin/www --exec babel-node",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 5000 test/setup.js test/**/*.js",
@@ -23,7 +31,8 @@
     "keygen": "babel-node keygen",
     "sequelize": "babel-node ./node_modules/.bin/sequelize",
     "migrate": "babel-node ./node_modules/.bin/sequelize db:migrate",
-    "seed": "babel-node ./node_modules/.bin/sequelize db:seed:all"
+    "seed": "babel-node ./node_modules/.bin/sequelize db:seed:all",
+    "lint": "eslint **/*.js --ignore-pattern coverage/"
   },
   "dependencies": {
     "apollo-server-express": "^1.3.2",

@@ -5,7 +5,7 @@ export default {
     group (entry) {
       return entry.getGroup()
     },
-    score(entry) {
+    score (entry) {
       return entry.getScore()
     },
     __resolveType (data, context, info) {

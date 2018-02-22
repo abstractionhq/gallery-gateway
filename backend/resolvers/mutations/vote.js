@@ -4,8 +4,7 @@ import User from '../../models/user'
 import { UserError } from 'graphql-errors'
 import { ADMIN, JUDGE } from '../../constants'
 
-
-function judgeIsAllowedToVote(input) {
+function judgeIsAllowedToVote (input) {
   return User.findById(input.judgeUsername).then(judge => {
     return Entry.findById(input.entryId).then(entry => {
       if (!entry) {
@@ -22,11 +21,11 @@ function judgeIsAllowedToVote(input) {
     })
   })
 }
-export function vote(_, args, req) {
+export function vote (_, args, req) {
   // Make sure judge is voting as themself
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-    (req.auth.type === JUDGE || req.auth.type === ADMIN) 
-    && req.auth.username === args.input.judgeUsername
+    (req.auth.type === JUDGE || req.auth.type === ADMIN) &&
+    req.auth.username === args.input.judgeUsername
   if (!isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }

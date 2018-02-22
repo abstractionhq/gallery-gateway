@@ -24,11 +24,11 @@ export function up (queryInterface, Sequelize) {
         key: 'id'
       },
       onUpdate: 'cascade',
-      onDelete: 'cascade'    
-  },
+      onDelete: 'cascade'
+    },
     value: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     createdAt: {
       allowNull: false,
