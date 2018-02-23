@@ -37,12 +37,12 @@ const ShowCard = (props) => (
       </Col>
     </Row>
     <hr />
-    <Row>
-      <Col className='text-center align-self-center h-100'>
-       <Link to={`/submit?to=${props.id}`} className='d-block w-100 h-100'>
-         <FaPlusCircle size='3em' />
-         <h5>New Submission</h5>
-       </Link>
+    <Row style={{minHeight: '250px'}}>
+      <Col className='text-center align-self-center justify-content-center h-100'>
+        <Link to={`/submit?to=${props.id}`} className='d-block w-100 h-100'>
+          <FaPlusCircle size='3em' />
+          <h5>New Submission</h5>
+        </Link>
       </Col>
     </Row>
   </Card>
