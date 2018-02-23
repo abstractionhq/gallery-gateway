@@ -13,19 +13,26 @@ const Card = styled.div`
   padding: 10px;
   width: 100%;
 `
+const ShowTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-self: baesline;
+`
 
 const ShowCard = (props) => (
   <Card>
     <Row>
-      <Col>
-        <h2>{props.name}</h2>
-      </Col>
+      <ShowTitle>
+        <Col>
+          <h2>{props.name}</h2>
+        </Col>
+      </ShowTitle>
       <Col className="text-right">
       <div>
         <h5>{props.entries.length}/{props.entryCap} submissions</h5>
       </div>
       <div>
-        Accepting Admissions until: <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
+        Accepting Submissions until: <Moment format='MMMM Do YYYY'>{props.entryEnd}</Moment>
       </div>
       </Col>
     </Row>

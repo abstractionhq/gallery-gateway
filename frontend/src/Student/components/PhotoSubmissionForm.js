@@ -31,6 +31,12 @@ class PhotoSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
+    data: PropTypes.shape({
+      show: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
+      })
+    }).isRequired,
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,

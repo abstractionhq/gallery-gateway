@@ -30,12 +30,19 @@ class OtherSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
+    data: PropTypes.shape({
+      show: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
+      })
+    }).isRequired,
     handleImageUpload: PropTypes.func.isRequired,
     handlePDFUpload: PropTypes.func.isRequired,
     previewFile: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     done: PropTypes.func.isRequired,
     clearPreview: PropTypes.func.isRequired
+
   }
 
   static defaultProps = {
@@ -128,15 +135,17 @@ class OtherSubmissionForm extends Component {
   }
 
   render () {
-    if(this.props.data.loading) {
+    if (this.props.data.loading) {
       return null
     }
+
     const {
       create,
       done,
       user
     } = this.props
-    const forShow = {id: this.props.data.show.id, name:this.props.data.show.name}
+    const forShow = {id: this.props.data.show.id, name: this.props.data.show.name}
+
     return (
       <Fragment>
         <Formik

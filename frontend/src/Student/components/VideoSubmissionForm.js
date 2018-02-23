@@ -25,6 +25,12 @@ class VideoSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
+    data: PropTypes.shape({
+      show: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
+      })
+    }).isRequired,
     create: PropTypes.func.isRequired,
     done: PropTypes.func.isRequired
   }
