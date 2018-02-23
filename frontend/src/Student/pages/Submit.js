@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Container } from 'reactstrap'
-import { connect } from 'react-redux'
 
 import SubmissionFormChooser from '../components/SubmissionFormChooser'
 import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'

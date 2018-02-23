@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
 import FaPlusCircle from 'babel-loader!react-icons/fa/plus-circle'
-import { Button, ButtonGroup, Row, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -28,12 +28,12 @@ const ShowCard = (props) => (
         </Col>
       </ShowTitle>
       <Col className="text-right">
-      <div>
-        <h5>{props.entries.length}/{props.entryCap} submissions</h5>
-      </div>
-      <div>
-        Accepting Submissions until: <Moment format='MMMM Do YYYY'>{props.entryEnd}</Moment>
-      </div>
+        <div>
+          <h5>{props.entries.length}/{props.entryCap} submissions</h5>
+        </div>
+        <div>
+          Accepting Submissions until: <Moment format='MMMM Do YYYY'>{props.entryEnd}</Moment>
+        </div>
       </Col>
     </Row>
     <hr />
@@ -50,7 +50,7 @@ const ShowCard = (props) => (
 
 ShowCard.defaultProps = {
   entries: []
-};
+}
 
 ShowCard.propTypes = {
   id: PropTypes.string.isRequired,

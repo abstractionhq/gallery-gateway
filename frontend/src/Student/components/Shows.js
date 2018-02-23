@@ -13,7 +13,7 @@ const Shows = ({shows, loading}) => (
 
 Shows.defaultProps = {
   shows: []
-};
+}
 
 Shows.propTypes = {
   shows: PropTypes.array.isRequired,

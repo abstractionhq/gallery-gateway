@@ -123,15 +123,16 @@ class PhotoSubmissionForm extends Component {
   }
 
   render () {
-    if(this.props.data.loading) {
+    if (this.props.data.loading) {
       return null
     }
+
     const {
       create,
       done,
       user
     } = this.props
-    const forShow = {id: this.props.data.show.id, name:this.props.data.show.name}
+    const forShow = {id: this.props.data.show.id, name: this.props.data.show.name}
     return (
       <Fragment>
         <Formik
