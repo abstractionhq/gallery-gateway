@@ -3,10 +3,6 @@ query assignedShows {
     shows {
       id
       name
-      description
-      entryStart
-      entryEnd
-      judgingStart
       judgingEnd
     }
   }

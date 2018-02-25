@@ -1,8 +1,8 @@
 export default {
   User: {
-    // TODO: Order shows
+    // Judges (and Admins) have shows
     shows (user) {
-      return user.getShows()
+      return user.getShows({order: [['judgingStart', 'DESC']]})
     }
   }
 }

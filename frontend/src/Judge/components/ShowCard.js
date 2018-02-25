@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import { Button, ButtonGroup, Row, Col } from 'reactstrap'
+import { Button, Row, Col } from 'reactstrap'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -12,47 +12,44 @@ const Card = styled.div`
   padding: 10px;
   width: 100%;
 `
+const ButtonContainer = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: '150px'
+`
 
 const ShowCard = props => (
   <Card>
     <h2>
       <Link to={`show/${props.id}`}>{props.name}</Link>
     </h2>
-    <Row>
-      <Col>
-        <dl>
-          <dt>Submission Starts:</dt>
-          <dd>
-            <Moment format='YYYY/MM/DD'>{props.entryStart}</Moment>
-          </dd>
-          <dt>Submission Ends:</dt>
-          <dd>
-            <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
-          </dd>
-        </dl>
-      </Col>
-      <Col>
-        <dl>
-          <dt>Judging Starts:</dt>
-          <dd>
-            <Moment format='YYYY/MM/DD'>{props.judgingStart}</Moment>
-          </dd>
-          <dt>Judging Ends:</dt>
-          <dd>
-            <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
-          </dd>
-        </dl>
-      </Col>
-    </Row>
+    <Col>
+      <dl>
+        <dt>Judging Ends:</dt>
+        <dd>
+          <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
+        </dd>
+      </dl>
+    </Col>
+    <Col>
+      <ButtonContainer>
+        <Button
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`judge/vote`} // TODO: Figure out where they go to vote
+        // TODO: Conditionally change the text
+        >
+          Start
+    </Button>
+      </ButtonContainer>
+    </Col>
   </Card>
 )
 
 ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  entryStart: PropTypes.string.isRequired,
-  entryEnd: PropTypes.string.isRequired,
-  judgingStart: PropTypes.string.isRequired,
   judgingEnd: PropTypes.string.isRequired
 }
 
