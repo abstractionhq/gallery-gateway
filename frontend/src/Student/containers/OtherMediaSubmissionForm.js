@@ -6,6 +6,7 @@ import { uploadImage, uploadPDF, clearPreview } from '../actions'
 
 import OtherMediaSubmissionForm from '../components/OtherMediaSubmissionForm'
 import CreateOtherMediaEntry from '../mutations/createOtherMediaEntry.graphql'
+import ShowName from '../queries/showName.graphql'
 
 const mapStateToProps = state => ({
   previewFile: state.student.ui.submission.previewFile || {},
@@ -30,6 +31,13 @@ const withMutations = compose(
         mutate({
           variables: { input: entry }
         })
+    })
+  }),
+  graphql(ShowName, {
+    options: (ownProps) => ({
+      variables: {
+        id: ownProps.id
+      }
     })
   })
 )(withRedux)

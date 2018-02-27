@@ -33,9 +33,11 @@ class VideoSubmissionForm extends Component {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
-    forShow: PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string
+    data: PropTypes.shape({
+      show: PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string
+      })
     }).isRequired,
     create: PropTypes.func.isRequired,
     done: PropTypes.func.isRequired
@@ -63,7 +65,12 @@ class VideoSubmissionForm extends Component {
   }
 
   render () {
-    const { create, done, user, forShow } = this.props
+    if (this.props.data.loading) {
+      return null
+    }
+
+    const { create, done, user } = this.props
+    const forShow = { id: this.props.data.show.id, name: this.props.data.show.name }
 
     return (
       <Fragment>
@@ -313,7 +320,7 @@ class VideoSubmissionForm extends Component {
                     </FormGroup>
                   ) : null}
                   <ButtonContainer>
-                    <Link to='/submit'>
+                    <Link to={`/submit?to=${forShow.id}`}>
                       <Button
                         type='button'
                         color='danger'
