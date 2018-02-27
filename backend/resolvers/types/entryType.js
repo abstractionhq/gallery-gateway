@@ -11,6 +11,16 @@ export const EntryBase = {
   },
   score (entry) {
     return entry.getScore()
+  },
+  // Returning entry type directly on the base class, for convenience
+  entryType (entry) {
+    if (entry.entryType === IMAGE_ENTRY) {
+      return 'PHOTO'
+    } else if (entry.entryType === VIDEO_ENTRY) {
+      return 'VIDEO'
+    } else if (entry.entryType === OTHER_ENTRY) {
+      return 'OTHER'
+    }
   }
 }
 
