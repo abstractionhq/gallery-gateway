@@ -1,0 +1,5 @@
+query Submission($id: ID!) {
+  submission: entry(id: $id) {
+    id
+  }
+}
