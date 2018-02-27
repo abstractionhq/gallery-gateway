@@ -34,6 +34,7 @@ Frontend:
 - [Apollo Client](https://github.com/apollographql/apollo-client) for GraphQL querying and data caching
 - [Boostrap](http://getbootstrap.com/) v4 (via [reactstrap](https://reactstrap.github.io/)) & [styled-components](https://www.styled-components.com/) for styling
 - [Formik](https://github.com/jaredpalmer/formik) w/ [yup](https://github.com/jquense/yup) for forms
+- [Webpack](https://webpack.js.org/) for compiling our app and bundling assets together
 
 Backend:
 
@@ -87,3 +88,15 @@ You'll need to be running both the frontend and backend for development. Check o
 ## Deployment
 
 _TODO_
+
+## Maintenance
+
+Because the JavaScript community tends to move faster than other language communities, this app will require regular maintenance to make sure it can run on the current LTS [Node.js](https://nodejs.org/en/) runtime. Additionally, [npm](http://npmjs.com/) packages this app depends on should be periodically monitored, including updating to their latest stable versions (possibly even switching packages if the current maintainer abandons support).
+
+Package dependencies will generally only need to be updated if packages contain security vulnerabilities or you will be developing additional features or upgrading Node versions. When running `npm install` or `yarn install`, you generally will be warned of deprecated package versions. It is recommended to also install [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) and run `ncu` to check which packages are out-of-date. Then, read through the `CHANGELOG`s of each out-dated package (they're usually found on the package's npm page or GitHub repo) to see if there are any breaking changes. If there are, update any of this project's code impacted by the breaking changes and update the version of the package in the corresponding `package.json` file. Double check that the upgrade is compatible by making sure that all existing tests pass (Note: frontend updates that impact styling will likely need to be manually tested).
+
+Determining the health of a package is subjective but usually involves identifying when its most recent commits were, how active the maintainers are in responding to Issues and Pull Requests, and the number of Issues and Pull Requests the project has. Additionally, new packages may be developed which offer similar features to a package we use, but because of non-functional characteristics (i.e. performance, user experience), the JavaScript community may collectively favor this new package over the old and recommend switching. A word of caution; though, beware of hype-driven development – it plagues the JavaScript community.
+
+[Node.js LTS releases](https://github.com/nodejs/Release#release-schedule) are cut every year in April. Upgrading Node versions involves updating any uses of deprecated [Node API](https://nodejs.org/dist/latest/docs/api/) calls and making sure that all npm dependencies are compatible with the new Node version.
+
+Changes to ECMAScript are generally backwards compatible, so it is unlikely that the language syntax will need maintenance. However, since we currently rely on [Babel](https://babeljs.io/) to transpile down to what's supported in major browsers and Node, Babel may need to be periodically updated. Ideally, Babel could be removed when the language features we're using are [supported natively](http://kangax.github.io/compat-table/es2016plus/) in all major browsers and Node.
