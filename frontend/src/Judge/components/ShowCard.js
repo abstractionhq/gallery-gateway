@@ -16,7 +16,7 @@ const ButtonContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
-  width: '150px'
+  width: '150px';
 `
 
 const ShowCard = props => (
@@ -37,11 +37,11 @@ const ShowCard = props => (
         <Button
           style={{ cursor: 'pointer' }}
           tag={Link}
-          to={`judge/vote`} // TODO: Figure out where they go to vote
-        // TODO: Conditionally change the text
+          to={`show/${props.id}/vote`}
+          // TODO: Conditionally change the text
         >
           Start
-    </Button>
+        </Button>
       </ButtonContainer>
     </Col>
   </Card>
