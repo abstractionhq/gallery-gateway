@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import request from 'supertest'
 import server from '../../server'
 import { expect } from 'chai'
@@ -6,8 +8,8 @@ import nconf from '../../config'
 import { fakeUser } from '../factories'
 import { signUserToken } from '../util'
 
-const image_dir = nconf.get('upload:imageDir')
-const pdf_dir = nconf.get('upload:pdfDir')
+const imageDir = nconf.get('upload:imageDir')
+const pdfDir = nconf.get('upload:pdfDir')
 
 describe('Image upload', function () {
   it('saves valid images from students at expected location', function (done) {
@@ -20,7 +22,7 @@ describe('Image upload', function () {
           .attach('image', 'test/resources/validTest.jpg')
           .expect((res) => {
             expect(res.body).to.have.property('path')
-            expect(fs.existsSync(image_dir + '/' +
+            expect(fs.existsSync(imageDir + '/' +
               res.body.path)).to.be.true
           })
           .expect(201)
@@ -37,7 +39,7 @@ describe('Image upload', function () {
           .attach('image', 'test/resources/validTest.jpg')
           .expect((res) => {
             expect(res.body).to.have.property('path')
-            expect(fs.existsSync(image_dir + '/' +
+            expect(fs.existsSync(imageDir + '/' +
               res.body.path)).to.be.true
           })
           .expect(201)
@@ -99,7 +101,7 @@ describe('PDF upload', function () {
           .attach('pdf', 'test/resources/pdf-sample.pdf')
           .expect((res) => {
             expect(res.body).to.have.property('path')
-            expect(fs.existsSync(pdf_dir + '/' +
+            expect(fs.existsSync(pdfDir + '/' +
               res.body.path)).to.be.true
           })
           .expect(201)

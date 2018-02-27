@@ -32,10 +32,7 @@ class LoginSwitch extends Component {
   }
 
   render () {
-    const {
-      user,
-      performingRole
-    } = this.props
+    const { user, performingRole } = this.props
 
     if (!user) {
       return <HomePage />
@@ -43,7 +40,7 @@ class LoginSwitch extends Component {
 
     switch (user.type) {
       case 'ADMIN':
-        if(performingRole === 'JUDGE'){
+        if (performingRole === 'JUDGE') {
           return <JudgePage />
         } else {
           return <AdminPage />
@@ -62,12 +59,12 @@ class LoginSwitch extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.shared.auth.user,
   performingRole: state.shared.auth.performingRole
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   shouldLogin,
   login: () => dispatch(login())
 })

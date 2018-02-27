@@ -99,7 +99,9 @@ const assignments = (state = {}, action) => {
 
       return {
         ...state,
-        [action.payload.id]: Object.values(action.payload.judges).map(judge => judge.username)
+        [action.payload.id]: Object.values(action.payload.judges).map(
+          judge => judge.username
+        )
       }
     case actions.ASSIGN_JUDGES_TO_SHOW:
       if (!action.payload.id) {
@@ -108,7 +110,10 @@ const assignments = (state = {}, action) => {
 
       return {
         ...state,
-        [action.payload.id]: [...state[action.payload.id], ...action.payload.usernames]
+        [action.payload.id]: [
+          ...state[action.payload.id],
+          ...action.payload.usernames
+        ]
       }
     case actions.REMOVE_JUDGES_FROM_SHOW:
       if (!action.payload.id) {
@@ -117,7 +122,9 @@ const assignments = (state = {}, action) => {
 
       return {
         ...state,
-        [action.payload.id]: state[action.payload.id].filter(judge => !action.payload.usernames.includes(judge))
+        [action.payload.id]: state[action.payload.id].filter(
+          judge => !action.payload.usernames.includes(judge)
+        )
       }
     default:
       return state

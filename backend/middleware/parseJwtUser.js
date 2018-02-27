@@ -1,6 +1,6 @@
 import { parseToken } from '../helpers/jwt'
 import nconf from '../config'
-import { ADMIN, JUDGE, STUDENT } from '../constants'
+import { ADMIN } from '../constants'
 
 export default function (req, res, next) {
   if (req.headers.authorization &&
@@ -12,12 +12,12 @@ export default function (req, res, next) {
       }
     })
   }
-  req.auth = req.auth || {};
-  req.auth.type = req.auth.type || null;
+  req.auth = req.auth || {}
+  req.auth.type = req.auth.type || null
   if (nconf.get('NODE_ENV') === 'development' &&
       req.headers.referer &&
       req.headers.referer.indexOf('http://localhost:3000/graphiql') === 0) {
-    req.auth.type = ADMIN;
+    req.auth.type = ADMIN
   }
-  next();
+  next()
 }

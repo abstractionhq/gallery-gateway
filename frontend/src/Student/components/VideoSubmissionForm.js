@@ -1,7 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Form, FormGroup, FormFeedback, Label, Button, Row, Col } from 'reactstrap'
+import {
+  Form,
+  FormGroup,
+  FormFeedback,
+  Label,
+  Button,
+  Row,
+  Col
+} from 'reactstrap'
 import styled from 'styled-components'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
@@ -45,7 +53,11 @@ class VideoSubmissionForm extends Component {
   renderErrors = (touched, errors, field) => {
     // Render feedback if this field's been touched and has errors
     if (touched[field] && errors[field]) {
-      return <FormFeedback style={{ display: 'block' }}>{errors[field]}</FormFeedback>
+      return (
+        <FormFeedback style={{ display: 'block' }}>
+          {errors[field]}
+        </FormFeedback>
+      )
     }
 
     // Otherwise, don't render anything
@@ -57,12 +69,9 @@ class VideoSubmissionForm extends Component {
       return null
     }
 
-    const {
-      create,
-      done,
-      user
-    } = this.props
-    const forShow = {id: this.props.data.show.id, name: this.props.data.show.name}
+    const { create, done, user } = this.props
+    const forShow = { id: this.props.data.show.id, name: this.props.data.show.name }
+
     return (
       <Fragment>
         <Formik
@@ -77,32 +86,42 @@ class VideoSubmissionForm extends Component {
             moreCopies: 'no',
             url: ''
           }}
-          validationSchema={
-            yup.object()
-              .shape({
-                academicProgram: yup.string().required('Required'),
-                yearLevel: yup.string().required('Required'),
-                submittingAsGroup: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                groupParticipants: yup.string()
-                  .when('submittingAsGroup', {
-                    is: 'yes',
-                    then: yup.string().required('Required')
-                  }),
-                title: yup.string().required('Required'),
-                comment: yup.string(),
-                forSale: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                moreCopies: yup.string().required('Required').oneOf(['yes', 'no']), // Radio button values
-                url: yup.string().required('Required').url('Must be a valid URL')
-              })}
-          onSubmit={(
-            values
-          ) => {
+          validationSchema={yup.object().shape({
+            academicProgram: yup.string().required('Required'),
+            yearLevel: yup.string().required('Required'),
+            submittingAsGroup: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            groupParticipants: yup.string().when('submittingAsGroup', {
+              is: 'yes',
+              then: yup.string().required('Required')
+            }),
+            title: yup.string().required('Required'),
+            comment: yup.string(),
+            forSale: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            moreCopies: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes', 'no']), // Radio button values
+            url: yup
+              .string()
+              .required('Required')
+              .url('Must be a valid URL')
+          })}
+          onSubmit={values => {
             const input = {
               entry: {
                 group: {
                   name: '',
                   creatorUsername: user.username,
-                  participants: values.submittingAsGroup === 'yes' ? values.groupParticipants : ''
+                  participants:
+                    values.submittingAsGroup === 'yes'
+                      ? values.groupParticipants
+                      : ''
                 },
                 studentUsername: user.username,
                 showId: forShow.id,
@@ -113,30 +132,24 @@ class VideoSubmissionForm extends Component {
                 forSale: values.forSale === 'yes',
                 // Must select 'forSale = yes' first
                 // So, if you select 'forSale = yes', 'moreCopies = yes', 'forSale = no' => 'moreCopies' will be false
-                moreCopies: values.forSale === 'yes' && values.moreCopies === 'yes'
+                moreCopies:
+                  values.forSale === 'yes' && values.moreCopies === 'yes'
               },
               url: values.url
             }
 
             // Create an entry, show the success modal, and then go to the dashboard
-            create(input)
-              .then(() => {
-                this.setState({showModal: true}, () => {
-                  setTimeout(done, 2000)
-                })
+            create(input).then(() => {
+              this.setState({ showModal: true }, () => {
+                setTimeout(done, 2000)
               })
-              // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
+            })
+            // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
           }}
-          render={({
-            values,
-            errors,
-            touched,
-            handleSubmit,
-            isSubmitting
-          }) => (
-            <Form onSubmit={handleSubmit} style={{marginBottom: '75px'}}>
+          render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
+            <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>
               <Row>
-                <Col xs='12' md='8' style={{margin: '0 auto'}}>
+                <Col xs='12' md='8' style={{ margin: '0 auto' }}>
                   <Header>New Video Submission</Header>
                   <SubHeader>{forShow.name}</SubHeader>
                   <FormGroup>
@@ -191,8 +204,8 @@ class VideoSubmissionForm extends Component {
                     </FormGroup>
                     {this.renderErrors(touched, errors, 'submittingAsGroup')}
                   </FormGroup>
-                  {values.submittingAsGroup === 'yes'
-                    ? <FormGroup>
+                  {values.submittingAsGroup === 'yes' ? (
+                    <FormGroup>
                       <Label>List the names of your other group members.</Label>
                       <Field
                         type='text'
@@ -203,7 +216,7 @@ class VideoSubmissionForm extends Component {
                       />
                       {this.renderErrors(touched, errors, 'groupParticipants')}
                     </FormGroup>
-                    : null}
+                  ) : null}
                   <FormGroup>
                     <Label>YouTube or Vimeo Video URL</Label>
                     <Field
@@ -239,7 +252,10 @@ class VideoSubmissionForm extends Component {
                     {this.renderErrors(touched, errors, 'comment')}
                   </FormGroup>
                   <FormGroup>
-                    <Label>Is this work available for purchase if selected for a purchase award?</Label>
+                    <Label>
+                      Is this work available for purchase if selected for a
+                      purchase award?
+                    </Label>
                     <FormGroup check>
                       <Label check>
                         <Field
@@ -268,9 +284,12 @@ class VideoSubmissionForm extends Component {
                     </FormGroup>
                     {this.renderErrors(touched, errors, 'forSale')}
                   </FormGroup>
-                  {values.forSale === 'yes'
-                    ? <FormGroup>
-                      <Label>If selected for multiple purchase awards, are you willing to sell multiple copies?</Label>
+                  {values.forSale === 'yes' ? (
+                    <FormGroup>
+                      <Label>
+                        If selected for multiple purchase awards, are you
+                        willing to sell multiple copies?
+                      </Label>
                       <FormGroup check>
                         <Label check>
                           <Field
@@ -299,13 +318,13 @@ class VideoSubmissionForm extends Component {
                       </FormGroup>
                       {this.renderErrors(touched, errors, 'moreCopies')}
                     </FormGroup>
-                    : null}
+                  ) : null}
                   <ButtonContainer>
                     <Link to={`/submit?to=${forShow.id}`}>
                       <Button
                         type='button'
                         color='danger'
-                        style={{cursor: 'pointer', width: '150px'}}
+                        style={{ cursor: 'pointer', width: '150px' }}
                       >
                         Back
                       </Button>
@@ -313,7 +332,11 @@ class VideoSubmissionForm extends Component {
                     <Button
                       type='submit'
                       color='primary'
-                      style={{cursor: 'pointer', float: 'right', width: '150px'}}
+                      style={{
+                        cursor: 'pointer',
+                        float: 'right',
+                        width: '150px'
+                      }}
                       disabled={isSubmitting}
                     >
                       Submit

@@ -8,7 +8,7 @@ import User from '../../models/user'
 import config from '../../config'
 import { fakeUser } from '../factories'
 import { decodeUserToken } from '../util'
-import { signToken, parseToken } from '../../helpers/jwt';
+import { signToken, parseToken } from '../../helpers/jwt'
 
 describe('Authentication', () => {
   describe('/auth/login', () => {

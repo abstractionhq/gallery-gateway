@@ -1,30 +1,25 @@
 import Entry from '../../models/entry'
+import User from '../../models/user'
 import { UserError } from 'graphql-errors'
-import { ADMIN, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
+import { ADMIN } from '../../constants'
 
 export function entries (_, args, req) {
-  if (req.auth.type !== ADMIN) {
+  // Make sure an admin or own user is requesting
+  const isRequestingOwnUser = req.auth.username !== undefined &&
+    req.auth.username === args.studentUsername
+  if (req.auth.type !== ADMIN && !isRequestingOwnUser) {
     throw new UserError('Permission Denied')
   }
-  return Entry.findAll({where: args}).each((entry) => {
-    entry.student = entry.getUser()
-    entry.group = entry.getGroup()
-    entry.score = entry.getScore()
-
-    if (entry.entryType === IMAGE_ENTRY) {
-      return entry.getImage().then((image) => {
-        return Object.assign(entry, image.dataValues)
-      })
-    } else if (entry.entryType === VIDEO_ENTRY) {
-      return entry.getVideo().then((video) => {
-        return Object.assign(entry, video.dataValues)
-      })
-    } else if (entry.entryType === OTHER_ENTRY) {
-      return entry.getOther().then((other) => {
-        return Object.assign(entry, other.dataValues)
-      })
-    } else {
-      throw new Error('unknown entry type')
-    }
-  })
+  // Get all entries if no args given
+  if (!args.showId && !args.studentUsername) {
+    return Entry.all()
+  } else if (args.showId) { // Get entries by show
+    return Entry.findAll({ where: { showId: args.showId } })
+  } else if (args.studentUsername) { // get entries by username
+    return User.findById(args.studentUsername).then((student) => {
+      return student.getOwnAndGroupEntries()
+    })
+  } else {
+    return Entry.findAll({ where: { args } })
+  }
 }

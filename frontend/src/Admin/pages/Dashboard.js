@@ -14,10 +14,11 @@ const Dashboard = () => (
         <Button
           color='primary'
           className='btn-block'
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
           tag={Link}
-          to='/show/new'>
-            Create Show
+          to='/show/new'
+        >
+          Create Show
         </Button>
       </Col>
     </Row>

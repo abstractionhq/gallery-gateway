@@ -24,11 +24,8 @@ class MultiCheckTable extends Component {
     selected: {}
   }
 
-  handleSelectRow = (row) => {
-    const {
-      selected,
-      onChange
-    } = this.props
+  handleSelectRow = row => {
+    const { selected, onChange } = this.props
 
     const rows = {
       ...selected
@@ -45,12 +42,7 @@ class MultiCheckTable extends Component {
   }
 
   handleSelectAll = () => {
-    const {
-      data,
-      unique,
-      selected,
-      onChange
-    } = this.props
+    const { data, unique, selected, onChange } = this.props
 
     // If none are selected, select them all
     // If some are selected, unselect them all (aka select none of them)
@@ -67,16 +59,11 @@ class MultiCheckTable extends Component {
   }
 
   render () {
-    const {
-      data,
-      columns,
-      unique,
-      selected,
-      ...otherProps
-    } = this.props
+    const { data, columns, unique, selected, ...otherProps } = this.props
 
     const numSelected = Object.keys(selected).length
-    const isSelectAllIndeterminate = numSelected > 0 && numSelected < data.length
+    const isSelectAllIndeterminate =
+      numSelected > 0 && numSelected < data.length
 
     const tableColumns = [
       {

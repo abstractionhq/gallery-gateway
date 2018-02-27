@@ -9,9 +9,12 @@ const students = (state = {}, action) => {
   }
 }
 
-const ui = (state = {
-  submission: {}
-}, action) => {
+const ui = (
+  state = {
+    submission: {}
+  },
+  action
+) => {
   switch (action.type) {
     case actions.UPLOAD_IMAGE:
     case actions.UPLOAD_PDF:

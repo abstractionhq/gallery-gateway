@@ -16,7 +16,9 @@ import RemoveFromShowMutation from '../mutations/removeFromShow.graphql'
 import AssignJudgesTable from '../components/AssignJudgesTable'
 
 const filterUnassignedJudges = (judges, assignments = []) => {
-  return Object.values(judges).filter(judge => !assignments.includes(judge.username))
+  return Object.values(judges).filter(
+    judge => !assignments.includes(judge.username)
+  )
 }
 
 const mapAssignmentsToJudges = (judges, assignments = []) => {
@@ -34,49 +36,59 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, {showId}) => ({
+const mapDispatchToProps = (dispatch, { showId }) => ({
   fetchData: () => dispatch(fetchJudgesByAssignmentForShow(showId)),
-  afterAssign: (usernames) => dispatch(assignJudgesToShow(showId, usernames)),
-  afterUnassign: (usernames) => dispatch(removeJudgesFromShow(showId, usernames))
+  afterAssign: usernames => dispatch(assignJudgesToShow(showId, usernames)),
+  afterUnassign: usernames => dispatch(removeJudgesFromShow(showId, usernames))
 })
 
-const withRedux = connect(mapStateToProps, mapDispatchToProps)(AssignJudgesTable)
+const withRedux = connect(mapStateToProps, mapDispatchToProps)(
+  AssignJudgesTable
+)
 
 const withMutations = compose(
   graphql(AssignToShowMutation, {
-    props: ({ownProps, mutate}) => ({
-      assign: (usernames) => mutate({
-        variables: {
-          showId: ownProps.showId,
-          usernames
-        },
-        refetchQueries: [{
-          query: JudgesForShowQuery,
+    props: ({ ownProps, mutate }) => ({
+      assign: usernames =>
+        mutate({
           variables: {
-            id: ownProps.showId
-          }
-        }, {
-          query: JudgesQuery
-        }]
-      })
+            showId: ownProps.showId,
+            usernames
+          },
+          refetchQueries: [
+            {
+              query: JudgesForShowQuery,
+              variables: {
+                id: ownProps.showId
+              }
+            },
+            {
+              query: JudgesQuery
+            }
+          ]
+        })
     })
   }),
   graphql(RemoveFromShowMutation, {
-    props: ({ownProps, mutate}) => ({
-      unassign: (usernames) => mutate({
-        variables: {
-          showId: ownProps.showId,
-          usernames
-        },
-        refetchQueries: [{
-          query: JudgesForShowQuery,
+    props: ({ ownProps, mutate }) => ({
+      unassign: usernames =>
+        mutate({
           variables: {
-            id: ownProps.showId
-          }
-        }, {
-          query: JudgesQuery
-        }]
-      })
+            showId: ownProps.showId,
+            usernames
+          },
+          refetchQueries: [
+            {
+              query: JudgesForShowQuery,
+              variables: {
+                id: ownProps.showId
+              }
+            },
+            {
+              query: JudgesQuery
+            }
+          ]
+        })
     })
   })
 )(withRedux)

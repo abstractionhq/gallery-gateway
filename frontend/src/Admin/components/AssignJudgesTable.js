@@ -49,15 +49,14 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedUnassignedJudges)
 
     if (judges.length) {
-      this.props.assign(judges)
-        .then(() => {
-          this.props.afterAssign(judges)
-          // Reset the checkboxes
-          this.setState({
-            selectedUnassignedJudges: {},
-            selectedAssignedJudges: {}
-          })
+      this.props.assign(judges).then(() => {
+        this.props.afterAssign(judges)
+        // Reset the checkboxes
+        this.setState({
+          selectedUnassignedJudges: {},
+          selectedAssignedJudges: {}
         })
+      })
     }
   }
 
@@ -65,30 +64,27 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedAssignedJudges)
 
     if (judges.length) {
-      this.props.unassign(judges)
-        .then(() => {
-          this.props.afterUnassign(judges)
-          // Reset the checkboxes
-          this.setState({
-            selectedUnassignedJudges: {},
-            selectedAssignedJudges: {}
-          })
+      this.props.unassign(judges).then(() => {
+        this.props.afterUnassign(judges)
+        // Reset the checkboxes
+        this.setState({
+          selectedUnassignedJudges: {},
+          selectedAssignedJudges: {}
         })
+      })
     }
   }
 
-  handleAssignedJudgesChange = (selectedAssignedJudges) => {
-    this.setState({selectedAssignedJudges})
+  handleAssignedJudgesChange = selectedAssignedJudges => {
+    this.setState({ selectedAssignedJudges })
   }
 
-  handleUnassignedJudgesChange = (selectedUnassignedJudges) => {
-    this.setState({selectedUnassignedJudges})
+  handleUnassignedJudgesChange = selectedUnassignedJudges => {
+    this.setState({ selectedUnassignedJudges })
   }
 
   render () {
-    const {
-      data
-    } = this.props
+    const { data } = this.props
 
     return (
       <Row>
@@ -108,7 +104,7 @@ class AssignJudgesTable extends Component {
                 <Button
                   color='primary'
                   block
-                  style={{cursor: 'pointer'}}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => this.assign()}
                 >
                   Assign <FaLongArrowRight />
@@ -120,7 +116,7 @@ class AssignJudgesTable extends Component {
                 <Button
                   color='primary'
                   block
-                  style={{cursor: 'pointer'}}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => this.unassign()}
                 >
                   <FaLongArrowLeft /> Unassign

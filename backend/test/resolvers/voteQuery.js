@@ -53,7 +53,7 @@ describe('Vote Queries', function () {
       fakeVoteReturnShowId({ user: fakeUser({ username: username }) })
         .then((showId) => {
           votes({}, { judgeUsername: username, showId: showId },
-            { auth: { type: 'ADMIN', username: "abc123" } })
+            { auth: { type: 'ADMIN', username: 'abc123' } })
             .then(result => {
               expect(result.length).to.equal(1)
               expect(result[0].judgeUsername).to.equal(username)

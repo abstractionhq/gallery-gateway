@@ -22,6 +22,4 @@ const Submit = (props) => (
   </Container>
 )
 
-
-
 export default Submit

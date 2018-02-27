@@ -6,11 +6,9 @@ const Dashboard = () => (
   <Container>
     <Row>
       <Col>
-      <h1>Dashboard</h1>
+        <h1>Dashboard</h1>
       </Col>
-      <Col>
-        {/* TODO: Show voting page */}
-      </Col>
+      <Col>{/* TODO: Show voting page */}</Col>
     </Row>
   </Container>
 )
