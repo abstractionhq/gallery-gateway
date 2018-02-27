@@ -8,8 +8,19 @@ query Shows {
     judgingEnd
     entryCap
     entries {
-      id
+      id,
+      title,
+      ... photoFields,
+      ... videoFields
     }
-
   }
+}
+
+fragment photoFields on Photo {
+  path
+}
+
+fragment videoFields on Video {
+  provider,
+  videoId
 }
