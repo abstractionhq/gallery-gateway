@@ -20,7 +20,11 @@ The project was sponsored by Nanette Salvaggio and coached by Bill Stumbo.
 
 ### Process
 
-_TODO_ Mention our Scrum process, tools we used, deliverables we made
+We followed a Distributed Scrum process with sprints lasting two weeks. We conducted daily stand-ups over [Slack](https://slack.com/) and used [ZenHub](https://www.zenhub.com/) to manage our backlog of stories. Before each sprint, we met to triage, plan, and point stories, and after each sprint, we held a retrospective meeting. We met with our sponsor weekly to verify and validate requirements, whiteboard interface designs, and demo progress. We tracked our time using [Toggl](https://toggl.com/).
+
+Our two primary metrics were Velocity and Code Coverage.
+
+See our [Interim Presentation](https://youtu.be/iLT2T8WT80Q?t=28m20s) and [Final Presentation]() for more details.
 
 ## Architecture
 
@@ -95,7 +99,7 @@ Because the JavaScript community tends to move faster than other language commun
 
 Package dependencies will generally only need to be updated if packages contain security vulnerabilities or you will be developing additional features or upgrading Node versions. When running `npm install` or `yarn install`, you generally will be warned of deprecated package versions. It is recommended to also install [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) and run `ncu` to check which packages are out-of-date. Then, read through the `CHANGELOG`s of each out-dated package (they're usually found on the package's npm page or GitHub repo) to see if there are any breaking changes. If there are, update any of this project's code impacted by the breaking changes and update the version of the package in the corresponding `package.json` file. Double check that the upgrade is compatible by making sure that all existing tests pass (Note: frontend updates that impact styling will likely need to be manually tested).
 
-Determining the health of a package is subjective but usually involves identifying when its most recent commits were, how active the maintainers are in responding to Issues and Pull Requests, and the number of Issues and Pull Requests the project has. Additionally, new packages may be developed which offer similar features to a package we use, but because of non-functional characteristics (i.e. performance, user experience), the JavaScript community may collectively favor this new package over the old and recommend switching. A word of caution; though, beware of hype-driven development – it plagues the JavaScript community.
+Determining the health of a package is subjective but usually involves identifying when its most recent commits were, how active the maintainers are in responding to Issues and Pull Requests, and the number of Issues and Pull Requests the project has. Additionally, new packages may be developed which offer similar features to a package we use, but because of non-functional characteristics (e.g. performance, user experience), the JavaScript community may collectively favor this new package over the old and recommend switching. A word of caution; though, beware of hype-driven development – it plagues the JavaScript community.
 
 [Node.js LTS releases](https://github.com/nodejs/Release#release-schedule) are cut every year in April. Upgrading Node versions involves updating any uses of deprecated [Node API](https://nodejs.org/dist/latest/docs/api/) calls and making sure that all npm dependencies are compatible with the new Node version.
 
