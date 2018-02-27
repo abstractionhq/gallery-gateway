@@ -50,7 +50,6 @@ class OtherSubmissionForm extends Component {
     create: PropTypes.func.isRequired,
     done: PropTypes.func.isRequired,
     clearPreview: PropTypes.func.isRequired
-
   }
 
   static defaultProps = {
