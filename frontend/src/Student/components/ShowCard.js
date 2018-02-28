@@ -7,7 +7,7 @@ import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
 import FaBook from 'babel-loader!react-icons/fa/book'
 import FaYouTube from 'babel-loader!react-icons/fa/youtube'
 import FaVimeo from 'babel-loader!react-icons/fa/vimeo'
-import { Row, Col, UncontrolledTooltip } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -31,12 +31,13 @@ const EntryNoThumbContainer = styled.div`
 `
 
 const EntryThumb = ({entry}) => {
-  switch (entry.__typename) {
-    case 'Photo':
+  switch (entry.entryType) {
+    case 'PHOTO':
       return <PhotoThumbnail
+        // TODO (robert) make this URL responsive to deploy environment
         src={`//localhost:3000/static/uploads/${entry.path}`}
       />
-    case 'Video':
+    case 'VIDEO':
       const url = entry.provider === 'youtube'
         ? `https://youtube.com/watch?v=${entry.videoId}`
         : `https://vimeo.com/${entry.videoId}`
@@ -49,7 +50,7 @@ const EntryThumb = ({entry}) => {
           <h5>{entry.title}</h5>
         </EntryNoThumbContainer>
       </a>
-    case 'OtherMedia':
+    case 'OTHER':
       return <EntryNoThumbContainer>
         <FaBook size='3em' />
         <h5>{entry.title}</h5>
@@ -76,6 +77,15 @@ const ShowCard = (props) => (
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
+      <Col
+        style={{minHeight: '10em'}}
+        md={props.show.entries.length > 0 ? '3' : null}
+        className='text-center align-self-center d-flex justify-content-center align-items-center'>
+        <Link to={`/submit?to=${props.show.id}`}>
+          <FaPlusCircle size='3em' />
+          <h5 className='mt-1'>New Submission</h5>
+        </Link>
+      </Col>
       {
         props.show.entries.map(entry => (
           <Col
@@ -88,14 +98,6 @@ const ShowCard = (props) => (
           </Col>
         ))
       }
-      <Col
-        style={{minHeight: '10em'}}
-        className='text-center align-self-center d-flex justify-content-center align-items-center'>
-        <Link to={`/submit?to=${props.show.id}`}>
-          <FaPlusCircle size='3em' />
-          <h5 className='mt-1'>New Submission</h5>
-        </Link>
-      </Col>
     </Row>
   </Card>
 )
@@ -108,9 +110,9 @@ ShowCard.propTypes = {
     entries: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      __typename: PropTypes.oneOf(['Photo', 'Video', 'OtherMedia']).isRequired,
+      entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
       path: PropTypes.string,
-      provider: PropTypes.oneOf(['youtube', 'vimeo']).isRequired,
+      provider: PropTypes.oneOf(['youtube', 'vimeo']),
       videoId: PropTypes.string
     })),
     entryStart: PropTypes.string,
