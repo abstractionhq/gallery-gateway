@@ -33,7 +33,7 @@ if (config.get('NODE_ENV') !== 'production') {
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 }
 
-app.use('/static/uploads', express.static(path.join(__dirname, 'images')))
-app.use('/static/uploads', express.static(path.join(__dirname, 'pdfs')))
+app.use('/static/uploads', express.static(path.join(__dirname, 'uploads', 'images')))
+app.use('/static/uploads', express.static(path.join(__dirname, 'uploads', 'pdfs')))
 
 export default app // for testing
