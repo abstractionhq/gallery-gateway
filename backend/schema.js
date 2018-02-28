@@ -17,7 +17,7 @@ type User {
     displayName: String
     type: UserType!
     entries: [Entry]
-    shows: [Show]
+    shows(date: Date): [Show]
 }
 
 input UserInput {

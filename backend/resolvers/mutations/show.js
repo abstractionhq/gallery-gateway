@@ -22,7 +22,8 @@ export function assignToShow (_, args, req) {
     }
     return show
       .addUsers(args.usernames)
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         throw new UserError('Cannot find one or more usernames')
       })
   }).then(() => { return true })

@@ -10,8 +10,8 @@ export function user (_, args, req) {
   return User.findById(args.id)
 }
 
-export function self(_, __,req) {
-  if (!req.auth.username){
+export function self (_, __, req) {
+  if (!req.auth.username) {
     throw new UserError('Permission Denied')
   }
   return User.findById(req.auth.username)
