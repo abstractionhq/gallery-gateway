@@ -16,7 +16,6 @@ const ButtonContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
-  width: '150px';
 `
 
 const ShowCard = props => (
@@ -35,6 +34,7 @@ const ShowCard = props => (
     <Col>
       <ButtonContainer>
         <Button
+          size='lg'
           style={{ cursor: 'pointer' }}
           tag={Link}
           to={`show/${props.id}/vote`}
