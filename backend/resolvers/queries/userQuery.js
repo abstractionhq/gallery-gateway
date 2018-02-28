@@ -10,6 +10,13 @@ export function user (_, args, req) {
   return User.findById(args.id)
 }
 
+export function self(_, __,req) {
+  if (!req.auth.username){
+    throw new UserError('Permission Denied')
+  }
+  return User.findById(req.auth.username)
+}
+
 export function users (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')

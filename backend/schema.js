@@ -190,6 +190,7 @@ enum UserType {
 }
 
 type Query {
+    self: User
     user(id: ID!): User
     users(type: UserType): [User]
     group(id: ID!): Group
