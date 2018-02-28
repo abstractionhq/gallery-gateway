@@ -1,0 +1,9 @@
+query assignedShows {
+  self {
+    shows {
+      id
+      name
+      judgingEnd
+    }
+  }
+}
