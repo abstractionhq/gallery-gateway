@@ -60,6 +60,7 @@ describe('Entry Queries', function () {
                 entries {
                   id,
                   title,
+                  entryType,
                   ...photoFields
                 }
               }
@@ -74,6 +75,7 @@ describe('Entry Queries', function () {
                       {
                         id: `${entry.id}`, // must be cast to a string :(
                         title: entry.title,
+                        entryType: 'PHOTO',
                         path: 'foo.jpg',
                         horizDimInch: 3,
                         vertDimInch: 4,
@@ -92,6 +94,7 @@ describe('Entry Queries', function () {
               entries {
                 id,
                 title,
+                entryType,
                 ...videoFields
               }
             }
@@ -106,6 +109,7 @@ describe('Entry Queries', function () {
                     {
                       id: `${entry.id}`, // must be cast to a string :(
                       title: entry.title,
+                      entryType: 'VIDEO',
                       videoId: 'abc123',
                       provider: 'youtube'
                     }
@@ -122,6 +126,7 @@ describe('Entry Queries', function () {
               entries {
                 id,
                 title,
+                entryType,
                 ...otherMediaFields
               }
             }
@@ -136,6 +141,7 @@ describe('Entry Queries', function () {
                     {
                       id: `${entry.id}`, // must be cast to a string :(
                       title: entry.title,
+                      entryType: 'OTHER',
                       path: 'foo.jpg'
                     }
                   ]

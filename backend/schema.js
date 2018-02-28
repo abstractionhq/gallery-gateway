@@ -96,6 +96,7 @@ interface Entry {
     academicProgram: String
     moreCopies: Boolean
     score: Float
+    entryType: String
 }
 
 input EntryInput {
@@ -123,6 +124,7 @@ type Photo implements Entry {
     academicProgram: String
     moreCopies: Boolean
     score: Float
+    entryType: String
     
     path: String!
     horizDimInch: Float
@@ -151,6 +153,7 @@ type Video implements Entry {
     academicProgram: String
     moreCopies: Boolean
     score: Float
+    entryType: String
 
     provider: String!
     videoId: String!
@@ -174,6 +177,7 @@ type OtherMedia implements Entry {
     academicProgram: String
     moreCopies: Boolean
     score: Float
+    entryType: String
 
     path: String!
 }
@@ -201,9 +205,7 @@ type Query {
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
-    photos: [Photo]
-    videos: [Video]
-    otherMedia: [OtherMedia]
+    entry(id: ID!): Entry
     entries(showId: ID, studentUsername: String): [Entry]
 }
 
