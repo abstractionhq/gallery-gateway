@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 
 import ShowCard from '../components/ShowCard'
 
-const Shows = ({shows, loading}) => (
+const Shows = ({ shows, loading }) => (
   <div>
-    {loading ? null : shows.map((show) => (
-      <ShowCard key={show.id} show={show} />
-    ))}
+    {loading ? null : shows.map(show => <ShowCard key={show.id} show={show} />)}
   </div>
 )
 

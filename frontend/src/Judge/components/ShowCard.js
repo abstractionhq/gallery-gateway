@@ -19,7 +19,7 @@ const ButtonContainer = styled.div`
   bottom: 0;
 `
 
-function renderCardContents(props) {
+function renderCardContents (props) {
   const now = moment()
   const judgingStart = moment(props.judgingStart)
   if (now.isBefore(judgingStart)) {
@@ -28,45 +28,50 @@ function renderCardContents(props) {
     return renderDuringJudging(props)
   }
 }
-function renderDuringJudging(props) {
-  return <div><Col>
-    <dl>
-      <dt>Judging Ends:</dt>
-      <dd>
-        <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
-      </dd>
-    </dl>
-  </Col>
-    <Col>
-      <ButtonContainer>
-        <Button
-          size='lg'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`show/${props.id}/vote`}
-        // TODO: Conditionally change the text
-        >
-          Start
-        </Button>
-      </ButtonContainer>
-    </Col>
-  </div>
+function renderDuringJudging (props) {
+  return (
+    <div>
+      <Col>
+        <dl>
+          <dt>Judging Ends:</dt>
+          <dd>
+            <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
+          </dd>
+        </dl>
+      </Col>
+      <Col>
+        <ButtonContainer>
+          <Button
+            size='lg'
+            style={{ cursor: 'pointer' }}
+            tag={Link}
+            to={`show/${props.id}/vote`}
+            // TODO: Conditionally change the text
+          >
+            Start
+          </Button>
+        </ButtonContainer>
+      </Col>
+    </div>
+  )
 }
 
-function renderBeforeJudging(props) {
-  return <Col>
-    <div> Judging hasn't started yet. Come back to vote soon! </div>
-    <dl>
-      <dt>Judging Starts:</dt>
-      <dd>
-        <Moment format='YYYY/MM/DD'>{props.judgingStart}</Moment>
-      </dd>
-      <dt>Judging Ends:</dt>
-      <dd>
-        <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
-      </dd>
-    </dl>
-  </Col>
+function renderBeforeJudging (props) {
+  return (
+    <Col>
+      <div> Judging has not started yet. Come back to vote soon! </div>
+      <dl>
+        <dt>Judging Starts:</dt>
+        <dd>
+          <Moment format='YYYY/MM/DD'>{props.judgingStart}</Moment>
+        </dd>
+        <dt>Judging Ends:</dt>
+        <dd>
+          <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
+        </dd>
+      </dl>
+    </Col>
+  )
 }
 
 const ShowCard = props => (

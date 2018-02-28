@@ -4,7 +4,7 @@ import ShowsQuery from '../queries/shows.graphql'
 import Shows from '../components/Shows'
 
 export default graphql(ShowsQuery, {
-  props: ({data: { shows, loading }}) => ({
+  props: ({ data: { shows, loading } }) => ({
     shows,
     loading
   })
