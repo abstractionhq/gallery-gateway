@@ -55,7 +55,8 @@ type Show {
     judgingEnd: Date!
     entryCap: Int!
     entries: [Entry]
-    judges: [User]    
+    judges: [User]
+    ownVotes: [Vote]    
     createdAt: Date!
     updatedAt: Date!
 }

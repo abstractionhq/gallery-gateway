@@ -5,6 +5,12 @@ query assignedShows($date: Date) {
       name
       judgingStart
       judgingEnd
+      entries {
+        id
+      }
+      ownVotes {
+        id
+      }
     }
   }
 }

@@ -33,6 +33,10 @@ function renderDuringJudging (props) {
     <div>
       <Col>
         <dl>
+          <dt>Judging Progress:</dt>
+          <dd>
+            {props.ownVotes.length} / {props.entries.length}
+          </dd>
           <dt>Judging Ends:</dt>
           <dd>
             <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
@@ -48,7 +52,11 @@ function renderDuringJudging (props) {
             to={`show/${props.id}/vote`}
             // TODO: Conditionally change the text
           >
-            Start
+            {props.ownVotes.length === 0 && props.entries.length === 0
+              ? 'Start'
+              : props.ownVotes.length === props.entries.length
+                ? 'Review'
+                : 'Resume'}
           </Button>
         </ButtonContainer>
       </Col>
@@ -87,7 +95,17 @@ ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   judgingStart: PropTypes.string.isRequired,
-  judgingEnd: PropTypes.string.isRequired
+  judgingEnd: PropTypes.string.isRequired,
+  entries: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })
+  ),
+  ownVotes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })
+  )
 }
 
 export default ShowCard
