@@ -19,53 +19,41 @@ const ButtonContainer = styled.div`
   bottom: 0;
 `
 
-function renderCardContents (props) {
-  const now = moment()
-  const judgingStart = moment(props.judgingStart)
-  if (now.isBefore(judgingStart)) {
-    return renderBeforeJudging(props)
-  } else {
-    return renderDuringJudging(props)
-  }
-}
-function renderDuringJudging (props) {
-  return (
-    <div>
-      <Col>
-        <dl>
-          <dt>Judging Progress:</dt>
-          <dd>
-            {props.ownVotes.length} / {props.entries.length}
-          </dd>
-          <dt>Judging Ends:</dt>
-          <dd>
-            <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
-          </dd>
-        </dl>
-      </Col>
-      <Col>
-        <ButtonContainer>
-          <Button
-            size='lg'
-            style={{ cursor: 'pointer' }}
-            tag={Link}
-            to={`show/${props.id}/vote`}
-            // TODO: Conditionally change the text
-          >
-            {props.ownVotes.length === 0 && props.entries.length === 0
-              ? 'Start'
-              : props.ownVotes.length === props.entries.length
-                ? 'Review'
-                : 'Resume'}
-          </Button>
-        </ButtonContainer>
-      </Col>
-    </div>
-  )
-}
+const DuringJudging = ({ ownVotes, entries, judgingEnd }) => (
+  <div>
+    <Col>
+      <dl>
+        <dt>Judging Progress:</dt>
+        <dd>
+          {props.ownVotes.length} / {props.entries.length}
+        </dd>
+        <dt>Judging Ends:</dt>
+        <dd>
+          <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
+        </dd>
+      </dl>
+    </Col>
+    <Col>
+      <ButtonContainer>
+        <Button
+          size='lg'
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`show/${props.id}/vote`}
+        >
+          {props.ownVotes.length === 0
+            ? 'Start'
+            : props.ownVotes.length === props.entries.length
+              ? 'Review'
+              : 'Resume'}
+        </Button>
+      </ButtonContainer>
+    </Col>
+  </div>
+)
 
-function renderBeforeJudging (props) {
-  return (
+const BeforeJudging = ({ ownVotes, entries, judgingStart, judgingEnd }) => (
+  <div>
     <Col>
       <div> Judging has not started yet. Come back to vote soon! </div>
       <dl>
@@ -79,17 +67,26 @@ function renderBeforeJudging (props) {
         </dd>
       </dl>
     </Col>
-  )
-}
+  </div>
+)
 
 const ShowCard = props => (
   <Card>
     <h2>
       <Link to={`show/${props.id}`}>{props.name}</Link>
     </h2>
-    {renderCardContents(props)}
+    {moment().isBefore(moment(props.judgingStart)) ? (
+      <BeforeJudging {...props} />
+    ) : (
+      <DuringJudging {...props} />
+    )}
   </Card>
 )
+
+ShowCard.defaultProps = {
+  entries: [],
+  ownVotes: []
+}
 
 ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
