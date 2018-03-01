@@ -67,17 +67,26 @@ const BeforeJudging = ({ judgingStart, judgingEnd }) => (
         </dd>
       </dl>
     </Col>
-  )
-}
+  </div>
+)
 
 const ShowCard = props => (
   <Card>
     <h2>
       <Link to={`show/${props.id}`}>{props.name}</Link>
     </h2>
-    {renderCardContents(props)}
+    {moment().isBefore(moment(props.judgingStart)) ? (
+      <BeforeJudging {...props} />
+    ) : (
+      <DuringJudging {...props} />
+    )}
   </Card>
 )
+
+ShowCard.defaultProps = {
+  entries: [],
+  ownVotes: []
+}
 
 ShowCard.propTypes = {
   id: PropTypes.string.isRequired,

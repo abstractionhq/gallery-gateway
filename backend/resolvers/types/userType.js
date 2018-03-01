@@ -1,12 +1,14 @@
 export default {
   User: {
-    // Judges (and Admins) have shows
+    // Judges (and Admins) are assigned to shows, Students are not
     shows (user, args) {
-      // Check if given date is in a show range
+      if (user.type === 'STUDENT') {
+        return []
+      }
+      // Check if given date is before any show ends
       if (args.date) {
         return user.getShows({
           where: {
-            entryStart: {lte: args.date},
             judgingEnd: {gte: args.date}
           },
           order: [['judgingStart', 'DESC']]
