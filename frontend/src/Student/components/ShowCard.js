@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
 import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
-import FaBook from 'babel-loader!react-icons/fa/book'
-import FaYouTube from 'babel-loader!react-icons/fa/youtube'
-import FaVimeo from 'babel-loader!react-icons/fa/vimeo'
+import FaBook from 'react-icons/lib/fa/book'
+import FaYouTube from 'react-icons/lib/fa/youtube'
+import FaVimeo from 'react-icons/lib/fa/vimeo'
 import { Row, Col } from 'reactstrap'
 
 const Card = styled.div`
@@ -19,14 +19,17 @@ const Card = styled.div`
 
 const PhotoThumbnail = styled.img`
   height: auto;
-  width: auto;
-  min-width: 4em;
+  margin-bottom: 10px;
   max-height: 10em;
   max-width: 100%;
+  min-width: 4em;
+  width: auto;
 `
 
 const EntryNoThumbContainer = styled.div`
+  color: black;
   height: 100%;
+  margin-bottom: 10px;
   padding: 15px;
 `
 
