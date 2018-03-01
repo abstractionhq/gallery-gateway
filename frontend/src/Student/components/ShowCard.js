@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -61,7 +61,7 @@ const EntryThumb = ({ entry }) => {
   }
 }
 
-const NewSubmission = ({show}) => (
+const NewSubmission = ({ show }) => (
   <Col
     style={{ minHeight: '10em' }}
     md={show.entries.length > 0 ? '3' : null}
@@ -73,7 +73,7 @@ const NewSubmission = ({show}) => (
   </Col>
 )
 
-const SubmittedEntries = ({show}) => (
+const SubmittedEntries = ({ show }) => (
   show.entries.map(entry => (
     <Col
       md='3'
@@ -84,6 +84,11 @@ const SubmittedEntries = ({show}) => (
       <EntryThumb entry={entry} />
     </Col>
   ))
+)
+
+const AcceptingSubmissionMessage = ({ show }) => (
+  <div>Accepting Submissions Until: <Moment format='MMMM Do YYYY'>{show.entryEnd}</Moment></div>
+
 )
 
 const ShowCard = (props) => (
@@ -97,14 +102,16 @@ const ShowCard = (props) => (
           <h5>{props.show.entries.length}/{props.show.entryCap} Submissions</h5>
         </div>
         <div>
-          Accepting Submissions Until: <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment>
+          {
+            moment().isAfter(moment(props.show.entryEnd)) ? "Submissions are closed" : <AcceptingSubmissionMessage {...props} />
+          }
         </div>
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
       {
-        moment().isAfter(moment(props.show.entryEnd)) ? <SubmittedEntries {...props}/> : <Fragment><NewSubmission {...props}/> <SubmittedEntries {...props}/> </Fragment>
+        moment().isAfter(moment(props.show.entryEnd)) ? <SubmittedEntries {...props} /> : <Fragment><NewSubmission {...props} /> <SubmittedEntries {...props} /> </Fragment>
       }
     </Row>
   </Card>
