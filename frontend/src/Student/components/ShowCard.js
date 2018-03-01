@@ -31,31 +31,30 @@ const EntryNoThumbContainer = styled.div`
   padding: 15px;
 `
 
-const EntryContainer = styled.div``
 const JudgingPhase = styled.div`
-  position: relative;
+  background-color: #fff3cd;
   border: 1px solid transparent;
+  border-color: #ffeeba;
   border-radius: 0.25rem;
   color: #856404;
-  background-color: #fff3cd;
-  border-color: #ffeeba;
+  position: relative;
 `
 const Accepted = styled.div`
-  position: relative;
+  background-color: #d4edda;
   border: 1px solid transparent;
+  border-color: #c3e6cb;
   border-radius: 0.25rem;
   color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+  position: relative;
 `
 
 const NotAccepted = styled.div`
-  position: relative;
+  background-color: #d6d8d9;
   border: 1px solid transparent;
+  border-color: #c6c8ca;
   border-radius: 0.25rem;
   color: #1b1e21;
-  background-color: #d6d8d9;
-  border-color: #c6c8ca;
+  position: relative;
 `
 
 const EntryThumb = ({ entry }) => {
@@ -76,8 +75,8 @@ const EntryThumb = ({ entry }) => {
         entry.provider === 'youtube' ? (
           <FaYouTube size='3em' />
         ) : (
-          <FaVimeo size='3em' />
-        )
+            <FaVimeo size='3em' />
+          )
       return (
         <a href={url} target='_blank'>
           <EntryNoThumbContainer>
@@ -120,28 +119,22 @@ const SubmittedEntries = ({ show }) =>
       title={entry.title}
       key={entry.id}
     >
-      <EntryContainer>
+      <div>
         <EntryThumb entry={entry} />
-        {// If after entry end and before judging end, display "judging phase" , else display accepted or denied
+        {/* If after entry end and before judging end, display "judging phase" 
+          , else display accepted or denied */
           moment().isBetween(show.entryEnd, show.judgingEnd) ? (
-            <JudgingPhase>In Judging Phase</JudgingPhase>
+            <JudgingPhase>Judging In Progress</JudgingPhase>
           ) : moment().isAfter(show.judgingEnd) ? (
             entry.invited ? (
               <Accepted>Invited</Accepted>
             ) : (
-              <NotAccepted>Not Invited</NotAccepted>
-            )
-          ) : null }
-      </EntryContainer>
+                <NotAccepted>Not Invited</NotAccepted>
+              )
+          ) : null}
+      </div>
     </Col>
   ))
-
-const AcceptingSubmissionMessage = ({ show }) => (
-  <div>
-    Accepting Submissions Until:{' '}
-    <Moment format='MMMM Do YYYY'>{show.entryEnd}</Moment>
-  </div>
-)
 
 const ShowCard = props => (
   <Card>
@@ -155,24 +148,20 @@ const ShowCard = props => (
             {props.show.entries.length}/{props.show.entryCap} Submissions
           </h5>
         </div>
-        <div>
-          {moment().isAfter(moment(props.show.entryEnd)) ? (
-            'Submissions are closed'
-          ) : (
-            <AcceptingSubmissionMessage {...props} />
+        {moment().isAfter(moment(props.show.entryEnd)) ? (
+          <div>No Longer Accepting Submissions</div>
+        ) : (
+            <div> Accepting Submissions Until:{' '}
+              <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment></div>
           )}
-        </div>
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
-      {moment().isAfter(moment(props.show.entryEnd)) ? (
+      <Fragment>
+        {moment().isBefore(props.show.entryEnd) ? <NewSubmission {...props} /> : null}
         <SubmittedEntries {...props} />
-      ) : (
-        <Fragment>
-          <NewSubmission {...props} /> <SubmittedEntries {...props} />{' '}
-        </Fragment>
-      )}
+      </Fragment>
     </Row>
   </Card>
 )
