@@ -55,7 +55,7 @@ const queue = (state = initialQueueState, action) => {
         ...state,
         // Continue incrementing until we've reached the end of the list.
         // Then continue to return the index of the last element.
-        viewing: viewing < order.length ? viewing + 1 : viewing
+        viewing: viewing + 1 < order.length ? viewing + 1 : viewing
       }
     case actions.PREVIOUS_IN_QUEUE:
       return {
