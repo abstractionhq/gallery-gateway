@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -7,7 +7,8 @@ import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
 import FaBook from 'react-icons/lib/fa/book'
 import FaYouTube from 'react-icons/lib/fa/youtube'
 import FaVimeo from 'react-icons/lib/fa/vimeo'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Alert } from 'reactstrap'
+import moment from 'moment'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -31,6 +32,38 @@ const EntryNoThumbContainer = styled.div`
   height: 100%;
   margin-bottom: 10px;
   padding: 15px;
+`
+const EntryContainer = styled.div`
+  width: inherit
+`
+
+const JudgingPhase = styled.div`
+  background-color: #fff3cd;
+  border: 1px solid transparent;
+  border-color: #ffeeba;
+  border-radius: 0.25rem;
+  color: #856404;
+  position: relative;
+  width: inherit
+`
+const Accepted = styled.div`
+  background-color: #d4edda;
+  border: 1px solid transparent;
+  border-color: #c3e6cb;
+  border-radius: 0.25rem;
+  color: #155724;
+  position: relative;
+  width: inherit
+`
+
+const NotAccepted = styled.div`
+  background-color: #d6d8d9;
+  border: 1px solid transparent;
+  border-color: #c6c8ca;
+  border-radius: 0.25rem;
+  color: #1b1e21;
+  position: relative;
+  width: inherit
 `
 
 const EntryThumb = ({ entry }) => {
@@ -73,6 +106,45 @@ const EntryThumb = ({ entry }) => {
   }
 }
 
+const NewSubmission = ({ show }) => (
+  <Col
+    style={{ minHeight: '10em' }}
+    md={show.entries.length > 0 ? '3' : null}
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+  >
+    <Link to={`/submit?to=${show.id}`}>
+      <FaPlusCircle size='3em' />
+      <h5 className='mt-1'>New Submission</h5>
+    </Link>
+  </Col>
+)
+
+const SubmittedEntries = ({ show }) =>
+  show.entries.map(entry => (
+    <Col
+      md='3'
+      className='text-center align-self-center d-flex justify-content-center align-items-center'
+      style={{ minHeight: '10em' }}
+      title={entry.title}
+      key={entry.id}
+    >
+      <EntryContainer>
+        <EntryThumb entry={entry} />
+        {/* If after entry end and before judging end, display "judging phase" 
+          , else display accepted or denied */
+          moment().isBetween(show.entryEnd, show.judgingEnd) ? (
+            <JudgingPhase>Judging In Progress</JudgingPhase>
+          ) : moment().isAfter(show.judgingEnd) ? (
+            entry.invited ? (
+              <Accepted>Invited</Accepted>
+            ) : (
+                <NotAccepted>Not Invited</NotAccepted>
+              )
+          ) : null}
+      </EntryContainer>
+    </Col>
+  ))
+
 const ShowCard = props => (
   <Card>
     <Row>
@@ -85,35 +157,20 @@ const ShowCard = props => (
             {props.show.entries.length}/{props.show.entryCap} Submissions
           </h5>
         </div>
-        <div>
-          Accepting Submissions Until:{' '}
-          <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment>
-        </div>
+        {moment().isAfter(moment(props.show.entryEnd)) ? (
+          <div>No Longer Accepting Submissions</div>
+        ) : (
+            <div> Accepting Submissions Until:{' '}
+              <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment></div>
+          )}
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
-      <Col
-        style={{ minHeight: '10em' }}
-        md={props.show.entries.length > 0 ? '3' : null}
-        className='text-center align-self-center d-flex justify-content-center align-items-center'
-      >
-        <Link to={`/submit?to=${props.show.id}`}>
-          <FaPlusCircle size='3em' />
-          <h5 className='mt-1'>New Submission</h5>
-        </Link>
-      </Col>
-      {props.show.entries.map(entry => (
-        <Col
-          md='3'
-          className='text-center align-self-center d-flex justify-content-center align-items-center'
-          style={{ minHeight: '10em' }}
-          title={entry.title}
-          key={entry.id}
-        >
-          <EntryThumb entry={entry} />
-        </Col>
-      ))}
+      <Fragment>
+        {moment().isBefore(props.show.entryEnd) ? <NewSubmission {...props} /> : null}
+        <SubmittedEntries {...props} />
+      </Fragment>
     </Row>
   </Card>
 )
@@ -128,6 +185,7 @@ ShowCard.propTypes = {
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
+        invited: PropTypes.bool,
         path: PropTypes.string,
         provider: PropTypes.oneOf(['youtube', 'vimeo']),
         videoId: PropTypes.string
