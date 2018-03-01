@@ -11,13 +11,31 @@ const addIdPropFromQueryParams = () => {
   return window.location.search.split('=')[1]
 }
 
-const Submit = (props) => (
+const Submit = props => (
   <Container>
     <Switch>
-      <Route exact path='/submit' render={() => <SubmissionFormChooser id={addIdPropFromQueryParams()} /> }/>
-      <Route exact path='/submit/photo' render={() => <PhotoSubmissionForm id={addIdPropFromQueryParams()} /> }/>
-      <Route exact path='/submit/video' render={() => <VideoSubmissionForm id={addIdPropFromQueryParams()} /> }/>
-      <Route exact path='/submit/other' render={() => <OtherMediaSubmissionForm id={addIdPropFromQueryParams()} /> }/>
+      <Route
+        exact
+        path='/submit'
+        render={() => <SubmissionFormChooser id={addIdPropFromQueryParams()} />}
+      />
+      <Route
+        exact
+        path='/submit/photo'
+        render={() => <PhotoSubmissionForm id={addIdPropFromQueryParams()} />}
+      />
+      <Route
+        exact
+        path='/submit/video'
+        render={() => <VideoSubmissionForm id={addIdPropFromQueryParams()} />}
+      />
+      <Route
+        exact
+        path='/submit/other'
+        render={() => (
+          <OtherMediaSubmissionForm id={addIdPropFromQueryParams()} />
+        )}
+      />
     </Switch>
   </Container>
 )

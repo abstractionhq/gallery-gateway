@@ -1,9 +1,16 @@
-query assignedShows {
+query assignedShows($date: Date) {
   self {
-    shows {
+    shows(date: $date) {
       id
       name
+      judgingStart
       judgingEnd
+      entries {
+        id
+      }
+      ownVotes {
+        id
+      }
     }
   }
 }
