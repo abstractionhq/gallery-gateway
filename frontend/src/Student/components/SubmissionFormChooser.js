@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 import styled from 'styled-components'
-import FaImage from 'babel-loader!react-icons/fa/image'
-import FaVideo from 'babel-loader!react-icons/fa/video-camera'
-import FaBook from 'babel-loader!react-icons/fa/book'
+import FaImage from 'react-icons/lib/fa/image'
+import FaVideo from 'react-icons/lib/fa/video-camera'
+import FaBook from 'react-icons/lib/fa/book'
 
 const Header = styled.h2`
   margin-top: 25px;

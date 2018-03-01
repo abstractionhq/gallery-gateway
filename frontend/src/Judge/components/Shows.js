@@ -18,7 +18,7 @@ const Shows = ({ user, loading }) => (
       user.shows.map(show => <ShowCard key={show.id} {...show} />)
     ) : (
       <NoShowsContainer>
-        You are not currently assinged to a show
+        You are not currently assigned to any future shows
       </NoShowsContainer>
     )}
   </div>

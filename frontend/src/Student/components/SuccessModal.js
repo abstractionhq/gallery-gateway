@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, ModalBody } from 'reactstrap'
-import FaCheckCircle from 'babel-loader!react-icons/fa/check-circle'
+import FaCheckCircle from 'react-icons/lib/fa/check-circle'
 
 const SuccessModal = props => (
   <Modal
