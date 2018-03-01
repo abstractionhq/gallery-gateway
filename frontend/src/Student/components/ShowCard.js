@@ -30,6 +30,9 @@ const EntryNoThumbContainer = styled.div`
   height: 100%;
   padding: 15px;
 `
+const EntryContainer = styled.div`
+  width: inherit
+`
 
 const JudgingPhase = styled.div`
   background-color: #fff3cd;
@@ -46,6 +49,7 @@ const Accepted = styled.div`
   border-radius: 0.25rem;
   color: #155724;
   position: relative;
+  width: inherit
 `
 
 const NotAccepted = styled.div`
@@ -119,7 +123,7 @@ const SubmittedEntries = ({ show }) =>
       title={entry.title}
       key={entry.id}
     >
-      <div>
+      <EntryContainer>
         <EntryThumb entry={entry} />
         {/* If after entry end and before judging end, display "judging phase" 
           , else display accepted or denied */
@@ -132,7 +136,7 @@ const SubmittedEntries = ({ show }) =>
                 <NotAccepted>Not Invited</NotAccepted>
               )
           ) : null}
-      </div>
+      </EntryContainer>
     </Col>
   ))
 
