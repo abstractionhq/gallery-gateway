@@ -7,7 +7,7 @@ import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
 import FaBook from 'babel-loader!react-icons/fa/book'
 import FaYouTube from 'babel-loader!react-icons/fa/youtube'
 import FaVimeo from 'babel-loader!react-icons/fa/vimeo'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Alert } from 'reactstrap'
 import moment from 'moment'
 
 const Card = styled.div`
@@ -29,6 +29,34 @@ const PhotoThumbnail = styled.img`
 const EntryNoThumbContainer = styled.div`
   height: 100%;
   padding: 15px;
+`
+
+const EntryContainer = styled.div`
+`
+const JudgingPhase = styled.div`
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  `
+const Accepted = styled.div`
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+`
+
+const NotAccepted = styled.div`
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #1b1e21;
+  background-color: #d6d8d9;
+  border-color: #c6c8ca;
 `
 
 const EntryThumb = ({ entry }) => {
@@ -81,7 +109,14 @@ const SubmittedEntries = ({ show }) => (
       style={{ minHeight: '10em' }}
       title={entry.title}
       key={entry.id}>
-      <EntryThumb entry={entry} />
+      <EntryContainer>
+        <EntryThumb entry={entry} />
+        {
+          // If after entry end and during judging show judging label, else display accepted or denined
+          moment().isBetween(show.judgingStart, show.judgingEnd) && moment().isAfter(show.entryEnd) ? 
+            <JudgingPhase>In Judging Phase</JudgingPhase> : entry.invited ? <Accepted>Invited</Accepted> : <NotAccepted>Not Invited</NotAccepted>
+        }
+      </EntryContainer>
     </Col>
   ))
 )
@@ -126,6 +161,7 @@ ShowCard.propTypes = {
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
+      invited: PropTypes.bool,
       path: PropTypes.string,
       provider: PropTypes.oneOf(['youtube', 'vimeo']),
       videoId: PropTypes.string

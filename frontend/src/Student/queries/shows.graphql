@@ -11,6 +11,7 @@ query Shows {
       id
       title
       entryType
+      invited
       ... photoFields
       ... videoFields
     }
