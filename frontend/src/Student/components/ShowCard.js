@@ -14,7 +14,7 @@ const Card = styled.div`
   width: 100%;
 `
 
-const ShowCard = (props) => (
+const ShowCard = props => (
   <Card>
     <Row>
       <Col style={{ display: 'flex' }}>
@@ -22,17 +22,23 @@ const ShowCard = (props) => (
       </Col>
       <Col className='text-right'>
         <div>
-          <h5>{props.show.entries.length}/{props.show.entryCap} Submissions</h5>
+          <h5>
+            {props.show.entries.length}/{props.show.entryCap} Submissions
+          </h5>
         </div>
         <div>
-          Accepting Submissions Until: <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment>
+          Accepting Submissions Until:{' '}
+          <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment>
         </div>
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }}>
       <Col className='text-center align-self-center justify-content-center h-100'>
-        <Link to={`/submit?to=${props.show.id}`} className='d-block w-100 h-100'>
+        <Link
+          to={`/submit?to=${props.show.id}`}
+          className='d-block w-100 h-100'
+        >
           <FaPlusCircle size='3em' />
           <h5 className='mt-1'>New Submission</h5>
         </Link>

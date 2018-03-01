@@ -17,7 +17,7 @@ type User {
     displayName: String
     type: UserType!
     entries: [Entry]
-    shows: [Show]
+    shows(date: Date): [Show]
 }
 
 input UserInput {
@@ -55,7 +55,8 @@ type Show {
     judgingEnd: Date!
     entryCap: Int!
     entries: [Entry]
-    judges: [User]    
+    judges: [User]
+    ownVotes: [Vote]    
     createdAt: Date!
     updatedAt: Date!
 }

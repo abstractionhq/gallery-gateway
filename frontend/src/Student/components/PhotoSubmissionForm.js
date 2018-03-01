@@ -137,7 +137,10 @@ class PhotoSubmissionForm extends Component {
     }
 
     const { create, done, user } = this.props
-    const forShow = { id: this.props.data.show.id, name: this.props.data.show.name }
+    const forShow = {
+      id: this.props.data.show.id,
+      name: this.props.data.show.name
+    }
 
     return (
       <Fragment>
