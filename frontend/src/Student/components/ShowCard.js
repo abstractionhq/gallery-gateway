@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -8,6 +8,7 @@ import FaBook from 'babel-loader!react-icons/fa/book'
 import FaYouTube from 'babel-loader!react-icons/fa/youtube'
 import FaVimeo from 'babel-loader!react-icons/fa/vimeo'
 import { Row, Col } from 'reactstrap'
+import moment from 'moment'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -30,7 +31,7 @@ const EntryNoThumbContainer = styled.div`
   padding: 15px;
 `
 
-const EntryThumb = ({entry}) => {
+const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
       return <PhotoThumbnail
@@ -60,6 +61,31 @@ const EntryThumb = ({entry}) => {
   }
 }
 
+const NewSubmission = ({show}) => (
+  <Col
+    style={{ minHeight: '10em' }}
+    md={show.entries.length > 0 ? '3' : null}
+    className='text-center align-self-center d-flex justify-content-center align-items-center'>
+    <Link to={`/submit?to=${show.id}`}>
+      <FaPlusCircle size='3em' />
+      <h5 className='mt-1'>New Submission</h5>
+    </Link>
+  </Col>
+)
+
+const SubmittedEntries = ({show}) => (
+  show.entries.map(entry => (
+    <Col
+      md='3'
+      className='text-center align-self-center d-flex justify-content-center align-items-center'
+      style={{ minHeight: '10em' }}
+      title={entry.title}
+      key={entry.id}>
+      <EntryThumb entry={entry} />
+    </Col>
+  ))
+)
+
 const ShowCard = (props) => (
   <Card>
     <Row>
@@ -77,26 +103,8 @@ const ShowCard = (props) => (
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
-      <Col
-        style={{minHeight: '10em'}}
-        md={props.show.entries.length > 0 ? '3' : null}
-        className='text-center align-self-center d-flex justify-content-center align-items-center'>
-        <Link to={`/submit?to=${props.show.id}`}>
-          <FaPlusCircle size='3em' />
-          <h5 className='mt-1'>New Submission</h5>
-        </Link>
-      </Col>
       {
-        props.show.entries.map(entry => (
-          <Col
-            md='3'
-            className='text-center align-self-center d-flex justify-content-center align-items-center'
-            style={{minHeight: '10em'}}
-            title={entry.title}
-            key={entry.id}>
-            <EntryThumb entry={entry} />
-          </Col>
-        ))
+        moment().isAfter(moment(props.show.entryEnd)) ? <SubmittedEntries {...props}/> : <Fragment><NewSubmission {...props}/> <SubmittedEntries {...props}/> </Fragment>
       }
     </Row>
   </Card>
