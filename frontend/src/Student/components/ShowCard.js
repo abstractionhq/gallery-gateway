@@ -19,11 +19,11 @@ const Card = styled.div`
 `
 
 const PhotoThumbnail = styled.img`
-    height: auto;
-    width: auto;
-    min-width: 4em;
-    max-height: 10em;
-    max-width: 100%;
+  height: auto;
+  width: auto;
+  min-width: 4em;
+  max-height: 10em;
+  max-width: 100%;
 `
 
 const EntryNoThumbContainer = styled.div`
@@ -31,8 +31,7 @@ const EntryNoThumbContainer = styled.div`
   padding: 15px;
 `
 
-const EntryContainer = styled.div`
-`
+const EntryContainer = styled.div``
 const JudgingPhase = styled.div`
   position: relative;
   border: 1px solid transparent;
@@ -40,7 +39,7 @@ const JudgingPhase = styled.div`
   color: #856404;
   background-color: #fff3cd;
   border-color: #ffeeba;
-  `
+`
 const Accepted = styled.div`
   position: relative;
   border: 1px solid transparent;
@@ -62,28 +61,38 @@ const NotAccepted = styled.div`
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
-      return <PhotoThumbnail
-        // TODO (robert) make this URL responsive to deploy environment
-        src={`//localhost:3000/static/uploads/${entry.path}`}
-      />
+      return (
+        <PhotoThumbnail
+          // TODO (robert) make this URL responsive to deploy environment
+          src={`//localhost:3000/static/uploads/${entry.path}`}
+        />
+      )
     case 'VIDEO':
-      const url = entry.provider === 'youtube'
-        ? `https://youtube.com/watch?v=${entry.videoId}`
-        : `https://vimeo.com/${entry.videoId}`
-      const icon = entry.provider === 'youtube'
-        ? <FaYouTube size='3em' />
-        : <FaVimeo size='3em' />
-      return <a href={url} target='_blank'>
+      const url =
+        entry.provider === 'youtube'
+          ? `https://youtube.com/watch?v=${entry.videoId}`
+          : `https://vimeo.com/${entry.videoId}`
+      const icon =
+        entry.provider === 'youtube' ? (
+          <FaYouTube size='3em' />
+        ) : (
+          <FaVimeo size='3em' />
+        )
+      return (
+        <a href={url} target='_blank'>
+          <EntryNoThumbContainer>
+            {icon}
+            <h5>{entry.title}</h5>
+          </EntryNoThumbContainer>
+        </a>
+      )
+    case 'OTHER':
+      return (
         <EntryNoThumbContainer>
-          {icon}
+          <FaBook size='3em' />
           <h5>{entry.title}</h5>
         </EntryNoThumbContainer>
-      </a>
-    case 'OTHER':
-      return <EntryNoThumbContainer>
-        <FaBook size='3em' />
-        <h5>{entry.title}</h5>
-      </EntryNoThumbContainer>
+      )
     default:
       return null
   }
@@ -93,7 +102,8 @@ const NewSubmission = ({ show }) => (
   <Col
     style={{ minHeight: '10em' }}
     md={show.entries.length > 0 ? '3' : null}
-    className='text-center align-self-center d-flex justify-content-center align-items-center'>
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+  >
     <Link to={`/submit?to=${show.id}`}>
       <FaPlusCircle size='3em' />
       <h5 className='mt-1'>New Submission</h5>
@@ -101,32 +111,39 @@ const NewSubmission = ({ show }) => (
   </Col>
 )
 
-const SubmittedEntries = ({ show }) => (
+const SubmittedEntries = ({ show }) =>
   show.entries.map(entry => (
     <Col
       md='3'
       className='text-center align-self-center d-flex justify-content-center align-items-center'
       style={{ minHeight: '10em' }}
       title={entry.title}
-      key={entry.id}>
+      key={entry.id}
+    >
       <EntryContainer>
         <EntryThumb entry={entry} />
-        {
-          // If after entry end and during judging show judging label, else display accepted or denined
-          moment().isBetween(show.judgingStart, show.judgingEnd) && moment().isAfter(show.entryEnd) ? 
-            <JudgingPhase>In Judging Phase</JudgingPhase> : entry.invited ? <Accepted>Invited</Accepted> : <NotAccepted>Not Invited</NotAccepted>
-        }
+        {// If after entry end and before judging end, display "judging phase" , else display accepted or denied
+          moment().isBetween(show.entryEnd, show.judgingEnd) ? (
+            <JudgingPhase>In Judging Phase</JudgingPhase>
+          ) : moment().isAfter(show.judgingEnd) ? (
+            entry.invited ? (
+              <Accepted>Invited</Accepted>
+            ) : (
+              <NotAccepted>Not Invited</NotAccepted>
+            )
+          ) : null }
       </EntryContainer>
     </Col>
   ))
-)
 
 const AcceptingSubmissionMessage = ({ show }) => (
-  <div>Accepting Submissions Until: <Moment format='MMMM Do YYYY'>{show.entryEnd}</Moment></div>
-
+  <div>
+    Accepting Submissions Until:{' '}
+    <Moment format='MMMM Do YYYY'>{show.entryEnd}</Moment>
+  </div>
 )
 
-const ShowCard = (props) => (
+const ShowCard = props => (
   <Card>
     <Row>
       <Col style={{ display: 'flex' }}>
@@ -134,20 +151,28 @@ const ShowCard = (props) => (
       </Col>
       <Col className='text-right'>
         <div>
-          <h5>{props.show.entries.length}/{props.show.entryCap} Submissions</h5>
+          <h5>
+            {props.show.entries.length}/{props.show.entryCap} Submissions
+          </h5>
         </div>
         <div>
-          {
-            moment().isAfter(moment(props.show.entryEnd)) ? "Submissions are closed" : <AcceptingSubmissionMessage {...props} />
-          }
+          {moment().isAfter(moment(props.show.entryEnd)) ? (
+            'Submissions are closed'
+          ) : (
+            <AcceptingSubmissionMessage {...props} />
+          )}
         </div>
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
-      {
-        moment().isAfter(moment(props.show.entryEnd)) ? <SubmittedEntries {...props} /> : <Fragment><NewSubmission {...props} /> <SubmittedEntries {...props} /> </Fragment>
-      }
+      {moment().isAfter(moment(props.show.entryEnd)) ? (
+        <SubmittedEntries {...props} />
+      ) : (
+        <Fragment>
+          <NewSubmission {...props} /> <SubmittedEntries {...props} />{' '}
+        </Fragment>
+      )}
     </Row>
   </Card>
 )
@@ -157,15 +182,17 @@ ShowCard.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
     entryCap: PropTypes.number,
-    entries: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
-      invited: PropTypes.bool,
-      path: PropTypes.string,
-      provider: PropTypes.oneOf(['youtube', 'vimeo']),
-      videoId: PropTypes.string
-    })),
+    entries: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
+        invited: PropTypes.bool,
+        path: PropTypes.string,
+        provider: PropTypes.oneOf(['youtube', 'vimeo']),
+        videoId: PropTypes.string
+      })
+    ),
     entryStart: PropTypes.string,
     entryEnd: PropTypes.string,
     judgingStart: PropTypes.string,

@@ -28,7 +28,7 @@ const withMutations = compose(
     })
   }),
   graphql(ShowName, {
-    options: (ownProps) => ({
+    options: ownProps => ({
       variables: {
         id: ownProps.id
       }
