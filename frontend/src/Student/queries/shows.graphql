@@ -9,7 +9,19 @@ query Shows {
     entryCap
     entries {
       id
+      title
+      entryType
+      ... photoFields
+      ... videoFields
     }
-
   }
+}
+
+fragment photoFields on Photo {
+  path
+}
+
+fragment videoFields on Video {
+  provider
+  videoId
 }
