@@ -8,12 +8,14 @@ import {
   Label,
   Button,
   Row,
-  Col
+  Col,
+  UncontrolledTooltip
 } from 'reactstrap'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
+import FaQuestionCircle from 'react-icons/lib/fa/question-circle'
 
 import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
@@ -42,7 +44,13 @@ class PhotoSubmissionForm extends Component {
     data: PropTypes.shape({
       show: PropTypes.shape({
         id: PropTypes.string,
-        name: PropTypes.string
+        name: PropTypes.string,
+        entries: PropTypes.arrayOf({
+          id: PropTypes.string,
+          student: PropTypes.shape({
+            username: PropTypes.string
+          })
+        })
       })
     }).isRequired,
     handleUpload: PropTypes.func.isRequired,
@@ -142,13 +150,21 @@ class PhotoSubmissionForm extends Component {
       name: this.props.data.show.name
     }
 
+    // calculate whether the user is beyond their single submissions
+    const numSingleEntries = this.props.data.show.entries.reduce(
+      // if 'student' is non-null, this is a single submission
+      (n, entry) => entry.student ? n + 1 : n,
+      0
+    )
+    const canSubmitAsSingle = numSingleEntries < this.props.data.show.entryCap
+
     return (
       <Fragment>
         <Formik
           initialValues={{
             academicProgram: '',
             yearLevel: '',
-            submittingAsGroup: 'no',
+            submittingAsGroup: canSubmitAsSingle ? 'no' : 'yes',
             groupParticipants: '',
             title: 'Untitled',
             comment: '',
@@ -277,9 +293,30 @@ class PhotoSubmissionForm extends Component {
                           name='submittingAsGroup'
                           value='no'
                           required
+                          disabled={!canSubmitAsSingle}
                           checked={values.submittingAsGroup === 'no'}
                         />
-                        <span className='ml-2'>No</span>
+                        {
+                          canSubmitAsSingle
+                            ? (
+                              <span className='ml-2'>
+                                No
+                              </span>
+                            )
+                            : (
+                              <span className='ml-2 text-muted'>
+                                No&nbsp;
+                                <FaQuestionCircle className='align-middle' id='noSingleHelp' />
+                                <UncontrolledTooltip target='noSingleHelp'>
+                                  <p className='text-left'>
+                                    You have reached your individual submission
+                                    limit for this show. Additional submissions
+                                    must be done as a group.
+                                  </p>
+                                </UncontrolledTooltip>
+                              </span>
+                            )
+                        }
                       </Label>
                     </FormGroup>
                     <FormGroup check>
