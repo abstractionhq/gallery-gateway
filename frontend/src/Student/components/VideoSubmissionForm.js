@@ -86,7 +86,7 @@ class VideoSubmissionForm extends Component {
     // calculate whether the user is beyond their single submissions
     const numSingleEntries = this.props.data.show.entries.reduce(
       // if 'student' is non-null, this is a single submission
-      (n, entry) => entry.student ? n + 1 : n,
+      (n, entry) => (entry.student ? n + 1 : n),
       0
     )
     const canSubmitAsSingle = numSingleEntries < this.props.data.show.entryCap
@@ -206,27 +206,24 @@ class VideoSubmissionForm extends Component {
                           disabled={!canSubmitAsSingle}
                           checked={values.submittingAsGroup === 'no'}
                         />
-                        {
-                          canSubmitAsSingle
-                            ? (
-                              <span className='ml-2'>
-                                No
-                              </span>
-                            )
-                            : (
-                              <span className='ml-2 text-muted'>
-                                No&nbsp;
-                                <FaQuestionCircle className='align-middle' id='noSingleHelp' />
-                                <UncontrolledTooltip target='noSingleHelp'>
-                                  <p className='text-left'>
-                                    You have reached your individual submission
-                                    limit for this show. Additional submissions
-                                    must be done as a group.
-                                  </p>
-                                </UncontrolledTooltip>
-                              </span>
-                            )
-                        }
+                        {canSubmitAsSingle ? (
+                          <span className='ml-2'>No</span>
+                        ) : (
+                          <span className='ml-2 text-muted'>
+                            No&nbsp;
+                            <FaQuestionCircle
+                              className='align-middle'
+                              id='noSingleHelp'
+                            />
+                            <UncontrolledTooltip target='noSingleHelp'>
+                              <p className='text-left'>
+                                You have reached your individual submission
+                                limit for this show. Additional submissions must
+                                be done as a group.
+                              </p>
+                            </UncontrolledTooltip>
+                          </span>
+                        )}
                       </Label>
                     </FormGroup>
                     <FormGroup check>
