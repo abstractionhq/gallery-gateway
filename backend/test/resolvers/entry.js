@@ -483,6 +483,7 @@ describe('Entry Mutations', function () {
           .then(([user, show]) => {
             const args = {
               input: {
+                entry: standardEntry(user, show),
                 path: 'a/image.jpg'
               }
             }
