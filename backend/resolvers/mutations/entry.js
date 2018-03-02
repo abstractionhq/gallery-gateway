@@ -6,6 +6,7 @@ import Image from '../../models/image'
 import Video from '../../models/video'
 import Other from '../../models/other'
 import Group from '../../models/group'
+import Show from '../../models/show'
 import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY, VIDEO_ENTRY } from '../../constants'
 import { allowedToSubmit, parseVideo } from '../../helpers/submission'
 
@@ -42,22 +43,49 @@ const createEntry = (entry, entryType, entryId, t) => {
     })
 }
 
+// Rejects the promise if the supplied args indicate the student is doing a
+// single (non-group) submission, but they have met their limit.
+const ensureCanMakeMoreSingleEntries = (
+  {input: {entry: {studentUsername = null, showId}}},
+  t
+) => {
+  // if submitting as a group, ignore this check
+  if (!studentUsername) {
+    return Promise.resolve()
+  }
+  // find the entry cap for this show
+  return Show.findById(showId, {transaction: t, rejectOnEmpty: true})
+    .then(show =>
+      Entry.count({where: {showId, studentUsername}})
+        .then(entries => {
+          if (entries >= show.entryCap) {
+            throw new UserError('Individual submission limit reached')
+          } else {
+            return Promise.resolve()
+          }
+        })
+    )
+}
+
 export function createPhoto (_, args, req) {
   if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')
   }
-  return db.transaction(t => {
-    return Image.create({
-      path: args.input.path,
-      horizDimInch: args.input.horizDimInch,
-      vertDimInch: args.input.vertDimInch,
-      mediaType: args.input.mediaType
-    }, {transaction: t})
-      .then(image =>
-        createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
+  return db.transaction(t =>
+    ensureCanMakeMoreSingleEntries(args, t)
+      .then(() =>
+        Image.create({
+          path: args.input.path,
+          horizDimInch: args.input.horizDimInch,
+          vertDimInch: args.input.vertDimInch,
+          mediaType: args.input.mediaType
+        }, {transaction: t})
+          .then(image =>
+            createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
+          )
       )
-  })
+  )
 }
 
 export function createVideo (_, args, req) {
@@ -69,15 +97,18 @@ export function createVideo (_, args, req) {
   if (!type || !id) {
     throw new UserError('The video URL must be a valid URL from Youtube or Vimeo')
   }
-  return db.transaction(t => {
-    return Video.create({
-      provider: type,
-      videoId: id
-    }, {transaction: t})
-      .then(video =>
-        createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
+  return db.transaction(t =>
+    ensureCanMakeMoreSingleEntries(args, t)
+      .then(() =>
+        Video.create({
+          provider: type,
+          videoId: id
+        }, {transaction: t})
+          .then(video =>
+            createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
+          )
       )
-  })
+  )
 }
 
 export function createOtherMedia (_, args, req) {
@@ -85,12 +116,15 @@ export function createOtherMedia (_, args, req) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')
   }
-  return db.transaction(t => {
-    return Other.create({
-      path: args.input.path
-    }, {transaction: t})
-      .then(other =>
-        createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
+  return db.transaction(t =>
+    ensureCanMakeMoreSingleEntries(args, t)
+      .then(() =>
+        Other.create({
+          path: args.input.path
+        }, {transaction: t})
+          .then(other =>
+            createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
+          )
       )
-  })
+  )
 }

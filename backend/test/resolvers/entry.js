@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import Entry from '../../models/entry'
 import Group from '../../models/group'
 import { createPhoto, createVideo, createOtherMedia } from '../../resolvers/mutations/entry'
-import { fakeUser, fakeShow } from '../factories'
+import { fakeUser, fakeShow, fakeImageEntry } from '../factories'
 import { execGraphql } from '../util'
 
 const standardEntry = (user, show) => ({
@@ -133,29 +133,23 @@ describe('Entry Mutations', function () {
       })
 
       it('rejects images with invalid dimensions', function () {
-        const args = {
-          input: {
-            entry: {
-              studentUsername: 'user1',
-              showId: 1,
-              title: 'mytitle',
-              comment: 'this is my comment',
-              forSale: false,
-              yearLevel: 'second',
-              academicProgram: 'learning',
-              moreCopies: false
-            },
-            path: 'a/path.jpg',
-            horizDimInch: -1.2,
-            vertDimInch: -1.3,
-            mediaType: 'mymedia'
-          }
-        }
-        return createPhoto({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
-          .then(() => Promise.reject(new Error('should have rejected')))
-          .catch((e) => {
-            expect(e.message).to.match(/must be positive/)
-            return Promise.resolve()
+        return Promise.all([fakeShow(), fakeUser({type: 'STUDENT'})])
+          .then(([show, user]) => {
+            const args = {
+              input: {
+                entry: standardEntry(user, show),
+                path: 'a/path.jpg',
+                horizDimInch: -1.2,
+                vertDimInch: -1.3,
+                mediaType: 'mymedia'
+              }
+            }
+            return createPhoto({}, args, { auth: { type: 'STUDENT', username: user.username } })
+              .then(() => Promise.reject(new Error('should have rejected')))
+              .catch((e) => {
+                expect(e.message).to.match(/must be positive/)
+                return Promise.resolve()
+              })
           })
       })
 
@@ -211,6 +205,31 @@ describe('Entry Mutations', function () {
             return Promise.resolve()
           })
       })
+
+      it('rejects submitting beyond the limit', () =>
+        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+          .then(([user, show]) =>
+            fakeImageEntry({user, show})
+              .then(() => [user, show])
+          )
+          .then(([user, show]) => {
+            const args = {
+              input: {
+                entry: standardEntry(user, show),
+                path: 'a/path.jpg',
+                horizDimInch: 1.2,
+                vertDimInch: 1.3,
+                mediaType: 'mymedia'
+              }
+            }
+            return createPhoto({}, args, { auth: { type: 'STUDENT', username: user.username } })
+              .then(() => Promise.reject(new Error('should have rejected')))
+              .catch((e) => {
+                expect(e.message).to.match(/Individual submission limit reached/)
+                return Promise.resolve()
+              })
+          })
+      )
     })
   })
   describe('Video Creation', function () {
@@ -377,6 +396,27 @@ describe('Entry Mutations', function () {
           createVideo({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
         }).to.throw('Permission Denied')
       })
+      it('rejects submitting beyond the limit', () =>
+        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+          .then(([user, show]) =>
+            fakeImageEntry({user, show})
+              .then(() => [user, show])
+          )
+          .then(([user, show]) => {
+            const args = {
+              input: {
+                entry: standardEntry(user, show),
+                url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+              }
+            }
+            return createVideo({}, args, { auth: { type: 'STUDENT', username: user.username } })
+              .then(() => Promise.reject(new Error('should have rejected')))
+              .catch((e) => {
+                expect(e.message).to.match(/Individual submission limit reached/)
+                return Promise.resolve()
+              })
+          })
+      )
     })
   })
   describe('OtherMedia Creation', function () {
@@ -434,6 +474,26 @@ describe('Entry Mutations', function () {
           createOtherMedia({}, args, { auth: { type: 'STUDENT', username: 'user1' } })
         }).to.throw('Permission Denied')
       })
+      it('rejects submitting beyond the limit', () =>
+        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+          .then(([user, show]) =>
+            fakeImageEntry({user, show})
+              .then(() => [user, show])
+          )
+          .then(([user, show]) => {
+            const args = {
+              input: {
+                path: 'a/image.jpg'
+              }
+            }
+            return createOtherMedia({}, args, { auth: { type: 'STUDENT', username: user.username } })
+              .then(() => Promise.reject(new Error('should have rejected')))
+              .catch((e) => {
+                expect(e.message).to.match(/Individual submission limit reached/)
+                return Promise.resolve()
+              })
+          })
+      )
     })
   })
 })
