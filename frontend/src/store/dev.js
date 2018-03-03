@@ -1,4 +1,4 @@
-import history from 'history'
+import history from '../history'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { persistState } from 'redux-devtools' // eslint-disable-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'

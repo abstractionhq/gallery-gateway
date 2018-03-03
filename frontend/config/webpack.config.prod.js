@@ -1,10 +1,10 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
+  mode: 'production',
   entry: {
     main: './src/app.js',
     vendor: [
@@ -20,9 +20,25 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     modules: [
-      path.resolve('./src'),
-      'node_modules'
+      'node_modules',
+      path.resolve('./src')
     ]
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'all'
+        },
+        main: {
+          name: 'main',
+          test: /[\\/]src[\\/]/
+        }
+      }
+    },
+    minimize: true
   },
   plugins: [
     new webpack.NamedChunksPlugin(),
@@ -31,29 +47,11 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'main', async: true, minChunks: 2 }),
-    new webpack.optimize.MinChunkSizePlugin({ minChunkSize: 8192 }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'runtime' }),
     new HtmlWebpackPlugin({
       chunksSortMode: 'dependency',
       title: 'Gallery Gateway',
       filename: '../index.html',
       template: './src/index.ejs'
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      parallel: true,
-      sourceMap: false,
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
-      }
-    }),
-    new ExtractTextPlugin({
-      filename: '[name].[chunkhash].css',
-      allChunks: true
     }),
     ...process.env.DEBUG ? [new BundleAnalyzerPlugin({
       analyzerMode: 'server'
@@ -73,7 +71,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(['css-loader'])
+        loader: ['style-loader', 'css-loader']
       },
       {
         test: /\.(gif|png|jpg|jpeg)(\?[a-z0-9]+)?$/,
