@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
-import { nextInQueue, previousInQueue } from '../actions'
+import { nextInQueue, previousInQueue, fetchSubmissions } from '../actions'
 import Submission from '../components/Submission'
 
 const Arrow = styled.span`
@@ -46,6 +46,7 @@ class Vote extends Component {
     }).isRequired,
     handlePrevious: PropTypes.func.isRequired,
     handleNext: PropTypes.func.isRequired,
+    fetchSubmissions: PropTypes.func.isRequired,
     submission: PropTypes.object,
     previous: PropTypes.shape({
       id: PropTypes.number
@@ -60,6 +61,7 @@ class Vote extends Component {
   }
 
   componentDidMount () {
+    this.props.fetchSubmissions()
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
     //   1. fetch all entries for the show we're voting on
@@ -118,7 +120,9 @@ class Vote extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const showId = ownProps.match.params.id
-  const { order, viewing } = state.judge.queues[showId]
+  // const { order, viewing } = state.judge.queues[showId]
+  const order = [0,1,2]
+  const viewing = 0
   const submissions = state.judge.submissions
 
   const obj = {
@@ -150,7 +154,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
   return {
     handlePrevious: () => dispatch(previousInQueue(showId)),
-    handleNext: () => dispatch(nextInQueue(showId))
+    handleNext: () => dispatch(nextInQueue(showId)),
+    fetchSubmissions: () => dispatch(fetchSubmissions(showId))
   }
 }
 

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 
+import { repeatableShuffle } from '../utils'
 import * as actions from './actions'
 
 // Example State:
@@ -22,17 +23,20 @@ const submissions = (state = {}, action) => {
         }
       }
     case actions.FETCH_SUBMISSIONS:
-      if (!action.payload.length) {
+      const {
+        submissions
+      } = action.payload
+      if (!submissions.length) {
         return state
       }
 
-      const submissions = action.payload.reduce((accum, submission) => {
+      const submissionsById = submissions.reduce((accum, submission) => {
         accum[submission.id] = submission
         return accum
       }, {})
       return {
         ...state,
-        ...submissions
+        ...submissionsById
       }
     default:
       return state
@@ -50,6 +54,19 @@ const queue = (state = initialQueueState, action) => {
   const { order, viewing } = state
 
   switch (action.type) {
+    case actions.FETCH_SUBMISSIONS:
+      const {
+        submissions,
+        username
+      } = action.payload
+      // Merge in the new submissions and perform a shuffle
+      const submissionIds = submissions.map(submission => submission.id)
+      const mergedOrder = Array.from(new Set([...order, ...submissionIds]))
+      const shuffledOrder = repeatableShuffle(username, mergedOrder, x => x)
+      return {
+        ...state,
+        order: shuffledOrder
+      }
     case actions.NEXT_IN_QUEUE:
       return {
         ...state,
@@ -78,6 +95,34 @@ const queue = (state = initialQueueState, action) => {
 const queues = (state = {}, action) => {
   // Proxy all queue actions to the particular queue we want to target
   switch (action.type) {
+    case actions.FETCH_SUBMISSIONS:
+      const {
+        submissions,
+        username
+      } = action.payload
+      // First, gather the submissions by show ID (they _should_ be all the same
+      // ID anyway, but just in case)
+      const submissionsByShowId = submissions.reduce(
+        (accum, submission) => ({
+          ...accum,
+          [submission.show.id]: [
+            ...(accum[submission.show.id] || []),
+            submission
+          ]
+        }),
+        {}
+      )
+      // proxy the action to each subqueue
+      return Object.entries(submissionsByShowId).reduce(
+        (accum, [showId, submissions]) => ({
+          ...accum,
+          [showId]: queue(
+            accum[showId],
+            {type: actions.FETCH_SUBMISSIONS, payload: {submissions, username}}
+          )
+        }),
+        state
+      )
     case actions.NEXT_IN_QUEUE:
     case actions.PREVIOUS_IN_QUEUE:
       if (!action.payload.id) {
@@ -87,6 +132,28 @@ const queues = (state = {}, action) => {
       return {
         ...state,
         [action.payload.id]: queue(state[action.payload.id], action)
+      }
+    default:
+      return state
+  }
+}
+
+// Example State:
+// {
+//   31: {id: 31, entry: {id: 102}, value: 2},
+//   34: {id: 34, entry: {id: 81}, value: 0}
+// }
+const votes = (state = {}, action) => {
+  switch (action.type) {
+    case actions.FETCH_VOTES:
+      const votes = action.payload.reduce((accum, vote) => {
+        accum[vote.id] = vote
+        return accum
+      }, {})
+
+      return {
+        ...state,
+        ...votes
       }
     default:
       return state
@@ -103,5 +170,6 @@ const ui = (state = {}, action) => {
 export default combineReducers({
   queues,
   submissions,
+  votes,
   ui
 })
