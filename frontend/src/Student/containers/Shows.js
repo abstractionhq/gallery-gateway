@@ -7,5 +7,10 @@ export default graphql(ShowsQuery, {
   props: ({ data: { shows, loading } }) => ({
     shows,
     loading
+  }),
+  options: ownProps => ({
+    variables: {
+      studentUsername: ownProps.studentUsername
+    }
   })
 })(Shows)

@@ -7,7 +7,7 @@ const Dashboard = () => (
   <Container>
     <Row>
       <Col>
-        <Shows />
+        <Shows studentUsername='user3'/>
         {/* TODO: Show all open shows w/ link to any submissions a student made to them */}
       </Col>
     </Row>
