@@ -117,11 +117,7 @@ class Vote extends Component {
     } = this.props
 
     return (
-      <Container
-        fluid
-        // tabIndex='0'
-        // onKeyDown={(e) => this.handleKeyInput(e, handleNext, handlePrevious, show, previous, next)}
-      >
+      <Container fluid>
         <Row>
           <Col xs='1'>
             {previous && previous.id ? (
