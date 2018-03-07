@@ -7,7 +7,10 @@ import * as actions from './actions'
 //   1: {id: '1', title...},
 //   2: {id: '2', title...}
 // }
-const submissions = (state = {}, action) => {
+const submissions = (
+  state = { 1: { id: '1' }, 2: { id: '2' }, 3: { id: '3' } },
+  action
+) => {
   switch (action.type) {
     case actions.FETCH_SUBMISSION:
       if (!action.payload.id) {
@@ -75,7 +78,7 @@ const queue = (state = initialQueueState, action) => {
 //   1: {order: [1, 2, 3], viewing: 0},
 //   2: {order: [9, 4, 5, 8, 6, 7], viewing: 5}
 // }
-const queues = (state = {}, action) => {
+const queues = (state = { 2: { order: [1, 2, 3], viewing: 0 } }, action) => {
   // Proxy all queue actions to the particular queue we want to target
   switch (action.type) {
     case actions.NEXT_IN_QUEUE:

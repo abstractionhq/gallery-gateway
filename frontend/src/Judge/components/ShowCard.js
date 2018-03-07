@@ -43,9 +43,7 @@ const DuringJudging = ({ ownVotes, entries, judgingEnd, id }) => (
         >
           {ownVotes.length === 0
             ? 'Start'
-            : ownVotes.length === entries.length
-              ? 'Review'
-              : 'Resume'}
+            : ownVotes.length === entries.length ? 'Review' : 'Resume'}
         </Button>
       </ButtonContainer>
     </Col>
