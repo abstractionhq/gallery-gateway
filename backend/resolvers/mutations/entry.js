@@ -45,12 +45,23 @@ const createEntry = (entry, entryType, entryId, t) => {
 
 // Rejects the promise if the supplied args indicate the student is doing a
 // single (non-group) submission, but they have met their limit.
-const ensureCanMakeMoreSingleEntries = (
-  {input: {entry: {studentUsername = null, showId}}},
+const canMakeMoreSingleEntries = (
+  {
+    input: {
+      entry: {
+        studentUsername = null,
+        group = null,
+        showId
+      }
+    }
+  },
   t
 ) => {
+  if (!studentUsername && !group) {
+    return Promise.reject(new UserError('Entry must have an entrant'))
+  }
   // if submitting as a group, ignore this check
-  if (!studentUsername) {
+  if (group && group.creatorUsername) {
     return Promise.resolve()
   }
   // find the entry cap for this show
@@ -73,7 +84,7 @@ export function createPhoto (_, args, req) {
     throw new UserError('Permission Denied')
   }
   return db.transaction(t =>
-    ensureCanMakeMoreSingleEntries(args, t)
+    canMakeMoreSingleEntries(args, t)
       .then(() =>
         Image.create({
           path: args.input.path,
@@ -98,7 +109,7 @@ export function createVideo (_, args, req) {
     throw new UserError('The video URL must be a valid URL from Youtube or Vimeo')
   }
   return db.transaction(t =>
-    ensureCanMakeMoreSingleEntries(args, t)
+    canMakeMoreSingleEntries(args, t)
       .then(() =>
         Video.create({
           provider: type,
@@ -117,7 +128,7 @@ export function createOtherMedia (_, args, req) {
     throw new UserError('Permission Denied')
   }
   return db.transaction(t =>
-    ensureCanMakeMoreSingleEntries(args, t)
+    canMakeMoreSingleEntries(args, t)
       .then(() =>
         Other.create({
           path: args.input.path

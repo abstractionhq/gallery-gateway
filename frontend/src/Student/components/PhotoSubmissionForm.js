@@ -8,17 +8,16 @@ import {
   Label,
   Button,
   Row,
-  Col,
-  UncontrolledTooltip
+  Col
 } from 'reactstrap'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
-import FaQuestionCircle from 'react-icons/lib/fa/question-circle'
 
 import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
+import SubmitAsGroupRadio from './SubmitAsGroupRadio'
 
 const Header = styled.h1`
   margin-bottom: 10px;
@@ -283,54 +282,13 @@ class PhotoSubmissionForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'yearLevel')}
                   </FormGroup>
-                  <FormGroup>
-                    <Label>Is this a group submission?</Label>
-                    <FormGroup check>
-                      <Label check>
-                        <Field
-                          type='radio'
-                          id='submittingAsGroup'
-                          name='submittingAsGroup'
-                          value='no'
-                          required
-                          disabled={!canSubmitAsSingle}
-                          checked={values.submittingAsGroup === 'no'}
-                        />
-                        {canSubmitAsSingle ? (
-                          <span className='ml-2'>No</span>
-                        ) : (
-                          <span className='ml-2 text-muted'>
-                            No&nbsp;
-                            <FaQuestionCircle
-                              className='align-middle'
-                              id='noSingleHelp'
-                            />
-                            <UncontrolledTooltip target='noSingleHelp'>
-                              <p className='text-left'>
-                                You have reached your individual submission
-                                limit for this show. Additional submissions must
-                                be done as a group.
-                              </p>
-                            </UncontrolledTooltip>
-                          </span>
-                        )}
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check>
-                      <Label check>
-                        <Field
-                          type='radio'
-                          id='submittingAsGroup'
-                          name='submittingAsGroup'
-                          value='yes'
-                          required
-                          checked={values.submittingAsGroup === 'yes'}
-                        />
-                        <span className='ml-2'>Yes</span>
-                      </Label>
-                    </FormGroup>
-                    {this.renderErrors(touched, errors, 'submittingAsGroup')}
-                  </FormGroup>
+                  <SubmitAsGroupRadio
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    canSubmitAsSingle={canSubmitAsSingle}
+                    renderErrors={this.renderErrors}
+                  />
                   {values.submittingAsGroup === 'yes' ? (
                     <FormGroup>
                       <Label>List the names of your other group members.</Label>
