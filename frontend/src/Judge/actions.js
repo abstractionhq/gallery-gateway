@@ -14,7 +14,9 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
         id: submissionId
       }
     })
-    .then(({ data: { submission } }) => dispatch({ type: FETCH_SUBMISSION, payload: submission }))
+    .then(({ data: { submission } }) =>
+      dispatch({ type: FETCH_SUBMISSION, payload: submission })
+    )
     .catch(console.error) // TODO: Handle the error
 }
 
@@ -26,7 +28,9 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
         showId
       }
     })
-    .then(({ data: { submissions } }) => dispatch({ type: FETCH_SUBMISSIONS, payload: submissions }))
+    .then(({ data: { submissions } }) =>
+      dispatch({ type: FETCH_SUBMISSIONS, payload: submissions })
+    )
     .catch(console.error) // TODO: Handle the error
 }
 

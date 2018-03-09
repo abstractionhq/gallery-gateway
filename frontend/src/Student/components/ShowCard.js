@@ -34,7 +34,7 @@ const EntryNoThumbContainer = styled.div`
   padding: 15px;
 `
 const EntryContainer = styled.div`
-  width: inherit
+  width: inherit;
 `
 
 const JudgingPhase = styled.div`
@@ -44,7 +44,7 @@ const JudgingPhase = styled.div`
   border-radius: 0.25rem;
   color: #856404;
   position: relative;
-  width: inherit
+  width: inherit;
 `
 const Accepted = styled.div`
   background-color: #d4edda;
@@ -53,7 +53,7 @@ const Accepted = styled.div`
   border-radius: 0.25rem;
   color: #155724;
   position: relative;
-  width: inherit
+  width: inherit;
 `
 
 const NotAccepted = styled.div`
@@ -63,7 +63,7 @@ const NotAccepted = styled.div`
   border-radius: 0.25rem;
   color: #1b1e21;
   position: relative;
-  width: inherit
+  width: inherit;
 `
 
 const EntryThumb = ({ entry }) => {
@@ -130,7 +130,7 @@ const SubmittedEntries = ({ show }) =>
     >
       <EntryContainer>
         <EntryThumb entry={entry} />
-        {/* If after entry end and before judging end, display "judging phase" 
+        {/* If after entry end and before judging end, display "judging phase"
           , else display accepted or denied */
           moment().isBetween(show.entryEnd, show.judgingEnd) ? (
             <JudgingPhase>Judging In Progress</JudgingPhase>
@@ -138,8 +138,8 @@ const SubmittedEntries = ({ show }) =>
             entry.invited ? (
               <Accepted>Invited</Accepted>
             ) : (
-                <NotAccepted>Not Invited</NotAccepted>
-              )
+              <NotAccepted>Not Invited</NotAccepted>
+            )
           ) : null}
       </EntryContainer>
     </Col>
@@ -160,15 +160,19 @@ const ShowCard = props => (
         {moment().isAfter(moment(props.show.entryEnd)) ? (
           <div>No Longer Accepting Submissions</div>
         ) : (
-            <div> Accepting Submissions Until:{' '}
-              <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment></div>
-          )}
+          <div>
+            Accepting Submissions Until:{' '}
+            <Moment format='MMMM Do YYYY'>{props.show.entryEnd}</Moment>
+          </div>
+        )}
       </Col>
     </Row>
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
       <Fragment>
-        {moment().isBefore(props.show.entryEnd) ? <NewSubmission {...props} /> : null}
+        {moment().isBefore(props.show.entryEnd) ? (
+          <NewSubmission {...props} />
+        ) : null}
         <SubmittedEntries {...props} />
       </Fragment>
     </Row>
