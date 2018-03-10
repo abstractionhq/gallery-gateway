@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import Status from '../../shared/containers/Status'
 import { Container, Row, Col } from 'reactstrap'
 
 const ViewShow = () => (

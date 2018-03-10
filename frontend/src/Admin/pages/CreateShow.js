@@ -1,4 +1,5 @@
 import React from 'react'
+import Status from '../../shared/containers/Status'
 import { Container } from 'reactstrap'
 
 import CreateShowForm from '../containers/CreateShowForm'

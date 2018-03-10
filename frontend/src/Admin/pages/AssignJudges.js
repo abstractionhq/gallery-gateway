@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Container } from 'reactstrap'
 import styled from 'styled-components'
+import Status from '../../shared/containers/Status'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
