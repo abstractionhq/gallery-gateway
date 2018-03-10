@@ -14,7 +14,6 @@ export function show (_, args, req) {
 
 export function shows (_, args, req) {
   // Students can only look at their own shows
-  console.log(args.studentUsername, req.auth.type)
   if (args.studentUsername && req.auth.type !== ADMIN && !isRequestingOwnUser(req, args)) {
     throw new UserError('Permission Denied')
   }

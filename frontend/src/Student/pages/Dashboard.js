@@ -1,17 +1,22 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
+import { connect } from 'react-redux'
 
 import Shows from '../containers/Shows'
 
-const Dashboard = () => (
+const Dashboard = props => (
   <Container>
     <Row>
       <Col>
-        <Shows studentUsername='user3'/>
+        <Shows studentUsername={props.studentUsername}/>
         {/* TODO: Show all open shows w/ link to any submissions a student made to them */}
       </Col>
     </Row>
   </Container>
 )
 
-export default Dashboard
+const mapStateToProps = ({ student }, ownProps) => ({
+  show: student.shows[ownProps.match.params.id]
+})
+
+export default connect(mapStateToProps)(Dashboard)
