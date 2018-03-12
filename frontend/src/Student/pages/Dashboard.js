@@ -15,8 +15,8 @@ const Dashboard = props => (
   </Container>
 )
 
-const mapStateToProps = ({ student }, ownProps) => ({
-  show: student.shows[ownProps.match.params.id]
+const mapStateToProps = (state, ownProps) => ({
+  studentUsername: state.shared.auth.user.username
 })
 
 export default connect(mapStateToProps)(Dashboard)
