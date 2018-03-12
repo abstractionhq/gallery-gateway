@@ -40,6 +40,28 @@ const SubmissionContainer = styled.section`
 `
 
 class Vote extends Component {
+  handleKeyInput = e => {
+    const {
+      show,
+      handleNext,
+      handlePrevious,
+      submission,
+      previous,
+      next
+    } = this.props
+    if (e.key === 'ArrowRight') {
+      if (next && next.id) {
+        handleNext()
+        this.props.history.push(`/show/${show.id}/vote?on=${next.id}`)
+      }
+    } else if (e.key === 'ArrowLeft') {
+      if (previous && previous.id) {
+        handlePrevious()
+        this.props.history.push(`/show/${show.id}/vote?on=${previous.id}`)
+      }
+    }
+  }
+
   static propTypes = {
     show: PropTypes.shape({
       id: PropTypes.string
@@ -60,8 +82,13 @@ class Vote extends Component {
     submission: null
   }
 
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.handleKeyInput)
+  }
+
   componentDidMount () {
     this.props.fetchSubmissions()
+    document.addEventListener('keydown', this.handleKeyInput)
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
     //   1. fetch all entries for the show we're voting on
@@ -82,20 +109,26 @@ class Vote extends Component {
   }
 
   render () {
-    const { show, handleNext, handlePrevious, submission, previous, next } = this.props
+    const {
+      show,
+      handleNext,
+      handlePrevious,
+      submission,
+      previous,
+      next
+    } = this.props
 
     return (
       <Container fluid>
         <Row>
           <Col xs='1'>
-            { previous && previous.id
-              ? (
-                <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
-                  <Previous onClick={handlePrevious}>
-                    <FaChevronLeft size='4em' />
-                  </Previous>
-                </Link>
-              ) : null }
+            {previous && previous.id ? (
+              <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
+                <Previous onClick={handlePrevious}>
+                  <FaChevronLeft size='4em' />
+                </Previous>
+              </Link>
+            ) : null}
           </Col>
           <Col xs='10' style={{ minHeight: '500px' }}>
             <SubmissionContainer>
@@ -103,14 +136,13 @@ class Vote extends Component {
             </SubmissionContainer>
           </Col>
           <Col xs='1'>
-            { next && next.id
-              ? (
-                <Link to={`/show/${show.id}/vote?on=${next.id}`}>
-                  <Next onClick={handleNext}>
-                    <FaChevronRight size='4em' />
-                  </Next>
-                </Link>
-              ) : null }
+            {next && next.id ? (
+              <Link to={`/show/${show.id}/vote?on=${next.id}`}>
+                <Next onClick={handleNext}>
+                  <FaChevronRight size='4em' />
+                </Next>
+              </Link>
+            ) : null}
           </Col>
         </Row>
       </Container>

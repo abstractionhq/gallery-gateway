@@ -16,7 +16,9 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
         id: submissionId
       }
     })
-    .then(({ data: { submission } }) => dispatch({ type: FETCH_SUBMISSION, payload: submission }))
+    .then(({ data: { submission } }) =>
+      dispatch({ type: FETCH_SUBMISSION, payload: submission })
+    )
     .catch(console.error) // TODO: Handle the error
 }
 
@@ -30,7 +32,9 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
         id: showId
       }
     })
-    .then(({ data: { submissions } }) => dispatch({ type: FETCH_SUBMISSIONS, payload: {submissions, username} }))
+    .then(({ data: { submissions } }) =>
+      dispatch({ type: FETCH_SUBMISSIONS, payload: {submissions, username} })
+    )
     .catch(console.error) // TODO: Handle the error
 }
 

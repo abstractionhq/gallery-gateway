@@ -6,7 +6,7 @@ import { uploadImage, clearPreview } from '../actions'
 
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
-import ShowName from '../queries/showName.graphql'
+import ShowForSubmission from '../queries/showForSubmission.graphql'
 
 const mapStateToProps = state => ({
   previewImage: state.student.ui.submission.previewFile || {},
@@ -33,7 +33,7 @@ const withMutations = compose(
         })
     })
   }),
-  graphql(ShowName, {
+  graphql(ShowForSubmission, {
     options: ownProps => ({
       variables: {
         id: ownProps.id

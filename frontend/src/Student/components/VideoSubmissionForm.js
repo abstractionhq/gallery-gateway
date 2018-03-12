@@ -15,6 +15,7 @@ import { Formik, Field } from 'formik'
 import yup from 'yup'
 
 import SuccessModal from './SuccessModal'
+import SubmitAsGroupRadio from './SubmitAsGroupRadio'
 
 const Header = styled.h1`
   margin-bottom: 10px;
@@ -36,7 +37,13 @@ class VideoSubmissionForm extends Component {
     data: PropTypes.shape({
       show: PropTypes.shape({
         id: PropTypes.string,
-        name: PropTypes.string
+        name: PropTypes.string,
+        entries: PropTypes.arrayOf({
+          id: PropTypes.string,
+          student: PropTypes.shape({
+            username: PropTypes.string
+          })
+        })
       })
     }).isRequired,
     create: PropTypes.func.isRequired,
@@ -75,13 +82,21 @@ class VideoSubmissionForm extends Component {
       name: this.props.data.show.name
     }
 
+    // calculate whether the user is beyond their single submissions
+    const numSingleEntries = this.props.data.show.entries.reduce(
+      // if 'student' is non-null, this is a single submission
+      (n, entry) => (entry.student ? n + 1 : n),
+      0
+    )
+    const canSubmitAsSingle = numSingleEntries < this.props.data.show.entryCap
+
     return (
       <Fragment>
         <Formik
           initialValues={{
             academicProgram: '',
             yearLevel: '',
-            submittingAsGroup: 'no',
+            submittingAsGroup: canSubmitAsSingle ? 'no' : 'yes',
             groupParticipants: '',
             title: 'Untitled',
             comment: '',
@@ -177,36 +192,13 @@ class VideoSubmissionForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'yearLevel')}
                   </FormGroup>
-                  <FormGroup>
-                    <Label>Is this a group submission?</Label>
-                    <FormGroup check>
-                      <Label check>
-                        <Field
-                          type='radio'
-                          id='submittingAsGroup'
-                          name='submittingAsGroup'
-                          value='no'
-                          required
-                          checked={values.submittingAsGroup === 'no'}
-                        />
-                        <span className='ml-2'>No</span>
-                      </Label>
-                    </FormGroup>
-                    <FormGroup check>
-                      <Label check>
-                        <Field
-                          type='radio'
-                          id='submittingAsGroup'
-                          name='submittingAsGroup'
-                          value='yes'
-                          required
-                          checked={values.submittingAsGroup === 'yes'}
-                        />
-                        <span className='ml-2'>Yes</span>
-                      </Label>
-                    </FormGroup>
-                    {this.renderErrors(touched, errors, 'submittingAsGroup')}
-                  </FormGroup>
+                  <SubmitAsGroupRadio
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    canSubmitAsSingle={canSubmitAsSingle}
+                    renderErrors={this.renderErrors}
+                  />
                   {values.submittingAsGroup === 'yes' ? (
                     <FormGroup>
                       <Label>List the names of your other group members.</Label>
