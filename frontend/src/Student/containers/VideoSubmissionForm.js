@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import VideoSubmissionForm from '../components/VideoSubmissionForm'
 import CreateVideoEntry from '../mutations/createVideoEntry.graphql'
-import ShowName from '../queries/showName.graphql'
+import ShowForSubmission from '../queries/showForSubmission.graphql'
 
 const mapStateToProps = state => ({
   user: state.shared.auth.user
@@ -27,7 +27,7 @@ const withMutations = compose(
         })
     })
   }),
-  graphql(ShowName, {
+  graphql(ShowForSubmission, {
     options: ownProps => ({
       variables: {
         id: ownProps.id
