@@ -96,8 +96,8 @@ class Vote extends Component {
       .resolve()
       // Fetches submissions, creates shuffle order, sets 'viewing' to 0
       .then(() => this.props.fetchSubmissions())
-      // If /vote, sets 'viewing' to 0 TODO: Set to first un-viewed
-      // If /vote?on=<entry_id>, sets 'viewing' to entry_id's index in the shuffle order, or 0 if not found
+      // If '/vote', sets 'viewing' to 0 TODO: Set to first un-viewed
+      // If '/vote?on=<entry_id>', sets 'viewing' to entry_id's index in the shuffle order, or 0 if not found
       .then(() => this.props.setViewing(on))
 
     document.addEventListener('keydown', this.handleKeyInput)
@@ -107,40 +107,49 @@ class Vote extends Component {
     const { on } = queryString.parse(this.props.location.search)
 
     // We're mounting this component at '/vote'
-    if (this.props.submission === null && !on) {
+    if (!on) {
       // Change the URL to '/vote?on=<entry_id>'
       // Don't keep the history to '/vote'
-      this.props.history.replace(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
-    }
-
-    // If we're mounting this component at '/vote?on=<entry_id>':
-    // 1. On the first render, 'this.props.submission === null'
-    // 2. 'this.props.fetchSubmissions()' will cause a second render
-    // because it changes 'this.props.submission' to be the first submission in the shuffle order
-    // 3. 'this.props.setViewing()' will cause a third render if the
-    // 'entry_id' in the query params is not the id of the first submission in the shuffle order
-    //
-    // Updating the URL for 1 is undesired because this will always start back at the beginning.
-    // Updating the URL for 2 is unnecessary if 'entry_id' is the id of the first submission in
-    // the shuffle order, because it will match the submission that is rendered.
-    // Therefore we only need to update the URL for 3, that is when 'this.props.submission !== null'
-    // and the current and next submissions differ.
-    //
-    // Coincidentally, 'handleNext' and 'handlePrevious' events can be handled with this same check.
-    if (this.props.submission !== null && this.props.submission !== nextProps.submission) {
-      this.props.history.push(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
-    }
-  }
-
-  componentDidUpdate (prevProps) {
-    const { on } = queryString.parse(this.props.location.search)
-    // This will be called if 'on' is not found – replace the URL with the submission we're now viewing
-    if (this.props.submission !== null && this.props.submission === prevProps.submission && prevProps.submission.id !== on) {
-      this.props.history.replace(`/show/${this.props.show.id}/vote?on=${this.props.submission.id}`)
+      if (this.props.submission === null) {
+        // This is the first time we're mounting the page (eg. refresh). We'll get a submission
+        // object from 'fetchSubmissions()' which will be in 'nextProps'
+        this.props.history.replace(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
+      } else {
+        // The shuffle order has already been defined. When we mount this page,
+        // we'll get a 'submission' prop from 'mapStateToProps'
+        this.props.history.replace(`/show/${this.props.show.id}/vote?on=${this.props.submission.id}`)
+      }
+    } else {
+      // We're mounting this component at '/vote?on=<entry_id>':
+      // 1. On the first render, 'this.props.submission === null'
+      // 2. 'this.props.fetchSubmissions()' will cause a second render
+      // because it changes 'this.props.submission' to be the first submission in the shuffle order
+      // 3. 'this.props.setViewing()' will cause a third render if the
+      // 'entry_id' in the query params is not the id of the first submission in the shuffle order
+      //
+      // Updating the URL for 1 is undesired because this will always start back at the beginning.
+      // Updating the URL for 2 is unnecessary if 'entry_id' is the id of the first submission in
+      // the shuffle order, because it will match the submission that is rendered.
+      // Therefore we only need to update the URL for 3, that is when 'this.props.submission !== null'
+      // and the current and next submissions differ.
+      //
+      // Coincidentally, 'handleNext' and 'handlePrevious' events can be handled with this same check.
+      if (this.props.submission !== null &&
+          nextProps.submission.id !== queryString.parse(nextProps.location.search).on) {
+        if (this.props.submission !== nextProps.submission) {
+          this.props.history.push(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
+        } else if (on === queryString.parse(nextProps.location.search).on && !this.props.location.key) {
+          // We're mounting this component at '/vote?on=<entry_id>' with an 'entry_id' that is invalid.
+          // BUG: '!this.props.location.key' will be 'undefined' on first page load,
+          // so loading the page, going forward/backwards once, and then using the back button will not work – the URL update is overwriten
+          this.props.history.replace(`/show/${this.props.show.id}/vote?on=${this.props.submission.id}`)
+        }
+      }
     }
   }
 
   componentWillUnmount () {
+    this.props.setViewing() // Reset the viewing order to prevent an extra first render on revisits
     document.removeEventListener('keydown', this.handleKeyInput)
   }
 
@@ -190,7 +199,7 @@ const mapStateToProps = (state, ownProps) => {
     show: {
       id: showId
     },
-    submission: viewing !== null ? submissions[order[viewing]] : null
+    submission: submissions[order[viewing]] // If 'undefined', the defaultProp will be used
   }
 
   // Show the previous button
