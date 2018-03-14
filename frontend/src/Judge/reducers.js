@@ -63,6 +63,30 @@ const queue = (state = initialQueueState, action) => {
         ...state,
         order: shuffledOrder
       }
+    case actions.SET_VIEWING:
+      if (action.payload.on) {
+        const indexOfOn = order.indexOf(action.payload.on)
+        // If we found 'on' in the shuffle order
+        if (indexOfOn > -1) {
+          // Set viewing to that index
+          return {
+            ...state,
+            viewing: indexOfOn
+          }
+        } else {
+          // View the first submission in the shuffle order
+          return {
+            ...state,
+            viewing: 0
+          }
+        }
+      } else {
+        // TODO: Change to the first unvoted entry in the shuffle order
+        return {
+          ...state,
+          viewing: 0
+        }
+      }
     case actions.NEXT_IN_QUEUE:
       return {
         ...state,
@@ -124,6 +148,7 @@ const queues = (state = {}, action) => {
       )
     case actions.NEXT_IN_QUEUE:
     case actions.PREVIOUS_IN_QUEUE:
+    case actions.SET_VIEWING:
       if (!action.payload.id) {
         return state
       }

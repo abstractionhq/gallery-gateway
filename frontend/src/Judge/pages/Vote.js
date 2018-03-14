@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
+import queryString from 'query-string'
 
-import { nextInQueue, previousInQueue, fetchSubmissions } from '../actions'
+import { nextInQueue, previousInQueue, fetchSubmissions, setViewing } from '../actions'
 import Submission from '../components/Submission'
 
 const Arrow = styled.span`
@@ -40,28 +40,6 @@ const SubmissionContainer = styled.section`
 `
 
 class Vote extends Component {
-  handleKeyInput = e => {
-    const {
-      show,
-      handleNext,
-      handlePrevious,
-      submission,
-      previous,
-      next
-    } = this.props
-    if (e.key === 'ArrowRight') {
-      if (next && next.id) {
-        handleNext()
-        this.props.history.push(`/show/${show.id}/vote?on=${next.id}`)
-      }
-    } else if (e.key === 'ArrowLeft') {
-      if (previous && previous.id) {
-        handlePrevious()
-        this.props.history.push(`/show/${show.id}/vote?on=${previous.id}`)
-      }
-    }
-  }
-
   static propTypes = {
     show: PropTypes.shape({
       id: PropTypes.string
@@ -69,48 +47,105 @@ class Vote extends Component {
     handlePrevious: PropTypes.func.isRequired,
     handleNext: PropTypes.func.isRequired,
     fetchSubmissions: PropTypes.func.isRequired,
-    submission: PropTypes.object,
+    submission: PropTypes.shape({
+      id: PropTypes.string
+    }),
     previous: PropTypes.shape({
       id: PropTypes.string
     }),
     next: PropTypes.shape({
       id: PropTypes.string
-    })
+    }),
+    history: PropTypes.shape({
+      push: PropTypes.func,
+      replace: PropTypes.func
+    }).isRequired,
+    location: PropTypes.shape({
+      search: PropTypes.string
+    }).isRequired
   }
 
   static defaultProps = {
     submission: null
   }
 
+  handleKeyInput = e => {
+    const {
+      handleNext,
+      handlePrevious,
+      previous,
+      next
+    } = this.props
+
+    if (e.key === 'ArrowRight') {
+      if (next && next.id) {
+        handleNext()
+      }
+    } else if (e.key === 'ArrowLeft') {
+      if (previous && previous.id) {
+        handlePrevious()
+      }
+    }
+  }
+
+  componentDidMount () {
+    const { on } = queryString.parse(this.props.location.search)
+    // Need to call these (and have them finish) in order,
+    // so that when we set 'viewing', there exists shuffle order
+    Promise
+      .resolve()
+      // Fetches submissions, creates shuffle order, sets 'viewing' to 0
+      .then(() => this.props.fetchSubmissions())
+      // If /vote, sets 'viewing' to 0 TODO: Set to first un-viewed
+      // If /vote?on=<entry_id>, sets 'viewing' to entry_id's index in the shuffle order, or 0 if not found
+      .then(() => this.props.setViewing(on))
+
+    document.addEventListener('keydown', this.handleKeyInput)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { on } = queryString.parse(this.props.location.search)
+
+    // We're mounting this component at '/vote'
+    if (this.props.submission === null && !on) {
+      // Change the URL to '/vote?on=<entry_id>'
+      // Don't keep the history to '/vote'
+      this.props.history.replace(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
+    }
+
+    // If we're mounting this component at '/vote?on=<entry_id>':
+    // 1. On the first render, 'this.props.submission === null'
+    // 2. 'this.props.fetchSubmissions()' will cause a second render
+    // because it changes 'this.props.submission' to be the first submission in the shuffle order
+    // 3. 'this.props.setViewing()' will cause a third render if the
+    // 'entry_id' in the query params is not the id of the first submission in the shuffle order
+    //
+    // Updating the URL for 1 is undesired because this will always start back at the beginning.
+    // Updating the URL for 2 is unnecessary if 'entry_id' is the id of the first submission in
+    // the shuffle order, because it will match the submission that is rendered.
+    // Therefore we only need to update the URL for 3, that is when 'this.props.submission !== null'
+    // and the current and next submissions differ.
+    //
+    // Coincidentally, 'handleNext' and 'handlePrevious' events can be handled with this same check.
+    if (this.props.submission !== null && this.props.submission !== nextProps.submission) {
+      this.props.history.push(`/show/${this.props.show.id}/vote?on=${nextProps.submission.id}`)
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    const { on } = queryString.parse(this.props.location.search)
+    // This will be called if 'on' is not found – replace the URL with the submission we're now viewing
+    if (this.props.submission !== null && this.props.submission === prevProps.submission && prevProps.submission.id !== on) {
+      this.props.history.replace(`/show/${this.props.show.id}/vote?on=${this.props.submission.id}`)
+    }
+  }
+
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleKeyInput)
   }
 
-  componentDidMount () {
-    this.props.fetchSubmissions()
-    document.addEventListener('keydown', this.handleKeyInput)
-    // TODO:
-    // a) If we're visiting this page for the first time (/vote)
-    //   1. fetch all entries for the show we're voting on
-    //   2. create the shuffle order
-    //   3. identify the first unvoted entry; set the 'viewing' state properly
-    //   4. go to the route /show/<show_id>/vote?on=<entry_id> so that the page will re-render populated w/ the entry
-    // b) If we're visiting a specific entry for the first time (/vote?on=<entry_id>) (i.e. refresh)
-    //   1. fetch all entries for the show we're voting on
-    //   2. create the shuffle order
-    //   3. update the 'viewing' state based on the entry in the query param
-    //   4. render the entry in the query param
-    // c) If we're returning to this page (/vote) (i.e. entries and shuffle order exist)
-    //   1. identify the first unvoted entry; set the 'viewing' state properly
-    //   2. go to the route /show/<show_id>/vote?on=<entry_id> so that the page will re-render populated w/ the entry
-    // d) If we're returning to a specific entry on this page (/vote?on=<entry_id>) (i.e. from a) 4. or from review page)
-    //   1. update the 'viewing' state based on the entry in the query param (if they don't already match)
-    //   2. render the entry in the query param
-  }
-
   render () {
     const {
-      show,
       handleNext,
       handlePrevious,
       submission,
@@ -123,11 +158,9 @@ class Vote extends Component {
         <Row>
           <Col xs='1'>
             {previous && previous.id ? (
-              <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
-                <Previous onClick={handlePrevious}>
-                  <FaChevronLeft size='4em' />
-                </Previous>
-              </Link>
+              <Previous onClick={handlePrevious}>
+                <FaChevronLeft size='4em' />
+              </Previous>
             ) : null}
           </Col>
           <Col xs='10' style={{ minHeight: '500px' }}>
@@ -137,11 +170,9 @@ class Vote extends Component {
           </Col>
           <Col xs='1'>
             {next && next.id ? (
-              <Link to={`/show/${show.id}/vote?on=${next.id}`}>
-                <Next onClick={handleNext}>
-                  <FaChevronRight size='4em' />
-                </Next>
-              </Link>
+              <Next onClick={handleNext}>
+                <FaChevronRight size='4em' />
+              </Next>
             ) : null}
           </Col>
         </Row>
@@ -185,7 +216,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handlePrevious: () => dispatch(previousInQueue(showId)),
     handleNext: () => dispatch(nextInQueue(showId)),
-    fetchSubmissions: () => dispatch(fetchSubmissions(showId))
+    fetchSubmissions: () => dispatch(fetchSubmissions(showId)),
+    setViewing: (on) => dispatch(setViewing(showId, on))
   }
 }
 

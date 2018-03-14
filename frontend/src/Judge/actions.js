@@ -7,6 +7,7 @@ export const FETCH_SUBMISSIONS = 'FETCH_SUBMISSIONS'
 export const FETCH_VOTES = 'FETCH_VOTES'
 export const NEXT_IN_QUEUE = 'NEXT_IN_QUEUE'
 export const PREVIOUS_IN_QUEUE = 'PREVIOUS_IN_QUEUE'
+export const SET_VIEWING = 'SET_VIEWING'
 
 export const fetchSubmission = submissionId => (dispatch, getState, client) => {
   return client
@@ -57,4 +58,8 @@ export const nextInQueue = id => (dispatch, getState, client) => {
 
 export const previousInQueue = id => (dispatch, getState, client) => {
   dispatch({ type: PREVIOUS_IN_QUEUE, payload: { id } })
+}
+
+export const setViewing = (id, on) => (dispatch, getState, client) => {
+  dispatch({ type: SET_VIEWING, payload: { id, on } })
 }
