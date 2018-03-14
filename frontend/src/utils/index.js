@@ -26,24 +26,24 @@ export const createLoading = namespace => type => ({
  * @returns {[any]} the shuffled array
  */
 export function repeatableShuffle (key, arr, identifier) {
-  // make a copy of the array so the original is unmodified
+  // Make a copy of the array so the original is unmodified
   arr = arr.slice()
-  // first we sort everything by its identifier, to ensure stability of
+  // First we sort everything by its identifier, to ensure stability of
   // following shuffle
   arr.sort((a, b) => {
     const idA = identifier(a)
     const idB = identifier(b)
     return idA > idB ? 1 : idA === idB ? 0 : -1
   })
-  // modified knuth-shuffle
-  for (let i=0; i<arr.length-1; i++) {
+  // Modified knuth-shuffle
+  for (let i = 0; i < arr.length - 1; i++) {
     const hash = new MD5()
       .update(`${key}${identifier(arr[i])}`)
       .digest()
-    // use hash to generate 'j' such that i <= j < NUM_ELEMS
+    // Use hash to generate 'j' such that i <= j < NUM_ELEMS
     const range = arr.length - i - 1
     const j = i + (hash.readUInt32LE(0) % range)
-    // swap elems[i], elems[j]
+    // Swap elems[i], elems[j]
     const tmp = arr[i]
     arr[i] = arr[j]
     arr[j] = tmp

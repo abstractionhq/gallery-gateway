@@ -163,14 +163,14 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   // Show the previous button
-  if (viewing != null && viewing > 0) {
+  if (viewing !== null && viewing > 0) {
     obj.previous = {
       id: order[viewing - 1]
     }
   }
 
   // Show the next button
-  if (viewing != null && viewing < order.length) {
+  if (viewing !== null && viewing < order.length) {
     obj.next = {
       id: order[viewing + 1]
     }

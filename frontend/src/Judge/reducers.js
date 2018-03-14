@@ -23,14 +23,11 @@ const submissions = (state = {}, action) => {
         }
       }
     case actions.FETCH_SUBMISSIONS:
-      const {
-        submissions
-      } = action.payload
-      if (!submissions.length) {
+      if (!action.payload.submissions.length) {
         return state
       }
 
-      const submissionsById = submissions.reduce((accum, submission) => {
+      const submissionsById = action.payload.submissions.reduce((accum, submission) => {
         accum[submission.id] = submission
         return accum
       }, {})
@@ -43,7 +40,6 @@ const submissions = (state = {}, action) => {
   }
 }
 
-// TODO: Produce 'order' based on shuffling the entry id's that are in this show
 // TODO: Calculate 'viewing' based on the first unvoted entry in 'order'
 const initialQueueState = {
   order: [], // Array of entry id's
@@ -89,36 +85,39 @@ const queue = (state = initialQueueState, action) => {
 // Each show has a queue whose key in the queues state is the show's id
 // Example State:
 // {
-//   1: {order: [1, 2, 3], viewing: 0},
-//   2: {order: [9, 4, 5, 8, 6, 7], viewing: 5}
+//   1: {order: ['1', '2', '3'], viewing: 0},
+//   2: {order: ['9', '4', '5', '8', '6', '7'], viewing: 5}
 // }
 const queues = (state = {}, action) => {
   // Proxy all queue actions to the particular queue we want to target
   switch (action.type) {
     case actions.FETCH_SUBMISSIONS:
-      const {
-        submissions,
-        username
-      } = action.payload
-      // First, gather the submissions by show ID (they _should_ be all the same
-      // ID anyway, but just in case)
-      const submissionsByShowId = submissions.reduce(
+      // First, gather the submissions by show ID
+      // (they _should_ be all the same ID anyway, but just in case)
+      // Example:
+      // {1: [{id: "1", show: {id: "1"}}, {id: "2", show: {id: "1"}}, {id: "3", show: {id: "1"}}]}
+      const submissionsByShowId = action.payload.submissions.reduce(
         (accum, submission) => ({
           ...accum,
           [submission.show.id]: [
+            // The accumulated submissions w/ the same show id,
+            // or an empty array (when spread will be nothing) if there aren't any yet
             ...(accum[submission.show.id] || []),
             submission
           ]
         }),
         {}
       )
-      // proxy the action to each subqueue
+      // Proxy the action to each subqueue
       return Object.entries(submissionsByShowId).reduce(
         (accum, [showId, submissions]) => ({
           ...accum,
           [showId]: queue(
             accum[showId],
-            {type: actions.FETCH_SUBMISSIONS, payload: {submissions, username}}
+            {
+              type: actions.FETCH_SUBMISSIONS,
+              payload: {submissions, username: action.payload.username}
+            }
           )
         }),
         state

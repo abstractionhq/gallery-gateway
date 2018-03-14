@@ -23,8 +23,7 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
 }
 
 export const fetchSubmissions = showId => (dispatch, getState, client) => {
-  // const {shared: {auth: {username}}} = getState()
-  const username = 'me'
+  const {shared: {auth: {username}}} = getState()
   return client
     .query({
       query: SubmissionsQuery,
