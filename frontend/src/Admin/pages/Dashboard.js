@@ -12,6 +12,7 @@ const Dashboard = () => (
         <h1>Dashboard</h1>
       </Col>
       <Col md='3'>
+        <Status />
         <Button
           color='primary'
           className='btn-block'

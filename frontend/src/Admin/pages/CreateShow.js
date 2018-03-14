@@ -7,6 +7,7 @@ import CreateShowForm from '../containers/CreateShowForm'
 const CreateShow = () => (
   <Container>
     <h1>Create Show</h1>
+    <Status />
     <CreateShowForm />
   </Container>
 )

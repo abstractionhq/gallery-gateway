@@ -6,6 +6,7 @@ const ManageJudges = () => (
   <Container>
     <Row>
       <Col>
+        <Status />
         <h1>ManageJudges</h1>
       </Col>
     </Row>

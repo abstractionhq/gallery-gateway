@@ -36,6 +36,7 @@ class AssignJudges extends Component {
     return (
       <Container fluid>
         <Heading>Assign Judges | {show.name}</Heading>
+        <Status />
         <AssignJudgesTable showId={show.id} />
         <FormContainer>
           <CreateJudgeForm />

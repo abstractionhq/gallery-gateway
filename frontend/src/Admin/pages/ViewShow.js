@@ -6,6 +6,7 @@ const ViewShow = () => (
   <Container>
     <Row>
       <Col>
+        <Status />
         <h1>ViewShow</h1>
       </Col>
     </Row>
