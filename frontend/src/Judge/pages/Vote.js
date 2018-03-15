@@ -9,6 +9,7 @@ import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
 import { nextInQueue, previousInQueue } from '../actions'
 import Submission from '../components/Submission'
+import VotePanel from '../components/VotePanel'
 
 const Arrow = styled.span`
   color: black;
@@ -37,6 +38,9 @@ const SubmissionContainer = styled.section`
   height: 100%;
   text-align: center;
   width: 100%;
+`
+const VoteContainer = styled.section`
+  text-align: center;
 `
 
 class Vote extends Component {
@@ -81,11 +85,11 @@ class Vote extends Component {
     submission: null
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyInput)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     document.addEventListener('keydown', this.handleKeyInput)
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
@@ -106,7 +110,7 @@ class Vote extends Component {
     //   2. render the entry in the query param
   }
 
-  render () {
+  render() {
     const {
       show,
       handleNext,
@@ -132,6 +136,9 @@ class Vote extends Component {
             <SubmissionContainer>
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>
+            <VoteContainer>
+              <VotePanel />
+            </VoteContainer>
           </Col>
           <Col xs='1'>
             {next && next.id ? (

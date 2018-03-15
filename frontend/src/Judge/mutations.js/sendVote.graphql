@@ -1,0 +1,5 @@
+mutation sendVote($input: VoteInput!) {
+  vote(input: $input) {
+    value
+  }
+}
