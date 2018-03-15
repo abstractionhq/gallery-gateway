@@ -9,20 +9,16 @@ const VoteSpacing = styled.span`
 
 class VotePanel extends Component {
   static propTypes = {
-    // user: PropTypes.shape({
-    //   username: PropTypes.string
-    // }).isRequired,
-    vote: PropTypes.func.isRequired,
-   // entryId: PropTypes.string.isRequired
+    vote: PropTypes.func.isRequired
   }
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       alertVisible: false
     }
   }
 
-  onDismiss() {
+  onDismiss () {
     this.setState({ alertVisible: false })
   }
 
@@ -32,22 +28,19 @@ class VotePanel extends Component {
     console.log(score)
   }
 
-  render() {
-    const { vote, user, entryId } = this.props
-    const input = {
-      judgeUsername: 'user1',
-      entryId: entryId,
-      score: 0
-    }
+  render () {
+    const {
+      vote
+    } = this.props
     return (
       <div>
         <ButtonGroup >
-          <VoteSpacing><Button color="primary" size="lg" onClick={() => vote(input)} >No</Button></VoteSpacing>
-          <VoteSpacing><Button color="primary" size="lg" onClick={() => this.sendVote(1)} >Maybe</Button></VoteSpacing>
-          <VoteSpacing><Button color="primary" size="lg" onClick={() => this.sendVote(2)} >Yes</Button></VoteSpacing>
+          <VoteSpacing><Button color="primary" size="lg" onClick={() => vote(0)}>No</Button></VoteSpacing>
+          <VoteSpacing><Button color="primary" size="lg" onClick={() => vote(1)}>Maybe</Button></VoteSpacing>
+          <VoteSpacing><Button color="primary" size="lg" onClick={() => vote(2)}>Yes</Button></VoteSpacing>
         </ButtonGroup>
         <Alert color="success" isOpen={this.state.alertVisible} toggle={() => this.onDismiss()}>
-          Vote Saved  
+          Vote Saved
         </Alert>
       </div>
     )
