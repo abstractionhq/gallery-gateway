@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
+  mode: 'development',
   entry: {
     main: [
       'react-hot-loader/patch',
@@ -23,8 +24,8 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     modules: [
-      path.resolve('./src'),
-      'node_modules'
+      'node_modules',
+      path.resolve('./src')
     ]
   },
   devtool: 'cheap-module-source-map',
