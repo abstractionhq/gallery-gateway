@@ -6,7 +6,7 @@ import { ADMIN, JUDGE } from '../../constants'
 
 export function votes (_, args, req) {
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-    req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+  req.auth.type === JUDGE && req.auth.username === args.judgeUsername
   if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }
@@ -17,6 +17,20 @@ export function votes (_, args, req) {
     // search for the entires that match the permission constraints
     const entryIds = showEntries.map(entry => entry.id)
     return getVotes(args.judgeUsername, req.auth.type, entryIds)
+  })
+}
+
+export function vote(_, args, req) {
+  const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
+  req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+  if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
+    throw new UserError('Permission Denied')
+  }
+  return Vote.find({
+    where: {
+      judgeUsername: args.judgeUsername,
+      entryId: args.entryId
+    }
   })
 }
 

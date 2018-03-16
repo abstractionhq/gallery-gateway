@@ -9,7 +9,7 @@ import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
 import { nextInQueue, previousInQueue } from '../actions'
 import Submission from '../components/Submission'
-import VotePanel from '../components/VotePanel'
+import VotePanel from '../containers/VotePanel'
 
 const Arrow = styled.span`
   color: black;

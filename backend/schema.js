@@ -202,6 +202,7 @@ type Query {
     show(id: ID!): Show
     groups: [Group]
     shows(orderBy: OrderByItem, studentUsername: String): [Show]
+    vote(entryId: ID!, judgeUsername: String!): Vote
     votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video

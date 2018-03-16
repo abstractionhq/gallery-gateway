@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import VotePanel from '../components/VotePanel'
 import SendVote from '../mutations/sendVote.graphql'
+import GetVote from '../queries/entryVote.graphql'
 
 const withMutations = compose(
   graphql(SendVote, {
@@ -16,6 +17,14 @@ const withMutations = compose(
           }
         }
       })
+    })
+  }),
+  graphql(GetVote, {
+    options: ownProps => ({
+      variables: {
+        entryId: ownProps.entryId,
+        judgeUsername: ownProps.user.username
+      }
     })
   })
 )(VotePanel)
