@@ -170,13 +170,12 @@ export function fakeVoteReturnShowId (opts) {
     .then((models) => {
       const entry = models[0]
       const user = models[1]
-      return user.addShow(entry.showId).then(() => {
+      return user.addShow(entry.showId).then(() =>
         Vote.create({
           judgeUsername: user.username,
           entryId: entry.id,
           value: opts.value
-        })
-        return entry.showId
-      })
+        }).then(() => entry.showId)
+      )
     })
 }

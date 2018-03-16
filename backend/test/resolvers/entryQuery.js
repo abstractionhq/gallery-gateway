@@ -295,13 +295,11 @@ describe('Entry Queries', function () {
       it('Can return a score on an entry that has votes', () =>
         // make an entry and give it two votes w/ average score 1.5
         fakeImageEntry()
-          // 'tap' says do this block but ignore its return value, passing entry
-          // on to the next `.then()`
-          .tap(entry =>
+          .then(entry =>
             Promise.all([
               fakeVoteReturnShowId({ entry, value: 1 }),
               fakeVoteReturnShowId({ entry, value: 2 })
-            ])
+            ]).then(() => entry)
           )
           .then(entry =>
             execGraphql(
