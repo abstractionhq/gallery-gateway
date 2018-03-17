@@ -17,7 +17,16 @@ const withMutations = compose(
               value
             }
           }
-        })
+        }),
+      refetchQueries: [
+        {
+          query: GetVote,
+          variables: {
+            entryId: ownProps.entryId,
+            judgeUsername: ownProps.user.username
+          }
+        }
+      ]
     })
   }),
   graphql(GetVote, {
