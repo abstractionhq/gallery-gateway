@@ -36,13 +36,11 @@ export function repeatableShuffle (key, arr, identifier) {
     return idA > idB ? 1 : idA === idB ? 0 : -1
   })
   // modified knuth-shuffle
-  for (let i=0; i<arr.length-1; i++) {
-    const hash = new MD5()
-      .update(`${key}${identifier(arr[i])}`)
-      .digest()
+  for (let i = 0; i < arr.length - 1; i++) {
+    const hash = new MD5().update(`${key}${identifier(arr[i])}`).digest()
     // use hash to generate 'j' such that i <= j < NUM_ELEMS
     const range = arr.length - i - 1
-    const j = i + (hash.readUInt32LE(0) % range)
+    const j = i + hash.readUInt32LE(0) % range
     // swap elems[i], elems[j]
     const tmp = arr[i]
     arr[i] = arr[j]

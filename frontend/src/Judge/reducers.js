@@ -27,10 +27,13 @@ const submissions = (state = {}, action) => {
         return state
       }
 
-      const submissionsById = action.payload.submissions.reduce((accum, submission) => {
-        accum[submission.id] = submission
-        return accum
-      }, {})
+      const submissionsById = action.payload.submissions.reduce(
+        (accum, submission) => {
+          accum[submission.id] = submission
+          return accum
+        },
+        {}
+      )
       return {
         ...state,
         ...submissionsById
@@ -52,7 +55,9 @@ const queue = (state = initialQueueState, action) => {
 
   switch (action.type) {
     case actions.FETCH_SUBMISSIONS:
-      const submissionIds = action.payload.submissions.map(submission => submission.id)
+      const submissionIds = action.payload.submissions.map(
+        submission => submission.id
+      )
       const shuffledOrder = repeatableShuffle(
         action.payload.username,
         submissionIds,
@@ -98,10 +103,7 @@ const queues = (state = {}, action) => {
       const showId = action.payload.submissions[0].show.id
       return {
         ...state,
-        [showId]: queue(
-          state[showId],
-          action
-        )
+        [showId]: queue(state[showId], action)
       }
     case actions.NEXT_IN_QUEUE:
     case actions.PREVIOUS_IN_QUEUE:

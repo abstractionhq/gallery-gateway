@@ -86,16 +86,12 @@ class Vote extends Component {
     submission: null
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('keydown', this.handleKeyInput)
   }
 
-<<<<<<< HEAD
-  componentDidMount() {
-=======
   componentDidMount () {
     this.props.fetchSubmissions()
->>>>>>> master
     document.addEventListener('keydown', this.handleKeyInput)
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
@@ -116,7 +112,7 @@ class Vote extends Component {
     //   2. render the entry in the query param
   }
 
-  render() {
+  render () {
     const {
       show,
       handleNext,

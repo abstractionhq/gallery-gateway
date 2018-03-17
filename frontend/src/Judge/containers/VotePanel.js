@@ -8,15 +8,16 @@ import GetVote from '../queries/entryVote.graphql'
 const withMutations = compose(
   graphql(SendVote, {
     props: ({ mutate, ownProps }) => ({
-      vote: (value) => mutate({
-        variables: {
-          input: {
-            judgeUsername: ownProps.user.username,
-            entryId: ownProps.entryId,
-            value
+      vote: value =>
+        mutate({
+          variables: {
+            input: {
+              judgeUsername: ownProps.user.username,
+              entryId: ownProps.entryId,
+              value
+            }
           }
-        }
-      })
+        })
     })
   }),
   graphql(GetVote, {

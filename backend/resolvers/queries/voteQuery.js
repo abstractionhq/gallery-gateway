@@ -6,7 +6,7 @@ import { ADMIN, JUDGE } from '../../constants'
 
 export function votes (_, args, req) {
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-  req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+    req.auth.type === JUDGE && req.auth.username === args.judgeUsername
   if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }
@@ -20,9 +20,9 @@ export function votes (_, args, req) {
   })
 }
 
-export function vote(_, args, req) {
+export function vote (_, args, req) {
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
-  req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+    req.auth.type === JUDGE && req.auth.username === args.judgeUsername
   if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
     throw new UserError('Permission Denied')
   }

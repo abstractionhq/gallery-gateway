@@ -23,7 +23,7 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
 }
 
 export const fetchSubmissions = showId => (dispatch, getState, client) => {
-  const {shared: {auth: {username}}} = getState()
+  const { shared: { auth: { username } } } = getState()
   return client
     .query({
       query: SubmissionsQuery,
@@ -32,13 +32,13 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { submissions } }) =>
-      dispatch({ type: FETCH_SUBMISSIONS, payload: {submissions, username} })
+      dispatch({ type: FETCH_SUBMISSIONS, payload: { submissions, username } })
     )
     .catch(console.error) // TODO: Handle the error
 }
 
 export const fetchVotes = showId => (dispatch, getState, client) => {
-  const {shared: {auth: {username}}} = getState()
+  const { shared: { auth: { username } } } = getState()
   return client
     .query({
       query: ShowVotes,
@@ -47,7 +47,9 @@ export const fetchVotes = showId => (dispatch, getState, client) => {
         username
       }
     })
-    .then(({ data: { votes } }) => dispatch({type: FETCH_VOTES, payload: votes}))
+    .then(({ data: { votes } }) =>
+      dispatch({ type: FETCH_VOTES, payload: votes })
+    )
     .catch(console.error) // TODO: Handle the error
 }
 

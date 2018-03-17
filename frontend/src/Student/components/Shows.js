@@ -21,11 +21,7 @@ const Shows = ({ shows, loading }) => {
       </NoShowsContainer>
     )
   }
-  return (
-    <div>
-      {shows.map(show => <ShowCard key={show.id} show={show} />)}
-    </div>
-  )
+  return <div>{shows.map(show => <ShowCard key={show.id} show={show} />)}</div>
 }
 
 Shows.propTypes = {

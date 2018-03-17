@@ -10,46 +10,74 @@ const VoteSpacing = styled.span`
 class VotePanel extends Component {
   static propTypes = {
     vote: PropTypes.func.isRequired,
-    data: PropTypes.shape({ 
+    data: PropTypes.shape({
       vote: PropTypes.shape({
         value: PropTypes.number
       })
     })
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       alertVisible: false
     }
   }
 
-  onDismiss() {
+  onDismiss () {
     this.setState({ alertVisible: false })
   }
 
-  handleVote() {
+  handleVote () {
     // TODO: Notify on errors
     this.setState({ alertVisible: true })
     setTimeout(() => {
       this.setState({ alertVisible: false })
-    }, 3000);
+    }, 3000)
   }
 
-  render() {
-    const {
-      vote,
-      data
-    } = this.props
+  render () {
+    const { vote, data } = this.props
     const entryVote = data.vote
     return (
       <div>
-        <ButtonGroup >
-          <VoteSpacing><Button color="primary" size="lg" active={entryVote && entryVote.value === 0} onClick={() => vote(0).then(this.handleVote())}>No</Button></VoteSpacing>
-          <VoteSpacing><Button color="primary" size="lg" active={entryVote && entryVote.value === 1} onClick={() => vote(1).then(this.handleVote())}>Maybe</Button></VoteSpacing>
-          <VoteSpacing><Button color="primary" size="lg" active={entryVote && entryVote.value === 2} onClick={() => vote(2).then(this.handleVote())}>Yes</Button></VoteSpacing>
+        <ButtonGroup>
+          <VoteSpacing>
+            <Button
+              color='primary'
+              size='lg'
+              active={entryVote && entryVote.value === 0}
+              onClick={() => vote(0).then(this.handleVote())}
+            >
+              No
+            </Button>
+          </VoteSpacing>
+          <VoteSpacing>
+            <Button
+              color='primary'
+              size='lg'
+              active={entryVote && entryVote.value === 1}
+              onClick={() => vote(1).then(this.handleVote())}
+            >
+              Maybe
+            </Button>
+          </VoteSpacing>
+          <VoteSpacing>
+            <Button
+              color='primary'
+              size='lg'
+              active={entryVote && entryVote.value === 2}
+              onClick={() => vote(2).then(this.handleVote())}
+            >
+              Yes
+            </Button>
+          </VoteSpacing>
         </ButtonGroup>
-        <Alert color="success" isOpen={this.state.alertVisible} toggle={() => this.onDismiss()}>
+        <Alert
+          color='success'
+          isOpen={this.state.alertVisible}
+          toggle={() => this.onDismiss()}
+        >
           Vote Saved
         </Alert>
       </div>
