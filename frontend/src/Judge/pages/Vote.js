@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
-import { nextInQueue, previousInQueue } from '../actions'
+import { nextInQueue, previousInQueue, fetchSubmissions } from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
 
@@ -72,12 +72,13 @@ class Vote extends Component {
     }).isRequired,
     handlePrevious: PropTypes.func.isRequired,
     handleNext: PropTypes.func.isRequired,
+    fetchSubmissions: PropTypes.func.isRequired,
     submission: PropTypes.object,
     previous: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     }),
     next: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     })
   }
 
@@ -89,7 +90,12 @@ class Vote extends Component {
     document.removeEventListener('keydown', this.handleKeyInput)
   }
 
+<<<<<<< HEAD
   componentDidMount() {
+=======
+  componentDidMount () {
+    this.props.fetchSubmissions()
+>>>>>>> master
     document.addEventListener('keydown', this.handleKeyInput)
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
@@ -157,25 +163,25 @@ class Vote extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const showId = ownProps.match.params.id
-  const { order, viewing } = state.judge.queues[showId]
+  const { order = [], viewing = null } = state.judge.queues[showId] || {}
   const submissions = state.judge.submissions
 
   const obj = {
     show: {
       id: showId
     },
-    submission: submissions[order[viewing]]
+    submission: viewing !== null ? submissions[order[viewing]] : null
   }
 
   // Show the previous button
-  if (viewing > 0) {
+  if (viewing !== null && viewing > 0) {
     obj.previous = {
       id: order[viewing - 1]
     }
   }
 
   // Show the next button
-  if (viewing < order.length) {
+  if (viewing !== null && viewing < order.length) {
     obj.next = {
       id: order[viewing + 1]
     }
@@ -189,7 +195,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
   return {
     handlePrevious: () => dispatch(previousInQueue(showId)),
-    handleNext: () => dispatch(nextInQueue(showId))
+    handleNext: () => dispatch(nextInQueue(showId)),
+    fetchSubmissions: () => dispatch(fetchSubmissions(showId))
   }
 }
 

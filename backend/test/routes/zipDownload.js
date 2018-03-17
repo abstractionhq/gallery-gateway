@@ -168,19 +168,24 @@ describe('downloading a zip file', () => {
               expect(Object.keys(zip.files).length)
                 .to.eq(3, 'should have one folder and two files')
               expect(zip.files['invited/']).to.exist
+              // NOTE: we don't know which is fileA or fileB, just need to
+              // make sure that they're both there
               const zobj1 = zip.file(
                 `invited/${user.lastName} ${user.firstName} - Untitled.jpg`
               )
               const zobj2 = zip.file(
                 `invited/${user.lastName} ${user.firstName} - Untitled (1).jpg`
               )
-              return zobj1.async('nodebuffer')
-                .then(buf => {
-                  expect(hash(buf)).to.eq(fileAHash)
-                })
-                .then(() => zobj2.async('nodebuffer'))
-                .then(buf => {
-                  expect(hash(buf)).to.eq(fileBHash)
+              return Promise.all([
+                zobj1.async('nodebuffer'),
+                zobj2.async('nodebuffer')
+              ])
+                .then(([buf1, buf2]) => {
+                  const hash1 = hash(buf1)
+                  const hash2 = hash(buf2)
+                  expect(hash1).to.not.eq(hash2)
+                  expect(hash1).to.be.oneOf([fileAHash, fileBHash])
+                  expect(hash2).to.be.oneOf([fileAHash, fileBHash])
                 })
             })
         )
