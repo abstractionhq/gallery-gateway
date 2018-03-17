@@ -1,5 +1,5 @@
-query Shows {
-  shows(orderBy: { sort: "entryStart", direction: DESC }) {
+query Shows($studentUsername: String!) {
+  shows(orderBy: { sort: "entryStart", direction: DESC }, studentUsername: $studentUsername) {
     id
     name
     entryStart
