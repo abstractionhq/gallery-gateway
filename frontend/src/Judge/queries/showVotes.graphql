@@ -1,0 +1,9 @@
+query ShowVotes($showId: ID!, $username: String!) {
+  votes(showId: $showId, judgeUsername: $username) {
+    id,
+    entry {
+      id
+    },
+    value
+  }
+}

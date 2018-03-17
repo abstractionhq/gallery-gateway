@@ -1,3 +1,4 @@
+import Show from '../../models/show'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
 
 // For Convenience: the 'base class' of functions for Photo / Video / OtherMedia
@@ -11,6 +12,9 @@ export const EntryBase = {
   },
   score (entry) {
     return entry.getScore()
+  },
+  show (entry) {
+    return Show.findById(entry.showId)
   },
   // Returning entry type directly on the base class, for convenience
   entryType (entry) {

@@ -13,16 +13,24 @@ import { execGraphql } from '../util'
 describe('Entry Queries', function () {
   describe('Entries Query', function () {
     describe('Validation', function () {
-      it('Rejects non-admins who are searching for someone else', function () {
-        expect(() => entries('', { studentUsername: 'different' },
-          { auth: { type: 'STUDENT', username: 'abc123' } }))
-          .to.throw('Permission Denied')
-      })
-      it('Rejects non-admins who are looking for all entries', function () {
-        expect(() => entries('', {},
-          { auth: { type: 'STUDENT', username: 'abc123' } }))
-          .to.throw('Permission Denied')
-      })
+      it('Rejects non-admins who are searching for someone else', () =>
+        entries(
+          '',
+          { studentUsername: 'different' },
+          { auth: { type: 'STUDENT', username: 'abc123' } }
+        )
+          .then(() => { throw new Error('should have rejected promise') })
+          .catch(e => expect(e).to.not.match(/should have rejected promise/))
+      )
+      it('Rejects non-admins who are looking for all entries', () =>
+        entries(
+          '',
+          {},
+          { auth: { type: 'STUDENT', username: 'abc123' } }
+        )
+          .then(() => { throw new Error('should have rejected promise') })
+          .catch(e => expect(e).to.not.match(/should have rejected promise/))
+      )
       it('Gets an empty list when no entries exist', function () {
         return entries('', {}, { auth: { type: 'ADMIN' } })
           .then((entries) => {
