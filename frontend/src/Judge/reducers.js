@@ -97,11 +97,11 @@ const queues = (state = {}, action) => {
       // proxy the action to the subqueue
       const showId = action.payload.submissions[0].show.id
       return {
+        ...state,
         [showId]: queue(
           state[showId],
           action
-        ),
-        ...state
+        )
       }
     case actions.NEXT_IN_QUEUE:
     case actions.PREVIOUS_IN_QUEUE:
