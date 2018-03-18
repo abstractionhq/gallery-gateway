@@ -20,6 +20,20 @@ export function votes (_, args, req) {
   })
 }
 
+export function vote (_, args, req) {
+  const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
+    req.auth.type === JUDGE && req.auth.username === args.judgeUsername
+  if (req.auth.type !== ADMIN && !isRequestingOwnJudgeUser) {
+    throw new UserError('Permission Denied')
+  }
+  return Vote.find({
+    where: {
+      judgeUsername: args.judgeUsername,
+      entryId: args.entryId
+    }
+  })
+}
+
 function getVotes (username, authType, entryIds) {
   // Give all votes on the show if the user
   // is an admin and username was not given

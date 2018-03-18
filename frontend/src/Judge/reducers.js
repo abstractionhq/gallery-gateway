@@ -27,10 +27,13 @@ const submissions = (state = {}, action) => {
         return state
       }
 
-      const submissionsById = action.payload.submissions.reduce((accum, submission) => {
-        accum[submission.id] = submission
-        return accum
-      }, {})
+      const submissionsById = action.payload.submissions.reduce(
+        (accum, submission) => {
+          accum[submission.id] = submission
+          return accum
+        },
+        {}
+      )
       return {
         ...state,
         ...submissionsById
@@ -52,7 +55,9 @@ const queue = (state = initialQueueState, action) => {
 
   switch (action.type) {
     case actions.FETCH_SUBMISSIONS:
-      const submissionIds = action.payload.submissions.map(submission => submission.id)
+      const submissionIds = action.payload.submissions.map(
+        submission => submission.id
+      )
       const shuffledOrder = repeatableShuffle(
         action.payload.username,
         submissionIds,
@@ -98,10 +103,7 @@ const queues = (state = {}, action) => {
       const showId = action.payload.submissions[0].show.id
       return {
         ...state,
-        [showId]: queue(
-          state[showId],
-          action
-        )
+        [showId]: queue(state[showId], action)
       }
     case actions.NEXT_IN_QUEUE:
     case actions.PREVIOUS_IN_QUEUE:
@@ -120,20 +122,62 @@ const queues = (state = {}, action) => {
 
 // Example State:
 // {
-//   31: {id: 31, entry: {id: 102}, value: 2},
-//   34: {id: 34, entry: {id: 81}, value: 0}
+//  byId: {
+//    31: {id: 31, entry: {id: 102}, value: 2},
+//    34: {id: 34, entry: {id: 81}, value: 0}
+//  }
+//  byEntryId: {
+//    81: {id: 34, entry: {id: 81}, value: 0},
+//    102: {id: 31, entry: {id: 102}, value: 2}
+//  }
 // }
-const votes = (state = {}, action) => {
+const initialVoteState = {
+  byId: {},
+  byEntryId: {}
+}
+
+const votes = (state = initialVoteState, action) => {
   switch (action.type) {
     case actions.FETCH_VOTES:
-      const votes = action.payload.reduce((accum, vote) => {
+      if (!action.payload.length) {
+        return state
+      }
+
+      const votesById = action.payload.reduce((accum, vote) => {
         accum[vote.id] = vote
+        return accum
+      }, {})
+      const votesByEntryId = action.payload.reduce((accum, vote) => {
+        accum[vote.entry.id] = vote
         return accum
       }, {})
 
       return {
         ...state,
-        ...votes
+        byId: {
+          ...state.byId,
+          ...votesById
+        },
+        byEntryId: {
+          ...state.byEntryId,
+          ...votesByEntryId
+        }
+      }
+    case actions.FETCH_VOTE:
+      if (!action.payload.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload
+        },
+        byEntryId: {
+          ...state.byEntryId,
+          [action.payload.entry.id]: action.payload
+        }
       }
     default:
       return state
