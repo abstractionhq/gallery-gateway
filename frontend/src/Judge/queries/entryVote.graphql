@@ -1,5 +1,9 @@
-query getVote($entryId: ID!, $judgeUsername: String!) {
-  vote(entryId: $entryId, judgeUsername: $judgeUsername) {
+query getVote($entryId: ID!, $username: String!) {
+  vote(entryId: $entryId, judgeUsername: $username) {
+    id,
+    entry {
+      id
+    },
     value
   }
 }

@@ -1,79 +1,114 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Alert, Button, ButtonGroup } from 'reactstrap'
-import styled from 'styled-components'
 
-const buttonStyles = { width: '33.33%', margin: '10px' }
+// Vote Values
+const NO = 0
+const MAYBE = 1
+const YES = 2
+
+// Alert Types
+const SUCCESS = 'SUCCESS'
+const ERROR = 'ERROR'
 
 class VotePanel extends Component {
   static propTypes = {
-    vote: PropTypes.func.isRequired,
-    data: PropTypes.shape({
-      vote: PropTypes.shape({
-        value: PropTypes.number
-      })
+    makeVote: PropTypes.func.isRequired,
+    vote: PropTypes.shape({
+      value: PropTypes.number
     })
   }
 
   constructor (props) {
     super(props)
+
     this.state = {
-      alertVisible: false
+      alertVisible: false,
+      alertType: ''
     }
   }
 
-  onDismiss () {
-    this.setState({ alertVisible: false })
+  onDismiss = () => {
+    this.setState({
+      alertVisible: false,
+      alertType: ''
+    })
   }
 
-  handleVote () {
-    // TODO: Notify on errors
-    this.setState({ alertVisible: true })
-    setTimeout(() => {
-      this.setState({ alertVisible: false })
-    }, 3000)
+  handleVote = (value) => {
+    const { makeVote } = this.props
+
+    makeVote(value)
+      .then(() => {
+        this.setState({
+          alertVisible: true,
+          alertType: SUCCESS
+        })
+        setTimeout(() => {
+          this.onDismiss()
+        }, 3000)
+      })
+      .catch(() => {
+        this.setState({
+          alertVisible: true,
+          alertType: ERROR
+        })
+        setTimeout(() => {
+          this.onDismiss()
+        }, 3000)
+      })
   }
 
   render () {
-    const { vote, data } = this.props
-    const entryVote = data.vote
+    const { vote } = this.props
+
     return (
       <div>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
             color='primary'
             size='lg'
-            style={buttonStyles}
-            active={entryVote && entryVote.value === 0}
-            onClick={() => vote(0).then(this.handleVote())}
+            outline={vote && vote.value === NO}
+            disabled={vote && vote.value === NO}
+            onClick={() => this.handleVote(NO)}
+            style={{ width: '33.33%', margin: '10px' }}
           >
             No
           </Button>
           <Button
             color='primary'
             size='lg'
-            style={buttonStyles}
-            active={entryVote && entryVote.value === 1}
-            onClick={() => vote(1).then(this.handleVote())}
+            outline={vote && vote.value === MAYBE}
+            disabled={vote && vote.value === MAYBE}
+            onClick={() => this.handleVote(MAYBE)}
+            style={{ width: '33.33%', margin: '10px' }}
           >
             Maybe
           </Button>
           <Button
             color='primary'
             size='lg'
-            style={buttonStyles}
-            active={entryVote && entryVote.value === 2}
-            onClick={() => vote(2).then(this.handleVote())}
+            outline={vote && vote.value === YES}
+            disabled={vote && vote.value === YES}
+            onClick={() => this.handleVote(YES)}
+            style={{ width: '33.33%', margin: '10px' }}
           >
             Yes
           </Button>
         </ButtonGroup>
         <Alert
           color='success'
-          isOpen={this.state.alertVisible}
+          isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
           toggle={() => this.onDismiss()}
         >
           Vote Saved
+        </Alert>
+        <Alert
+          color='danger'
+          isOpen={this.state.alertVisible && this.state.alertType === ERROR}
+          toggle={() => this.onDismiss()}
+        >
+          There was an error saving your vote.
         </Alert>
       </div>
     )

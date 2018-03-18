@@ -122,20 +122,62 @@ const queues = (state = {}, action) => {
 
 // Example State:
 // {
-//   31: {id: 31, entry: {id: 102}, value: 2},
-//   34: {id: 34, entry: {id: 81}, value: 0}
+//  byId: {
+//    31: {id: 31, entry: {id: 102}, value: 2},
+//    34: {id: 34, entry: {id: 81}, value: 0}
+//  }
+//  byEntryId: {
+//    81: {id: 34, entry: {id: 81}, value: 0},
+//    102: {id: 31, entry: {id: 102}, value: 2}
+//  }
 // }
-const votes = (state = {}, action) => {
+const initialVoteState = {
+  byId: {},
+  byEntryId: {}
+}
+
+const votes = (state = initialVoteState, action) => {
   switch (action.type) {
     case actions.FETCH_VOTES:
-      const votes = action.payload.reduce((accum, vote) => {
+      if (!action.payload.length) {
+        return state
+      }
+
+      const votesById = action.payload.reduce((accum, vote) => {
         accum[vote.id] = vote
+        return accum
+      }, {})
+      const votesByEntryId = action.payload.reduce((accum, vote) => {
+        accum[vote.entry.id] = vote
         return accum
       }, {})
 
       return {
         ...state,
-        ...votes
+        byId: {
+          ...state.byId,
+          ...votesById
+        },
+        byEntryId: {
+          ...state.byEntryId,
+          ...votesByEntryId
+        }
+      }
+    case actions.FETCH_VOTE:
+      if (!action.payload.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload
+        },
+        byEntryId: {
+          ...state.byEntryId,
+          [action.payload.entry.id]: action.payload
+        }
       }
     default:
       return state

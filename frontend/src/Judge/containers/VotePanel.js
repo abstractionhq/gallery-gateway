@@ -1,48 +1,33 @@
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
+import { fetchVote } from '../actions'
 import VotePanel from '../components/VotePanel'
 import SendVote from '../mutations/sendVote.graphql'
-import GetVote from '../queries/entryVote.graphql'
-
-const withMutations = compose(
-  graphql(SendVote, {
-    props: ({ mutate, ownProps }) => ({
-      vote: value =>
-        mutate({
-          variables: {
-            input: {
-              judgeUsername: ownProps.user.username,
-              entryId: ownProps.entryId,
-              value
-            }
-          }
-        }),
-      refetchQueries: [
-        {
-          query: GetVote,
-          variables: {
-            entryId: ownProps.entryId,
-            judgeUsername: ownProps.user.username
-          }
-        }
-      ]
-    })
-  }),
-  graphql(GetVote, {
-    options: ownProps => ({
-      variables: {
-        entryId: ownProps.entryId,
-        judgeUsername: ownProps.user.username
-      }
-    })
-  })
-)(VotePanel)
 
 const mapStateToProps = state => ({
   user: state.shared.auth.user
 })
 
-const withRedux = connect(mapStateToProps, null)(withMutations)
+const mapDispatchToProps = dispatch => ({
+  fetchVote: (submissionId) => dispatch(fetchVote(submissionId))
+})
 
-export default withRedux
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(SendVote, {
+    props: ({ mutate, ownProps }) => ({
+      makeVote: value =>
+        mutate({
+          variables: {
+            input: {
+              judgeUsername: ownProps.user.username,
+              entryId: ownProps.submission.id,
+              value
+            }
+          }
+        }).then(() => ownProps.fetchVote(ownProps.submission.id))
+    })
+  })
+)(VotePanel)

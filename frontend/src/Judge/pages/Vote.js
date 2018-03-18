@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
-import { nextInQueue, previousInQueue, fetchSubmissions } from '../actions'
+import { nextInQueue, previousInQueue, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
 
@@ -39,6 +39,7 @@ const SubmissionContainer = styled.section`
   text-align: center;
   width: 100%;
 `
+
 const VoteContainer = styled.section`
   text-align: center;
 `
@@ -79,7 +80,9 @@ class Vote extends Component {
     }),
     next: PropTypes.shape({
       id: PropTypes.string
-    })
+    }),
+    fetchVotes: PropTypes.func.isRequired,
+    vote: PropTypes.object
   }
 
   static defaultProps = {
@@ -92,6 +95,7 @@ class Vote extends Component {
 
   componentDidMount () {
     this.props.fetchSubmissions()
+    this.props.fetchVotes()
     document.addEventListener('keydown', this.handleKeyInput)
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
@@ -119,7 +123,8 @@ class Vote extends Component {
       handlePrevious,
       submission,
       previous,
-      next
+      next,
+      vote
     } = this.props
 
     return (
@@ -139,7 +144,7 @@ class Vote extends Component {
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>
             <VoteContainer>
-              <VotePanel />
+              {submission ? <VotePanel submission={submission} vote={vote} /> : null}
             </VoteContainer>
           </Col>
           <Col xs='1'>
@@ -161,12 +166,14 @@ const mapStateToProps = (state, ownProps) => {
   const showId = ownProps.match.params.id
   const { order = [], viewing = null } = state.judge.queues[showId] || {}
   const submissions = state.judge.submissions
+  const votes = state.judge.votes
 
   const obj = {
     show: {
       id: showId
     },
-    submission: viewing !== null ? submissions[order[viewing]] : null
+    submission: viewing !== null ? submissions[order[viewing]] : null,
+    vote: viewing !== null ? votes.byEntryId[order[viewing]] : null
   }
 
   // Show the previous button
@@ -192,7 +199,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     handlePrevious: () => dispatch(previousInQueue(showId)),
     handleNext: () => dispatch(nextInQueue(showId)),
-    fetchSubmissions: () => dispatch(fetchSubmissions(showId))
+    fetchSubmissions: () => dispatch(fetchSubmissions(showId)),
+    fetchVotes: () => dispatch(fetchVotes(showId))
   }
 }
 
