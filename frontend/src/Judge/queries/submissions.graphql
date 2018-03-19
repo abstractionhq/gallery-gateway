@@ -6,6 +6,17 @@ query Submissions($id: ID!) {
     show {
       id
     }
-
+    ... on Video {
+      provider
+      videoId
+    }
+    ... on Photo {
+      path
+    }
+    ... on OtherMedia {
+      path
+    }
   }
 }
+
+

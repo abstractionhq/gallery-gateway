@@ -13,11 +13,13 @@ const Submission = props => (
   <div>
     <h5>{props.submission.title}</h5>
     <div>
-      {props.submission.entryType === VIDEO ? <VideoSubmission />
-        : props.submission.entryType === PHOTO ? <PhotoSubmission />
-          : props.submission.entryType === OTHER ? <OtherMediaSubmission />
-            : null
-      }
+      {props.submission.entryType === VIDEO ? (
+        <VideoSubmission />
+      ) : props.submission.entryType === PHOTO ? (
+        <PhotoSubmission />
+      ) : props.submission.entryType === OTHER ? (
+        <OtherMediaSubmission />
+      ) : null}
     </div>
   </div>
 )
