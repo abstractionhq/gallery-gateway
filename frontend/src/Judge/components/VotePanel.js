@@ -59,6 +59,31 @@ class VotePanel extends Component {
       })
   }
 
+  handleKeyInput = e => {
+    const { vote } = this.props
+
+    // Listen for key presses. Only update the choice if there is none selected
+    // or the key pressed doesn't match the currently selected choice
+    if ((e.key === '1' || e.key === 'n') && (!vote || vote.value !== NO)) {
+      // 1 or n key
+      this.handleVote(NO)
+    } else if ((e.key === '2' || e.key === 'm') && (!vote || vote.value !== MAYBE)) {
+      // 2 or m key
+      this.handleVote(MAYBE)
+    } else if ((e.key === '3' || e.key === 'y') && (!vote || vote.value !== YES)) {
+      // 3 or y key
+      this.handleVote(YES)
+    }
+  }
+
+  componentDidMount () {
+    document.addEventListener('keydown', this.handleKeyInput)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.handleKeyInput)
+  }
+
   render () {
     const { vote } = this.props
 
