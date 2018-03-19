@@ -74,7 +74,11 @@ class Vote extends Component {
     handlePrevious: PropTypes.func.isRequired,
     handleNext: PropTypes.func.isRequired,
     fetchSubmissions: PropTypes.func.isRequired,
-    submission: PropTypes.object,
+    submission: PropTypes.shape({
+      id: PropTypes.string,
+      title: PropTypes.string,
+      entryType: PropTypes.string
+    }),
     previous: PropTypes.shape({
       id: PropTypes.string
     }),
