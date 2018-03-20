@@ -18,5 +18,3 @@ query Submissions($id: ID!) {
     }
   }
 }
-
-

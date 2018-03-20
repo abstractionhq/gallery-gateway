@@ -14,7 +14,7 @@ const Submission = props => (
     <h5>{props.submission.title}</h5>
     <div>
       {props.submission.entryType === VIDEO ? (
-        <VideoSubmission />
+        <VideoSubmission provider={props.submission.provider} videoId={props.submission.videoId} />
       ) : props.submission.entryType === PHOTO ? (
         <PhotoSubmission />
       ) : props.submission.entryType === OTHER ? (
