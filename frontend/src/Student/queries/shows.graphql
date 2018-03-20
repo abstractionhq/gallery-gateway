@@ -12,17 +12,16 @@ query Shows($studentUsername: String!) {
       title
       entryType
       invited
-      ... photoFields
-      ... videoFields
+      ... on Video {
+        provider
+        videoId
+      }
+      ... on Photo {
+        path
+      }
+      ... on OtherMedia {
+        path
+      }
     }
   }
-}
-
-fragment photoFields on Photo {
-  path
-}
-
-fragment videoFields on Video {
-  provider
-  videoId
 }
