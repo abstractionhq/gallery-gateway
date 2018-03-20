@@ -8,8 +8,6 @@ const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
 const VIMEO_BASE_URL = 'https://vimeo.com/'
 
 const PlayerContainer = styled.div`
-  margin-top: 50px;
-
   /* Center the top-most 'div' that ReactPlayer wraps around the 'iframe'  */
   & > div {
     margin: 0 auto;
