@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import VideoSubmission from '../components/VideoSubmission'
 import PhotoSubmission from '../components/PhotoSubmission'
@@ -23,5 +24,14 @@ const Submission = props => (
     </div>
   </div>
 )
+
+Submission.propTypes = {
+  submission: PropTypes.shape({ 
+    entryType: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    provider: PropTypes.string,
+    videoId: PropTypes.string
+  })
+}
 
 export default Submission

@@ -1,23 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ReactPlayer from 'react-player'
 import styled from 'styled-components'
 
 // Video Providers
-const youtubeBaseURL = 'https://www.youtube.com/watch?v='
-const vimeoBaseURL = 'https://vimeo.com/'
+const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
+const VIMEO_BASE_URL = 'https://vimeo.com/'
 
-const videoStyle = {
-  minHeight: '500px',
-}
+const PlayerContainer = styled.div`
+  margin-top: 50px;
+
+  /* Center the top-most 'div' that ReactPlayer wraps around the 'iframe'  */
+  & > div {
+    margin: 0 auto;
+  }
+`
 
 const VideoSubmission = props => (
-  <div>
+  <PlayerContainer>
     {props.provider === 'youtube' ? (
-      <ReactPlayer url={youtubeBaseURL + props.videoId} playing controls width='100%' style={videoStyle}/>
+      <ReactPlayer url={`${YOUTUBE_BASE_URL}${props.videoId}`} playing controls />
     ) : props.provider === 'vimeo' ? (
-      <ReactPlayer url={vimeoBaseURL + props.videoId} playing controls width='100%' style={videoStyle} />
+      <ReactPlayer url={`${VIMEO_BASE_URL}${props.videoId}`} playing controls />
     ) : null}
-  </div>
+  </PlayerContainer>
 )
+
+VideoSubmission.propTypes = {
+  provider: PropTypes.string.isRequired,
+  videoId: PropTypes.string.isRequired
+}
 
 export default VideoSubmission
