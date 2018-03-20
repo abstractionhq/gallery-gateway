@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
+import queryString from 'query-string'
 
-import { nextInQueue, previousInQueue, fetchSubmissions, fetchVotes } from '../actions'
+import { setViewing, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
 
@@ -46,23 +46,14 @@ const VoteContainer = styled.section`
 
 class Vote extends Component {
   handleKeyInput = e => {
-    const {
-      show,
-      handleNext,
-      handlePrevious,
-      submission,
-      previous,
-      next
-    } = this.props
+    const { setViewing, previous, next } = this.props
     if (e.key === 'ArrowRight') {
       if (next && next.id) {
-        handleNext()
-        this.props.history.push(`/show/${show.id}/vote?on=${next.id}`)
+        setViewing(next.id)
       }
     } else if (e.key === 'ArrowLeft') {
       if (previous && previous.id) {
-        handlePrevious()
-        this.props.history.push(`/show/${show.id}/vote?on=${previous.id}`)
+        setViewing(previous.id)
       }
     }
   }
@@ -71,8 +62,7 @@ class Vote extends Component {
     show: PropTypes.shape({
       id: PropTypes.string
     }).isRequired,
-    handlePrevious: PropTypes.func.isRequired,
-    handleNext: PropTypes.func.isRequired,
+    setViewing: PropTypes.func.isRequired,
     fetchSubmissions: PropTypes.func.isRequired,
     submission: PropTypes.object,
     previous: PropTypes.shape({
@@ -97,46 +87,19 @@ class Vote extends Component {
     this.props.fetchSubmissions()
     this.props.fetchVotes()
     document.addEventListener('keydown', this.handleKeyInput)
-    // TODO:
-    // a) If we're visiting this page for the first time (/vote)
-    //   1. fetch all entries for the show we're voting on
-    //   2. create the shuffle order
-    //   3. identify the first unvoted entry; set the 'viewing' state properly
-    //   4. go to the route /show/<show_id>/vote?on=<entry_id> so that the page will re-render populated w/ the entry
-    // b) If we're visiting a specific entry for the first time (/vote?on=<entry_id>) (i.e. refresh)
-    //   1. fetch all entries for the show we're voting on
-    //   2. create the shuffle order
-    //   3. update the 'viewing' state based on the entry in the query param
-    //   4. render the entry in the query param
-    // c) If we're returning to this page (/vote) (i.e. entries and shuffle order exist)
-    //   1. identify the first unvoted entry; set the 'viewing' state properly
-    //   2. go to the route /show/<show_id>/vote?on=<entry_id> so that the page will re-render populated w/ the entry
-    // d) If we're returning to a specific entry on this page (/vote?on=<entry_id>) (i.e. from a) 4. or from review page)
-    //   1. update the 'viewing' state based on the entry in the query param (if they don't already match)
-    //   2. render the entry in the query param
   }
 
   render () {
-    const {
-      show,
-      handleNext,
-      handlePrevious,
-      submission,
-      previous,
-      next,
-      vote
-    } = this.props
+    const { setViewing, submission, previous, next, vote } = this.props
 
     return (
       <Container fluid>
         <Row>
           <Col xs='1'>
             {previous && previous.id ? (
-              <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
-                <Previous onClick={handlePrevious}>
-                  <FaChevronLeft size='4em' />
-                </Previous>
-              </Link>
+              <Previous onClick={() => setViewing(previous.id)}>
+                <FaChevronLeft size='4em' />
+              </Previous>
             ) : null}
           </Col>
           <Col xs='10' style={{ minHeight: '500px' }}>
@@ -144,16 +107,16 @@ class Vote extends Component {
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>
             <VoteContainer>
-              {submission ? <VotePanel submission={submission} vote={vote} /> : null}
+              {submission ? (
+                <VotePanel submission={submission} vote={vote} />
+              ) : null}
             </VoteContainer>
           </Col>
           <Col xs='1'>
             {next && next.id ? (
-              <Link to={`/show/${show.id}/vote?on=${next.id}`}>
-                <Next onClick={handleNext}>
-                  <FaChevronRight size='4em' />
-                </Next>
-              </Link>
+              <Next onClick={() => setViewing(next.id)}>
+                <FaChevronRight size='4em' />
+              </Next>
             ) : null}
           </Col>
         </Row>
@@ -164,7 +127,29 @@ class Vote extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const showId = ownProps.match.params.id
-  const { order = [], viewing = null } = state.judge.queues[showId] || {}
+  const { order = [], loadingVotes = true, loadingSubmissions = true } =
+    state.judge.queues[showId] || {}
+  let submissionId = queryString.parse(state.router.location.search).on || null
+
+  // If ?on={submissionId} is not found _and_ everything is loaded, find the
+  // first un-voted submission and set that as active.
+  if (submissionId === null && !loadingSubmissions && !loadingVotes) {
+    for (let i = 0; i < order.length; i++) {
+      const candidateSubmissionId = order[i]
+      const isVoted = !!state.judge.votes.byEntryId[candidateSubmissionId]
+      if (!isVoted) {
+        submissionId = candidateSubmissionId
+        break
+      }
+    }
+    if (submissionId === null) {
+      // Everything is voted on, just the current submission to the first one
+      submissionId = order[0] || null
+    }
+  }
+
+  const viewing =
+    order.indexOf(submissionId) >= 0 ? order.indexOf(submissionId) : null
   const submissions = state.judge.submissions
   const votes = state.judge.votes
 
@@ -172,8 +157,8 @@ const mapStateToProps = (state, ownProps) => {
     show: {
       id: showId
     },
-    submission: viewing !== null ? submissions[order[viewing]] : null,
-    vote: viewing !== null ? votes.byEntryId[order[viewing]] : null
+    submission: submissionId !== null ? submissions[submissionId] : null,
+    vote: submissionId !== null ? votes.byEntryId[submissionId] : null
   }
 
   // Show the previous button
@@ -184,7 +169,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 
   // Show the next button
-  if (viewing !== null && viewing < order.length) {
+  if (viewing !== null && viewing + 1 < order.length) {
     obj.next = {
       id: order[viewing + 1]
     }
@@ -197,8 +182,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const showId = ownProps.match.params.id
 
   return {
-    handlePrevious: () => dispatch(previousInQueue(showId)),
-    handleNext: () => dispatch(nextInQueue(showId)),
+    setViewing: submissionId => dispatch(setViewing(showId, submissionId)),
     fetchSubmissions: () => dispatch(fetchSubmissions(showId)),
     fetchVotes: () => dispatch(fetchVotes(showId))
   }

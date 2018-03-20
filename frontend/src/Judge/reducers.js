@@ -43,16 +43,13 @@ const submissions = (state = {}, action) => {
   }
 }
 
-// TODO: Produce 'order' based on shuffling the entry id's that are in this show
-// TODO: Calculate 'viewing' based on the first unvoted entry in 'order'
 const initialQueueState = {
   order: [], // Array of entry id's
-  viewing: 0 // The index in 'order' we're currently viewing
+  loadingSubmissions: false,
+  loadingVotes: false
 }
 
 const queue = (state = initialQueueState, action) => {
-  const { order, viewing } = state
-
   switch (action.type) {
     case actions.FETCH_SUBMISSIONS:
       const submissionIds = action.payload.submissions.map(
@@ -65,21 +62,23 @@ const queue = (state = initialQueueState, action) => {
       )
       return {
         ...state,
-        order: shuffledOrder
+        order: shuffledOrder,
+        loadingSubmissions: false
       }
-    case actions.NEXT_IN_QUEUE:
+    case actions.FETCH_VOTES:
       return {
         ...state,
-        // Continue incrementing until we've reached the end of the list.
-        // Then continue to return the index of the last element.
-        viewing: viewing + 1 < order.length ? viewing + 1 : viewing
+        loadingVotes: false
       }
-    case actions.PREVIOUS_IN_QUEUE:
+    case actions.WILL_FETCH_SUBMISSIONS:
       return {
         ...state,
-        // Continue decrementing until we've reached the beginning of the list.
-        // Then continue to return the index of the first element (i.e. 0).
-        viewing: viewing > 0 ? viewing - 1 : viewing
+        loadingSubmissions: true
+      }
+    case actions.WILL_FETCH_VOTES:
+      return {
+        ...state,
+        loadingVotes: true
       }
     default:
       return state
@@ -89,8 +88,8 @@ const queue = (state = initialQueueState, action) => {
 // Each show has a queue whose key in the queues state is the show's id
 // Example State:
 // {
-//   1: {order: [1, 2, 3], viewing: 0},
-//   2: {order: [9, 4, 5, 8, 6, 7], viewing: 5}
+//   1: {order: [1, 2, 3], loadingSubmissions: true, loadingVotes: false},
+//   2: {order: [9, 4, 5, 8, 6, 7], loadingSubmissions: true, loadingVotes: false}
 // }
 const queues = (state = {}, action) => {
   // Proxy all queue actions to the particular queue we want to target
@@ -105,15 +104,16 @@ const queues = (state = {}, action) => {
         ...state,
         [showId]: queue(state[showId], action)
       }
-    case actions.NEXT_IN_QUEUE:
-    case actions.PREVIOUS_IN_QUEUE:
-      if (!action.payload.id) {
-        return state
-      }
-
+    case actions.WILL_FETCH_SUBMISSIONS:
+    case actions.WILL_FETCH_VOTES:
       return {
         ...state,
-        [action.payload.id]: queue(state[action.payload.id], action)
+        [action.payload]: queue(state[action.payload], action)
+      }
+    case actions.FETCH_VOTES:
+      return {
+        ...state,
+        [action.payload.showId]: queue(state[action.payload.showId], action)
       }
     default:
       return state
@@ -139,15 +139,15 @@ const initialVoteState = {
 const votes = (state = initialVoteState, action) => {
   switch (action.type) {
     case actions.FETCH_VOTES:
-      if (!action.payload.length) {
+      if (!action.payload.votes.length) {
         return state
       }
 
-      const votesById = action.payload.reduce((accum, vote) => {
+      const votesById = action.payload.votes.reduce((accum, vote) => {
         accum[vote.id] = vote
         return accum
       }, {})
-      const votesByEntryId = action.payload.reduce((accum, vote) => {
+      const votesByEntryId = action.payload.votes.reduce((accum, vote) => {
         accum[vote.entry.id] = vote
         return accum
       }, {})
