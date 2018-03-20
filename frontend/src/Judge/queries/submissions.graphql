@@ -1,8 +1,20 @@
 query Submissions($id: ID!) {
   submissions: entries(showId: $id) {
-    id,
+    id
+    title
+    entryType
     show {
       id
+    }
+    ... on Video {
+      provider
+      videoId
+    }
+    ... on Photo {
+      path
+    }
+    ... on OtherMedia {
+      path
     }
   }
 }

@@ -88,7 +88,7 @@ class VotePanel extends Component {
     const { vote } = this.props
 
     return (
-      <div>
+      <div style={{margin: '10px'}}>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
             color='primary'

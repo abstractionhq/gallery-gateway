@@ -35,13 +35,21 @@ const Next = Arrow.extend`
 `
 
 const SubmissionContainer = styled.section`
-  height: 100%;
-  text-align: center;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 25%;
+  text-align:center;
 `
 
 const VoteContainer = styled.section`
-  text-align: center;
+  position: absolute;
+  top: 80%;
+  right: 0;
+  left: 0;
+  bottom: 20px;
+  text-align:center;
 `
 
 class Vote extends Component {
@@ -139,7 +147,7 @@ class Vote extends Component {
               </Link>
             ) : null}
           </Col>
-          <Col xs='10' style={{ minHeight: '500px' }}>
+          <Col xs='10' style={{ minHeight: '500px', height: '100%' }}>
             <SubmissionContainer>
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>
