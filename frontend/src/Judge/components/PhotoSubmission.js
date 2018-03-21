@@ -5,11 +5,9 @@ import Lightbox from 'react-images';
 
 
 const PhotoContainer = styled.img`
-  width:100%;
-  height:100%; //change to whatever your choice
-
-  /*Scale down will take the necessary specified space that is 40% x 40% without stretching the image*/
+  height:100%;
   object-fit:scale-down;
+  width:100%;
 `
 
 class PhotoSubmission extends Component {
@@ -41,20 +39,20 @@ class PhotoSubmission extends Component {
 
     return (
       <Fragment>
-      <PhotoContainer
-        // TODO make this URL responsive to deploy environment
-        src={`//localhost:3000/static/uploads/${path}`}
-        onClick={() => this.openLightbox()}
-      >
-      </PhotoContainer>
-      <Lightbox
-        images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
-        isOpen={this.state.lightboxIsOpen}
-        onClose={() => this.closeLightbox()}
-        showImageCount={false}
-        backdropClosesModal={true}
-        onClickImage={() => this.closeLightbox()}
-      />  
+        <PhotoContainer
+          // TODO make this URL responsive to deploy environment
+          src={`//localhost:3000/static/uploads/${path}`}
+          onClick={() => this.openLightbox()}
+        >
+        </PhotoContainer>
+        <Lightbox
+          images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
+          isOpen={this.state.lightboxIsOpen}
+          onClose={() => this.closeLightbox()}
+          showImageCount={false}
+          backdropClosesModal={true}
+          onClickImage={() => this.closeLightbox()}
+        />
       </Fragment>
     )
   }
