@@ -89,6 +89,19 @@ class Vote extends Component {
     document.addEventListener('keydown', this.handleKeyInput)
   }
 
+  componentWillReceiveProps (nextProps) {
+    // If we receive props where 'viewing' exists but the url ?on={int} doesn't,
+    // set the latter to the former
+    if (nextProps.submission !== null && !queryString.parse(nextProps.location.search).on) {
+      const thing = {
+        ...queryString.parse(nextProps.location.search),
+        on: nextProps.submission.id
+      }
+      const newQueryString = queryString.stringify(thing)
+      this.props.history.replace(`/show/${nextProps.show.id}/vote?${newQueryString}`)
+    }
+  }
+
   render () {
     const { setViewing, submission, previous, next, vote } = this.props
 
@@ -129,10 +142,21 @@ const mapStateToProps = (state, ownProps) => {
   const showId = ownProps.match.params.id
   const { order = [], loadingVotes = true, loadingSubmissions = true } =
     state.judge.queues[showId] || {}
-  let submissionId = queryString.parse(state.router.location.search).on || null
+  let { on: submissionId } = queryString.parse(state.router.location.search)
 
-  // If ?on={submissionId} is not found _and_ everything is loaded, find the
-  // first un-voted submission and set that as active.
+  // If this submissionId is not parsable as a base-10 integer, throw it out
+  if (isNaN(parseInt(submissionId, 10))) {
+    submissionId = null
+  }
+
+  // If this submissionId is not in the ordering, throw it out
+  if (order.indexOf(submissionId) < 0) {
+    submissionId = null
+  }
+
+  // No satisfactory submission ID was found. If the data is loaded, loop
+  // through the order and find the first un-voted submission; we'll use that one.
+  // In the event that _all_ submissions have votes, use the first submission.
   if (submissionId === null && !loadingSubmissions && !loadingVotes) {
     for (let i = 0; i < order.length; i++) {
       const candidateSubmissionId = order[i]
@@ -142,14 +166,14 @@ const mapStateToProps = (state, ownProps) => {
         break
       }
     }
+
+    // If everything is voted on, just set the current submission to the first one
     if (submissionId === null) {
-      // Everything is voted on, just the current submission to the first one
       submissionId = order[0] || null
     }
   }
 
-  const viewing =
-    order.indexOf(submissionId) >= 0 ? order.indexOf(submissionId) : null
+  const viewing = submissionId !== null ? order.indexOf(submissionId) : null
   const submissions = state.judge.submissions
   const votes = state.judge.votes
 
