@@ -89,19 +89,6 @@ class Vote extends Component {
     document.addEventListener('keydown', this.handleKeyInput)
   }
 
-  componentWillReceiveProps (nextProps) {
-    // If we receive props where 'viewing' exists but the url ?on={int} doesn't,
-    // set the latter to the former
-    if (nextProps.submission !== null && !queryString.parse(nextProps.location.search).on) {
-      const thing = {
-        ...queryString.parse(nextProps.location.search),
-        on: nextProps.submission.id
-      }
-      const newQueryString = queryString.stringify(thing)
-      this.props.history.replace(`/show/${nextProps.show.id}/vote?${newQueryString}`)
-    }
-  }
-
   render () {
     const { setViewing, submission, previous, next, vote } = this.props
 
@@ -170,6 +157,14 @@ const mapStateToProps = (state, ownProps) => {
     // If everything is voted on, just set the current submission to the first one
     if (submissionId === null) {
       submissionId = order[0] || null
+    }
+
+    if (submissionId !== null) {
+      const newQueryString = queryString.stringify({
+        ...queryString.parse(ownProps.location.search),
+        on: submissionId
+      })
+      ownProps.history.replace(`/show/${showId}/vote?${newQueryString}`)
     }
   }
 
