@@ -11,13 +11,13 @@ const PHOTO = 'PHOTO'
 const OTHER = 'OTHER'
 
 const Submission = props => (
-  <div>
+  <div style={{ height: '100%'}}>
     <h5>{props.submission.title}</h5>
-    <div>
+    <div style={{ height: '100%'}}>
       {props.submission.entryType === VIDEO ? (
         <VideoSubmission provider={props.submission.provider} videoId={props.submission.videoId} />
       ) : props.submission.entryType === PHOTO ? (
-        <PhotoSubmission />
+        <PhotoSubmission path={props.submission.path}/>
       ) : props.submission.entryType === OTHER ? (
         <OtherMediaSubmission />
       ) : null}

@@ -147,7 +147,7 @@ class Vote extends Component {
               </Link>
             ) : null}
           </Col>
-          <Col xs='10' style={{ minHeight: '500px', height: '100%' }}>
+          <Col xs='10' style={{ height: '90vh'}}>
             <SubmissionContainer>
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>

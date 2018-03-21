@@ -10,7 +10,7 @@ const VIMEO_BASE_URL = 'https://vimeo.com/'
 const PlayerContainer = styled.div`
   /* Center the top-most 'div' that ReactPlayer wraps around the 'iframe'  */
   & > div {
-    margin: 0 auto;
+    margin: 5% auto;
   }
 `
 
