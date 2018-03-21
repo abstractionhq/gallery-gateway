@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Container } from 'reactstrap'
 import styled from 'styled-components'
-import Status from '../../shared/containers/Status'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import ErrorHandler from '../../shared/components/ErrorHandler'
 
 import AssignJudgesTable from '../containers/AssignJudgesTable'
 import CreateJudgeForm from '../containers/CreateJudgeForm'
@@ -36,7 +36,6 @@ class AssignJudges extends Component {
     return (
       <Container fluid>
         <Heading>Assign Judges | {show.name}</Heading>
-        <Status />
         <AssignJudgesTable showId={show.id} />
         <FormContainer>
           <CreateJudgeForm />
@@ -58,4 +57,4 @@ const mapDispatchToProps = dispatch => ({
   fetchData: showId => dispatch(fetchShow(showId))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AssignJudges)
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorHandler(AssignJudges))

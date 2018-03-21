@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Status from '../../shared/containers/Status'
 import { Container, Row, Col, Button } from 'reactstrap'
 
 import Shows from '../containers/Shows'
@@ -12,7 +11,6 @@ const Dashboard = () => (
         <h1>Dashboard</h1>
       </Col>
       <Col md='3'>
-        <Status />
         <Button
           color='primary'
           className='btn-block'
