@@ -52,6 +52,7 @@ class PhotoSubmission extends Component {
           showImageCount={false}
           backdropClosesModal={true}
           onClickImage={() => this.closeLightbox()}
+          showCloseButton={false}
         />
       </Fragment>
     )

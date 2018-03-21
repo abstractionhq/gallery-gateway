@@ -99,12 +99,14 @@ class Vote extends Component {
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleKeyInput)
+    document.body.style = 'background: white'
   }
 
   componentDidMount () {
     this.props.fetchSubmissions()
     this.props.fetchVotes()
     document.addEventListener('keydown', this.handleKeyInput)
+    document.body.style = 'background: #777777'
     // TODO:
     // a) If we're visiting this page for the first time (/vote)
     //   1. fetch all entries for the show we're voting on

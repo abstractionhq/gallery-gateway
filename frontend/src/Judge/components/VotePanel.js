@@ -91,7 +91,7 @@ class VotePanel extends Component {
       <div style={{margin: '10px'}}>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
-            color='primary'
+            color={vote && vote.value === NO ? 'white' : 'primary'}
             size='lg'
             outline={vote && vote.value === NO}
             disabled={vote && vote.value === NO}
@@ -101,7 +101,7 @@ class VotePanel extends Component {
             No
           </Button>
           <Button
-            color='primary'
+            color={vote && vote.value === MAYBE ? 'white' : 'primary'}
             size='lg'
             outline={vote && vote.value === MAYBE}
             disabled={vote && vote.value === MAYBE}
@@ -111,7 +111,7 @@ class VotePanel extends Component {
             Maybe
           </Button>
           <Button
-            color='primary'
+            color={vote && vote.value === YES ? 'white' : 'primary'}
             size='lg'
             outline={vote && vote.value === YES}
             disabled={vote && vote.value === YES}
