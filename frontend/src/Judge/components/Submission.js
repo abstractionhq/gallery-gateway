@@ -22,7 +22,7 @@ const Submission = props => (
       ) : props.submission.entryType === PHOTO ? (
         <PhotoSubmission path={props.submission.path} />
       ) : props.submission.entryType === OTHER ? (
-        <OtherMediaSubmission />
+        <OtherMediaSubmission path={props.submission.path} />
       ) : null}
     </div>
   </div>
@@ -33,7 +33,8 @@ Submission.propTypes = {
     entryType: PropTypes.string.isRequired,
     title: PropTypes.string,
     provider: PropTypes.string,
-    videoId: PropTypes.string
+    videoId: PropTypes.string,
+    path: PropTypes.string
   })
 }
 
