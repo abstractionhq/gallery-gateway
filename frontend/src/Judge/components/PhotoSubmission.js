@@ -5,8 +5,10 @@ import Lightbox from 'react-images'
 
 const PhotoContainer = styled.img`
   height: 100%;
-  object-fit: scale-down;
-  width: 100%;
+  width: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 class PhotoSubmission extends Component {
