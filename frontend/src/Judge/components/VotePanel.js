@@ -35,7 +35,7 @@ class VotePanel extends Component {
     })
   }
 
-  handleVote = (value) => {
+  handleVote = value => {
     const { makeVote } = this.props
 
     makeVote(value)
@@ -67,10 +67,16 @@ class VotePanel extends Component {
     if ((e.key === '1' || e.key === 'n') && (!vote || vote.value !== NO)) {
       // 1 or n key
       this.handleVote(NO)
-    } else if ((e.key === '2' || e.key === 'm') && (!vote || vote.value !== MAYBE)) {
+    } else if (
+      (e.key === '2' || e.key === 'm') &&
+      (!vote || vote.value !== MAYBE)
+    ) {
       // 2 or m key
       this.handleVote(MAYBE)
-    } else if ((e.key === '3' || e.key === 'y') && (!vote || vote.value !== YES)) {
+    } else if (
+      (e.key === '3' || e.key === 'y') &&
+      (!vote || vote.value !== YES)
+    ) {
       // 3 or y key
       this.handleVote(YES)
     }
@@ -88,7 +94,7 @@ class VotePanel extends Component {
     const { vote } = this.props
 
     return (
-      <div style={{margin: '10px'}}>
+      <div style={{ margin: '10px' }}>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
             color={vote && vote.value === NO ? 'white' : 'primary'}

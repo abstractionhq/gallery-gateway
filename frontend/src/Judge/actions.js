@@ -65,9 +65,7 @@ export const fetchVote = submissionId => (dispatch, getState, client) => {
         username
       }
     })
-    .then(({ data: { vote } }) =>
-      dispatch({ type: FETCH_VOTE, payload: vote })
-    )
+    .then(({ data: { vote } }) => dispatch({ type: FETCH_VOTE, payload: vote }))
     .catch(console.error) // TODO: Handle the error
 }
 

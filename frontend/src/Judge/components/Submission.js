@@ -11,13 +11,16 @@ const PHOTO = 'PHOTO'
 const OTHER = 'OTHER'
 
 const Submission = props => (
-  <div style={{ height: '100%'}}>
+  <div style={{ height: '100%' }}>
     <h5>{props.submission.title}</h5>
-    <div style={{ height: '100%'}}>
+    <div style={{ height: '100%' }}>
       {props.submission.entryType === VIDEO ? (
-        <VideoSubmission provider={props.submission.provider} videoId={props.submission.videoId} />
+        <VideoSubmission
+          provider={props.submission.provider}
+          videoId={props.submission.videoId}
+        />
       ) : props.submission.entryType === PHOTO ? (
-        <PhotoSubmission path={props.submission.path}/>
+        <PhotoSubmission path={props.submission.path} />
       ) : props.submission.entryType === OTHER ? (
         <OtherMediaSubmission />
       ) : null}
@@ -26,7 +29,7 @@ const Submission = props => (
 )
 
 Submission.propTypes = {
-  submission: PropTypes.shape({ 
+  submission: PropTypes.shape({
     entryType: PropTypes.string.isRequired,
     title: PropTypes.string,
     provider: PropTypes.string,

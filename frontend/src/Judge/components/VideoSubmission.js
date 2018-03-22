@@ -10,7 +10,7 @@ const VIMEO_BASE_URL = 'https://vimeo.com/'
 const PlayerContainer = styled.div`
   height: 100%;
   display: inline-block;
-  `
+`
 
 class VideoSubmission extends Component {
   static propTypes = {
@@ -18,12 +18,12 @@ class VideoSubmission extends Component {
     videoId: PropTypes.string.isRequired
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
       height: 0,
-      width:0
+      width: 0
     }
     this.updateDimensions = this.updateDimensions.bind(this)
   }
@@ -38,31 +38,34 @@ class VideoSubmission extends Component {
     })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.updateDimensions()
-    window.addEventListener("resize", this.updateDimensions);
+    window.addEventListener('resize', this.updateDimensions)
   }
 
-  componentWillUnmount() {
-    window.addEventListener("resize", this.updateDimensions);
+  componentWillUnmount () {
+    window.addEventListener('resize', this.updateDimensions)
   }
 
-  render() {
-    const {
-      provider,
-      videoId
-    } = this.props
+  render () {
+    const { provider, videoId } = this.props
     return (
-      <PlayerContainer
-      id="videoPlayerContainer"
-      >
+      <PlayerContainer id='videoPlayerContainer'>
         {provider === 'youtube' ? (
-          <ReactPlayer url={`${YOUTUBE_BASE_URL}${videoId}`} playing controls 
-          width={this.state.width} height={this.state.height}
+          <ReactPlayer
+            url={`${YOUTUBE_BASE_URL}${videoId}`}
+            playing
+            controls
+            width={this.state.width}
+            height={this.state.height}
           />
         ) : provider === 'vimeo' ? (
-          <ReactPlayer url={`${VIMEO_BASE_URL}${videoId}`} playing controls 
-          width={this.state.width} height={this.state.height}
+          <ReactPlayer
+            url={`${VIMEO_BASE_URL}${videoId}`}
+            playing
+            controls
+            width={this.state.width}
+            height={this.state.height}
           />
         ) : null}
       </PlayerContainer>

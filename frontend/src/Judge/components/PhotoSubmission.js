@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Lightbox from 'react-images';
-
+import Lightbox from 'react-images'
 
 const PhotoContainer = styled.img`
-  height:100%;
-  object-fit:scale-down;
-  width:100%;
+  height: 100%;
+  object-fit: scale-down;
+  width: 100%;
 `
 
 class PhotoSubmission extends Component {
@@ -15,11 +14,11 @@ class PhotoSubmission extends Component {
     path: PropTypes.string.isRequired
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
-      lightboxIsOpen: false,
+      lightboxIsOpen: false
     }
   }
 
@@ -31,11 +30,8 @@ class PhotoSubmission extends Component {
     this.setState({ lightboxIsOpen: true })
   }
 
-
-  render() {
-    const {
-      path
-    } = this.props
+  render () {
+    const { path } = this.props
 
     return (
       <Fragment>
@@ -43,8 +39,7 @@ class PhotoSubmission extends Component {
           // TODO make this URL responsive to deploy environment
           src={`//localhost:3000/static/uploads/${path}`}
           onClick={() => this.openLightbox()}
-        >
-        </PhotoContainer>
+        />
         <Lightbox
           images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
           isOpen={this.state.lightboxIsOpen}
@@ -58,6 +53,5 @@ class PhotoSubmission extends Component {
     )
   }
 }
-
 
 export default PhotoSubmission

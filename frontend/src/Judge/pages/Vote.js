@@ -7,7 +7,12 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 
-import { nextInQueue, previousInQueue, fetchSubmissions, fetchVotes } from '../actions'
+import {
+  nextInQueue,
+  previousInQueue,
+  fetchSubmissions,
+  fetchVotes
+} from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
 
@@ -40,7 +45,7 @@ const SubmissionContainer = styled.section`
   right: 0;
   left: 0;
   bottom: 25%;
-  text-align:center;
+  text-align: center;
 `
 
 const VoteContainer = styled.section`
@@ -49,7 +54,7 @@ const VoteContainer = styled.section`
   right: 0;
   left: 0;
   bottom: 20px;
-  text-align:center;
+  text-align: center;
 `
 
 class Vote extends Component {
@@ -149,12 +154,14 @@ class Vote extends Component {
               </Link>
             ) : null}
           </Col>
-          <Col xs='10' style={{ height: '90vh'}}>
+          <Col xs='10' style={{ height: '90vh' }}>
             <SubmissionContainer>
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>
             <VoteContainer>
-              {submission ? <VotePanel submission={submission} vote={vote} /> : null}
+              {submission ? (
+                <VotePanel submission={submission} vote={vote} />
+              ) : null}
             </VoteContainer>
           </Col>
           <Col xs='1'>
