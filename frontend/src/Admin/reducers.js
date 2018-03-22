@@ -138,9 +138,26 @@ const ui = (state = {}, action) => {
   }
 }
 
+const errorState = (state = {show: false}, action) => {
+  switch (action.type) {
+    case actions.DISPLAY_ERROR:
+      return {
+        message: action.message,
+        show: true
+      }
+    case actions.DISMISS_ERROR:
+      return {
+        show: false
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   shows,
   judges,
   assignments,
-  ui
+  ui,
+  errorState
 })

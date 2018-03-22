@@ -15,6 +15,8 @@ export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW =
 export const ASSIGN_JUDGES_TO_SHOW = 'ASSIGN_JUDGES_TO_SHOW'
 export const REMOVE_JUDGES_FROM_SHOW = 'REMOVE_JUDGES_FROM_SHOW'
 export const ADD_JUDGE = 'ADD_JUDGE'
+export const DISPLAY_ERROR = 'DISPLAY_ERROR'
+export const DISMISS_ERROR = 'DISMISS_ERROR'
 
 export const fetchShow = showId => (dispatch, getState, client) => {
   return client
@@ -25,7 +27,9 @@ export const fetchShow = showId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { show } }) => dispatch({ type: FETCH_SHOW, payload: show }))
-    .catch(console.error) // TODO: Handle the error
+    .catch((message) => {
+      dispatch({type: DISPLAY_ERROR, message})
+    })
 }
 
 export const fetchShows = () => (dispatch, getState, client) => {
@@ -34,7 +38,9 @@ export const fetchShows = () => (dispatch, getState, client) => {
     .then(({ data: { shows } }) =>
       dispatch({ type: FETCH_SHOWS, payload: shows })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch((message) => {
+      dispatch({type: DISPLAY_ERROR, message})
+    })
 }
 
 export const fetchJudges = () => (dispatch, getState, client) => {
@@ -43,7 +49,9 @@ export const fetchJudges = () => (dispatch, getState, client) => {
     .then(({ data: { judges } }) =>
       dispatch({ type: FETCH_JUDGES, payload: judges })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch((message) => {
+      dispatch({type: DISPLAY_ERROR, message})
+    })
 }
 
 export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
@@ -57,7 +65,9 @@ export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
     .then(({ data: { show } }) =>
       dispatch({ type: FETCH_JUDGES_FOR_SHOW, payload: show })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch((message) => {
+      dispatch({type: DISPLAY_ERROR, message})
+    })
 }
 
 export const fetchJudgesByAssignmentForShow = showId => (
@@ -88,7 +98,9 @@ export const fetchJudgesByAssignmentForShow = showId => (
         })
       }
     })
-    .catch(console.error) // TODO: Handle the error
+    .catch((message) => {
+      dispatch({type: DISPLAY_ERROR, message})
+    })
 }
 
 export const assignJudgesToShow = (showId, usernames) => (
@@ -123,5 +135,18 @@ export const addJudge = judge => (dispatch, getState, client) => {
   dispatch({
     type: ADD_JUDGE,
     payload: judge
+  })
+}
+
+export const displayError = (message) => dispatch => {
+  dispatch({
+    type: DISPLAY_ERROR,
+    message: message
+  })
+}
+
+export const dismissError = () => dispatch => {
+  dispatch({
+    type: DISMISS_ERROR
   })
 }
