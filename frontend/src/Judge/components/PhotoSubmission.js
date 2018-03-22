@@ -18,16 +18,16 @@ class PhotoSubmission extends Component {
     super(props)
 
     this.state = {
-      lightboxIsOpen: false
+      isLightboxOpen: false
     }
   }
 
   closeLightbox = () => {
-    this.setState({ lightboxIsOpen: false })
+    this.setState({ isLightboxOpen: false })
   }
 
   openLightbox = () => {
-    this.setState({ lightboxIsOpen: true })
+    this.setState({ isLightboxOpen: true })
   }
 
   render () {
@@ -42,7 +42,7 @@ class PhotoSubmission extends Component {
         />
         <Lightbox
           images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
-          isOpen={this.state.lightboxIsOpen}
+          isOpen={this.state.isLightboxOpen}
           onClose={() => this.closeLightbox()}
           showImageCount={false}
           backdropClosesModal={true}

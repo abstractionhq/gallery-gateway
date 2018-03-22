@@ -25,10 +25,9 @@ class VideoSubmission extends Component {
       height: 0,
       width: 0
     }
-    this.updateDimensions = this.updateDimensions.bind(this)
   }
 
-  updateDimensions () {
+  updateDimensions = () => {
     const videoPlayerContainer = document.getElementById('videoPlayerContainer')
     const height = videoPlayerContainer.clientHeight // height is static to container max size
     const width = height * 1.7778 // width is 640/360 (default width and height)
@@ -44,7 +43,7 @@ class VideoSubmission extends Component {
   }
 
   componentWillUnmount () {
-    window.addEventListener('resize', this.updateDimensions)
+    window.removeEventListener('resize', this.updateDimensions)
   }
 
   render () {
