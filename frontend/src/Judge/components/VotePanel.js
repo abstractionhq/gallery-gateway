@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Alert, Button, ButtonGroup } from 'reactstrap'
+import styled from 'styled-components'
 
 // Vote Values
 const NO = 0
@@ -10,6 +11,12 @@ const YES = 2
 // Alert Types
 const SUCCESS = 'SUCCESS'
 const ERROR = 'ERROR'
+
+const VotingContainer = styled.div`
+  background-color: white;
+  margin: 10px 0;
+  width: 100%;
+`
 
 class VotePanel extends Component {
   static propTypes = {
@@ -94,10 +101,10 @@ class VotePanel extends Component {
     const { vote } = this.props
 
     return (
-      <div style={{ margin: '10px' }}>
+      <VotingContainer>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
-            color={vote && vote.value === NO ? 'white' : 'primary'}
+            color={vote && vote.value === NO ? 'dark' : 'primary'}
             size='lg'
             outline={vote && vote.value === NO}
             disabled={vote && vote.value === NO}
@@ -107,7 +114,7 @@ class VotePanel extends Component {
             No
           </Button>
           <Button
-            color={vote && vote.value === MAYBE ? 'white' : 'primary'}
+            color={vote && vote.value === MAYBE ? 'dark' : 'primary'}
             size='lg'
             outline={vote && vote.value === MAYBE}
             disabled={vote && vote.value === MAYBE}
@@ -117,7 +124,7 @@ class VotePanel extends Component {
             Maybe
           </Button>
           <Button
-            color={vote && vote.value === YES ? 'white' : 'primary'}
+            color={vote && vote.value === YES ? 'dark' : 'primary'}
             size='lg'
             outline={vote && vote.value === YES}
             disabled={vote && vote.value === YES}
@@ -131,6 +138,7 @@ class VotePanel extends Component {
           color='success'
           isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
           toggle={() => this.onDismiss()}
+          className='text-center'
         >
           Vote Saved
         </Alert>
@@ -138,10 +146,11 @@ class VotePanel extends Component {
           color='danger'
           isOpen={this.state.alertVisible && this.state.alertType === ERROR}
           toggle={() => this.onDismiss()}
+          className='text-center'
         >
           There was an error saving your vote.
         </Alert>
-      </div>
+      </VotingContainer>
     )
   }
 }

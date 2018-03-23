@@ -12,7 +12,7 @@ import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
 
 const Arrow = styled.span`
-  color: black;
+  color: white;
   position: fixed;
   opacity: 0.25;
   transition: opacity 0.25s ease-in; /* fade light to dark when hover over */
@@ -34,28 +34,7 @@ const Next = Arrow.extend`
   right: 25px;
 `
 
-const SubmissionContainer = styled.section`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`
-
-const VoteContainer = styled.section``
-
 class Vote extends Component {
-  handleKeyInput = e => {
-    const { setViewing, previous, next } = this.props
-    if (e.key === 'ArrowRight') {
-      if (next && next.id) {
-        setViewing(next.id)
-      }
-    } else if (e.key === 'ArrowLeft') {
-      if (previous && previous.id) {
-        setViewing(previous.id)
-      }
-    }
-  }
-
   static propTypes = {
     show: PropTypes.shape({
       id: PropTypes.string
@@ -77,16 +56,27 @@ class Vote extends Component {
     submission: null
   }
 
-  componentWillUnmount () {
-    document.removeEventListener('keydown', this.handleKeyInput)
-    document.body.style = 'background: white'
+  handleKeyInput = e => {
+    const { setViewing, previous, next } = this.props
+    if (e.key === 'ArrowRight') {
+      if (next && next.id) {
+        setViewing(next.id)
+      }
+    } else if (e.key === 'ArrowLeft') {
+      if (previous && previous.id) {
+        setViewing(previous.id)
+      }
+    }
   }
 
   componentDidMount () {
     this.props.fetchSubmissions()
     this.props.fetchVotes()
     document.addEventListener('keydown', this.handleKeyInput)
-    document.body.style = 'background: #777777'
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.handleKeyInput)
   }
 
   render () {
@@ -94,7 +84,7 @@ class Vote extends Component {
 
     return (
       <Container fluid>
-        <Row style={{ height: '90vh' }}>
+        <Row style={{ backgroundColor: '#777777', minHeight: '70vh', paddingTop: '25px' }}>
           <Col xs='1'>
             {previous && previous.id ? (
               <Previous onClick={() => setViewing(previous.id)}>
@@ -102,15 +92,8 @@ class Vote extends Component {
               </Previous>
             ) : null}
           </Col>
-          <Col xs='10' style={{ display: 'flex', flexDirection: 'column' }}>
-            <SubmissionContainer>
-              {submission ? <Submission submission={submission} /> : null}
-            </SubmissionContainer>
-            <VoteContainer>
-              {submission ? (
-                <VotePanel submission={submission} vote={vote} />
-              ) : null}
-            </VoteContainer>
+          <Col xs='10'>
+            {submission ? <Submission submission={submission} /> : null}
           </Col>
           <Col xs='1'>
             {next && next.id ? (
@@ -120,6 +103,15 @@ class Vote extends Component {
             ) : null}
           </Col>
         </Row>
+        {submission ? (
+          <Row>
+            <Col>
+              <section>
+                <VotePanel submission={submission} vote={vote} />
+              </section>
+            </Col>
+          </Row>
+        ) : null}
       </Container>
     )
   }

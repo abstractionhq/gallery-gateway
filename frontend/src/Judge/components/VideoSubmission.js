@@ -7,12 +7,10 @@ const YOUTUBE_BASE_URL = 'https://www.youtube.com/embed/'
 const YOUTUBE_VIDEO_CONTROLS = '?autoplay=1&controls=0'
 const VIMEO_BASE_URL = 'https://player.vimeo.com/video/'
 const VIMEO_VIDEO_CONTROLS = '?autoplay=1'
+
 const PlayerContainer = styled.div`
-  height: 100%;
-  display: inline-block;
-  flex-grow: 1
-  display: flex
-  flex-direction: column
+  margin: 0 auto 25px;
+  max-width: 75%;
 `
 
 class VideoSubmission extends Component {
@@ -23,25 +21,22 @@ class VideoSubmission extends Component {
 
   render () {
     const { provider, videoId } = this.props
+
     return (
-      <PlayerContainer id='videoPlayerContainer'>
+      <PlayerContainer className='embed-responsive embed-responsive-16by9'>
         {provider === 'youtube' ? (
           <iframe
-            frameBorder='0'
+            title='youtube-player'
             allowFullScreen='1'
-            width='100%'
-            height='100%'
             src={`${YOUTUBE_BASE_URL}${videoId}${YOUTUBE_VIDEO_CONTROLS}`}
-            style={{ flexGrow: '1' }}
+            className='embed-responsive-item'
           />
         ) : provider === 'vimeo' ? (
           <iframe
-            frameBorder='0'
+            title='vimeo-player'
             allowFullScreen='1'
-            width='100%'
-            height='100%'
             src={`${VIMEO_BASE_URL}${videoId}${VIMEO_VIDEO_CONTROLS}`}
-            style={{ flexGrow: '1' }}
+            className='embed-responsive-item'
           />
         ) : null}
       </PlayerContainer>
