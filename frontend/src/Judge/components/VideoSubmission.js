@@ -21,34 +21,6 @@ class VideoSubmission extends Component {
     videoId: PropTypes.string.isRequired
   }
 
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      height: 0,
-      width: 0
-    }
-  }
-
-  updateDimensions = () => {
-    const videoPlayerContainer = document.getElementById('videoPlayerContainer')
-    const height = videoPlayerContainer.clientHeight // height is static to container max size
-    const width = height * 1.7778 // width is 640/360 (default width and height)
-    this.setState({
-      height: height,
-      width: width
-    })
-  }
-
-  componentDidMount () {
-    this.updateDimensions()
-    window.addEventListener('resize', this.updateDimensions)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.updateDimensions)
-  }
-
   render () {
     const { provider, videoId } = this.props
     return (
