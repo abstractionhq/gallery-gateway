@@ -36,12 +36,9 @@ class PhotoSubmission extends Component {
 
     return (
       <Fragment>
-        {/* <PhotoContainer
-          // TODO make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${path}`}
-          onClick={() => this.openLightbox()}
-        /> */}
-        <PhotoContainer style={{backgroundImage: `url(//localhost:3000/static/uploads/${path})`}} />
+        <PhotoContainer 
+        style={{backgroundImage: `url(//localhost:3000/static/uploads/${path})`}} 
+        onClick={() => this.openLightbox()}/>
         <Lightbox
           images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
           isOpen={this.state.isLightboxOpen}

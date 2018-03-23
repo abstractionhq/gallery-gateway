@@ -26,8 +26,6 @@ const PdfWell = styled.a`
   background-color: #666666;
   box-shadow: inset 2px 2px 1px rgba(0, 0, 0, 0.05);
 `
-const PdfText = styled.div`
-`
 
 class OtherMediaSubmission extends Component {
   static propTypes = {
@@ -48,9 +46,7 @@ class OtherMediaSubmission extends Component {
           // TODO make this URL responsive to deploy environment
           <PdfWell href={`//localhost:3000/static/uploads/${path}`} target='_blank'>
             <PdfImg style={{backgroundImage: `url(${pdf})`}}  />
-            <PdfText>
-              <h3>Click to View</h3>
-            </PdfText>
+            <h3>Click to View</h3>
           </PdfWell>
         ) : (<PhotoSubmission path={path} />)}
       </Fragment>
