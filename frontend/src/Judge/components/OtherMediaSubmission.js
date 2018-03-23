@@ -31,24 +31,26 @@ class OtherMediaSubmission extends Component {
   static propTypes = {
     path: PropTypes.string.isRequired
   }
-  render() {
+  render () {
     const { path } = this.props
 
     return (
       <Fragment>
-        <Alert
-          color='warning'
-          style={{ textAlign: 'center' }}
-        >
+        <Alert color='warning' style={{ textAlign: 'center' }}>
           This submission may need to be viewed in person
         </Alert>
         {path.match('.pdf$') ? (
           // TODO make this URL responsive to deploy environment
-          <PdfWell href={`//localhost:3000/static/uploads/${path}`} target='_blank'>
-            <PdfImg style={{backgroundImage: `url(${pdf})`}}  />
+          <PdfWell
+            href={`//localhost:3000/static/uploads/${path}`}
+            target='_blank'
+          >
+            <PdfImg style={{ backgroundImage: `url(${pdf})` }} />
             <h3>Click to View</h3>
           </PdfWell>
-        ) : (<PhotoSubmission path={path} />)}
+        ) : (
+          <PhotoSubmission path={path} />
+        )}
       </Fragment>
     )
   }

@@ -40,8 +40,7 @@ const SubmissionContainer = styled.section`
   flex-direction: column;
 `
 
-const VoteContainer = styled.section`
-`
+const VoteContainer = styled.section``
 
 class Vote extends Component {
   handleKeyInput = e => {
@@ -95,7 +94,7 @@ class Vote extends Component {
 
     return (
       <Container fluid>
-        <Row style={{height: '90vh'}}>
+        <Row style={{ height: '90vh' }}>
           <Col xs='1'>
             {previous && previous.id ? (
               <Previous onClick={() => setViewing(previous.id)}>

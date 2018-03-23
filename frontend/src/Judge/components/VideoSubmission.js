@@ -26,21 +26,23 @@ class VideoSubmission extends Component {
     return (
       <PlayerContainer id='videoPlayerContainer'>
         {provider === 'youtube' ? (
-          <iframe 
-          frameBorder="0" 
-          allowFullScreen="1" 
-          width="100%" 
-          height="100%"
-          src={`${YOUTUBE_BASE_URL}${videoId}${YOUTUBE_VIDEO_CONTROLS}`}
-          style={{flexGrow: '1'}}/>
+          <iframe
+            frameBorder='0'
+            allowFullScreen='1'
+            width='100%'
+            height='100%'
+            src={`${YOUTUBE_BASE_URL}${videoId}${YOUTUBE_VIDEO_CONTROLS}`}
+            style={{ flexGrow: '1' }}
+          />
         ) : provider === 'vimeo' ? (
-          <iframe 
-          frameBorder="0" 
-          allowFullScreen="1" 
-          width="100%" 
-          height="100%"
-          src={`${VIMEO_BASE_URL}${videoId}${VIMEO_VIDEO_CONTROLS}`}
-          style={{flexGrow: '1'}}/>
+          <iframe
+            frameBorder='0'
+            allowFullScreen='1'
+            width='100%'
+            height='100%'
+            src={`${VIMEO_BASE_URL}${videoId}${VIMEO_VIDEO_CONTROLS}`}
+            style={{ flexGrow: '1' }}
+          />
         ) : null}
       </PlayerContainer>
     )

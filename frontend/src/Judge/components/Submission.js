@@ -12,7 +12,7 @@ const OTHER = 'OTHER'
 
 const Submission = props => (
   <Fragment>
-    <h5 style={{textAlign: 'center'}}>{props.submission.title}</h5>
+    <h5 style={{ textAlign: 'center' }}>{props.submission.title}</h5>
     {props.submission.entryType === VIDEO ? (
       <VideoSubmission
         provider={props.submission.provider}
