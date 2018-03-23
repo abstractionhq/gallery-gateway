@@ -131,11 +131,6 @@ const mapStateToProps = (state, ownProps) => {
     state.judge.queues[showId] || {}
   let { on: submissionId } = queryString.parse(state.router.location.search)
 
-  // If this submissionId is not parsable as a base-10 integer, throw it out
-  if (isNaN(parseInt(submissionId, 10))) {
-    submissionId = null
-  }
-
   // If this submissionId is not in the ordering, throw it out
   if (order.indexOf(submissionId) < 0) {
     submissionId = null

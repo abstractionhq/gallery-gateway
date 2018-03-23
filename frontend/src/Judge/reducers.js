@@ -88,8 +88,8 @@ const queue = (state = initialQueueState, action) => {
 // Each show has a queue whose key in the queues state is the show's id
 // Example State:
 // {
-//   1: {order: [1, 2, 3], loadingSubmissions: true, loadingVotes: false},
-//   2: {order: [9, 4, 5, 8, 6, 7], loadingSubmissions: true, loadingVotes: false}
+//   1: {order: ['1', '2', '3'], loadingSubmissions: true, loadingVotes: false},
+//   2: {order: ['9', '4', '5', '8', '6', '7'], loadingSubmissions: true, loadingVotes: false}
 // }
 const queues = (state = {}, action) => {
   // Proxy all queue actions to the particular queue we want to target
