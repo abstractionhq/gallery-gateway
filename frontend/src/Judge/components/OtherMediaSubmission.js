@@ -46,6 +46,7 @@ class OtherMediaSubmission extends Component {
       <Fragment>
         <Alert
           color='warning'
+          style={{textAlign: 'center'}}
         >
           This submission may need to be viewed in person
         </Alert>

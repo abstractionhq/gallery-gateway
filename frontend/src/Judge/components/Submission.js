@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import VideoSubmission from '../components/VideoSubmission'
@@ -11,21 +11,19 @@ const PHOTO = 'PHOTO'
 const OTHER = 'OTHER'
 
 const Submission = props => (
-  <div style={{ height: '100%' }}>
-    <h5>{props.submission.title}</h5>
-    <div style={{ height: '100%' }}>
-      {props.submission.entryType === VIDEO ? (
-        <VideoSubmission
-          provider={props.submission.provider}
-          videoId={props.submission.videoId}
-        />
-      ) : props.submission.entryType === PHOTO ? (
-        <PhotoSubmission path={props.submission.path} />
-      ) : props.submission.entryType === OTHER ? (
-        <OtherMediaSubmission path={props.submission.path} />
-      ) : null}
-    </div>
-  </div>
+  <Fragment>
+    <h5 style={{textAlign: 'center'}}>{props.submission.title}</h5>
+    {props.submission.entryType === VIDEO ? (
+      <VideoSubmission
+        provider={props.submission.provider}
+        videoId={props.submission.videoId}
+      />
+    ) : props.submission.entryType === PHOTO ? (
+      <PhotoSubmission path={props.submission.path} />
+    ) : props.submission.entryType === OTHER ? (
+      <OtherMediaSubmission path={props.submission.path} />
+    ) : null}
+  </Fragment>
 )
 
 Submission.propTypes = {

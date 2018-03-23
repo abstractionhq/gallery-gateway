@@ -3,12 +3,11 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Lightbox from 'react-images'
 
-const PhotoContainer = styled.img`
-  height: 100%;
-  width: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+const PhotoContainer = styled.div`
+  flex-grow: 1
+  background-repeat: no-repeat
+  background-position: center
+  background-size: contain
 `
 
 class PhotoSubmission extends Component {
@@ -37,11 +36,12 @@ class PhotoSubmission extends Component {
 
     return (
       <Fragment>
-        <PhotoContainer
+        {/* <PhotoContainer
           // TODO make this URL responsive to deploy environment
           src={`//localhost:3000/static/uploads/${path}`}
           onClick={() => this.openLightbox()}
-        />
+        /> */}
+        <PhotoContainer style={{backgroundImage: `url(//localhost:3000/static/uploads/${path})`}} />
         <Lightbox
           images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
           isOpen={this.state.isLightboxOpen}

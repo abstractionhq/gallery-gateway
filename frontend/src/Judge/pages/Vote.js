@@ -40,21 +40,12 @@ const Next = Arrow.extend`
 `
 
 const SubmissionContainer = styled.section`
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 25%;
-  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 const VoteContainer = styled.section`
-  position: absolute;
-  top: 80%;
-  right: 0;
-  left: 0;
-  bottom: 20px;
-  text-align: center;
 `
 
 class Vote extends Component {
@@ -144,7 +135,7 @@ class Vote extends Component {
 
     return (
       <Container fluid>
-        <Row>
+        <Row style={{height: '90vh'}}>
           <Col xs='1'>
             {previous && previous.id ? (
               <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
@@ -154,7 +145,7 @@ class Vote extends Component {
               </Link>
             ) : null}
           </Col>
-          <Col xs='10' style={{ height: '90vh' }}>
+          <Col xs='10' style={{ display: 'flex', flexDirection: 'column' }}>
             <SubmissionContainer>
               {submission ? <Submission submission={submission} /> : null}
             </SubmissionContainer>

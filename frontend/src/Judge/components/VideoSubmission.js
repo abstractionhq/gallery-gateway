@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactPlayer from 'react-player'
 import styled from 'styled-components'
 
 // Video Providers
-const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
-const VIMEO_BASE_URL = 'https://vimeo.com/'
-
+const YOUTUBE_BASE_URL = 'https://www.youtube.com/embed/'
+const YOUTUBE_VIDEO_CONTROLS = '?autoplay=1&controls=0'
+const VIMEO_BASE_URL = 'https://player.vimeo.com/video/'
+const VIMEO_VIDEO_CONTROLS = '?autoplay=1'
 const PlayerContainer = styled.div`
   height: 100%;
   display: inline-block;
+  flex-grow: 1
+  display: flex
+  flex-direction: column
 `
 
 class VideoSubmission extends Component {
@@ -51,21 +54,21 @@ class VideoSubmission extends Component {
     return (
       <PlayerContainer id='videoPlayerContainer'>
         {provider === 'youtube' ? (
-          <ReactPlayer
-            url={`${YOUTUBE_BASE_URL}${videoId}`}
-            playing
-            controls
-            width={this.state.width}
-            height={this.state.height}
-          />
+          <iframe 
+          frameBorder="0" 
+          allowFullScreen="1" 
+          width="100%" 
+          height="100%"
+          src={`${YOUTUBE_BASE_URL}${videoId}${YOUTUBE_VIDEO_CONTROLS}`}
+          style={{flexGrow: '1'}}/>
         ) : provider === 'vimeo' ? (
-          <ReactPlayer
-            url={`${VIMEO_BASE_URL}${videoId}`}
-            playing
-            controls
-            width={this.state.width}
-            height={this.state.height}
-          />
+          <iframe 
+          frameBorder="0" 
+          allowFullScreen="1" 
+          width="100%" 
+          height="100%"
+          src={`${VIMEO_BASE_URL}${videoId}${VIMEO_VIDEO_CONTROLS}`}
+          style={{flexGrow: '1'}}/>
         ) : null}
       </PlayerContainer>
     )
