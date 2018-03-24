@@ -4,6 +4,7 @@ import request from 'supertest'
 import server from '../../server'
 import { expect } from 'chai'
 import fs from 'fs'
+import path from 'path'
 import nconf from '../../config'
 import { fakeUser } from '../factories'
 import { signUserToken } from '../util'
@@ -12,23 +13,32 @@ const imageDir = nconf.get('upload:imageDir')
 const pdfDir = nconf.get('upload:pdfDir')
 
 describe('Image upload', function () {
-  it('saves valid images from students at expected location', function (done) {
+  it('saves valid images from students at expected location', () =>
     fakeUser({ username: 'user1', type: 'STUDENT' })
-      .then((user) => {
-        const token = signUserToken(user)
+      .then((user) =>
         request(server)
           .post('/static/upload/image')
-          .set('Authorization', 'Bearer ' + token)
+          .set('Authorization', 'Bearer ' + signUserToken(user))
           .attach('image', 'test/resources/validTest.jpg')
           .expect((res) => {
             expect(res.body).to.have.property('path')
+            const parsedPath = path.parse(res.body.path)
             expect(fs.existsSync(imageDir + '/' +
               res.body.path)).to.be.true
+            expect(
+              fs.existsSync(
+                imageDir + '/' +
+                parsedPath.dir + '/' +
+                parsedPath.name +
+                '_thumb' +
+                parsedPath.ext
+              ),
+              'Thumbnail must exist'
+            ).to.be.true
           })
           .expect(201)
-          .end(done)
-      })
-  })
+      )
+  )
   it('saves valid images from admin at expected location', function (done) {
     fakeUser({ username: 'user2', type: 'ADMIN' })
       .then((user) => {
