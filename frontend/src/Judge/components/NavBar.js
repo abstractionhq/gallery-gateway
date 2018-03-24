@@ -9,13 +9,8 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap'
-import styled from 'styled-components'
 
-const NavBarContainer = styled.div`
-  margin-bottom: 25px;
-`
-
-export default class NavBar extends Component {
+class NavBar extends Component {
   static propTypes = {
     user: PropTypes.shape({
       type: PropTypes.string
@@ -52,7 +47,7 @@ export default class NavBar extends Component {
     const isAdmin = this.props.user.type === 'ADMIN'
 
     return (
-      <NavBarContainer>
+      <div>
         <Navbar color='dark' dark expand='md'>
           <Link to='/' className='navbar-brand'>
             Gallery Gateway
@@ -69,7 +64,9 @@ export default class NavBar extends Component {
             </Nav>
           </Collapse>
         </Navbar>
-      </NavBarContainer>
+      </div>
     )
   }
 }
+
+export default NavBar
