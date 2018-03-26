@@ -1,32 +1,46 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactPlayer from 'react-player'
 import styled from 'styled-components'
 
 // Video Providers
-const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
-const VIMEO_BASE_URL = 'https://vimeo.com/'
+const YOUTUBE_BASE_URL = 'https://www.youtube.com/embed/'
+const YOUTUBE_VIDEO_CONTROLS = '?autoplay=1&controls=0'
+const VIMEO_BASE_URL = 'https://player.vimeo.com/video/'
+const VIMEO_VIDEO_CONTROLS = '?autoplay=1'
 
 const PlayerContainer = styled.div`
-  /* Center the top-most 'div' that ReactPlayer wraps around the 'iframe'  */
-  & > div {
-    margin: 0 auto;
-  }
+  margin: 0 auto 25px;
+  max-width: 75%;
 `
 
-const VideoSubmission = props => (
-  <PlayerContainer>
-    {props.provider === 'youtube' ? (
-      <ReactPlayer url={`${YOUTUBE_BASE_URL}${props.videoId}`} playing controls />
-    ) : props.provider === 'vimeo' ? (
-      <ReactPlayer url={`${VIMEO_BASE_URL}${props.videoId}`} playing controls />
-    ) : null}
-  </PlayerContainer>
-)
+class VideoSubmission extends Component {
+  static propTypes = {
+    provider: PropTypes.string.isRequired,
+    videoId: PropTypes.string.isRequired
+  }
 
-VideoSubmission.propTypes = {
-  provider: PropTypes.string.isRequired,
-  videoId: PropTypes.string.isRequired
+  render () {
+    const { provider, videoId } = this.props
+
+    return (
+      <PlayerContainer className='embed-responsive embed-responsive-16by9'>
+        {provider === 'youtube' ? (
+          <iframe
+            title='youtube-player'
+            allowFullScreen='1'
+            src={`${YOUTUBE_BASE_URL}${videoId}${YOUTUBE_VIDEO_CONTROLS}`}
+            className='embed-responsive-item'
+          />
+        ) : provider === 'vimeo' ? (
+          <iframe
+            title='vimeo-player'
+            allowFullScreen='1'
+            src={`${VIMEO_BASE_URL}${videoId}${VIMEO_VIDEO_CONTROLS}`}
+            className='embed-responsive-item'
+          />
+        ) : null}
+      </PlayerContainer>
+    )
+  }
 }
-
 export default VideoSubmission
