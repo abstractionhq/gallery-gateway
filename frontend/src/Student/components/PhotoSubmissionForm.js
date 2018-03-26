@@ -44,12 +44,12 @@ class PhotoSubmissionForm extends Component {
       show: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf({
+        entries: PropTypes.arrayOf(PropTypes.shape({
           id: PropTypes.string,
           student: PropTypes.shape({
             username: PropTypes.string
           })
-        })
+        }))
       })
     }).isRequired,
     handleUpload: PropTypes.func.isRequired,
@@ -232,7 +232,7 @@ class PhotoSubmissionForm extends Component {
                 moreCopies:
                   values.forSale === 'yes' && values.moreCopies === 'yes'
               },
-              mediaType: values.mediaType,
+              mediaType: values.mediaType.value,
               horizDimInch: values.horizDimInch,
               vertDimInch: values.vertDimInch,
               path: values.path
