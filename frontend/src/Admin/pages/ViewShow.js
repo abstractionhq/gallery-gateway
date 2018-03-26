@@ -78,7 +78,9 @@ const ViewShow = props => {
 
 ViewShow.propTypes = {
   loading: PropTypes.bool.isRequired,
-  show: PropTypes.object,
+  show: PropTypes.shape({
+    name: PropTypes.string.isRequired
+  }),
   match: PropTypes.shape({
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
