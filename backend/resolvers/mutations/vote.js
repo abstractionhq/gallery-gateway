@@ -2,11 +2,22 @@ import Vote from '../../models/vote'
 import Entry from '../../models/entry'
 import User from '../../models/user'
 import { UserError } from 'graphql-errors'
-import { ADMIN, JUDGE } from '../../constants'
+import { ADMIN, JUDGE, STUDENT } from '../../constants'
 
-function judgeIsAllowedToVote (input) {
-  return User.findById(input.judgeUsername).then(judge => {
-    return Entry.findById(input.entryId).then(entry => {
+function judgeIsAllowedToVote (judgeUsername, entryId, userType) {
+  // Admins can vote on any show
+  if (userType === ADMIN) {
+    return Promise.resolve()
+  }
+
+  // Students may not vote
+  if (userType === STUDENT) {
+    return Promise.reject(new UserError('Students may not vote'))
+  }
+
+  // Judges may only vote on entries submited to shows they've been assigned to.
+  return User.findById(judgeUsername).then(judge => {
+    return Entry.findById(entryId).then(entry => {
       if (!entry) {
         return Promise.reject(new UserError('Cannot find entry'))
       }
@@ -21,6 +32,7 @@ function judgeIsAllowedToVote (input) {
     })
   })
 }
+
 export function vote (_, args, req) {
   // Make sure judge is voting as themself
   const isRequestingOwnJudgeUser = req.auth.username !== undefined &&
@@ -31,7 +43,7 @@ export function vote (_, args, req) {
   }
   // Make sure judge is allowed to vote on this entry
   const input = args.input
-  return judgeIsAllowedToVote(input)
+  return judgeIsAllowedToVote(input.judgeUsername, input.entryId, req.auth.type)
     .then(() => {
       return Vote
         .findOrCreate({
