@@ -1,141 +1,100 @@
 import React from 'react'
-import { graphql, compose } from 'react-apollo'
-import { connect } from 'react-redux'
+import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Container,
-  Row,
-  Col
-} from 'reactstrap'
-import queryString from 'query-string'
+import { TabContent, TabPane, Container, Row, Col } from 'reactstrap'
+import { RoutedTabs, NavTab } from 'react-router-tabs'
+import { Route, Switch } from 'react-router-dom'
 
+import ShowDetailsTab from '../components/ShowDetailsTab'
+import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
+import ShowJudgesTab from '../components/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 
-class ViewShow extends React.Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    show: PropTypes.shape({
-      name: PropTypes.string.isRequired
-    })
+const ViewShow = props => {
+  if (props.loading) {
+    return null
   }
 
-  goToTab (tab) {
-    if (tab === this.props.tab) {
-      return
-    }
-    const { id: showId } = this.props.match.params
-    const newQueryString = queryString.stringify({
-      ...queryString.parse(this.props.location.search),
-      tab: tab
-    })
-    this.props.history.push(`/show/${showId}?${newQueryString}`)
-  }
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <h1>{props.show.name}</h1>
+        </Col>
+      </Row>
 
-  render () {
-    if (this.props.loading) {
-      return null
-    }
+      <hr />
 
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <h1>{this.props.show.name}</h1>
-          </Col>
-        </Row>
-        <hr />
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={this.props.tab === '1' ? 'active' : ''}
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.goToTab('1')}
-            >
-              Details
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={this.props.tab === '2' ? 'active' : ''}
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.goToTab('2')}
-            >
-              Submissions
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={this.props.tab === '3' ? 'active' : ''}
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.goToTab('3')}
-            >
-              Judges
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={this.props.tab}>
-          <TabPane tabId='1'>
-            <Row>
-              <Col>Details</Col>
-            </Row>
-          </TabPane>
-          <TabPane tabId='2'>
-            <Row>
-              <Col>Submissions</Col>
-            </Row>
-          </TabPane>
-          <TabPane tabId='3'>
-            <Row>
-              <Col>Judges</Col>
-            </Row>
-          </TabPane>
-        </TabContent>
-      </Container>
-    )
-  }
+      {/* We must use 'match.url' as the base because it contains the show id */}
+      <RoutedTabs
+        startPathWith={props.match.url}
+        className='nav nav-tabs'
+        style={{ marginBottom: '1rem' }}
+      >
+        {/* 'replace={false} makes it so tab navigation is in the browser history */}
+        <NavTab exact to='' replace={false} className='nav-item nav-link'>
+          Details
+        </NavTab>
+        <NavTab
+          exact
+          to='/submissions'
+          replace={false}
+          className='nav-item nav-link'
+        >
+          Submissions
+        </NavTab>
+        <NavTab
+          exact
+          to='/judges'
+          replace={false}
+          className='nav-item nav-link'
+        >
+          Judges
+        </NavTab>
+      </RoutedTabs>
+
+      <TabContent>
+        <TabPane>
+          <Switch>
+            <Route
+              exact
+              path={`${props.match.path}`}
+              render={() => <ShowDetailsTab show={props.show} />}
+            />
+            <Route
+              path={`${props.match.path}/submissions`}
+              render={() => <ShowSubmissionsTab show={props.show} />}
+            />
+            <Route
+              path={`${props.match.path}/judges`}
+              render={() => <ShowJudgesTab show={props.show} />}
+            />
+          </Switch>
+        </TabPane>
+      </TabContent>
+    </Container>
+  )
 }
 
-const mapStateToProps = (state, ownProps) => {
-  let { tab } = queryString.parse(ownProps.location.search)
-  const { id: showId } = ownProps.match.params
-
-  // If tab is invalid, destroy it
-  if (tab !== '1' && tab !== '2' && tab !== '3') {
-    tab = null
-  }
-
-  if (!tab) {
-    // Update the query-string to contain the currently active tab, if needed
-    const newQueryString = queryString.stringify({
-      ...queryString.parse(ownProps.location.search),
-      tab: '1'
-    })
-    ownProps.history.replace(`/show/${showId}?${newQueryString}`)
-  }
-
-  return {
-    tab
-  }
+ViewShow.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  show: PropTypes.object,
+  match: PropTypes.shape({
+    path: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired
+  }).isRequired
 }
 
-const withQuery = compose(
-  connect(mapStateToProps, null),
-  graphql(ShowQuery, {
-    options: ownProps => ({
-      variables: {
-        id: ownProps.match.params.id
-      }
-    }),
-    props: ({ data: { show, loading } }) => ({
-      show,
-      loading
-    })
+const withQuery = graphql(ShowQuery, {
+  options: ownProps => ({
+    variables: {
+      id: ownProps.match.params.id
+    }
+  }),
+  props: ({ data: { show, loading } }) => ({
+    show,
+    loading
   })
-)(ViewShow)
+})(ViewShow)
 
 export default withQuery
