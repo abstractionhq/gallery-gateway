@@ -77,10 +77,22 @@ function handleRes (req, res, err, fileType) {
     const image = sharp(req.file.path)
     image
       .metadata()
-      .then(metadata => {
+      .then(({height, width}) => {
         // Generate a thumnail with max width of 400px and max height of 300px
-        const targetWidth = Math.min(400, metadata.width)
-        const targetHeight = Math.min(300, metadata.height)
+
+        let targetWidth = 0
+        let targetHeight = 0
+        // If the item is portrait-oriented, constrain the height and scale the
+        // width proportionally
+        if (height > width) {
+          targetHeight = Math.min(300, height)
+          targetWidth = Math.floor(targetHeight / height * width)
+        } else {
+          // Otherwise, the item is landscape-oriented, constrain the width and
+          // scale the height proportionally
+          targetWidth = Math.min(400, width)
+          targetHeight = Math.floor(targetWidth / width * height)
+        }
         // The thumbnail path is 'a/1/<guid>_thumb.jpg', for example
         const parsedFileName = path.parse(req.file.path)
         const thumbnailPath = `${parsedFileName.dir}/${parsedFileName.name}_thumb${parsedFileName.ext}`
