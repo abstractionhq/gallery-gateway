@@ -7,7 +7,7 @@ import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
 import FaBook from 'react-icons/lib/fa/book'
 import FaYouTube from 'react-icons/lib/fa/youtube'
 import FaVimeo from 'react-icons/lib/fa/vimeo'
-import { Row, Col, Alert } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 
 const Card = styled.div`
@@ -69,10 +69,11 @@ const NotAccepted = styled.div`
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
+      const [base, extn] = entry.path.split('.')
       return (
         <PhotoThumbnail
           // TODO (robert) make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${entry.path}`}
+          src={`//localhost:3000/static/uploads/${base}_thumb.${extn}`}
         />
       )
     case 'VIDEO':

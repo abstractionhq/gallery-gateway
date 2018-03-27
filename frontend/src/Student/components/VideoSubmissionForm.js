@@ -38,12 +38,12 @@ class VideoSubmissionForm extends Component {
       show: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf({
+        entries: PropTypes.arrayOf(PropTypes.shape({
           id: PropTypes.string,
           student: PropTypes.shape({
             username: PropTypes.string
           })
-        })
+        }))
       })
     }).isRequired,
     create: PropTypes.func.isRequired,
