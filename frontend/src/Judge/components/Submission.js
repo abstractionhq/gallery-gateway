@@ -13,7 +13,11 @@ const OTHER = 'OTHER'
 const Submission = props => (
   <div>
     <h5>{props.submission.title}</h5>
+<<<<<<< Updated upstream
     <div>
+=======
+    <div style={{ height: '55vh', maxWidth: '80%', margin: 'auto' }}>
+>>>>>>> Stashed changes
       {props.submission.entryType === VIDEO ? (
         <VideoSubmission provider={props.submission.provider} videoId={props.submission.videoId} />
       ) : props.submission.entryType === PHOTO ? (
