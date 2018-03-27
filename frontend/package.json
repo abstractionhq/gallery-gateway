@@ -57,6 +57,7 @@
     "react-moment": "^0.7.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-router-tabs": "^1.1.1",
     "react-select": "^1.2.1",
     "react-table": "^6.7.4",
     "reactstrap": "^5.0.0-alpha.3",

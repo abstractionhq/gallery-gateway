@@ -50,14 +50,14 @@ const ShowCard = props => (
           <Button
             style={{ cursor: 'pointer' }}
             tag={Link}
-            to={`show/${props.id}/submissions`}
+            to={`show/${props.id}`}
           >
-            View Submissions
+            View Details
           </Button>{' '}
           <Button
             style={{ cursor: 'pointer' }}
             tag={Link}
-            to={`show/${props.id}/judges`}
+            to={`show/${props.id}/judges/assign`}
           >
             Manage Judges
           </Button>
