@@ -16,4 +16,8 @@ const ShowDetailsTab = props => (
   </div>
 )
 
+ShowDetailsTab.propTypes = {
+  downloadZip: PropTypes.func.isRequired
+}
+
 export default ShowDetailsTab
