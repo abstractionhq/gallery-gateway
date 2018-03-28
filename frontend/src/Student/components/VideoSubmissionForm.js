@@ -72,7 +72,11 @@ class VideoSubmissionForm extends Component {
   }
 
   render () {
-    if (this.props.data.loading) {
+    // Since we are clearing the Apollo cache when we submit an entry
+    // there is a brief period where the data is not present but we are not
+    // 'loading' -- this is only for a moment until we are taken back to the
+    // home page.
+    if (this.props.data.loading || !this.props.data.show) {
       return null
     }
 

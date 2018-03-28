@@ -23,7 +23,10 @@ const withMutations = compose(
     props: ({ mutate }) => ({
       create: entry =>
         mutate({
-          variables: { input: entry }
+          variables: { input: entry },
+          update: cache => {
+            cache.reset()
+          }
         })
     })
   }),
