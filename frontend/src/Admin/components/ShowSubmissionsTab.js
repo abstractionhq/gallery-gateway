@@ -74,11 +74,12 @@ const ShowSubmissionsTab = props => {
               ? `${submission.student.lastName}, ${submission.student.firstName} (${submission.student.username})`
               : (
                 <div>
+                  <small>Group</small>
                   <p>
                     {submission.group.creator.lastName}, {submission.group.creator.firstName} ({submission.group.creator.username})
                   </p>
                   <p>
-                    {submission.group.participants}
+                    Participants: {submission.group.participants}
                   </p>
                 </div>
               )
