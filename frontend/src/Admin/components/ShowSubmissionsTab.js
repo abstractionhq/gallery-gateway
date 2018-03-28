@@ -44,9 +44,9 @@ class ShowSubmissionsTab extends Component {
     }
   }
 
-  updateShowInvite = value => {
+  updateShowInvite = (id, value) => {
     const { updateInvite } = this.props
-    updateInvite(value)
+    updateInvite(id, value)
       .then(() => {
         console.log('updated!!!')
       })
@@ -151,12 +151,12 @@ class ShowSubmissionsTab extends Component {
           Cell: ({ original: submission }) =>
             submission.invited ? (
               <a style={{ cursor: 'pointer' }}
-              onClick={() => this.updateShowInvite(false)}>
+              onClick={() => this.updateShowInvite(submission.id, false)}>
                 <FaStar size='1.5em' style={{ color: 'gold' }} />
               </a>
             ) : (
                 <a style={{ cursor: 'pointer' }}
-                onClick={() => this.updateShowInvite(true)}>
+                onClick={() => this.updateShowInvite(submission.id, true)}>
                   <FaStarOpen size='1.5em' />
                 </a>
               ),
