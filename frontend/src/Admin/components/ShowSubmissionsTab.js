@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import FaYouTube from 'react-icons/lib/fa/youtube'
 import FaVimeo from 'react-icons/lib/fa/vimeo'
 import FaStar from 'react-icons/lib/fa/star'
@@ -16,12 +17,48 @@ const PhotoThumbnail = styled.img`
   min-width: 3em;
   width: auto;
 `
+class ShowSubmissionsTab extends Component {
+  static propTypes = {
+    updateInvite: PropTypes.func.isRequired,
+    show: PropTypes.shape({
+      entries: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          title: PropTypes.string.isRequired,
+          entryType: PropTypes.oneOf(['PHOTO', 'VIDEO', 'OTHER']).isRequired,
+          invited: PropTypes.bool,
+          path: PropTypes.string,
+          provider: PropTypes.oneOf(['youtube', 'vimeo']),
+          videoId: PropTypes.string
+        })
+      )
+    }).isRequired
+  }
 
-const ShowSubmissionsTab = props => {
-  return (
-    <ReactTable
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      alertVisible: false,
+      alertType: ''
+    }
+  }
+
+  updateShowInvite = value => {
+    const { updateInvite } = this.props
+    updateInvite(value)
+      .then(() => {
+        console.log('updated!!!')
+      })
+  }
+
+  render () {
+    const { show } = this.props
+
+    return (
+      <ReactTable
       defaultPageSize={20}
-      data={props.show.entries}
+      data={show.entries}
       columns={[
         {
           Header: 'Row',
@@ -74,20 +111,20 @@ const ShowSubmissionsTab = props => {
           Cell: ({ original: submission }) =>
             !submission.group ? (
               `${submission.student.lastName}, ${
-                submission.student.firstName
+              submission.student.firstName
               } (${submission.student.username})`
             ) : (
-              <div>
-                <small>Group</small>
-                <p>
-                  {submission.group.creator.lastName},{' '}
-                  {submission.group.creator.firstName} ({
-                    submission.group.creator.username
-                  })
+                <div>
+                  <small>Group</small>
+                  <p>
+                    {submission.group.creator.lastName},{' '}
+                    {submission.group.creator.firstName} ({
+                      submission.group.creator.username
+                    })
                 </p>
-                <p>Participants: {submission.group.participants}</p>
-              </div>
-            )
+                  <p>Participants: {submission.group.participants}</p>
+                </div>
+              )
         },
         {
           id: 'dimensions',
@@ -100,7 +137,7 @@ const ShowSubmissionsTab = props => {
           Cell: ({ original: submission }) =>
             submission.entryType === 'PHOTO'
               ? `${submission.horizDimInch} in. \u00D7 ${
-                submission.vertDimInch
+              submission.vertDimInch
               } in.`
               : 'n/a'
         },
@@ -113,16 +150,23 @@ const ShowSubmissionsTab = props => {
           accessor: 'invited',
           Cell: ({ original: submission }) =>
             submission.invited ? (
-              <FaStar size='1.5em' />
+              <a style={{ cursor: 'pointer' }}
+              onClick={() => this.updateShowInvite(false)}>
+                <FaStar size='1.5em' style={{ color: 'gold' }} />
+              </a>
             ) : (
-              <FaStarOpen size='1.5em' />
-            ),
+                <a style={{ cursor: 'pointer' }}
+                onClick={() => this.updateShowInvite(true)}>
+                  <FaStarOpen size='1.5em' />
+                </a>
+              ),
           style: { textAlign: 'center' },
           width: 80
         }
       ]}
     />
-  )
+    )
+  }
 }
 
 export default ShowSubmissionsTab
