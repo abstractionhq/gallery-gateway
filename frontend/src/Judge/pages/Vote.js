@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
-import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
-import FaChevronRight from 'react-icons/lib/fa/chevron-right'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft'
+import FaChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight'
 
 import { nextInQueue, previousInQueue, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
@@ -142,7 +143,7 @@ class Vote extends Component {
             {previous && previous.id ? (
               <Link to={`/show/${show.id}/vote?on=${previous.id}`}>
                 <Previous onClick={handlePrevious}>
-                  <FaChevronLeft size='4em' />
+                  <FontAwesomeIcon icon={FaChevronLeft} size='4x' />
                 </Previous>
               </Link>
             ) : null}
@@ -159,7 +160,7 @@ class Vote extends Component {
             {next && next.id ? (
               <Link to={`/show/${show.id}/vote?on=${next.id}`}>
                 <Next onClick={handleNext}>
-                  <FaChevronRight size='4em' />
+                  <FontAwesomeIcon icon={FaChevronRight} size='4x' />
                 </Next>
               </Link>
             ) : null}

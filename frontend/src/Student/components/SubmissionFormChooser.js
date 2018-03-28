@@ -2,9 +2,10 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 import styled from 'styled-components'
-import FaImage from 'react-icons/lib/fa/image'
-import FaVideo from 'react-icons/lib/fa/video-camera'
-import FaBook from 'react-icons/lib/fa/book'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaImage from '@fortawesome/fontawesome-free-regular/faImage'
+import FaVideo from '@fortawesome/fontawesome-free-solid/faVideo'
+import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
 
 const Header = styled.h2`
   margin-top: 25px;
@@ -38,7 +39,7 @@ const SubmissionFormChooser = props => (
           className='bg-light'
         >
           <SubmissionContainer className='text-dark'>
-            <FaImage size='4em' />
+            <FontAwesomeIcon icon={FaImage} size='4x' />
             <h3>Photo</h3>
           </SubmissionContainer>
         </Link>
@@ -50,7 +51,7 @@ const SubmissionFormChooser = props => (
           className='bg-light'
         >
           <SubmissionContainer className='text-dark'>
-            <FaVideo size='4em' />
+            <FontAwesomeIcon icon={FaVideo} size='4x' />
             <h3>Video</h3>
             <p>(YouTube or Vimeo)</p>
           </SubmissionContainer>
@@ -63,7 +64,7 @@ const SubmissionFormChooser = props => (
           className='bg-light'
         >
           <SubmissionContainer className='text-dark'>
-            <FaBook size='4em' />
+            <FontAwesomeIcon icon={FaBook} size='4x' />
             <h3>Other</h3>
             <p>(eg. A book or physical art)</p>
           </SubmissionContainer>

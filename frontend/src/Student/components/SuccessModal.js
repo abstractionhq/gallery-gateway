@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, ModalBody } from 'reactstrap'
-import FaCheckCircle from 'react-icons/lib/fa/check-circle'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaCheckCircle from '@fortawesome/fontawesome-free-solid/faCheckCircle'
 
 const SuccessModal = props => (
   <Modal
@@ -20,7 +21,7 @@ const SuccessModal = props => (
       }}
     >
       <h4 className='modal-title' style={{ width: '100%' }}>
-        <FaCheckCircle size='3em' style={{ margin: '0 auto' }} />
+        <FontAwesomeIcon icon={FaCheckCircle} size='3x' style={{ margin: '0 auto' }} />
       </h4>
     </div>
     <ModalBody style={{ padding: '40px 0' }}>

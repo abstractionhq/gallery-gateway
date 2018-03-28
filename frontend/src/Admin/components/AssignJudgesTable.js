@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Row, Col, Button } from 'reactstrap'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left'
-import FaLongArrowRight from 'react-icons/lib/fa/long-arrow-right'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaLongArrowLeft from '@fortawesome/fontawesome-free-solid/faLongArrowAltLeft'
+import FaLongArrowRight from '@fortawesome/fontawesome-free-solid/faLongArrowAltRight'
 
 import JudgesTable from '../components/JudgesTable'
 
@@ -95,7 +96,6 @@ class AssignJudgesTable extends Component {
             selected={this.state.selectedUnassignedJudges}
             onChange={this.handleUnassignedJudgesChange}
           />
-          {/* TODO: Form and Button to Create a new Judge */}
         </Col>
         <Col xs='12' md='2' className='align-self-center'>
           <Row>
@@ -107,7 +107,7 @@ class AssignJudgesTable extends Component {
                   style={{ cursor: 'pointer' }}
                   onClick={() => this.assign()}
                 >
-                  Assign <FaLongArrowRight />
+                  Assign <FontAwesomeIcon icon={FaLongArrowRight} className='align-middle' />
                 </Button>
               </ReassignButtonContainer>
             </Col>
@@ -119,7 +119,7 @@ class AssignJudgesTable extends Component {
                   style={{ cursor: 'pointer' }}
                   onClick={() => this.unassign()}
                 >
-                  <FaLongArrowLeft /> Unassign
+                  <FontAwesomeIcon icon={FaLongArrowLeft} className='align-middle' /> Unassign
                 </Button>
               </ReassignButtonContainer>
             </Col>
