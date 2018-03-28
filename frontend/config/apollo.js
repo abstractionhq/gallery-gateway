@@ -1,6 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { HttpLink, InMemoryCache } from 'apollo-client-preset'
-import { ApolloLink, concat } from 'apollo-link'
+import { ApolloLink } from 'apollo-link'
+import { onError } from 'apollo-link-error'
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 
 const httpLink = new HttpLink({uri: 'http://localhost:3000/graphql'}) // TODO: Read from .env
@@ -17,32 +18,47 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
+const errorMiddleware = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    // TODO
+    console.log(graphQLErrors)
+  }
+  if (networkError) {
+    // TODO
+    console.log(networkError)
+  }
+})
+
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
     __schema: {
-      types: [ 
+      types: [
         {
-          "kind": "INTERFACE",
-          "name": "Entry",
-          "possibleTypes": [
+          'kind': 'INTERFACE',
+          'name': 'Entry',
+          'possibleTypes': [
             {
-              "name": "Photo"
+              'name': 'Photo'
             },
             {
-              "name": "Video"
+              'name': 'Video'
             },
             {
-              "name": "OtherMedia"
+              'name': 'OtherMedia'
             }
           ]
         }
-      ] 
+      ]
     }
   }
 })
 
 const client = new ApolloClient({
-  link: concat(authMiddleware, httpLink),
+  link: ApolloLink.from([
+    errorMiddleware,
+    authMiddleware,
+    httpLink
+  ]),
   cache: new InMemoryCache({
     dataIdFromObject: o => {
       switch (o.__typename) {

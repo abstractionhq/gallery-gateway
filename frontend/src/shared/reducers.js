@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux'
+import { LOCATION_CHANGE } from 'connected-react-router'
+
 import * as actions from './actions'
 
 //
@@ -67,7 +69,7 @@ const errors = (state = [], action) => {
         action.payload
       ]
     case actions.DISMISS_ERROR:
-      if (!action.payload) {
+      if (action.payload === undefined) { // We can get 0 as a payload
         return state
       }
 
@@ -76,6 +78,9 @@ const errors = (state = [], action) => {
         ...state.slice(0, action.payload),
         ...state.slice(action.payload + 1)
       ]
+    case LOCATION_CHANGE:
+      // Dismiss all errors if you navigate to another page
+      return []
     default:
       return state
   }
