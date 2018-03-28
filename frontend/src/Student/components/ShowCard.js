@@ -74,7 +74,9 @@ const EntryThumb = ({ entry }) => {
       return (
         <PhotoThumbnail
           // TODO (robert) make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${getImageThumbnail(entry.path)}`}
+          src={`//localhost:3000/static/uploads/${getImageThumbnail(
+            entry.path
+          )}`}
         />
       )
     case 'VIDEO':

@@ -25,21 +25,23 @@ const ShowSubmissionsTab = props => {
       columns={[
         {
           Header: 'Row',
-          Cell: (row) => row.viewIndex + 1,
+          Cell: row => row.viewIndex + 1,
           maxWidth: 50,
           sortable: false
         },
         {
           Header: 'Thumbnail',
-          Cell: ({original: submission}) => {
+          Cell: ({ original: submission }) => {
             switch (submission.entryType) {
               case 'PHOTO':
-                return <PhotoThumbnail
-                  alt={submission.title}
-                  src={
-                    `//localhost:3000/static/uploads/${getImageThumbnail(submission.path)}`
-                  }
-                />
+                return (
+                  <PhotoThumbnail
+                    alt={submission.title}
+                    src={`//localhost:3000/static/uploads/${getImageThumbnail(
+                      submission.path
+                    )}`}
+                  />
+                )
               case 'VIDEO':
                 if (submission.provider === 'youtube') {
                   return <FaYouTube size='2em' />
@@ -54,7 +56,7 @@ const ShowSubmissionsTab = props => {
             }
           },
           sortable: false,
-          style: {textAlign: 'center'},
+          style: { textAlign: 'center' },
           width: 150
         },
         {
@@ -69,36 +71,38 @@ const ShowSubmissionsTab = props => {
             const student = submission.student || submission.group.creator
             return `${student.lastName}${student.firstName}${student.username}`
           },
-          Cell: ({original: submission}) => (
-            !submission.group
-              ? `${submission.student.lastName}, ${submission.student.firstName} (${submission.student.username})`
-              : (
-                <div>
-                  <small>Group</small>
-                  <p>
-                    {submission.group.creator.lastName}, {submission.group.creator.firstName} ({submission.group.creator.username})
-                  </p>
-                  <p>
-                    Participants: {submission.group.participants}
-                  </p>
-                </div>
-              )
-          )
+          Cell: ({ original: submission }) =>
+            !submission.group ? (
+              `${submission.student.lastName}, ${
+                submission.student.firstName
+              } (${submission.student.username})`
+            ) : (
+              <div>
+                <small>Group</small>
+                <p>
+                  {submission.group.creator.lastName},{' '}
+                  {submission.group.creator.firstName} ({
+                    submission.group.creator.username
+                  })
+                </p>
+                <p>Participants: {submission.group.participants}</p>
+              </div>
+            )
         },
         {
           id: 'dimensions',
-          accessor: submission => (
+          accessor: submission =>
             // Allows for sorting by area
             submission.entryType === 'PHOTO'
               ? submission.horizDimInch * submission.vertDimInch
-              : 0
-          ),
+              : 0,
           Header: 'Dimensions',
-          Cell: ({original: submission}) => (
+          Cell: ({ original: submission }) =>
             submission.entryType === 'PHOTO'
-              ? `${submission.horizDimInch} in. \u00D7 ${submission.vertDimInch} in.`
+              ? `${submission.horizDimInch} in. \u00D7 ${
+                submission.vertDimInch
+              } in.`
               : 'n/a'
-          )
         },
         {
           Header: 'Score',
@@ -107,12 +111,13 @@ const ShowSubmissionsTab = props => {
         {
           Header: 'Invited',
           accessor: 'invited',
-          Cell: ({original: submission}) => (
-            submission.invited
-              ? <FaStar size='1.5em' />
-              : <FaStarOpen size='1.5em' />
-          ),
-          style: {textAlign: 'center'},
+          Cell: ({ original: submission }) =>
+            submission.invited ? (
+              <FaStar size='1.5em' />
+            ) : (
+              <FaStarOpen size='1.5em' />
+            ),
+          style: { textAlign: 'center' },
           width: 80
         }
       ]}

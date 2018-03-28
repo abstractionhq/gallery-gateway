@@ -27,9 +27,11 @@ export default compose(
               value
             }
           },
-          update: (cache) => {
+          update: cache => {
             // Invalidates the 'score' attribute for this submission
-            const dataId = `${ownProps.submission.__typename}:${ownProps.submission.id}`
+            const dataId = `${ownProps.submission.__typename}:${
+              ownProps.submission.id
+            }`
             cache.data.set(dataId, {
               ...cache.data.get(dataId),
               score: undefined
