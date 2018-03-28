@@ -70,7 +70,7 @@ const ShowSubmissionsTab = props => {
             return `${student.lastName}${student.firstName}${student.username}`
           },
           Cell: ({original: submission}) => (
-            submission.student
+            !submission.group
               ? `${submission.student.lastName}, ${submission.student.firstName} (${submission.student.username})`
               : (
                 <div>
