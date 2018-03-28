@@ -10,6 +10,8 @@ import FaVimeo from 'react-icons/lib/fa/vimeo'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 
+import { getImageThumbnail } from '../../utils'
+
 const Card = styled.div`
   background-color: #f8f9fa;
   border-radius: 5px;
@@ -69,11 +71,10 @@ const NotAccepted = styled.div`
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
-      const [base, extn] = entry.path.split('.')
       return (
         <PhotoThumbnail
           // TODO (robert) make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${base}_thumb.${extn}`}
+          src={`//localhost:3000/static/uploads/${getImageThumbnail(entry.path)}`}
         />
       )
     case 'VIDEO':

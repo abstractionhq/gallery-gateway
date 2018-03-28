@@ -13,5 +13,37 @@ query Show($id: ID!) {
     judges {
       username
     }
+    entries {
+      id
+      title
+      entryType
+      invited
+      score
+      student {
+        username
+        firstName
+        lastName
+      }
+      group {
+        creator {
+          username
+          firstName
+          lastName
+        }
+        participants
+      }
+      ... on Video {
+        provider
+        videoId
+      }
+      ... on Photo {
+        horizDimInch
+        vertDimInch
+        path
+      }
+      ... on OtherMedia {
+        path
+      }
+    }
   }
 }
