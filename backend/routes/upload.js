@@ -2,7 +2,9 @@
 
 import multer from 'multer'
 import mkdirp from 'mkdirp'
-import uuidv1 from 'uuid/v1'
+import uuidv4 from 'uuid/v4'
+import sharp from 'sharp'
+import path from 'path'
 import nconf from '../config'
 import { Router } from 'express'
 import { ADMIN, STUDENT } from '../constants'
@@ -12,6 +14,10 @@ const router = Router()
 const imageDir = nconf.get('upload:imageDir')
 const pdfDir = nconf.get('upload:pdfDir')
 
+// Enums, for designating what file type we are processing
+const JPEG = 'JPEG'
+const PDF = 'PDF'
+
 function storage (dir, extn) {
   return multer.diskStorage({
     destination: (req, file, callback) => {
@@ -19,7 +25,7 @@ function storage (dir, extn) {
     },
     filename: (req, file, callback) => {
       // Generate a unique id for the file
-      const filename = uuidv1()
+      const filename = uuidv4()
       // Make sure the correct directories exist or are created
       mkdirp.sync(`${dir}/${filename[0]}/${filename[1]}`)
       // Return the path for the file
@@ -66,7 +72,47 @@ function handleRes (req, res, err, fileType) {
     return res.status(400).json({ error: `No ${fileType} Provided` })
   }
 
-  return res.status(201).json({ path: req.file.filename })
+  if (fileType === JPEG) {
+    // Must generate thumbnails for JPEG images
+    const image = sharp(req.file.path)
+    image
+      .metadata()
+      .then(({height, width}) => {
+        // Generate a thumnail with max width of 400px and max height of 300px
+
+        let targetWidth = 0
+        let targetHeight = 0
+        // If the item is portrait-oriented, constrain the height and scale the
+        // width proportionally
+        if (height > width) {
+          targetHeight = Math.min(300, height)
+          targetWidth = Math.floor(targetHeight / height * width)
+        } else {
+          // Otherwise, the item is landscape-oriented, constrain the width and
+          // scale the height proportionally
+          targetWidth = Math.min(400, width)
+          targetHeight = Math.floor(targetWidth / width * height)
+        }
+        // The thumbnail path is 'a/1/<guid>_thumb.jpg', for example
+        const parsedFileName = path.parse(req.file.path)
+        const thumbnailPath = `${parsedFileName.dir}/${parsedFileName.name}_thumb${parsedFileName.ext}`
+        return image
+          .resize(targetWidth, targetHeight)
+          // Use progressive loading for super-quick low-quality image preview
+          .jpeg({progressive: true})
+          .toFile(thumbnailPath)
+          .then(() => {
+            res.status(201).json({ path: req.file.filename })
+          })
+      })
+      .catch((e) => {
+        console.error('Error in generating image thumbnail', e)
+        res.status(500).json({ error: 'Internal server error' })
+      })
+  } else {
+    // This is a PDF; no additional processing necessary
+    res.status(201).json({ path: req.file.filename })
+  }
 }
 
 function uploadAuth (req, res, next) {
@@ -83,7 +129,7 @@ router.route('/static/upload/image')
   .post(
     uploadAuth,
     (req, res, next) => imageUpload(req, res, (err) => {
-      return handleRes(req, res, err, 'JPEG')
+      return handleRes(req, res, err, JPEG)
     })
   )
 
@@ -91,7 +137,7 @@ router.route('/static/upload/pdf')
   .post(
     uploadAuth,
     (req, res, next) => pdfUpload(req, res, (err) => {
-      return handleRes(req, res, err, 'PDF')
+      return handleRes(req, res, err, PDF)
     })
   )
 

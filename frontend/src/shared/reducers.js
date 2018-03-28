@@ -5,6 +5,7 @@ import * as actions from './actions'
 // Example state:
 // {
 //   'token': '...',
+//   'downloadToken': '...',
 //   'user': {
 //     'username': 'souperManne',
 //     'firstName': 'Clark',
@@ -38,6 +39,14 @@ const auth = (state = {}, action) => {
       return {
         ...state,
         performingRole: 'ADMIN'
+      }
+    case actions.GET_DOWNLOAD_TOKEN:
+      if (!action.payload) {
+        return state
+      }
+      return {
+        ...state,
+        downloadToken: action.payload
       }
     default:
       return state

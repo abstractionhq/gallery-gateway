@@ -122,3 +122,15 @@ export const addJudge = judge => (dispatch, getState, client) => {
     payload: judge
   })
 }
+
+export const downloadZip = showId => (dispatch, getState, client) => {
+  const { shared: { auth: { downloadToken } } } = getState()
+
+  // TODO replace this with the deployed url
+  window.open(
+    `//localhost:3000/zips/${showId}?token=${encodeURIComponent(
+      downloadToken
+    )}`,
+    '_self'
+  )
+}

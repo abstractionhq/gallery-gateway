@@ -43,12 +43,12 @@ class OtherSubmissionForm extends Component {
       show: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf({
+        entries: PropTypes.arrayOf(PropTypes.shape({
           id: PropTypes.string,
           student: PropTypes.shape({
             username: PropTypes.string
           })
-        })
+        }))
       })
     }).isRequired,
     handleImageUpload: PropTypes.func.isRequired,

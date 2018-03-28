@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchVote: (submissionId) => dispatch(fetchVote(submissionId))
+  fetchVote: submissionId => dispatch(fetchVote(submissionId))
 })
 
 export default compose(
