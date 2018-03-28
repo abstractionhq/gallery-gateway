@@ -28,6 +28,9 @@
     }
   ],
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.5",
+    "@fortawesome/fontawesome-free-solid": "^5.0.9",
+    "@fortawesome/react-fontawesome": "^0.0.18",
     "apollo-client": "^2.0.2",
     "apollo-client-preset": "^1.0.2",
     "axios": "^0.18.0",
