@@ -1,12 +1,12 @@
 import React from 'react'
 
 import NavBar from '../containers/NavBar'
-import ErrorMessage from './ErrorMessage'
+import Errors from '../../shared/containers/Errors'
 
 const Layout = props => (
   <main>
     <NavBar />
-    <ErrorMessage />
+    <Errors />
     {props.children}
   </main>
 )

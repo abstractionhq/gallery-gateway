@@ -3,7 +3,6 @@ import { Container } from 'reactstrap'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import ErrorHandler from '../../shared/components/ErrorHandler'
 
 import AssignJudgesTable from '../containers/AssignJudgesTable'
 import CreateJudgeForm from '../containers/CreateJudgeForm'
@@ -57,4 +56,4 @@ const mapDispatchToProps = dispatch => ({
   fetchData: showId => dispatch(fetchShow(showId))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ErrorHandler(AssignJudges))
+export default connect(mapStateToProps, mapDispatchToProps)(AssignJudges)

@@ -11,6 +11,7 @@ import apollo from '../config/apollo'
 import history from './history'
 import store from './store'
 
+import ErrorHandler from './shared/components/ErrorHandler'
 import LoginSwitch from './shared/components/LoginSwitch'
 
 // Import Global CSS
@@ -22,7 +23,9 @@ const Root = () => (
   <ApolloProvider client={apollo}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <LoginSwitch />
+        <ErrorHandler>
+          <LoginSwitch />
+        </ErrorHandler>
       </ConnectedRouter>
     </Provider>
   </ApolloProvider>

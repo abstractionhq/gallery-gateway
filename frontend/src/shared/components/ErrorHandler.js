@@ -1,27 +1,40 @@
 import React, { Component } from 'react'
+import { Container, Row, Col } from 'reactstrap'
 
-const ErrorHandler = (View) => {
-  class ErrorBoundary extends Component {
-    constructor (props) {
-      super(props)
-      this.state = { hasError: false }
-    }
+class ErrorHandler extends Component {
+  constructor (props) {
+    super(props)
 
-    componentDidCatch (error, info) {
-      // Display fallback UI
-      this.setState({ hasError: true })
-      console.error(error, info)
-    }
-
-    render () {
-      if (this.state.hasError) {
-        // You can render any custom fallback UI
-        return (<h1>Something went wrong.</h1>)
-      }
-      return <View {...this.props} />
+    this.state = {
+      hasError: false
     }
   }
-  return ErrorBoundary
+
+  componentDidCatch (error, info) {
+    this.setState({
+      hasError: true
+    })
+    console.error(error, info)
+  }
+
+  render () {
+    // If there's an error, display the error page
+    if (this.state.hasError) {
+      return (
+        <Container>
+          <Row>
+            <Col className='text-center' style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center' }}>
+              <h1>Something went wrong.</h1>
+              <p>Please clear your browser cache and cookies and then refresh the page. If the issue persists, please contact a site administrator.</p>
+            </Col>
+          </Row>
+        </Container>
+      )
+    }
+
+    // Normally render the children
+    return this.props.children
+  }
 }
 
 export default ErrorHandler

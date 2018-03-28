@@ -2,17 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import ShowCard from '../components/ShowCard'
-import LoadingIcon from '../components/Loading'
+import Loading from '../../shared/components/Loading'
 
 const Shows = ({ shows, loading }) => (
   <div>
-    {loading || !shows ? <LoadingIcon /> : shows.map(show => <ShowCard key={show.id} {...show} />)}
+    {loading ? <Loading /> : shows.map(show => <ShowCard key={show.id} {...show} />)}
   </div>
 )
 
 Shows.propTypes = {
-  shows: PropTypes.array,
+  shows: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired
+}
+
+Shows.defaultProps = {
+  shows: []
 }
 
 export default Shows
