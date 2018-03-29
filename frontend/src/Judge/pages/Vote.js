@@ -84,7 +84,14 @@ class Vote extends Component {
 
     return (
       <Container fluid>
-        <Row style={{ backgroundColor: '#777777', maxHeight: '75vh', minHeight: '70vh', paddingTop: '25px' }}>
+        <Row
+          style={{
+            backgroundColor: '#777777',
+            maxHeight: '75vh',
+            minHeight: '70vh',
+            paddingTop: '25px'
+          }}
+        >
           <Col xs='1'>
             {previous && previous.id ? (
               <Previous onClick={() => setViewing(previous.id)}>
