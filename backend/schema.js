@@ -112,6 +112,17 @@ input EntryInput {
     moreCopies: Boolean
 }
 
+input EntryUpdate {
+    title: String
+    comment: String
+    forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
+}
+
 type Photo implements Entry {
     id: ID!
     group: Group
@@ -226,6 +237,7 @@ type Mutation {
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia
+    updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote
 }
