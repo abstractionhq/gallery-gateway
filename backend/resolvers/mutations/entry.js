@@ -110,7 +110,7 @@ export function createPhoto (_, args, req) {
   )
 }
 
-export function createVideo(_, args, req) {
+export function createVideo (_, args, req) {
   if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')
@@ -133,7 +133,7 @@ export function createVideo(_, args, req) {
   )
 }
 
-export function createOtherMedia(_, args, req) {
+export function createOtherMedia (_, args, req) {
   if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
     // don't allow non-admins to submit work claiming to be from someone else
     throw new UserError('Permission Denied')

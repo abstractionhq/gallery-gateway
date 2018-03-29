@@ -511,7 +511,7 @@ describe('Entry Mutations', function () {
             const updateEntry = `
             mutation {
               updateEntry(id: ${entry.id}, input: {
-                title: "THIS IS A UNIQUE TITLE"
+                title: "UNIQUE TITLE"
                 comment: "a comment"
                 forSale: true
                 invited: true
@@ -519,20 +519,23 @@ describe('Entry Mutations', function () {
                 academicProgram: "SE"
                 moreCopies: true
                 excludeFromJudging: false
-              })
+              }){
+                id,
+                invited,
+                title
+              }
             }`
             return execGraphql(updateEntry, { type: 'ADMIN' })
               .then(
                 result => {
-                  return Entry.findById(entry.id).then ((e) => {
-                    expect(result.data.updateEntry).to.equal(`${entry.id}`)
-                    expect(e.title).to.equal("THIS IS A UNIQUE TITLE")
-                  })
+                  console.log(result)
+                  expect(result.data.updateEntry.id).to.equal(`${entry.id}`)
+                  expect(result.data.updateEntry.title).to.equal('UNIQUE TITLE')
+                  expect(result.data.updateEntry.invited).to.equal(true)
                 }
               )
           })
       })
-
     })
   })
 })
