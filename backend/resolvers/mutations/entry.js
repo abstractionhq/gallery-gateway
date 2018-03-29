@@ -86,7 +86,6 @@ export function updateEntry (_, args, req) {
   return Entry.findById(args.id)
     .then((entry) => {
       return entry.update(args.input)
-        .then(() => { return args.id })
     })
 }
 

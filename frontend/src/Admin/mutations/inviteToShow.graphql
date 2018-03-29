@@ -1,3 +1,6 @@
 mutation inviteToShow($id: ID! $input: EntryUpdate!) {
-  updateEntry(id: $id, input: $input)
+  updateEntry(id: $id, input: $input) {
+    id,
+    invited
+  }
 }

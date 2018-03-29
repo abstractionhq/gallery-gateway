@@ -237,7 +237,7 @@ type Mutation {
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia
-    updateEntry(id: ID!, input: EntryUpdate!): ID
+    updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote
 }
