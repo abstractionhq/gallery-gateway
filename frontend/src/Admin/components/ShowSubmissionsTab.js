@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Button } from 'reactstrap'
+import { Alert, Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -26,6 +26,8 @@ const PhotoThumbnail = styled.img`
   min-width: 3em;
   width: auto;
 `
+
+
 class ShowSubmissionsTab extends Component {
   static propTypes = {
     updateInvite: PropTypes.func.isRequired,
@@ -46,13 +48,23 @@ class ShowSubmissionsTab extends Component {
     }).isRequired
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
       alertVisible: true,
       alertType: '',
-      showFinalized: false
+      showFinalized: false,
+      modal: false
+    }
+  }
+
+  toggleFinalizeInviteModal = (id, finalize) => {
+    this.setState({
+      modal: !this.state.modal
+    })
+    if (finalize){
+      this.finalizeShowInvites(id)
     }
   }
 
@@ -96,16 +108,16 @@ class ShowSubmissionsTab extends Component {
       })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { show } = this.props
-    if (show.finalized){
+    if (show.finalized) {
       this.setState({
         showFinalized: true
       })
     }
   }
 
-  render () {
+  render() {
     const { show } = this.props
 
     return (
@@ -140,13 +152,22 @@ class ShowSubmissionsTab extends Component {
         >
           There was an error updating the invite status
         </Alert>
+        <Modal isOpen={this.state.modal}>
+          <ModalBody>
+            This is a permanent action. Clicking continue will make the invite status for all submissions viewable to students.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => this.toggleFinalizeInviteModal(show.id, true)}>Make invites public</Button>{' '}
+            <Button color="secondary" onClick={() => this.toggleFinalizeInviteModal(show.id, false)}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
         <div style={{ textAlign: 'right', margin: '10px' }}>
           <Button
             color={'primary'}
             disabled={this.state.showFinalized}
-            onClick={() => this.finalizeShowInvites(show.id)}
-          > 
-            {show.finalized ? INVITES_FINALIZED :  FINALIZE_INVITES}
+            onClick={() => this.toggleFinalizeInviteModal(show.id)}
+          >
+            {show.finalized ? INVITES_FINALIZED : FINALIZE_INVITES}
           </Button>
         </div>
         <ReactTable
@@ -201,25 +222,25 @@ class ShowSubmissionsTab extends Component {
                 const student = submission.student || submission.group.creator
                 return `${student.lastName}${student.firstName}${
                   student.username
-                }`
+                  }`
               },
               Cell: ({ original: submission }) =>
                 !submission.group ? (
                   `${submission.student.lastName}, ${
-                    submission.student.firstName
+                  submission.student.firstName
                   } (${submission.student.username})`
                 ) : (
-                  <div>
-                    <small>Group</small>
-                    <p>
-                      {submission.group.creator.lastName},{' '}
-                      {submission.group.creator.firstName} ({
-                        submission.group.creator.username
-                      })
+                    <div>
+                      <small>Group</small>
+                      <p>
+                        {submission.group.creator.lastName},{' '}
+                        {submission.group.creator.firstName} ({
+                          submission.group.creator.username
+                        })
                     </p>
-                    <p>Participants: {submission.group.participants}</p>
-                  </div>
-                )
+                      <p>Participants: {submission.group.participants}</p>
+                    </div>
+                  )
             },
             {
               id: 'dimensions',
@@ -232,7 +253,7 @@ class ShowSubmissionsTab extends Component {
               Cell: ({ original: submission }) =>
                 submission.entryType === 'PHOTO'
                   ? `${submission.horizDimInch} in. \u00D7 ${
-                    submission.vertDimInch
+                  submission.vertDimInch
                   } in.`
                   : 'n/a'
             },
@@ -252,13 +273,13 @@ class ShowSubmissionsTab extends Component {
                     <FaStar size='1.5em' style={{ color: 'gold' }} />
                   </a>
                 ) : (
-                  <a
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => this.updateShowInvite(submission.id, true)}
-                  >
-                    <FaStarOpen size='1.5em' />
-                  </a>
-                ),
+                    <a
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => this.updateShowInvite(submission.id, true)}
+                    >
+                      <FaStarOpen size='1.5em' />
+                    </a>
+                  ),
               style: { textAlign: 'center' },
               width: 80
             }
