@@ -134,10 +134,10 @@ const SubmittedEntries = ({ show }) =>
     >
       <EntryContainer>
         <EntryThumb entry={entry} />
-        {/* If after entry end and before judging end, display "judging phase"
-          , else display accepted or denied */
-          moment().isBetween(show.entryEnd, show.judgingEnd) ? (
-            <JudgingPhase>Judging In Progress</JudgingPhase>
+        {/* If after entry end and before judging end (or if the show is not finalized),
+          display "judging phase", else display accepted or denied */
+          moment().isBetween(show.entryEnd, show.judgingEnd) || !show.finalized ? (
+            <JudgingPhase>Pending</JudgingPhase>
           ) : moment().isAfter(show.judgingEnd) ? (
             entry.invited ? (
               <Accepted>Invited</Accepted>
