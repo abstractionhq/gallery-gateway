@@ -25,7 +25,10 @@ const SuccessModal = props => (
     </div>
     <ModalBody style={{ padding: '40px 0' }}>
       <h2 style={{ color: '#3CB778' }}>Great!</h2>
-      <p>Your submission was successfully submitted. Check back soon to see if your work is invited to this show.</p>
+      <p>
+        Your submission was successfully submitted. Check back soon to see if
+        your work is invited to this show.
+      </p>
     </ModalBody>
   </Modal>
 )

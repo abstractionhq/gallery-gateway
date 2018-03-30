@@ -44,12 +44,14 @@ class PhotoSubmissionForm extends Component {
       show: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf(PropTypes.shape({
-          id: PropTypes.string,
-          student: PropTypes.shape({
-            username: PropTypes.string
+        entries: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            student: PropTypes.shape({
+              username: PropTypes.string
+            })
           })
-        }))
+        )
       })
     }).isRequired,
     handleUpload: PropTypes.func.isRequired,

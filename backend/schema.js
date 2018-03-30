@@ -223,9 +223,9 @@ type Mutation {
     assignToShow(showId: ID!, usernames: [String]!): Boolean    
     removeFromShow(showId: ID!, usernames: [String]!): Boolean    
     
-    createPhoto(input: PhotoInput!): Photo
-    createVideo(input: VideoInput!): Video
-    createOtherMedia(input: OtherMediaInput!): OtherMedia
+    createPhoto(input: PhotoInput!): Show
+    createVideo(input: VideoInput!): Show
+    createOtherMedia(input: OtherMediaInput!): Show
 
     vote(input: VoteInput): Vote
 }

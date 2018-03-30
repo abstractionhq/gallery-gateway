@@ -59,6 +59,8 @@ describe('Entry Mutations', function () {
               }
             }
             return createPhoto({}, args, { auth: { type: 'ADMIN' } })
+              .then(show => show.getEntries())
+              .then(([entry]) => entry)
               .then((entry) => {
                 expect(entry.title).to.equal('Untitled')
                 expect(entry.moreCopies).to.equal(false)
@@ -95,6 +97,8 @@ describe('Entry Mutations', function () {
               }
             }
             return createPhoto({}, args, { auth: { type: 'ADMIN' } })
+              .then(show => show.getEntries())
+              .then(([entry]) => entry)
               .then((photoEntry) => {
                 // make sure a Group was created
                 return Group.findOne().then(group => {
@@ -254,17 +258,22 @@ describe('Entry Mutations', function () {
                 }
                 url:"https://vimeo.com/45196609"
               }){
-                provider
-                videoId
-                yearLevel
+                entries {
+                  yearLevel
+                  ... on Video {
+                    provider
+                    videoId
+                  }
+                }
               }
             }`
             return execGraphql(createVideo, { type: 'ADMIN' })
               .then(
                 result => {
-                  expect(result.data.createVideo.provider).to.equal('vimeo')
-                  expect(result.data.createVideo.videoId).to.equal('45196609')
-                  expect(result.data.createVideo.yearLevel).to.equal('second')
+                  expect(result.data.createVideo.entries.length).to.equal(1)
+                  expect(result.data.createVideo.entries[0].provider).to.equal('vimeo')
+                  expect(result.data.createVideo.entries[0].videoId).to.equal('45196609')
+                  expect(result.data.createVideo.entries[0].yearLevel).to.equal('second')
                 }
               )
           })
@@ -289,17 +298,23 @@ describe('Entry Mutations', function () {
               }
               url:"https://www.youtube.com/watch?v=JHAReoWi-nE"
             }){
-              provider
-              videoId
-              yearLevel
+              entries {
+                yearLevel
+                ... on Video {
+                  provider
+                  videoId
+                }
+              }
             }
           }`
             return execGraphql(createVideo, { type: 'ADMIN' })
               .then(
                 result => {
-                  expect(result.data.createVideo.provider).to.equal('youtube')
-                  expect(result.data.createVideo.videoId).to.equal('JHAReoWi-nE')
-                  expect(result.data.createVideo.yearLevel).to.equal('third')
+                  console.log(result)
+                  expect(result.data.createVideo.entries.length).to.equal(1)
+                  expect(result.data.createVideo.entries[0].provider).to.equal('youtube')
+                  expect(result.data.createVideo.entries[0].videoId).to.equal('JHAReoWi-nE')
+                  expect(result.data.createVideo.entries[0].yearLevel).to.equal('third')
                 }
               )
           })
@@ -441,13 +456,18 @@ describe('Entry Mutations', function () {
               }
               path:"foo.jpg"
             }){
-              path
+              entries {
+                ... on OtherMedia {
+                  path
+                }
+              }
             }
           }`
             return execGraphql(createVideo, { type: 'ADMIN' })
               .then(
                 result => {
-                  expect(result.data.createOtherMedia.path).to.equal('foo.jpg')
+                  expect(result.data.createOtherMedia.entries.length).to.equal(1)
+                  expect(result.data.createOtherMedia.entries[0].path).to.equal('foo.jpg')
                 }
               )
           })
