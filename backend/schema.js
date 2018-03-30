@@ -54,6 +54,7 @@ type Show {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+    finalized: Boolean
     entries: [Entry]
     judges: [User]
     ownVotes: [Vote]    
@@ -69,6 +70,7 @@ input ShowInput {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+    finalized: Boolean
 }
 
 type Vote {
