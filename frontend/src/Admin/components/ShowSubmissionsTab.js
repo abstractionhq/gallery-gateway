@@ -51,7 +51,7 @@ class ShowSubmissionsTab extends Component {
 
   onDismiss = () => {
     this.setState({
-      alertVisible: true,
+      alertVisible: false,
       alertType: ''
     })
   }
@@ -174,7 +174,7 @@ class ShowSubmissionsTab extends Component {
                     submission.student.firstName
                   } (${submission.student.username})`
                 ) : (
-                  <div>
+                  <Fragment>
                     <small>Group</small>
                     <p>
                       {submission.group.creator.lastName},{' '}
@@ -183,7 +183,7 @@ class ShowSubmissionsTab extends Component {
                       })
                     </p>
                     <p>Participants: {submission.group.participants}</p>
-                  </div>
+                  </Fragment>
                 )
             },
             {
@@ -203,7 +203,8 @@ class ShowSubmissionsTab extends Component {
             },
             {
               Header: 'Score',
-              accessor: 'score'
+              accessor: 'score',
+              Cell: ({ original: submission }) => submission.score.toFixed(3)
             },
             {
               Header: 'Invited',

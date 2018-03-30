@@ -528,7 +528,6 @@ describe('Entry Mutations', function () {
             return execGraphql(updateEntry, { type: 'ADMIN' })
               .then(
                 result => {
-                  console.log(result)
                   expect(result.data.updateEntry.id).to.equal(`${entry.id}`)
                   expect(result.data.updateEntry.title).to.equal('UNIQUE TITLE')
                   expect(result.data.updateEntry.invited).to.equal(true)
