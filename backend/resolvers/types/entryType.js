@@ -1,5 +1,11 @@
+import { UserError } from 'graphql-errors'
+
 import Show from '../../models/show'
-import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../../constants'
+import Vote from '../../models/vote'
+import {
+  IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY,
+  ADMIN, JUDGE
+} from '../../constants'
 
 // For Convenience: the 'base class' of functions for Photo / Video / OtherMedia
 // entry type fields, which they share.
@@ -15,6 +21,19 @@ export const EntryBase = {
   },
   show (entry) {
     return Show.findById(entry.showId)
+  },
+  votes (entry, _, req) {
+    switch (req.auth.type) {
+      case ADMIN:
+        // Admins see all votes
+        return Vote.findAll({where: {entryId: entry.id}})
+      case JUDGE:
+        // Judges see only their own votes
+        return Vote.findAll({where: {entryId: entry.id, judgeUsername: req.auth.username}})
+      default:
+        // Students cannot access this
+        throw new UserError('Students cannot access entry votes')
+    }
   },
   // Returning entry type directly on the base class, for convenience
   entryType (entry) {

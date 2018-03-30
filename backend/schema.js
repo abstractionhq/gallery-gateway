@@ -98,6 +98,8 @@ interface Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 }
 
 input EntryInput {
@@ -126,7 +128,9 @@ type Photo implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
-    
+    votes: [Vote]
+    excludeFromJudging: Boolean
+
     path: String!
     horizDimInch: Float
     vertDimInch: Float
@@ -155,6 +159,8 @@ type Video implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 
     provider: String!
     videoId: String!
@@ -179,6 +185,8 @@ type OtherMedia implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 
     path: String!
 }
