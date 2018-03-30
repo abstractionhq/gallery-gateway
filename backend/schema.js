@@ -63,13 +63,13 @@ type Show {
 }
 
 input ShowInput {
-    name: String!
+    name: String
     description: String
-    entryStart: Date!
-    entryEnd: Date!
-    judgingStart: Date!
-    judgingEnd: Date!
-    entryCap: Int!
+    entryStart: Date
+    entryEnd: Date
+    judgingStart: Date
+    judgingEnd: Date
+    entryCap: Int
     finalized: Boolean
 }
 
