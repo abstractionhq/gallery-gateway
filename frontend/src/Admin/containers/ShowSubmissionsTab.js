@@ -21,7 +21,7 @@ export default compose(
   }),
   graphql(FinalizeShowInvites, {
     props: ({ mutate }) => ({
-      finalizeInvites: (id) =>
+      finalizeInvites: id =>
         mutate({
           variables: {
             id: id,
