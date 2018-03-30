@@ -16,8 +16,8 @@ const SUCCESS = 'SUCCESS'
 const ERROR = 'ERROR'
 
 // Invite button Message
-const FINALIZE_INVITES = 'Finalize show invites'
-const INVITES_FINALIZED = 'Show invites are public'
+const FINALIZE_INVITES = 'Make invites public'
+const INVITES_FINALIZED = 'Invites on this show are public'
 
 const PhotoThumbnail = styled.img`
   height: auto;
