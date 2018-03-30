@@ -8,10 +8,22 @@ query Show($id: ID!) {
     judgingStart
     judgingEnd
     entryCap
-    createdAt
-    updatedAt
     judges {
+      firstName
+      lastName
       username
     }
+    entries {
+      id
+      excludeFromJudging
+      votes {
+        id
+        judge {
+          username
+        }
+      }
+    }
+    createdAt
+    updatedAt
   }
 }
