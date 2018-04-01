@@ -37,11 +37,6 @@ export function up (queryInterface, Sequelize) {
       type: Sequelize.DATE,
       allowNull: false
     },
-    finalized: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false
-    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
