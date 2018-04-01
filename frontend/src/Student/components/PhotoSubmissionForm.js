@@ -214,14 +214,13 @@ class PhotoSubmissionForm extends Component {
           onSubmit={values => {
             const input = {
               entry: {
-                group: {
-                  name: '',
-                  creatorUsername: user.username,
-                  participants:
-                    values.submittingAsGroup === 'yes'
-                      ? values.groupParticipants
-                      : ''
-                },
+                group: values.submittingAsGroup === 'yes'
+                  ? {
+                    name: '',
+                    creatorUsername: user.username,
+                    participants: values.groupParticipants
+                  }
+                  : null,
                 studentUsername: user.username,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
