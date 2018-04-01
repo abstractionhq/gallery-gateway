@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Alert } from 'reactstrap'
+import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import ReactTable from 'react-table'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
@@ -45,8 +45,21 @@ class ShowSubmissionsTab extends Component {
 
     this.state = {
       alertVisible: true,
-      alertType: ''
+      alertType: '',
+      modal: false
     }
+  }
+
+  onDismissModal () {
+    this.setState({
+      modal: false
+    })
+  }
+
+  onLaunchModal () {
+    this.setState({
+      modal: true
+    })
   }
 
   onDismiss = () => {
@@ -156,7 +169,8 @@ class ShowSubmissionsTab extends Component {
             },
             {
               Header: 'Title',
-              accessor: 'title'
+              accessor: 'title',
+              Cell: ({ original: submission }) => (<div style={{cursor: 'pointer'}} onClick={() => this.onLaunchModal()}>{submission.title}</div>)
             },
             {
               id: 'artist',
@@ -230,6 +244,13 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
+        <Button onClick={() => this.onLaunchModal()} />
+        <Modal isOpen={this.state.modal} toggle={() => this.onDismissModal()}>
+          <ModalHeader toggle={() => this.onDismissModal()}></ModalHeader>
+          <ModalBody>
+            foo
+          </ModalBody>
+        </Modal>
       </Fragment>
     )
   }
