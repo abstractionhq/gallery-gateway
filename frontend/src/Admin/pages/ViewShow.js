@@ -5,8 +5,8 @@ import { TabContent, TabPane, Container, Row, Col } from 'reactstrap'
 import { RoutedTabs, NavTab } from 'react-router-tabs'
 import { Route, Switch } from 'react-router-dom'
 
-import ShowDetailsTab from '../components/ShowDetailsTab'
-import ShowSubmissionsTab from '../containers/ShowSubmissionsTab'
+import ShowDetailsTab from '../containers/ShowDetailsTab'
+import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
 import ShowJudgesTab from '../components/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 
