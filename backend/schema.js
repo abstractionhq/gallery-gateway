@@ -57,18 +57,24 @@ type Show {
     finalized: Boolean
     entries: [Entry]
     judges: [User]
-    ownVotes: [Vote]    
+    ownVotes: [Vote]
     createdAt: Date!
     updatedAt: Date!
 }
 
 input ShowInput {
+    name: String!
+    description: String
+    entryStart: Date!
+    entryEnd: Date!
+    judgingStart: Date!
+    judgingEnd: Date!
+    entryCap: Int!
+}
+
+input ShowUpdate {
     name: String
     description: String
-    entryStart: Date
-    entryEnd: Date
-    judgingStart: Date
-    judgingEnd: Date
     entryCap: Int
     finalized: Boolean
 }
@@ -139,7 +145,7 @@ type Photo implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
-    
+
     path: String!
     horizDimInch: Float
     vertDimInch: Float
@@ -231,11 +237,11 @@ type Mutation {
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
-    updateShow(id: ID!, input: ShowInput!): Show
+    updateShow(id: ID!, input: ShowUpdate!): Show
     deleteShow(id: ID!): Boolean
-    assignToShow(showId: ID!, usernames: [String]!): Boolean    
-    removeFromShow(showId: ID!, usernames: [String]!): Boolean    
-    
+    assignToShow(showId: ID!, usernames: [String]!): Boolean
+    removeFromShow(showId: ID!, usernames: [String]!): Boolean
+
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia

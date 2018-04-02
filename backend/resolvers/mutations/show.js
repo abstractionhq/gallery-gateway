@@ -16,7 +16,10 @@ export function updateShow (_, args, req) {
   }
   return Show.findById(args.id)
     .then((show) => {
-      return show.update(args.input)
+      return show.update(args.input, {
+        fields: ['name', 'description',
+          'entryCap', 'finalized']
+      })
     })
 }
 
@@ -24,7 +27,7 @@ export function assignToShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')
   }
-  return Show.findOne({where: {id: args.showId}}).then((show) => {
+  return Show.findOne({ where: { id: args.showId } }).then((show) => {
     if (show === null) {
       throw new UserError('Show Not Found')
     }
@@ -43,7 +46,7 @@ export function removeFromShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')
   }
-  return Show.findOne({where: {id: args.showId}}).then((show) => {
+  return Show.findOne({ where: { id: args.showId } }).then((show) => {
     if (show === null) {
       throw new UserError('Show Not Found')
     }
