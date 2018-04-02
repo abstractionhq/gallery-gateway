@@ -13,7 +13,6 @@ const SUCCESS = 'SUCCESS'
 const ERROR = 'ERROR'
 
 const VotingContainer = styled.div`
-  background-color: white;
   margin: 10px 0;
   width: 100%;
 `
@@ -104,9 +103,8 @@ class VotePanel extends Component {
       <VotingContainer>
         <ButtonGroup style={{ width: '100%' }}>
           <Button
-            color={vote && vote.value === NO ? 'dark' : 'primary'}
+            color={vote && vote.value === NO ? 'dark' : 'light'}
             size='lg'
-            outline={vote && vote.value === NO}
             disabled={vote && vote.value === NO}
             onClick={() => this.handleVote(NO)}
             style={{ width: '33.33%', margin: '10px' }}
@@ -114,9 +112,8 @@ class VotePanel extends Component {
             No
           </Button>
           <Button
-            color={vote && vote.value === MAYBE ? 'dark' : 'primary'}
+            color={vote && vote.value === MAYBE ? 'dark' : 'light'}
             size='lg'
-            outline={vote && vote.value === MAYBE}
             disabled={vote && vote.value === MAYBE}
             onClick={() => this.handleVote(MAYBE)}
             style={{ width: '33.33%', margin: '10px' }}
@@ -124,9 +121,8 @@ class VotePanel extends Component {
             Maybe
           </Button>
           <Button
-            color={vote && vote.value === YES ? 'dark' : 'primary'}
+            color={vote && vote.value === YES ? 'dark' : 'light'}
             size='lg'
-            outline={vote && vote.value === YES}
             disabled={vote && vote.value === YES}
             onClick={() => this.handleVote(YES)}
             style={{ width: '33.33%', margin: '10px' }}

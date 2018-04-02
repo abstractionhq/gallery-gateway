@@ -8,6 +8,7 @@ const Photo = styled.img`
   display: block;
   margin: 0 auto;
   max-height: 90%;
+  height: 70vh;
 `
 
 class PhotoSubmission extends Component {

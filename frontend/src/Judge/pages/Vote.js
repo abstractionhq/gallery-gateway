@@ -87,38 +87,44 @@ class Vote extends Component {
         <Row
           style={{
             backgroundColor: '#777777',
-            maxHeight: '75vh',
-            minHeight: '70vh',
-            paddingTop: '25px'
+            minHeight: 'calc(100vh - 56px)',
+            paddingTop: '25px',
+            margin: '0 -15px'
           }}
         >
-          <Col xs='1'>
-            {previous && previous.id ? (
-              <Previous onClick={() => setViewing(previous.id)}>
-                <FaChevronLeft size='4em' />
-              </Previous>
-            ) : null}
+          <Col md='12'>
+            <Row>
+              <Col xs='1'>
+                {previous && previous.id ? (
+                  <Previous onClick={() => setViewing(previous.id)}>
+                    <FaChevronLeft size='4em' />
+                  </Previous>
+                ) : null}
+              </Col>
+              <Col xs='10'>
+                {submission ? <Submission submission={submission} /> : null}
+              </Col>
+              <Col xs='1'>
+                {next && next.id ? (
+                  <Next onClick={() => setViewing(next.id)}>
+                    <FaChevronRight size='4em' />
+                  </Next>
+                ) : null}
+              </Col>
+            </Row>
           </Col>
-          <Col xs='10'>
-            {submission ? <Submission submission={submission} /> : null}
-          </Col>
-          <Col xs='1'>
-            {next && next.id ? (
-              <Next onClick={() => setViewing(next.id)}>
-                <FaChevronRight size='4em' />
-              </Next>
-            ) : null}
-          </Col>
-        </Row>
-        {submission ? (
-          <Row>
-            <Col>
-              <section>
-                <VotePanel submission={submission} vote={vote} />
-              </section>
+          {submission ? (
+            <Col md='12'>
+              <Row>
+                <Col>
+                  <section>
+                    <VotePanel submission={submission} vote={vote} />
+                  </section>
+                </Col>
+              </Row>
             </Col>
-          </Row>
-        ) : null}
+          ) : null}
+        </Row>
       </Container>
     )
   }
