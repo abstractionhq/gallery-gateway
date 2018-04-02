@@ -15,10 +15,6 @@ import { getImageThumbnail } from '../../utils'
 const SUCCESS = 'SUCCESS'
 const ERROR = 'ERROR'
 
-// Invite button Message
-const FINALIZE_INVITES = 'Make invites public'
-const INVITES_FINALIZED = 'Invites on this show are public'
-
 const PhotoThumbnail = styled.img`
   height: auto;
   max-height: 5em;
@@ -53,17 +49,18 @@ class ShowSubmissionsTab extends Component {
     this.state = {
       alertVisible: true,
       alertType: '',
-      showFinalized: false,
-      modal: false
+      isModalOpen: false
     }
   }
 
-  toggleFinalizeInviteModal = (id, finalize) => {
+  toggleFinalizeInviteModal = finalize => {
+    const { finalizeInvites } = this.props
+
     this.setState({
-      modal: !this.state.modal
+      isModalOpen: !this.state.isModalOpen
     })
     if (finalize) {
-      this.finalizeShowInvites(id)
+      finalizeInvites()
     }
   }
 
@@ -95,24 +92,6 @@ class ShowSubmissionsTab extends Component {
           this.onDismiss()
         }, 3000)
       })
-  }
-
-  finalizeShowInvites = id => {
-    const { finalizeInvites } = this.props
-    finalizeInvites(id).then(() => {
-      this.setState({
-        showFinalized: true
-      })
-    })
-  }
-
-  componentDidMount () {
-    const { show } = this.props
-    if (show.finalized) {
-      this.setState({
-        showFinalized: true
-      })
-    }
   }
 
   render () {
@@ -150,33 +129,35 @@ class ShowSubmissionsTab extends Component {
         >
           There was an error updating the invite status
         </Alert>
-        <Modal isOpen={this.state.modal}>
+        <Modal isOpen={this.state.isModalOpen}>
           <ModalBody>
-            This is a permanent action. Clicking continue will make the invite
-            status for all submissions viewable to students.
+            This is a permanent action and will make invitations for this show
+            visible to all students.
           </ModalBody>
           <ModalFooter>
             <Button
-              color='primary'
-              onClick={() => this.toggleFinalizeInviteModal(show.id, true)}
-            >
-              Make invites public
-            </Button>{' '}
-            <Button
               color='secondary'
-              onClick={() => this.toggleFinalizeInviteModal(show.id, false)}
+              onClick={() => this.toggleFinalizeInviteModal(false)}
             >
               Cancel
+            </Button>{' '}
+            <Button
+              color='danger'
+              onClick={() => this.toggleFinalizeInviteModal(true)}
+            >
+              Continue
             </Button>
           </ModalFooter>
         </Modal>
         <div style={{ textAlign: 'right', margin: '10px' }}>
           <Button
             color={'primary'}
-            disabled={this.state.showFinalized}
-            onClick={() => this.toggleFinalizeInviteModal(show.id)}
+            disabled={show.finalized}
+            onClick={() => this.toggleFinalizeInviteModal(false)}
           >
-            {show.finalized ? INVITES_FINALIZED : FINALIZE_INVITES}
+            {show.finalized
+              ? 'Invitations Are Public'
+              : 'Make Invitations Public'}
           </Button>
         </div>
         <ReactTable
