@@ -129,7 +129,7 @@ class ShowSubmissionsTab extends Component {
         >
           There was an error updating the invite status
         </Alert>
-        <Modal isOpen={this.state.isModalOpen}>
+        <Modal isOpen={this.state.isModalOpen} style={{ top: '25%' }}>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
