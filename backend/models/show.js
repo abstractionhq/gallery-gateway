@@ -33,6 +33,11 @@ const Show = sequelize.define('show', {
   judgingEnd: {
     type: DataTypes.DATE,
     allowNull: false
+  },
+  finalized: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   }
 },
 {
