@@ -111,7 +111,7 @@ const ShowSubmissionDetails = ({ submission }) => (
         <dd>{submission.title}</dd>
         {submission.comment ? (
           <Fragment>
-            <dt>Artist's Comment</dt>
+            <dt>Artist&quot;s Comment</dt>
             <dd>{submission.comment}</dd>
           </Fragment>
         ) : null}
