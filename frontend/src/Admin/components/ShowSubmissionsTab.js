@@ -212,6 +212,7 @@ class ShowSubmissionsTab extends Component {
                       return <FaVimeo size='2em' />
                     }
                   case 'OTHER':
+                    // TODO: Should ends with .jpg should render the image thumbnail?
                     return <FaBook size='2em' />
                   default:
                     console.log(submission.entryType)
@@ -303,7 +304,7 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
-        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal}>
+        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal} style={{ minWidth: '50%' }}>
           <ModalHeader toggle={this.onDismissSubmissionModal}></ModalHeader>
           <ModalBody>
             <ShowSubmissionDetails submission={this.state.viewingSubmission} />
