@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import ShowDetailsTab from '../containers/ShowDetailsTab'
 import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
-import ShowJudgesTab from '../components/ShowJudgesTab'
+import ShowJudgesTab from '../containers/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 
 const ViewShow = props => {

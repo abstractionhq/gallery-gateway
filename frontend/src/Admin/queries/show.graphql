@@ -20,6 +20,8 @@ query Show($id: ID!) {
         id
         judge {
           username
+          firstName
+          lastName
         }
       }
     }
