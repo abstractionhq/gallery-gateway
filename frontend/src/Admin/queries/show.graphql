@@ -30,10 +30,6 @@ query Show($id: ID!) {
       group {
         id
         creator {
-      excludeFromJudging
-      votes {
-        id
-        judge {
           username
           firstName
           lastName
@@ -52,7 +48,14 @@ query Show($id: ID!) {
       ... on OtherMedia {
         path
       }
-    }
+      excludeFromJudging
+      votes {
+        id
+        judge {
+          username
+          firstName
+          lastName
+        }
       }
     }
     createdAt
