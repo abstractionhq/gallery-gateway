@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Progress, Button } from 'reactstrap'
 import { Link } from 'react-router-dom'
@@ -18,35 +18,17 @@ const colorForProgress = progress => {
   return 'success'
 }
 
-const ShowJudgesTab = ({ show }) => {
-  // Extract all votes we care about
-  const allVotes = show.entries.reduce(
-    // Don't count votes on entries that are excluded
-    (lst, entry) => (entry.excludeFromJudging ? lst : [...lst, ...entry.votes]),
-    []
-  )
-  // Count the votes by judge
-  const voteCountByJudge = allVotes.reduce(
-    (accum, vote) => ({
-      ...accum,
-      [vote.judge.username]: (accum[vote.judge.username] || 0) + 1
-    }),
-    {}
-  )
-  // Count the number of total entries that are in judging
-  const numEntries = show.entries.filter(entry => !entry.excludeFromJudging)
-    .length
-
-  return (
-    <div>
-      <Row style={{ marginBottom: '1.5rem' }}>
-        <Col className='text-right'>
-          <Link to={`/show/${show.id}/judges/assign`}>
-            <Button color='primary'>Manage Judges</Button>
-          </Link>
-        </Col>
-      </Row>
-      {show.judges.map(judge => {
+const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
+  <Fragment>
+    <Row style={{ marginBottom: '1.5rem' }}>
+      <Col className='text-right'>
+        <Link to={`/show/${show.id}/judges/assign`}>
+          <Button color='primary'>Manage Judges</Button>
+        </Link>
+      </Col>
+    </Row>
+    {show.judges.length > 0 ? (
+      show.judges.map(judge => {
         const numVotes = voteCountByJudge[judge.username] || 0
         return (
           <Row key={judge.username} style={{ marginBottom: '1.5rem' }}>
@@ -54,37 +36,44 @@ const ShowJudgesTab = ({ show }) => {
               {judge.firstName} {judge.lastName} ({judge.username})
             </Col>
             <Col>
-              <Progress
-                value={numVotes / numEntries * 100}
-                color={colorForProgress(numVotes / numEntries)}
-              >
-                {numVotes} / {numEntries}
-              </Progress>
+              {numVotes ? (
+                <Progress
+                  value={numVotes / numEntries * 100}
+                  color={colorForProgress(numVotes / numEntries)}
+                >
+                  {numVotes} / {numEntries}
+                </Progress>
+              ) : (
+                <div class='text-center text-muted'>
+                  No submissions have been judged.
+                </div>
+              )}
             </Col>
           </Row>
         )
-      })}
-    </div>
-  )
-}
+      })
+    ) : (
+      <div className='text-center'>
+        No judges are assigned to this show. Visit the "Manage Judges" page to
+        assign judges to this show.
+      </div>
+    )}
+  </Fragment>
+)
 
 ShowJudgesTab.propTypes = {
+  voteCountByJudge: PropTypes.object.isRequired,
+  numEntries: PropTypes.number.isRequired,
   show: PropTypes.shape({
-    judges: PropTypes.arrayOf({
-      username: PropTypes.string.isRequired
-    }).isRequired,
-    entries: PropTypes.arrayOf(
+    id: PropTypes.string.isRequired,
+    judges: PropTypes.arrayOf(
       PropTypes.shape({
-        votes: PropTypes.arrayOf(
-          PropTypes.shape({
-            judge: PropTypes.shape({
-              username: PropTypes.string.isRequired
-            }).isRequired
-          })
-        ).isRequired
+        username: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired
       })
     ).isRequired
-  }).isRequired
+  })
 }
 
 export default ShowJudgesTab
