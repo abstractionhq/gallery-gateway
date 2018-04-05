@@ -2,11 +2,11 @@ import { graphql } from 'react-apollo'
 import { compose } from 'recompose'
 
 import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
-import InviteToShow from '../mutations/inviteToShow.graphql'
+import UpdateInvitation from '../mutations/updateInvitation.graphql'
 import FinalizeShowInvites from '../mutations/finalizeShowInvites.graphql'
 
 export default compose(
-  graphql(InviteToShow, {
+  graphql(UpdateInvitation, {
     props: ({ mutate }) => ({
       updateInvite: (id, value) =>
         mutate({

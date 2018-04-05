@@ -71,7 +71,7 @@ class ShowSubmissionsTab extends Component {
     })
   }
 
-  updateShowInvite = (id, value) => {
+  updateInvitation = (id, value) => {
     const { updateInvite } = this.props
     updateInvite(id, value)
       .then(() => {
@@ -112,7 +112,7 @@ class ShowSubmissionsTab extends Component {
           toggle={() => this.onDismiss()}
           className='text-center'
         >
-          Invite status saved
+          Invitation Saved
         </Alert>
         <Alert
           color='danger'
@@ -127,7 +127,7 @@ class ShowSubmissionsTab extends Component {
           toggle={() => this.onDismiss()}
           className='text-center'
         >
-          There was an error updating the invite status
+          There was an error updating the invitation
         </Alert>
         <Modal isOpen={this.state.isModalOpen} style={{ top: '25%' }}>
           <ModalBody>
@@ -210,9 +210,7 @@ class ShowSubmissionsTab extends Component {
               accessor: submission => {
                 // Allows for sorting by student submitter's name
                 const student = submission.student || submission.group.creator
-                return `${student.lastName}${student.firstName}${
-                  student.username
-                }`
+                return `${ student.username }`
               },
               Cell: ({ original: submission }) =>
                 !submission.group ? (
@@ -257,19 +255,19 @@ class ShowSubmissionsTab extends Component {
               accessor: 'invited',
               Cell: ({ original: submission }) =>
                 submission.invited ? (
-                  <a
+                  <span
                     style={{ cursor: 'pointer' }}
-                    onClick={() => this.updateShowInvite(submission.id, false)}
+                    onClick={() => this.updateInvitation(submission.id, false)}
                   >
                     <FaStar size='1.5em' style={{ color: 'gold' }} />
-                  </a>
+                  </span>
                 ) : (
-                  <a
+                  <span
                     style={{ cursor: 'pointer' }}
-                    onClick={() => this.updateShowInvite(submission.id, true)}
+                    onClick={() => this.updateInvitation(submission.id, true)}
                   >
                     <FaStarOpen size='1.5em' />
-                  </a>
+                  </span>
                 ),
               style: { textAlign: 'center' },
               width: 80

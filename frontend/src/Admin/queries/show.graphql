@@ -12,6 +12,8 @@ query Show($id: ID!) {
     createdAt
     updatedAt
     judges {
+      firstName
+      lastName
       username
     }
     entries {
@@ -28,6 +30,10 @@ query Show($id: ID!) {
       group {
         id
         creator {
+      excludeFromJudging
+      votes {
+        id
+        judge {
           username
           firstName
           lastName
@@ -47,5 +53,9 @@ query Show($id: ID!) {
         path
       }
     }
+      }
+    }
+    createdAt
+    updatedAt
   }
 }
