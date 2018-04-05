@@ -84,7 +84,10 @@ export function updateEntry (_, args, req) {
     throw new UserError('Permission Denied')
   }
   return Entry.findById(args.id)
-    .then(entry => entry.update(args.input))
+    .then(entry => entry.update(args.input, {
+      fields: ['title', 'comment', 'forSale', 'invited', 'yearLevel',
+        'academicProgram', 'moreCopies', 'excludeFromJudging']
+    }))
 }
 
 export function createPhoto (_, args, req) {
