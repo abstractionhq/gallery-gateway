@@ -1,0 +1,6 @@
+mutation finalizeShowInvites($id: ID! $input: ShowUpdate!) {
+  updateShow(id: $id, input: $input) {
+    id,
+    finalized
+  }
+}

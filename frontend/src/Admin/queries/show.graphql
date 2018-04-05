@@ -8,6 +8,7 @@ query Show($id: ID!) {
     judgingStart
     judgingEnd
     entryCap
+    finalized
     createdAt
     updatedAt
     judges {

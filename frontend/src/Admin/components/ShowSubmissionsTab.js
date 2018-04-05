@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
@@ -23,10 +23,13 @@ const PhotoThumbnail = styled.img`
   min-width: 3em;
   width: auto;
 `
+
 class ShowSubmissionsTab extends Component {
   static propTypes = {
     updateInvite: PropTypes.func.isRequired,
+    finalizeInvites: PropTypes.func.isRequired,
     show: PropTypes.shape({
+      finalized: PropTypes.bool.isRequired,
       entries: PropTypes.arrayOf(
         PropTypes.shape({
           id: PropTypes.string.isRequired,
@@ -47,7 +50,19 @@ class ShowSubmissionsTab extends Component {
     this.state = {
       alertVisible: true,
       alertType: '',
-      modal: false
+      modal: false,
+      isModalOpen: false
+    }
+  }
+
+  toggleFinalizeInviteModal = finalize => {
+    const { finalizeInvites } = this.props
+
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    })
+    if (finalize) {
+      finalizeInvites()
     }
   }
 
@@ -129,6 +144,37 @@ class ShowSubmissionsTab extends Component {
         >
           There was an error updating the invite status
         </Alert>
+        <Modal isOpen={this.state.isModalOpen} style={{ top: '25%' }}>
+          <ModalBody>
+            This is a permanent action and will make invitations for this show
+            visible to all students.
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color='secondary'
+              onClick={() => this.toggleFinalizeInviteModal(false)}
+            >
+              Cancel
+            </Button>{' '}
+            <Button
+              color='danger'
+              onClick={() => this.toggleFinalizeInviteModal(true)}
+            >
+              Continue
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <div style={{ textAlign: 'right', margin: '10px' }}>
+          <Button
+            color={'primary'}
+            disabled={show.finalized}
+            onClick={() => this.toggleFinalizeInviteModal(false)}
+          >
+            {show.finalized
+              ? 'Invitations Are Public'
+              : 'Make Invitations Public'}
+          </Button>
+        </div>
         <ReactTable
           defaultPageSize={20}
           data={show.entries}
