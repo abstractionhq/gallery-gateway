@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const ShowSubmissionDetails = props => {
-  console.log(props)
   return (
     <div>
       <div>Title: {props.submission.title.toString()}</div>
@@ -11,6 +10,9 @@ const ShowSubmissionDetails = props => {
       </div>
       <div>
         Entry Type: {props.submission.entryType}
+      </div>
+      <div>
+        Dimensions: {props.submission.horizDimInch}
       </div>
     </div>
   )
@@ -22,7 +24,9 @@ ShowSubmissionDetails.propTypes = {
     title: PropTypes.string,
     provider: PropTypes.string,
     videoId: PropTypes.string,
-    path: PropTypes.string
+    path: PropTypes.string,
+    horizDimInch: PropTypes.string,
+    vertDimInch: PropTypes.string
   })
 }
 
