@@ -44,7 +44,7 @@ const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
                   {numVotes} / {numEntries}
                 </Progress>
               ) : (
-                <div class='text-center text-muted'>
+                <div className='text-center text-muted'>
                   No submissions have been judged.
                 </div>
               )}
@@ -54,7 +54,7 @@ const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
       })
     ) : (
       <div className='text-center'>
-        No judges are assigned to this show. Visit the "Manage Judges" page to
+        No judges are assigned to this show. Visit the <Link to={`/show/${show.id}/judges/assign`}>"Manage Judges"</Link> page to
         assign judges to this show.
       </div>
     )}
