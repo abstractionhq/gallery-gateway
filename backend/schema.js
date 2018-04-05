@@ -54,9 +54,10 @@ type Show {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+    finalized: Boolean
     entries: [Entry]
     judges: [User]
-    ownVotes: [Vote]    
+    ownVotes: [Vote]
     createdAt: Date!
     updatedAt: Date!
 }
@@ -69,6 +70,13 @@ input ShowInput {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+}
+
+input ShowUpdate {
+    name: String
+    description: String
+    entryCap: Int
+    finalized: Boolean
 }
 
 type Vote {
@@ -112,6 +120,17 @@ input EntryInput {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+}
+
+input EntryUpdate {
+    title: String
+    comment: String
+    forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
 }
 
 type Photo implements Entry {
@@ -226,14 +245,15 @@ type Mutation {
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
-    updateShow(id: ID!, input: ShowInput!): Show
+    updateShow(id: ID!, input: ShowUpdate!): Show
     deleteShow(id: ID!): Boolean
-    assignToShow(showId: ID!, usernames: [String]!): Boolean    
-    removeFromShow(showId: ID!, usernames: [String]!): Boolean    
-    
+    assignToShow(showId: ID!, usernames: [String]!): Boolean
+    removeFromShow(showId: ID!, usernames: [String]!): Boolean
+
     createPhoto(input: PhotoInput!): Photo
     createVideo(input: VideoInput!): Video
     createOtherMedia(input: OtherMediaInput!): OtherMedia
+    updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote
 }

@@ -8,6 +8,9 @@ query Show($id: ID!) {
     judgingStart
     judgingEnd
     entryCap
+    finalized
+    createdAt
+    updatedAt
     judges {
       firstName
       lastName
@@ -15,6 +18,36 @@ query Show($id: ID!) {
     }
     entries {
       id
+      title
+      entryType
+      invited
+      score
+      student {
+        username
+        firstName
+        lastName
+      }
+      group {
+        id
+        creator {
+          username
+          firstName
+          lastName
+        }
+        participants
+      }
+      ... on Video {
+        provider
+        videoId
+      }
+      ... on Photo {
+        horizDimInch
+        vertDimInch
+        path
+      }
+      ... on OtherMedia {
+        path
+      }
       excludeFromJudging
       votes {
         id

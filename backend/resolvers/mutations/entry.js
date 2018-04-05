@@ -19,7 +19,7 @@ const createEntry = (entry, entryType, entryId, t) => {
       name: entry.group.name,
       creatorUsername: entry.group.creatorUsername,
       participants: entry.group.participants
-    }, {transaction: t})
+    }, { transaction: t })
   }
   return groupPromise
     .then(group => {
@@ -39,7 +39,7 @@ const createEntry = (entry, entryType, entryId, t) => {
         entryType: entryType,
         entryId: entryId,
         groupId: group ? group.id : null
-      }, {transaction: t})
+      }, { transaction: t })
     })
 }
 
@@ -65,9 +65,9 @@ const canMakeMoreSingleEntries = (
     return Promise.resolve()
   }
   // find the entry cap for this show
-  return Show.findById(showId, {transaction: t, rejectOnEmpty: true})
+  return Show.findById(showId, { transaction: t, rejectOnEmpty: true })
     .then(show =>
-      Entry.count({where: {showId, studentUsername}})
+      Entry.count({ where: { showId, studentUsername } })
         .then(entries => {
           if (entries >= show.entryCap) {
             throw new UserError('Individual submission limit reached')
@@ -76,6 +76,18 @@ const canMakeMoreSingleEntries = (
           }
         })
     )
+}
+
+export function updateEntry (_, args, req) {
+  // Only admins can update entries
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied')
+  }
+  return Entry.findById(args.id)
+    .then(entry => entry.update(args.input, {
+      fields: ['title', 'comment', 'forSale', 'invited', 'yearLevel',
+        'academicProgram', 'moreCopies', 'excludeFromJudging']
+    }))
 }
 
 export function createPhoto (_, args, req) {
@@ -91,7 +103,7 @@ export function createPhoto (_, args, req) {
           horizDimInch: args.input.horizDimInch,
           vertDimInch: args.input.vertDimInch,
           mediaType: args.input.mediaType
-        }, {transaction: t})
+        }, { transaction: t })
           .then(image =>
             createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
           )
@@ -114,7 +126,7 @@ export function createVideo (_, args, req) {
         Video.create({
           provider: type,
           videoId: id
-        }, {transaction: t})
+        }, { transaction: t })
           .then(video =>
             createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
           )
@@ -132,7 +144,7 @@ export function createOtherMedia (_, args, req) {
       .then(() =>
         Other.create({
           path: args.input.path
-        }, {transaction: t})
+        }, { transaction: t })
           .then(other =>
             createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
           )

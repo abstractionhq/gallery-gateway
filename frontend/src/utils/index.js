@@ -18,6 +18,11 @@ export const createLoading = namespace => type => ({
   }
 })
 
+export const getImageThumbnail = path => {
+  const [base, extn] = path.split('.')
+  return `${base}_thumb.${extn}`
+}
+
 /**
  * Performs a repeatable shuffle
  * @param {string} key the shuffle's unique keying which determines order
