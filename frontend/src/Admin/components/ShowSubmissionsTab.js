@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Alert, Modal, ModalHeader, ModalBody } from 'reactstrap'
 import ReactTable from 'react-table'
+import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import FaYouTube from 'react-icons/lib/fa/youtube'
@@ -50,15 +51,16 @@ class ShowSubmissionsTab extends Component {
     }
   }
 
-  onDismissModal () {
+  onDismissModal = () => {
     this.setState({
       modal: false
     })
   }
 
-  onLaunchModal () {
+  onLaunchModal = submission => {
     this.setState({
-      modal: true
+      modal: true,
+      submission: submission
     })
   }
 
@@ -170,7 +172,7 @@ class ShowSubmissionsTab extends Component {
             {
               Header: 'Title',
               accessor: 'title',
-              Cell: ({ original: submission }) => (<div style={{cursor: 'pointer'}} onClick={() => this.onLaunchModal()}>{submission.title}</div>)
+              Cell: ({ original: submission }) => (<div style={{cursor: 'pointer'}} onClick={() => this.onLaunchModal(submission)}>{submission.title}</div>)
             },
             {
               id: 'artist',
@@ -244,11 +246,10 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
-        <Button onClick={() => this.onLaunchModal()} />
         <Modal isOpen={this.state.modal} toggle={() => this.onDismissModal()}>
           <ModalHeader toggle={() => this.onDismissModal()}></ModalHeader>
           <ModalBody>
-            foo
+            <ShowSubmissionDetails submission={this.state.submission} />
           </ModalBody>
         </Modal>
       </Fragment>
