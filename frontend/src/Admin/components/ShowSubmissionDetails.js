@@ -1,32 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const ShowSubmissionDetails = props => {
-  return (
-    <div>
-      <div>Title: {props.submission.title.toString()}</div>
-      <div>
-        Artist Name: {props.submission.student.firstName.toString()} {props.submission.student.lastName.toString()}
-      </div>
-      <div>
-        Entry Type: {props.submission.entryType}
-      </div>
-      <div>
-        Dimensions: {props.submission.horizDimInch}
-      </div>
-    </div>
-  )
-}
+const ShowSubmissionDetails = ({ submission }) => (
+  <div>
+    <dl>
+      <dt>Title</dt>
+      <dd>{submission.title}</dd>
+    </dl>
+  </div>
+)
 
 ShowSubmissionDetails.propTypes = {
   submission: PropTypes.shape({
+    group: PropTypes.shape({
+      participants: PropTypes.string.isRequired
+    }),
+    student: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      firstName: PropTypes.string.isRequired,
+      lastName: PropTypes.string.isRequired,
+      displayName: PropTypes.string.isRequired
+    }),
+    title: PropTypes.string.isRequired,
+    comment: PropTypes.string.isRequired,
+    forSale: PropTypes.bool.isRequired,
+    invited: PropTypes.bool.isRequired,
+    yearLevel: PropTypes.string.isRequired,
+    academicProgram: PropTypes.string.isRequired,
+    moreCopies: PropTypes.bool.isRequired,
+    score: PropTypes.number.isRequired,
     entryType: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    provider: PropTypes.string,
-    videoId: PropTypes.string,
+    // For Photo or Other Entries
     path: PropTypes.string,
+    // For Photo Entries
     horizDimInch: PropTypes.string,
-    vertDimInch: PropTypes.string
+    vertDimInch: PropTypes.string,
+    mediaType: PropTypes.string,
+    // For Video Entries
+    provider: PropTypes.string,
+    videoId: PropTypes.string
   })
 }
 

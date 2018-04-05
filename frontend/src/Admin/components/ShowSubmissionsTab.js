@@ -48,69 +48,73 @@ class ShowSubmissionsTab extends Component {
     super(props)
 
     this.state = {
-      alertVisible: true,
+      alertVisible: false,
       alertType: '',
-      modal: false,
-      isModalOpen: false
+      isFinalizeConfirmationOpen: false,
+      isSubmissionModalOpen: false,
+      viewingSubmission: null
     }
   }
 
-  toggleFinalizeInviteModal = finalize => {
-    const { finalizeInvites } = this.props
-
+  onDismissFinalizeConfirmation = () => {
     this.setState({
-      isModalOpen: !this.state.isModalOpen
-    })
-    if (finalize) {
-      finalizeInvites()
-    }
-  }
-
-  onDismissModal = () => {
-    this.setState({
-      modal: false
+      isFinalizeConfirmationOpen: false
     })
   }
 
-  onLaunchModal = submission => {
+  onDismissSubmissionModal = () => {
     this.setState({
-      modal: true,
-      submission: submission
+      isSubmissionModalOpen: false
     })
   }
 
-  onDismiss = () => {
+  onDismissAlert = () => {
     this.setState({
       alertVisible: false,
       alertType: ''
     })
   }
 
-  updateShowInvite = (id, value) => {
+  onDisplayFinalizeConfirmation = () => {
+    this.setState({
+      isFinalizeConfirmationOpen: true
+    })
+  }
+
+  onDisplaySubmissionModal = submission => {
+    this.setState({
+      isSubmissionModalOpen: true,
+      viewingSubmission: submission
+    })
+  }
+
+  onDisplayAlert = type => {
+    this.setState({
+      alertVisible: true,
+      alertType: type
+    })
+  }
+
+  updateInvitation = (id, value) => {
     const { updateInvite } = this.props
+
     updateInvite(id, value)
       .then(() => {
-        this.setState({
-          alertVisible: true,
-          alertType: SUCCESS
-        })
+        this.onDisplayAlert(SUCCESS)
         setTimeout(() => {
-          this.onDismiss()
+          this.onDismissAlert()
         }, 3000)
       })
       .catch(() => {
-        this.setState({
-          alertVisible: true,
-          alertType: ERROR
-        })
+        this.onDisplayAlert(ERROR)
         setTimeout(() => {
-          this.onDismiss()
+          this.onDismissAlert()
         }, 3000)
       })
   }
 
   render () {
-    const { show } = this.props
+    const { show, finalizeInvites } = this.props
 
     return (
       <Fragment>
@@ -124,7 +128,7 @@ class ShowSubmissionsTab extends Component {
             zIndex: '5'
           }}
           isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
-          toggle={() => this.onDismiss()}
+          toggle={() => this.onDismissAlert()}
           className='text-center'
         >
           Invite status saved
@@ -139,12 +143,12 @@ class ShowSubmissionsTab extends Component {
             zIndex: '5'
           }}
           isOpen={this.state.alertVisible && this.state.alertType === ERROR}
-          toggle={() => this.onDismiss()}
+          toggle={() => this.onDismissAlert()}
           className='text-center'
         >
           There was an error updating the invite status
         </Alert>
-        <Modal isOpen={this.state.isModalOpen} style={{ top: '25%' }}>
+        <Modal isOpen={this.state.isFinalizeConfirmationOpen} style={{ top: '25%' }}>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
@@ -152,13 +156,16 @@ class ShowSubmissionsTab extends Component {
           <ModalFooter>
             <Button
               color='secondary'
-              onClick={() => this.toggleFinalizeInviteModal(false)}
+              onClick={() => this.onDismissFinalizeConfirmation()}
             >
               Cancel
             </Button>{' '}
             <Button
               color='danger'
-              onClick={() => this.toggleFinalizeInviteModal(true)}
+              onClick={() => {
+                finalizeInvites()
+                this.onDismissFinalizeConfirmation()
+              }}
             >
               Continue
             </Button>
@@ -168,7 +175,7 @@ class ShowSubmissionsTab extends Component {
           <Button
             color={'primary'}
             disabled={show.finalized}
-            onClick={() => this.toggleFinalizeInviteModal(false)}
+            onClick={() => this.onDisplayFinalizeConfirmation()}
           >
             {show.finalized
               ? 'Invitations Are Public'
@@ -218,7 +225,11 @@ class ShowSubmissionsTab extends Component {
             {
               Header: 'Title',
               accessor: 'title',
-              Cell: ({ original: submission }) => (<div style={{cursor: 'pointer'}} onClick={() => this.onLaunchModal(submission)}>{submission.title}</div>)
+              Cell: ({ original: submission }) => (
+                <div style={{ cursor: 'pointer' }} onClick={() => this.onDisplaySubmissionModal(submission)}>
+                  {submission.title}
+                </div>
+              )
             },
             {
               id: 'artist',
@@ -275,14 +286,14 @@ class ShowSubmissionsTab extends Component {
                 submission.invited ? (
                   <a
                     style={{ cursor: 'pointer' }}
-                    onClick={() => this.updateShowInvite(submission.id, false)}
+                    onClick={() => this.updateInvitation(submission.id, false)}
                   >
                     <FaStar size='1.5em' style={{ color: 'gold' }} />
                   </a>
                 ) : (
                   <a
                     style={{ cursor: 'pointer' }}
-                    onClick={() => this.updateShowInvite(submission.id, true)}
+                    onClick={() => this.updateInvitation(submission.id, true)}
                   >
                     <FaStarOpen size='1.5em' />
                   </a>
@@ -292,10 +303,10 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
-        <Modal isOpen={this.state.modal} toggle={() => this.onDismissModal()}>
-          <ModalHeader toggle={() => this.onDismissModal()}></ModalHeader>
+        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal}>
+          <ModalHeader toggle={this.onDismissSubmissionModal}></ModalHeader>
           <ModalBody>
-            <ShowSubmissionDetails submission={this.state.submission} />
+            <ShowSubmissionDetails submission={this.state.viewingSubmission} />
           </ModalBody>
         </Modal>
       </Fragment>
