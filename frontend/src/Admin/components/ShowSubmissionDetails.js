@@ -82,7 +82,7 @@ const renderSubmissionByType = submission => {
 const ShowSubmissionDetails = ({ submission }) => (
   <Row>
     <Col>
-      <h4 className='text-center'>Artist(s)</h4>
+      <h4 className='text-center'>Artist{submission.group ? 's' : null}</h4>
       <dl>
         <dt>Name</dt>
         <dd>{submission.student.firstName} {submission.student.lastName} ({submission.student.username})</dd>
