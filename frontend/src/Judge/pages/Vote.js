@@ -6,10 +6,13 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 import queryString from 'query-string'
+import { compose } from 'recompose'
+import { graphql } from 'react-apollo'
 
 import { setViewing, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
+import ShowsQuery from '../queries/assignedShows.graphql'
 
 const Arrow = styled.span`
   color: white;
@@ -34,6 +37,13 @@ const Next = Arrow.extend`
   right: 25px;
 `
 
+const Progress = styled.div`
+  color: white;
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
 class Vote extends Component {
   static propTypes = {
     show: PropTypes.shape({
@@ -49,7 +59,10 @@ class Vote extends Component {
       id: PropTypes.string
     }),
     fetchVotes: PropTypes.func.isRequired,
-    vote: PropTypes.object
+    vote: PropTypes.object,
+    loadingProgress: PropTypes.bool.isRequired,
+    totalEntries: PropTypes.number,
+    totalOwnVotes: PropTypes.number
   }
 
   static defaultProps = {
@@ -80,7 +93,7 @@ class Vote extends Component {
   }
 
   render () {
-    const { setViewing, submission, previous, next, vote } = this.props
+    const { setViewing, submission, previous, next, vote, loadingProgress, totalEntries, totalOwnVotes } = this.props
 
     return (
       <Container fluid>
@@ -100,6 +113,7 @@ class Vote extends Component {
             ) : null}
           </Col>
           <Col xs='10'>
+            {loadingProgress ? null : <Progress>{totalOwnVotes} / {totalEntries}</Progress>}
             {submission ? <Submission submission={submission} /> : null}
           </Col>
           <Col xs='1'>
@@ -201,4 +215,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Vote)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(ShowsQuery, {
+    options: () => ({ variables: { date: Date.now() } }),
+    props: ({ data: { self, loading }, ownProps }) => {
+      if (!loading) {
+        const show = self.shows.filter((s) => s.id === ownProps.show.id)[0]
+        return {
+          loadingProgress: loading,
+          totalEntries: show.entries.length,
+          totalOwnVotes: show.ownVotes.length
+        }
+      }
+
+      return { loadingProgress: loading }
+    }
+  })
+)(Vote)
