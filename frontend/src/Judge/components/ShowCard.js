@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import { Button, Row, Col } from 'reactstrap'
+import { Button, Col } from 'reactstrap'
 import moment from 'moment'
 
 const Card = styled.div`
