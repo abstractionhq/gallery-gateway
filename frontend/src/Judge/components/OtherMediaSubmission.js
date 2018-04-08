@@ -12,8 +12,7 @@ const PdfImg = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  height: 300px;
-  max-height: 400px;
+  height: 50vh;
   min-height: 2em;
 `
 
@@ -23,6 +22,7 @@ const PdfWell = styled.a`
   color: white;
   display: flex;
   flex-direction: column;
+  height: 50vh;
   padding: 25px;
   text-align: center;
 

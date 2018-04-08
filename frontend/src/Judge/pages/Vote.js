@@ -26,11 +26,11 @@ const Arrow = styled.span`
 
 const Previous = Arrow.extend`
   left: 25px;
-  padding: 225px 25px 200px 0; /* Create a larger click target */
+  padding: 35vh 25px 15vh 0; /* Create a larger click target */
 `
 
 const Next = Arrow.extend`
-  padding: 225px 0 200px 25px; /* Create a larger click target */
+  padding: 35vh 0 15vh 25px; /* Create a larger click target */
   right: 25px;
 `
 
@@ -88,11 +88,10 @@ class Vote extends Component {
           style={{
             backgroundColor: '#777777',
             minHeight: 'calc(100vh - 56px)',
-            paddingTop: '25px',
-            margin: '0 -15px'
+            paddingTop: '25px'
           }}
         >
-          <Col md='12'>
+          <Col xs='12' style={{ maxHeight: '60vh' }}>
             <Row>
               <Col xs='1'>
                 {previous && previous.id ? (
@@ -114,14 +113,8 @@ class Vote extends Component {
             </Row>
           </Col>
           {submission ? (
-            <Col md='12'>
-              <Row>
-                <Col>
-                  <section>
-                    <VotePanel submission={submission} vote={vote} />
-                  </section>
-                </Col>
-              </Row>
+            <Col xs='12'>
+              <VotePanel submission={submission} vote={vote} />
             </Col>
           ) : null}
         </Row>

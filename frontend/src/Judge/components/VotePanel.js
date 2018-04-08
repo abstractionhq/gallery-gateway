@@ -13,8 +13,15 @@ const SUCCESS = 'SUCCESS'
 const ERROR = 'ERROR'
 
 const VotingContainer = styled.div`
-  margin: 10px 0;
+  left: 0;
+  margin: 10px auto;
+  position: absolute;
   width: 100%;
+
+  @media (min-width: 768px) {
+    left: 25%;
+    width: 50%;
+  }
 `
 
 class VotePanel extends Component {
