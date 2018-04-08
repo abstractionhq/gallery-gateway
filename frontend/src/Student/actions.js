@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import pdf from 'assets/pdf.svg'
+import { IMAGE_UPLOAD_PATH, PDF_UPLOAD_PATH } from '../utils'
 
 export const UPLOAD_IMAGE = 'UPLOAD_IMAGE'
 export const UPLOAD_PDF = 'UPLOAD_PDF'
@@ -12,8 +13,7 @@ export const uploadImage = file => (dispatch, getState, client) => {
   formData.append('image', file)
 
   return axios
-    .post('http://localhost:3000/static/upload/image', formData, {
-      // TODO: Extract URL
+    .post(IMAGE_UPLOAD_PATH, formData, {
       headers: { Authorization: `Bearer ${getState().shared.auth.token}` }
     })
     .then(({ data }) =>
@@ -35,8 +35,7 @@ export const uploadPDF = file => (dispatch, getState, client) => {
   formData.append('pdf', file)
 
   return axios
-    .post('http://localhost:3000/static/upload/pdf', formData, {
-      // TODO: Extract URL
+    .post(PDF_UPLOAD_PATH, formData, {
       headers: { Authorization: `Bearer ${getState().shared.auth.token}` }
     })
     .then(({ data }) =>

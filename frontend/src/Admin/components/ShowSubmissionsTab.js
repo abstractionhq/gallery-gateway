@@ -9,7 +9,7 @@ import FaStar from 'react-icons/lib/fa/star'
 import FaStarOpen from 'react-icons/lib/fa/star-o'
 import FaBook from 'react-icons/lib/fa/book'
 
-import { getImageThumbnail } from '../../utils'
+import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 // Alert Types
 const SUCCESS = 'SUCCESS'
@@ -99,6 +99,7 @@ class ShowSubmissionsTab extends Component {
 
     return (
       <Fragment>
+        {/* TODO: Remove alerts on this page */}
         <Alert
           color='success'
           style={{
@@ -178,7 +179,7 @@ class ShowSubmissionsTab extends Component {
                     return (
                       <PhotoThumbnail
                         alt={submission.title}
-                        src={`//localhost:3000/static/uploads/${getImageThumbnail(
+                        src={`${STATIC_PATH}${getImageThumbnail(
                           submission.path
                         )}`}
                       />
@@ -210,7 +211,7 @@ class ShowSubmissionsTab extends Component {
               accessor: submission => {
                 // Allows for sorting by student submitter's name
                 const student = submission.student || submission.group.creator
-                return `${ student.username }`
+                return `${student.username}`
               },
               Cell: ({ original: submission }) =>
                 !submission.group ? (
