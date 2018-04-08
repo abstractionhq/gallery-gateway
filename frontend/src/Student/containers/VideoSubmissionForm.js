@@ -1,6 +1,7 @@
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import VideoSubmissionForm from '../components/VideoSubmissionForm'
 import CreateVideoEntry from '../mutations/createVideoEntry.graphql'
@@ -14,11 +15,8 @@ const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/'))
 })
 
-const withRedux = connect(mapStateToProps, mapDispatchToProps)(
-  VideoSubmissionForm
-)
-
-const withMutations = compose(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(CreateVideoEntry, {
     props: ({ mutate }) => ({
       create: entry =>
@@ -34,6 +32,4 @@ const withMutations = compose(
       }
     })
   })
-)(withRedux)
-
-export default withMutations
+)(VideoSubmissionForm)

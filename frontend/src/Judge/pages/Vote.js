@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 import queryString from 'query-string'
+import { compose } from 'recompose'
 
 import { setViewing, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
@@ -201,4 +202,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Vote)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(Vote)

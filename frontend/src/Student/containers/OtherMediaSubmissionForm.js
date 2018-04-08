@@ -1,6 +1,7 @@
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import { uploadImage, uploadPDF, clearPreview } from '../actions'
 
@@ -20,11 +21,8 @@ const mapDispatchToProps = dispatch => ({
   clearPreview: () => dispatch(clearPreview())
 })
 
-const withRedux = connect(mapStateToProps, mapDispatchToProps)(
-  OtherMediaSubmissionForm
-)
-
-const withMutations = compose(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(CreateOtherMediaEntry, {
     props: ({ mutate }) => ({
       create: entry =>
@@ -40,6 +38,4 @@ const withMutations = compose(
       }
     })
   })
-)(withRedux)
-
-export default withMutations
+)(OtherMediaSubmissionForm)

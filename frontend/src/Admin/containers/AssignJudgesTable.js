@@ -1,5 +1,6 @@
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import {
   fetchJudgesByAssignmentForShow,
@@ -42,11 +43,8 @@ const mapDispatchToProps = (dispatch, { showId }) => ({
   afterUnassign: usernames => dispatch(removeJudgesFromShow(showId, usernames))
 })
 
-const withRedux = connect(mapStateToProps, mapDispatchToProps)(
-  AssignJudgesTable
-)
-
-const withMutations = compose(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(AssignToShowMutation, {
     props: ({ ownProps, mutate }) => ({
       assign: usernames =>
@@ -91,6 +89,4 @@ const withMutations = compose(
         })
     })
   })
-)(withRedux)
-
-export default withMutations
+)(AssignJudgesTable)
