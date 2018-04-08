@@ -310,7 +310,6 @@ describe('Entry Mutations', function () {
             return execGraphql(createVideo, { type: 'ADMIN' })
               .then(
                 result => {
-                  console.log(result)
                   expect(result.data.createVideo.entries.length).to.equal(1)
                   expect(result.data.createVideo.entries[0].provider).to.equal('youtube')
                   expect(result.data.createVideo.entries[0].videoId).to.equal('JHAReoWi-nE')
