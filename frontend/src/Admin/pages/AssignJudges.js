@@ -34,7 +34,7 @@ class AssignJudges extends Component {
   renderPage (show) {
     return (
       <Container fluid>
-        <Heading>Assign Judges | {show.name}</Heading>
+        <Heading>{show.name}</Heading>
         <AssignJudgesTable showId={show.id} />
         <FormContainer>
           <CreateJudgeForm />
