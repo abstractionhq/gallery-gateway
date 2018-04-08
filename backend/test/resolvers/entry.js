@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import Entry from '../../models/entry'
 import Group from '../../models/group'
-import { createPhoto, createVideo, createOtherMedia } from '../../resolvers/mutations/entry'
+import { createPhoto, createVideo, createOtherMedia, updateEntry } from '../../resolvers/mutations/entry'
 import { fakeUser, fakeShow, fakeImageEntry } from '../factories'
 import { execGraphql } from '../util'
 
@@ -137,7 +137,7 @@ describe('Entry Mutations', function () {
       })
 
       it('rejects images with invalid dimensions', function () {
-        return Promise.all([fakeShow(), fakeUser({type: 'STUDENT'})])
+        return Promise.all([fakeShow(), fakeUser({ type: 'STUDENT' })])
           .then(([show, user]) => {
             const args = {
               input: {
@@ -211,9 +211,9 @@ describe('Entry Mutations', function () {
       })
 
       it('rejects submitting beyond the limit', () =>
-        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+        Promise.all([fakeUser({ type: 'STUDENT' }), fakeShow({ entryCap: 1 })])
           .then(([user, show]) =>
-            fakeImageEntry({user, show})
+            fakeImageEntry({ user, show })
               .then(() => [user, show])
           )
           .then(([user, show]) => {
@@ -412,9 +412,9 @@ describe('Entry Mutations', function () {
         }).to.throw('Permission Denied')
       })
       it('rejects submitting beyond the limit', () =>
-        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+        Promise.all([fakeUser({ type: 'STUDENT' }), fakeShow({ entryCap: 1 })])
           .then(([user, show]) =>
-            fakeImageEntry({user, show})
+            fakeImageEntry({ user, show })
               .then(() => [user, show])
           )
           .then(([user, show]) => {
@@ -495,9 +495,9 @@ describe('Entry Mutations', function () {
         }).to.throw('Permission Denied')
       })
       it('rejects submitting beyond the limit', () =>
-        Promise.all([fakeUser({type: 'STUDENT'}), fakeShow({entryCap: 1})])
+        Promise.all([fakeUser({ type: 'STUDENT' }), fakeShow({ entryCap: 1 })])
           .then(([user, show]) =>
-            fakeImageEntry({user, show})
+            fakeImageEntry({ user, show })
               .then(() => [user, show])
           )
           .then(([user, show]) => {
@@ -515,6 +515,46 @@ describe('Entry Mutations', function () {
               })
           })
       )
+    })
+  })
+  describe('Entry Update', function () {
+    describe('Successes', function () {
+      it('doesn\'t allow non admins to update', function () {
+        expect(() => {
+          updateEntry({}, {}, { auth: { type: 'STUDENT', username: 'user1' } })
+        }).to.throw('Permission Denied')
+      })
+
+      it('allows admins to update fields on entry', function () {
+        return fakeImageEntry()
+          .then((entry) => {
+            const updateEntry = `
+            mutation {
+              updateEntry(id: ${entry.id}, input: {
+                title: "UNIQUE TITLE"
+                comment: "a comment"
+                forSale: true
+                invited: true
+                yearLevel: "5th"
+                academicProgram: "SE"
+                moreCopies: true
+                excludeFromJudging: false
+              }){
+                id,
+                invited,
+                title
+              }
+            }`
+            return execGraphql(updateEntry, { type: 'ADMIN' })
+              .then(
+                result => {
+                  expect(result.data.updateEntry.id).to.equal(`${entry.id}`)
+                  expect(result.data.updateEntry.title).to.equal('UNIQUE TITLE')
+                  expect(result.data.updateEntry.invited).to.equal(true)
+                }
+              )
+          })
+      })
     })
   })
 })

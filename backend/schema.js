@@ -54,9 +54,10 @@ type Show {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+    finalized: Boolean
     entries: [Entry]
     judges: [User]
-    ownVotes: [Vote]    
+    ownVotes: [Vote]
     createdAt: Date!
     updatedAt: Date!
 }
@@ -69,6 +70,13 @@ input ShowInput {
     judgingStart: Date!
     judgingEnd: Date!
     entryCap: Int!
+}
+
+input ShowUpdate {
+    name: String
+    description: String
+    entryCap: Int
+    finalized: Boolean
 }
 
 type Vote {
@@ -98,6 +106,8 @@ interface Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 }
 
 input EntryInput {
@@ -110,6 +120,17 @@ input EntryInput {
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
+}
+
+input EntryUpdate {
+    title: String
+    comment: String
+    forSale: Boolean
+    invited: Boolean
+    yearLevel: String
+    academicProgram: String
+    moreCopies: Boolean
+    excludeFromJudging: Boolean
 }
 
 type Photo implements Entry {
@@ -126,7 +147,9 @@ type Photo implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
-    
+    votes: [Vote]
+    excludeFromJudging: Boolean
+
     path: String!
     horizDimInch: Float
     vertDimInch: Float
@@ -155,6 +178,8 @@ type Video implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 
     provider: String!
     videoId: String!
@@ -179,6 +204,8 @@ type OtherMedia implements Entry {
     moreCopies: Boolean
     score: Float
     entryType: String
+    votes: [Vote]
+    excludeFromJudging: Boolean
 
     path: String!
 }
@@ -218,14 +245,15 @@ type Mutation {
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
-    updateShow(id: ID!, input: ShowInput!): Show
+    updateShow(id: ID!, input: ShowUpdate!): Show
     deleteShow(id: ID!): Boolean
-    assignToShow(showId: ID!, usernames: [String]!): Boolean    
-    removeFromShow(showId: ID!, usernames: [String]!): Boolean    
-    
+    assignToShow(showId: ID!, usernames: [String]!): Boolean
+    removeFromShow(showId: ID!, usernames: [String]!): Boolean
+
     createPhoto(input: PhotoInput!): Show
     createVideo(input: VideoInput!): Show
     createOtherMedia(input: OtherMediaInput!): Show
+    updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote
 }

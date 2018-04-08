@@ -6,8 +6,8 @@ import { RoutedTabs, NavTab } from 'react-router-tabs'
 import { Route, Switch } from 'react-router-dom'
 
 import ShowDetailsTab from '../containers/ShowDetailsTab'
-import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
-import ShowJudgesTab from '../components/ShowJudgesTab'
+import ShowSubmissionsTab from '../containers/ShowSubmissionsTab'
+import ShowJudgesTab from '../containers/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 
 const ViewShow = props => {

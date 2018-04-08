@@ -10,6 +10,8 @@ import FaVimeo from 'react-icons/lib/fa/vimeo'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 
+import { getImageThumbnail } from '../../utils'
+
 const Card = styled.div`
   background-color: #f8f9fa;
   border-radius: 5px;
@@ -37,7 +39,7 @@ const EntryContainer = styled.div`
   width: inherit;
 `
 
-const JudgingPhase = styled.div`
+const Pending = styled.div`
   background-color: #fff3cd;
   border: 1px solid transparent;
   border-color: #ffeeba;
@@ -46,7 +48,7 @@ const JudgingPhase = styled.div`
   position: relative;
   width: inherit;
 `
-const Accepted = styled.div`
+const Invited = styled.div`
   background-color: #d4edda;
   border: 1px solid transparent;
   border-color: #c3e6cb;
@@ -56,7 +58,7 @@ const Accepted = styled.div`
   width: inherit;
 `
 
-const NotAccepted = styled.div`
+const NotInvited = styled.div`
   background-color: #d6d8d9;
   border: 1px solid transparent;
   border-color: #c6c8ca;
@@ -69,11 +71,12 @@ const NotAccepted = styled.div`
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
-      const [base, extn] = entry.path.split('.')
       return (
         <PhotoThumbnail
           // TODO (robert) make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${base}_thumb.${extn}`}
+          src={`//localhost:3000/static/uploads/${getImageThumbnail(
+            entry.path
+          )}`}
         />
       )
     case 'VIDEO':
@@ -131,17 +134,18 @@ const SubmittedEntries = ({ show }) =>
     >
       <EntryContainer>
         <EntryThumb entry={entry} />
-        {/* If after entry end and before judging end, display "judging phase"
-          , else display accepted or denied */
-          moment().isBetween(show.entryEnd, show.judgingEnd) ? (
-            <JudgingPhase>Judging In Progress</JudgingPhase>
-          ) : moment().isAfter(show.judgingEnd) ? (
-            entry.invited ? (
-              <Accepted>Invited</Accepted>
-            ) : (
-              <NotAccepted>Not Invited</NotAccepted>
-            )
-          ) : null}
+        {/* If after entry end and before judging end (or if the show is not finalized),
+          display "Pending", else display invited or not invited */
+          moment().isBetween(show.entryEnd, show.judgingEnd) ||
+        !show.finalized ? (
+              <Pending>Pending</Pending>
+            ) : moment().isAfter(show.judgingEnd) ? (
+              entry.invited ? (
+                <Invited>Invited</Invited>
+              ) : (
+                <NotInvited>Not Invited</NotInvited>
+              )
+            ) : null}
       </EntryContainer>
     </Col>
   ))

@@ -1,0 +1,6 @@
+mutation updateInvitation($id: ID! $input: EntryUpdate!) {
+  updateEntry(id: $id, input: $input) {
+    id,
+    invited
+  }
+}
