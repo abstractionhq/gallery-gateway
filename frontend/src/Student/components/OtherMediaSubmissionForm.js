@@ -211,7 +211,6 @@ class OtherSubmissionForm extends Component {
               entry: {
                 group: values.submittingAsGroup === 'yes'
                   ? {
-                    name: '',
                     creatorUsername: user.username,
                     participants: values.groupParticipants
                   }

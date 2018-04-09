@@ -209,11 +209,7 @@ router.route('/zips/:showId')
             return submissionsWithSubmitters.reduce((arr, {user, group, entries}) => {
               // ['Clark Kent - Daily Planet Office']
               const newSubmissionSummaries = entries.map(({path, title, invited}) => {
-                const entryNamePrefix = (
-                  (user ? `${user.lastName} ${user.firstName}` : group.name) +
-                  ' - ' +
-                  title
-                )
+                const entryNamePrefix = `${(user ? `${user.lastName}, ${user.firstName}` : group.participants)} - ${title}`
                 // enforce non-conflicting titles by adding (1), (2), ... to end of name
                 let proposedName = entryNamePrefix
                 let i = 1

@@ -91,40 +91,43 @@ describe('downloading a zip file', () => {
   )
 
   it('Downloads a single student submitted image', () =>
-    fakeImageEntry({invited: true, path: 'imageA.jpg'})
-      .then(entry =>
-        // ok now get the user that was just created
-        User.findById(entry.studentUsername)
-          .then(user =>
-            request(server)
-              .get(`/zips/${entry.showId}?token=${token}`)
-              .buffer()
-              .parse(binaryParser)
-              .expect(200)
-              .then(res => JSZip.loadAsync(res.body))
-              .then(zip => {
-                // Expect the zip to have
-                // a folder invited/ and
-                // a file invited/<expected title>.jpg -- with appropriate content
-                expect(Object.keys(zip.files).length)
-                  .to.eq(2, 'should have only one file and one directory')
-                expect(zip.files['invited/']).to.exist
-                const zobj = zip.file(
-                  `invited/${user.lastName} ${user.firstName} - ${entry.title}.jpg`
-                )
-                return zobj.async('nodebuffer')
-                  .then(buf => {
-                    expect(hash(buf)).to.eq(fileAHash)
+    fakeShow({name: 'Honors Show'})
+      .then((show) =>
+        fakeImageEntry({invited: true, path: 'imageA.jpg', show})
+          .then(entry =>
+            User.findById(entry.studentUsername)
+              .then(user =>
+                request(server)
+                  .get(`/zips/${entry.showId}?token=${token}`)
+                  .buffer()
+                  .parse(binaryParser)
+                  .expect(200)
+                  .then(res => JSZip.loadAsync(res.body))
+                  .then(zip => {
+                    // Expect the zip to have
+                    // folders "Honors Show/Invited/" and
+                    // a file "Honors Show/Invited/<Expected Title>.jpg" -- with appropriate content
+                    expect(Object.keys(zip.files).length)
+                      .to.eq(3, 'should have only one file and two directories')
+                    expect(zip.files[`${show.name}/`]).to.exist
+                    expect(zip.files[`${show.name}/Invited/`]).to.exist
+                    const zobj = zip.file(
+                      `${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`
+                    )
+                    return zobj.async('nodebuffer')
+                      .then(buf => {
+                        expect(hash(buf)).to.eq(fileAHash)
+                      })
                   })
-              })
+              )
           )
       )
   )
 
   it('downloads a single group-submitted image', () =>
-    fakeGroup()
-      .then(group =>
-        fakeImageEntry({invited: true, path: 'imageB.jpg', group: group})
+    Promise.all([fakeShow({name: 'Honors Show'}), fakeGroup()])
+      .then(([show, group]) =>
+        fakeImageEntry({invited: true, path: 'imageB.jpg', group, show})
           .then(entry =>
             request(server)
               .get(`/zips/${entry.showId}?token=${token}`)
@@ -134,13 +137,14 @@ describe('downloading a zip file', () => {
               .then(res => JSZip.loadAsync(res.body))
               .then(zip => {
                 // Expect the zip to have
-                // a folder invited/ and
-                // a file invited/<expected title>.jpg -- with appropriate content
+                // folders "Honors Show/Invited/" and
+                // a file "Honors Show/Invited/<Expected Title>.jpg" -- with appropriate content
                 expect(Object.keys(zip.files).length)
-                  .to.eq(2, 'should have only one file and one directory')
-                expect(zip.files['invited/']).to.exist
+                  .to.eq(3, 'should have only one file and two directories')
+                expect(zip.files[`${show.name}/`]).to.exist
+                expect(zip.files[`${show.name}/Invited/`]).to.exist
                 const zobj = zip.file(
-                  `invited/${group.name} - ${entry.title}.jpg`
+                  `${show.name}/Invited/${group.participants} - ${entry.title}.jpg`
                 )
                 return zobj.async('nodebuffer')
                   .then(buf => {
@@ -152,7 +156,7 @@ describe('downloading a zip file', () => {
   )
 
   it('disambiguates untitled submissions', () =>
-    Promise.all([fakeShow(), fakeUser()])
+    Promise.all([fakeShow({name: 'Honors Show'}), fakeUser()])
       .then(([show, user]) =>
         Promise.all([
           fakeImageEntry({title: 'Untitled', path: 'imageA.jpg', invited: true, user, show}),
@@ -166,15 +170,16 @@ describe('downloading a zip file', () => {
             .then(res => JSZip.loadAsync(res.body))
             .then(zip => {
               expect(Object.keys(zip.files).length)
-                .to.eq(3, 'should have one folder and two files')
-              expect(zip.files['invited/']).to.exist
+                .to.eq(4, 'should have two folders and two files')
+              expect(zip.files[`${show.name}/`]).to.exist
+              expect(zip.files[`${show.name}/Invited/`]).to.exist
               // NOTE: we don't know which is fileA or fileB, just need to
               // make sure that they're both there
               const zobj1 = zip.file(
-                `invited/${user.lastName} ${user.firstName} - Untitled.jpg`
+                `${show.name}/Invited/${user.lastName}, ${user.firstName} - Untitled.jpg`
               )
               const zobj2 = zip.file(
-                `invited/${user.lastName} ${user.firstName} - Untitled (1).jpg`
+                `${show.name}/Invited/${user.lastName}, ${user.firstName} - Untitled (1).jpg`
               )
               return Promise.all([
                 zobj1.async('nodebuffer'),
@@ -193,19 +198,42 @@ describe('downloading a zip file', () => {
   )
 
   it('creates non-invited folder for submissions correctly', () =>
-    fakeImageEntry({invited: false, path: 'imageA.jpg'})
-      .then(entry =>
-        request(server)
-          .get(`/zips/${entry.showId}?token=${token}`)
-          .buffer()
-          .parse(binaryParser)
-          .expect(200)
-          .then(res => JSZip.loadAsync(res.body))
-          .then(zip => {
-            expect(Object.keys(zip.files).length).to.eq(2)
-            expect(zip.files['not invited/']).to.exist
-            expect(zip.files['invited/']).to.not.exist
-          })
-      )
-  )
+    fakeShow({name: 'Honors Show'})
+      .then(show =>
+        fakeImageEntry({invited: false, path: 'imageA.jpg', show})
+          .then(entry =>
+            request(server)
+              .get(`/zips/${entry.showId}?token=${token}`)
+              .buffer()
+              .parse(binaryParser)
+              .expect(200)
+              .then(res => JSZip.loadAsync(res.body))
+              .then(zip => {
+                expect(Object.keys(zip.files).length).to.eq(3)
+                expect(zip.files[`${show.name}/`]).to.exist
+                expect(zip.files[`${show.name}/Not Invited/`]).to.exist
+                expect(zip.files[`${show.name}/Invited/`]).to.not.exist
+              })
+          )
+      ))
+
+  it('supports submissions that have emoji in their title', () =>
+    Promise.all([fakeShow({name: 'Honors Show'}), fakeUser({firstName: '☕️', lastName: '🍰'})])
+      .then(([show, user]) =>
+        fakeImageEntry({invited: true, path: 'imageA.jpg', title: '🚀🌈❤️', show, user})
+          .then(entry =>
+            request(server)
+              .get(`/zips/${entry.showId}?token=${token}`)
+              .buffer()
+              .parse(binaryParser)
+              .expect(200)
+              .then(res => JSZip.loadAsync(res.body))
+              .then(zip => {
+                expect(Object.keys(zip.files).length).to.eq(3)
+                expect(zip.files[`${show.name}/`]).to.exist
+                expect(zip.files[`${show.name}/Invited/`]).to.exist
+                expect(zip.files[`${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`]).to.exist
+              })
+          )
+      ))
 })

@@ -76,7 +76,6 @@ describe('Entry Mutations', function () {
               input: {
                 entry: {
                   group: {
-                    name: 'mygroup1',
                     creatorUsername: user.username,
                     participants: 'uncle jimmy'
                   },
@@ -100,7 +99,6 @@ describe('Entry Mutations', function () {
                 return Group.findOne().then(group => {
                   expect(group.participants).to.equal('uncle jimmy')
                   expect(group.creatorUsername).to.equal(user.username)
-                  expect(group.name).to.equal('mygroup1')
                   expect(group.id).to.equal(photoEntry.groupId)
                 })
               })

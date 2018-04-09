@@ -34,13 +34,11 @@ input PermissionInput {
 
 type Group {
     id: ID!
-    name: String!
     creator: User!
     participants: String!
 }
 
 input GroupInput {
-    name: String!
     creatorUsername: String!
     participants: String!
 }
