@@ -4,7 +4,7 @@ import { promisify } from 'util'
 
 import { Router } from 'express'
 import JSZip from 'jszip'
-import stringify from 'csv-stringify';
+import stringify from 'csv-stringify'
 
 import Entry from '../models/entry'
 import Group from '../models/group'
@@ -39,120 +39,122 @@ const ensureAdminDownloadToken = (req, res, next) => {
 
 router.route('/csv/:showId')
   .get(ensureAdminDownloadToken, (req, res, next) => {
-  // find the show
-  Show.findById(req.params.showId, {rejectOnEmpty: true})
-    .then(show => {
-      // find all image Entries to this show id
-      Entry.findAll({where: {showId: req.params.showId},
-        attributes: { exclude: ['createdAt', 'updatedAt'] } })
-        .then(entries => {
-          // Get the additonal information on the entries by getting
-          // all the ids and then making the call, to reduce calls to the db
-          const imageIds = []
-          const videoIds = []
-          const otherMediaIds = []
-          entries.forEach((entry) => {
-            if (entry.entryType === IMAGE_ENTRY) {
-              imageIds.push(entry.entryId)
-            } else if (entry.entryType === VIDEO_ENTRY) {
-              videoIds.push(entry.entryId)
-            } else if (entry.entryType === OTHER_ENTRY){
-              otherMediaIds.push(entry.entryId)
-            }
-          })
-
-          return Promise.all([Image.findAll({where: {id: {$in: imageIds}}}),
-            Video.findAll({where: {id: {$in: videoIds}}}), OtherMedia.findAll({where: {id: {$in: otherMediaIds}}})
-          ]).then(([images, videos, otherMedia]) => {
-            // Create a mapping for type objects to their ids for easy assigning
-            const imageIdsToImage = images.reduce((obj, image) => ({
-              ...obj,
-              [image.id]: image
-            }), {})
-            const videoIdsToImage = videos.reduce((obj, video) => ({
-              ...obj,
-              [video.id]: video
-            }), {})
-            const otherMediaIdsToImage = otherMedia.reduce((obj, other) => ({
-              ...obj,
-              [other.id]: other
-            }), {})
-
-            // create update entry objects that contain modified entry data plus:
-            // path, vert and horiz dementions medaiType, provider, videoId
-            const entriesWithTypeData = entries.map(entry => {
-              let entryData = entry.dataValues
-              let entryType = entry.entryType === IMAGE_ENTRY ? 'Image' :
-                entry.entryType === VIDEO_ENTRY ? 'Video' :
-                entry.entryType === OTHER_ENTRY ? 'OtherMedia': ''
-              let newEntry = {
-                studentEmail: `${entryData.studentUsername}@rit.edu`,
-                isGroupSubmission: entryData.groupId ? true : false,
-                entryType: entryType,
-                title: entryData.title,
-                comment: entryData.comment,
-                moreCopies: entryData.moreCopies,
-                forSale: entryData.forSale,
-                awardWon: entryData.awardWon,
-                invited: entryData.invited,
-                yearLevel: entryData.yearLevel,
-                academicProgram: entryData.academicProgram,
-                excludeFromJudging: entryData.excludeFromJudging,
-                path: '',
-                horizDimInch: '',
-                vertDimInch: '',
-                mediaType: '',
-                provider: '',
-                videoId: ''
-              }
-
-              // Add entry data to data object
-              if (entry.entryType === IMAGE_ENTRY) {
-                let imageObj = imageIdsToImage[entry.entryId]
-                return {
-                  ...newEntry,
-                  path: imageObj.path,
-                  horizDimInch: imageObj.horizDimInch,
-                  vertDimInch: imageObj.vertDimInch,
-                  mediaType: imageObj.mediaType
-                }
-              } else if (entry.entryType === VIDEO_ENTRY) {
-                let videoObj = videoIdsToImage[entry.entryId]
-                return {
-                  ...newEntry,
-                  provider: videoObj.provider,
-                  videoId: videoObj.videoId
-                }
-              } else if (entry.entryType === OTHER_ENTRY){
-                let otherObj = otherMediaIdsToImage[entry.entryId]
-                return {
-                  ...newEntry,
-                  path: otherObj.path,
-                }
-              }
-            })
-            // Send csv data to browser
-            stringify(entriesWithTypeData, { header: true }, (err, output) => {
-              if(err) {
-                console.error(err)
-                res.status(500).send('500: Oops! Try again later.')
-              }
-              res.status(200)
-              .type('text/csv')
-              .attachment(`${show.name}.csv`)
-              .send(output)
-            })
-          })
+    // find the show
+    Show.findById(req.params.showId, { rejectOnEmpty: true })
+      .then(show => {
+        // find all image Entries to this show id
+        Entry.findAll({
+          where: { showId: req.params.showId },
+          attributes: { exclude: ['createdAt', 'updatedAt'] }
         })
+          .then(entries => {
+            // Get the additonal information on the entries by getting
+            // all the ids and then making the call, to reduce calls to the db
+            const imageIds = []
+            const videoIds = []
+            const otherMediaIds = []
+            entries.forEach((entry) => {
+              if (entry.entryType === IMAGE_ENTRY) {
+                imageIds.push(entry.entryId)
+              } else if (entry.entryType === VIDEO_ENTRY) {
+                videoIds.push(entry.entryId)
+              } else if (entry.entryType === OTHER_ENTRY) {
+                otherMediaIds.push(entry.entryId)
+              }
+            })
+
+            return Promise.all([Image.findAll({ where: { id: { $in: imageIds } } }),
+              Video.findAll({ where: { id: { $in: videoIds } } }), OtherMedia.findAll({ where: { id: { $in: otherMediaIds } } })
+            ]).then(([images, videos, otherMedia]) => {
+              // Create a mapping for type objects to their ids for easy assigning
+              const imageIdsToImage = images.reduce((obj, image) => ({
+                ...obj,
+                [image.id]: image
+              }), {})
+              const videoIdsToImage = videos.reduce((obj, video) => ({
+                ...obj,
+                [video.id]: video
+              }), {})
+              const otherMediaIdsToImage = otherMedia.reduce((obj, other) => ({
+                ...obj,
+                [other.id]: other
+              }), {})
+
+              // create update entry objects that contain modified entry data plus:
+              // path, vert and horiz dementions medaiType, provider, videoId
+              const entriesWithTypeData = entries.map(entry => {
+                let entryData = entry.dataValues
+                let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
+                  : entry.entryType === VIDEO_ENTRY ? 'Video'
+                    : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
+                let newEntry = {
+                  studentEmail: `${entryData.studentUsername}@rit.edu`,
+                  isGroupSubmission: entryData.groupId ? true : null,
+                  entryType: entryType,
+                  title: entryData.title,
+                  comment: entryData.comment,
+                  moreCopies: entryData.moreCopies,
+                  forSale: entryData.forSale,
+                  awardWon: entryData.awardWon,
+                  invited: entryData.invited,
+                  yearLevel: entryData.yearLevel,
+                  academicProgram: entryData.academicProgram,
+                  excludeFromJudging: entryData.excludeFromJudging,
+                  path: '',
+                  horizDimInch: '',
+                  vertDimInch: '',
+                  mediaType: '',
+                  provider: '',
+                  videoId: ''
+                }
+
+                // Add entry data to data object
+                if (entry.entryType === IMAGE_ENTRY) {
+                  let imageObj = imageIdsToImage[entry.entryId]
+                  return {
+                    ...newEntry,
+                    path: imageObj.path,
+                    horizDimInch: imageObj.horizDimInch,
+                    vertDimInch: imageObj.vertDimInch,
+                    mediaType: imageObj.mediaType
+                  }
+                } else if (entry.entryType === VIDEO_ENTRY) {
+                  let videoObj = videoIdsToImage[entry.entryId]
+                  return {
+                    ...newEntry,
+                    provider: videoObj.provider,
+                    videoId: videoObj.videoId
+                  }
+                } else if (entry.entryType === OTHER_ENTRY) {
+                  let otherObj = otherMediaIdsToImage[entry.entryId]
+                  return {
+                    ...newEntry,
+                    path: otherObj.path
+                  }
+                }
+              })
+              // Send csv data to browser
+              stringify(entriesWithTypeData, { header: true }, (err, output) => {
+                if (err) {
+                  console.error(err)
+                  res.status(500).send('500: Oops! Try again later.')
+                }
+                res.status(200)
+                  .type('text/csv')
+                  .attachment(`${show.name}.csv`)
+                  .send(output)
+              })
+            })
+          })
       })
   })
 router.route('/zips/:showId')
   .get(ensureAdminDownloadToken, (req, res, next) => {
     // find the show
-    Show.findById(req.params.showId, {rejectOnEmpty: true})
+    Show.findById(req.params.showId, { rejectOnEmpty: true })
       .then(show => {
         // find all image Entries to this show id
-        Entry.findAll({where: {showId: req.params.showId, entryType: IMAGE_ENTRY}})
+        Entry.findAll({ where: { showId: req.params.showId, entryType: IMAGE_ENTRY } })
           .then(entries => {
             // Look up all Images for these Entries to add the 'path' attribute to
             // all entry objects.
@@ -162,7 +164,7 @@ router.route('/zips/:showId')
             //   [Entry]
 
             const imageIds = entries.map((entry) => entry.entryId)
-            return Image.findAll({where: {id: {$in: imageIds}}})
+            return Image.findAll({ where: { id: { $in: imageIds } } })
               .then(images => {
                 // create a mapping of imageId -> image for easy assigning
                 // Evaluates to: [Entry]
@@ -225,7 +227,7 @@ router.route('/zips/:showId')
               groupSubmissions
             }
           })
-          .then(({studentSubmissions, groupSubmissions}) => {
+          .then(({ studentSubmissions, groupSubmissions }) => {
             // We need to query for the User and Group objects that go with each
             // of the following usernames or group IDs, so we know their names
             // Params:
@@ -253,8 +255,8 @@ router.route('/zips/:showId')
             //   ]
 
             return Promise.all([
-              User.findAll({where: {username: {$in: Object.keys(studentSubmissions)}}}),
-              Group.findAll({where: {id: {$in: Object.keys(groupSubmissions)}}})
+              User.findAll({ where: { username: { $in: Object.keys(studentSubmissions) } } }),
+              Group.findAll({ where: { id: { $in: Object.keys(groupSubmissions) } } })
             ])
               .then(([users, groups]) => {
                 // construct a username -> User mapping
@@ -319,9 +321,9 @@ router.route('/zips/:showId')
             //   }
             // ]
             const namesSeen = new Set()
-            return submissionsWithSubmitters.reduce((arr, {user, group, entries}) => {
+            return submissionsWithSubmitters.reduce((arr, { user, group, entries }) => {
               // ['Clark Kent - Daily Planet Office']
-              const newSubmissionSummaries = entries.map(({path, title, invited}) => {
+              const newSubmissionSummaries = entries.map(({ path, title, invited }) => {
                 const entryNamePrefix = (
                   (user ? `${user.lastName} ${user.firstName}` : group.name) +
                   ' - ' +
@@ -380,5 +382,4 @@ router.route('/zips/:showId')
       })
   })
 
-
-  export default router
+export default router
