@@ -27,7 +27,7 @@ const ensureAdminDownloadToken = (req, res, next) => {
     if (err || decoded.type !== ADMIN) {
       res.status(401)
         .type('html')
-        .send('permission denied')
+        .send('Permission Denied')
     } else {
       next()
     }
@@ -48,7 +48,6 @@ router.route('/zips/:showId')
             //   entries: [Entry]
             // Evaluates to:
             //   [Entry]
-
             const imageIds = entries.map((entry) => entry.entryId)
             return Image.findAll({where: {id: {$in: imageIds}}})
               .then(images => {
@@ -238,33 +237,41 @@ router.route('/zips/:showId')
             // entrySummaries:
             // [
             //   {
-            //     name: 'First Last Title.jpg',
+            //     name: 'Last First - title.jpg',
             //     path: 'path/to/image.jpg',
             //     invited: true
             //   },
             //   ...
             // ]
             const zip = new JSZip()
-            entrySummaries.forEach((summary) => {
-              zip.file(
-                (summary.invited ? 'invited' : 'not invited') + '/' + summary.name,
-                readFileAsync(path.join(IMAGE_DIR, summary.path))
-              )
+            Promise.all(
+              entrySummaries.map((summary) => {
+                const filename = path.join(IMAGE_DIR, summary.path)
+                return readFileAsync(filename)
+                  .then((data) => {
+                    zip.file(`${show.name}/${summary.invited ? 'Invited' : 'Not Invited'}/${summary.name}`, data)
+                  })
+                  .catch((err) => {
+                    // eg. a file isn't found
+                    console.error(`There was an issue reading file: ${filename}`)
+                    console.error(err)
+                  })
+              })
+            ).then(() => {
+              res.status(200)
+                .type('zip')
+                .attachment(`${show.name}.zip`)
+
+              zip.generateNodeStream().pipe(res)
             })
-
-            res.status(200)
-              .type('zip')
-              .attachment(`${show.name}.zip`)
-
-            zip.generateNodeStream().pipe(res)
           })
       })
       .catch(sequelize.EmptyResultError, () => {
-        res.status(404).send('404: Show not found')
+        res.status(404).send('Show Not Found')
       })
       .catch(err => {
         console.error(err)
-        res.status(500).send('500: Oops! Try again later.')
+        res.status(500).send('Oops! Try again later.')
       })
   })
 
