@@ -4,6 +4,7 @@ import { promisify } from 'util'
 
 import { Router } from 'express'
 import JSZip from 'jszip'
+import stringify from 'csv-stringify';
 
 import Entry from '../models/entry'
 import Group from '../models/group'
@@ -77,7 +78,7 @@ router.route('/csv/:showId')
               [other.id]: other
             }), {})
 
-            // create update entry objects that contain Entry data plus:
+            // create update entry objects that contain modified entry data plus:
             // path, vert and horiz dementions medaiType, provider, videoId
             const entriesWithTypeData = entries.map(entry => {
               let entryData = entry.dataValues
@@ -104,6 +105,8 @@ router.route('/csv/:showId')
                 provider: '',
                 videoId: ''
               }
+
+              // Add entry data to data object
               if (entry.entryType === IMAGE_ENTRY) {
                 let imageObj = imageIdsToImage[entry.entryId]
                 return {
@@ -128,7 +131,17 @@ router.route('/csv/:showId')
                 }
               }
             })
-            console.log(JSON.stringify(entriesWithTypeData))
+            // Send csv data to browser
+            stringify(entriesWithTypeData, { header: true }, (err, output) => {
+              if(err) {
+                console.error(err)
+                res.status(500).send('500: Oops! Try again later.')
+              }
+              res.status(200)
+              .type('text/csv')
+              .attachment(`${show.name}.csv`)
+              .send(output)
+            })
           })
         })
       })
