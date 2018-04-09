@@ -1,8 +1,17 @@
+dist: trusty
+sudo: required
 language: node_js
 node_js:
   - "8"
 services:
   - mysql
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
 env:
   global:
     - ABSTRACTION_DB_USER=travis
@@ -15,17 +24,23 @@ cache:
     - "backend/node_modules"
     - "frontend/node_modules"
 before_install:
-  # install yarn
+  # Setup MySQL
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade
+  - sudo service mysql restart
+  # Create MySQL Test Database
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - mysql -e 'ALTER DATABASE test CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;'
+  # Install Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s --
   - export PATH="$HOME/.yarn/bin:$PATH"
-  # install packages
+  # Install npm Packages
   - cd frontend && yarn install && cd ..
   - cd backend && npm install && cd ..
-  # install certs
+  # Install Certs
   - cd backend && mkdir keys && cd ..
   - cd backend && curl https://raw.githubusercontent.com/kristophjunge/docker-test-saml-idp/master/config/simplesamlphp/server.crt > keys/idp_cert.pem && cd ..
   - cd backend && npm run keygen && cd ..
-  # create mysql database
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 script:
   - cd backend && npm test && npm run lint && cd ../frontend && yarn test && cd ..
