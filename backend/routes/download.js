@@ -5,6 +5,7 @@ import { promisify } from 'util'
 import { Router } from 'express'
 import JSZip from 'jszip'
 import stringify from 'csv-stringify'
+import moment from 'moment'
 
 import Entry from '../models/entry'
 import Group from '../models/group'
@@ -21,6 +22,8 @@ import { parseToken } from '../helpers/jwt'
 const readFileAsync = promisify(fs.readFile)
 
 const IMAGE_DIR = config.get('upload:imageDir')
+const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
+const VIMEO_BASE_URL = 'https://vimeo.com/'
 
 const router = Router()
 
@@ -178,7 +181,7 @@ router.route('/csv/:showId')
     Show.findById(req.params.showId, { rejectOnEmpty: true })
       .then(show => {
         // find all image Entries to this show id
-        Entry.findAll({ where: { showId: req.params.showId }, attributes: { exclude: ['createdAt', 'updatedAt'] } })
+        Entry.findAll({ where: { showId: req.params.showId } })
           .then(entries => {
             // Get the additonal information on the entries by getting
             // all the ids and then making the call, to reduce calls to the db
@@ -217,7 +220,7 @@ router.route('/csv/:showId')
                 // Format the data to be csv-stringified
                 return submissionsWithSubmitters.reduce((arr, { user, group, entries }) => {
                   // create update entry objects that contain modified entry data plus:
-                  // path, vert and horiz dementions medaiType, provider, videoId
+                  // path, vert and horiz dementions medaiType, videoUrl
                   const newSubmissionSummaries = entries.map(entry => {
                     let entryData = entry.dataValues
                     let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
@@ -239,35 +242,43 @@ router.route('/csv/:showId')
                       yearLevel: entryData.yearLevel,
                       academicProgram: entryData.academicProgram,
                       excludeFromJudging: entryData.excludeFromJudging,
+                      submittedAt: moment(entryData.createdAt).format(),
                       path: '',
                       horizDimInch: '',
                       vertDimInch: '',
                       mediaType: '',
-                      provider: '',
-                      videoId: ''
+                      videoUrl: '',
                     }
                     // Add entry data to data object
                     if (entry.entryType === IMAGE_ENTRY) {
                       let imageObj = imageIdsToImage[entry.entryId]
+                      //TODO: change loclahost for deployment
                       return {
                         ...newEntry,
-                        path: imageObj.path,
+                        path: `//localhost:3000//static/uploads/${imageObj.path}`,
                         horizDimInch: imageObj.horizDimInch,
                         vertDimInch: imageObj.vertDimInch,
                         mediaType: imageObj.mediaType
                       }
                     } else if (entry.entryType === VIDEO_ENTRY) {
                       let videoObj = videoIdsToImage[entry.entryId]
-                      return {
-                        ...newEntry,
-                        provider: videoObj.provider,
-                        videoId: videoObj.videoId
+                      if (videoObj.provider === 'youtube') {
+                        return {
+                          ...newEntry,
+                          videoUrl: `${YOUTUBE_BASE_URL}${videoObj.videoId}`
+                        }
+
+                      } else if (videoObj.provider === 'vimeo') {
+                        return {
+                          ...newEntry,
+                          videoUrl: `${VIMEO_BASE_URL}${videoObj.videoId}`
+                        }
                       }
                     } else if (entry.entryType === OTHER_ENTRY) {
                       let otherObj = otherMediaIdsToImage[entry.entryId]
                       return {
                         ...newEntry,
-                        path: otherObj.path
+                        path:  `//localhost:3000//static/uploads/${otherObj.path}`
                       }
                     }
                   })
@@ -276,7 +287,30 @@ router.route('/csv/:showId')
               })
               .then(entrySummaries => {
                 // Send csv data to browser
-                stringify(entrySummaries, { header: true }, (err, output) => {
+                const columns = {
+                  studentEmail: 'Student Email',
+                  studentFirstName: 'Student First Name',
+                  studentLastName: 'Student Last Name',
+                  isGroupSubmission: 'Group Submission?',
+                  groupParticipants: 'Group Participants',
+                  entryType: 'Submission Type',
+                  title: 'Title',
+                  comment: 'Artist Comment',
+                  moreCopies: 'More Copies?',
+                  forSale: 'For Sale?',
+                  awardWon: 'Award Won?',
+                  invited: 'Invited?',
+                  yearLevel: 'Year Level',
+                  academicProgram: 'Academic Program',
+                  excludeFromJudging: 'Exclude From Judging?',
+                  submittedAt: 'Submitted At',
+                  path: 'File',
+                  horizDimInch: 'Width (in.)',
+                  vertDimInch: 'Height (in.)',
+                  mediaType: 'Media Type',
+                  videoUrl: 'Video URL',
+                }
+                stringify(entrySummaries, { header: true, columns: columns }, (err, output) => {
                   if (err) {
                     console.error(err)
                     res.status(500).send('500: Oops! Try again later.')
