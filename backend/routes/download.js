@@ -37,16 +37,148 @@ const ensureAdminDownloadToken = (req, res, next) => {
   })
 }
 
+const groupEntriesBySubmitter = (entries) => {
+  // Now we need to group entries by who is submitting,
+  // Params:
+  //   entries: [Entry] with the `path` attribute set
+  // Evaluates to:
+  //   {
+  //     studentSubmissions: {
+  //       xxx1233: [entry, ...],
+  //       ...
+  //     },
+  //     groupSubmissions: {
+  //       4: [entry, ...],
+  //       ...
+  //     }
+  //   }
+
+  // maps usernames to their entries
+  // example:
+  // {
+  //   xxx1234: [entry, ...]
+  // }
+  const studentSubmissions = entries
+    .filter(entry => entry.isStudentSubmission() && !entry.isGroupSubmission())
+    .reduce((accum, elem) => ({
+      ...accum,
+      [elem.studentUsername]: [...(accum[elem.studentUsername] || []), elem]
+    }), {})
+
+  // maps group ids to their entries
+  // example:
+  // {
+  //   4: [entry, ...]
+  // }
+  const groupSubmissions = entries
+    .filter(entry => entry.isGroupSubmission())
+    .reduce((accum, elem) => ({
+      ...accum,
+      [elem.groupId]: [...(accum[elem.groupId] || []), elem]
+    }), {})
+
+  return {
+    studentSubmissions,
+    groupSubmissions
+  }
+}
+
+const getSubmitterData = (studentSubmissions, groupSubmissions) => {
+  // We need to query for the User and Group objects that go with each
+  // of the following usernames or group IDs, so we know their names
+  // Params:
+  //   {
+  //     studentSubmissions: {
+  //       xxx1233: [entry, ...],
+  //       ...
+  //     },
+  //     groupSubmissions: {
+  //       4: [entry, ...],
+  //       ...
+  //     }
+  //   }
+  // Evaluates to:
+  //   [
+  //     {
+  //       user: User,
+  //       entries: [...]
+  //     },
+  //     {
+  //       group: User,
+  //       entries: [...]
+  //     },
+  //     ...
+  //   ]
+
+  return Promise.all([
+    User.findAll({ where: { username: { $in: Object.keys(studentSubmissions) } } }),
+    Group.findAll({ where: { id: { $in: Object.keys(groupSubmissions) } } })
+  ])
+    .then(([users, groups]) => {
+      // construct a username -> User mapping
+      // {
+      //   "xxx1234": User,
+      //   ...
+      // }
+      const usernamesToUsers = users.reduce((obj, user) => ({
+        ...obj,
+        [user.username]: user
+      }), {})
+
+      // construct a groupId -> Group mapping
+      // {
+      //   4: Group,
+      //   ...
+      // }
+      const groupIdsToGroups = groups.reduce((obj, group) => ({
+        ...obj,
+        [group.id]: group
+      }), {})
+
+      // [
+      //   {
+      //     user: User,
+      //     entries: [entry, ...]
+      //   },
+      //   ...
+      // ]
+      const submissionsWithUsers = Object
+        .entries(studentSubmissions)
+        .map(([username, entries]) => ({
+          user: usernamesToUsers[username],
+          entries
+        }))
+
+      // [
+      //   {
+      //     group: Group,
+      //     entries: [entry, ...]
+      //   },
+      //   ...
+      // ]
+      const submissionsWithGroups = Object
+        .entries(groupSubmissions)
+        .map(([groupId, entries]) => ({
+          group: groupIdsToGroups[groupId],
+          entries
+        }))
+
+      return [...submissionsWithUsers, ...submissionsWithGroups]
+    })
+}
+
+const submissionsWithSubmittersPromise = (entries) => {
+  const { studentSubmissions, groupSubmissions } = groupEntriesBySubmitter(entries)
+  return getSubmitterData(studentSubmissions, groupSubmissions)
+}
+
 router.route('/csv/:showId')
   .get(ensureAdminDownloadToken, (req, res, next) => {
     // find the show
     Show.findById(req.params.showId, { rejectOnEmpty: true })
       .then(show => {
         // find all image Entries to this show id
-        Entry.findAll({
-          where: { showId: req.params.showId },
-          attributes: { exclude: ['createdAt', 'updatedAt'] }
-        })
+        Entry.findAll({ where: { showId: req.params.showId }, attributes: { exclude: ['createdAt', 'updatedAt'] } })
           .then(entries => {
             // Get the additonal information on the entries by getting
             // all the ids and then making the call, to reduce calls to the db
@@ -62,92 +194,103 @@ router.route('/csv/:showId')
                 otherMediaIds.push(entry.entryId)
               }
             })
-
-            return Promise.all([Image.findAll({ where: { id: { $in: imageIds } } }),
-              Video.findAll({ where: { id: { $in: videoIds } } }), OtherMedia.findAll({ where: { id: { $in: otherMediaIds } } })
-            ]).then(([images, videos, otherMedia]) => {
-              // Create a mapping for type objects to their ids for easy assigning
-              const imageIdsToImage = images.reduce((obj, image) => ({
-                ...obj,
-                [image.id]: image
-              }), {})
-              const videoIdsToImage = videos.reduce((obj, video) => ({
-                ...obj,
-                [video.id]: video
-              }), {})
-              const otherMediaIdsToImage = otherMedia.reduce((obj, other) => ({
-                ...obj,
-                [other.id]: other
-              }), {})
-
-              // create update entry objects that contain modified entry data plus:
-              // path, vert and horiz dementions medaiType, provider, videoId
-              const entriesWithTypeData = entries.map(entry => {
-                let entryData = entry.dataValues
-                let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
-                  : entry.entryType === VIDEO_ENTRY ? 'Video'
-                    : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
-                let newEntry = {
-                  studentEmail: `${entryData.studentUsername}@rit.edu`,
-                  isGroupSubmission: entryData.groupId ? true : null,
-                  entryType: entryType,
-                  title: entryData.title,
-                  comment: entryData.comment,
-                  moreCopies: entryData.moreCopies,
-                  forSale: entryData.forSale,
-                  awardWon: entryData.awardWon,
-                  invited: entryData.invited,
-                  yearLevel: entryData.yearLevel,
-                  academicProgram: entryData.academicProgram,
-                  excludeFromJudging: entryData.excludeFromJudging,
-                  path: '',
-                  horizDimInch: '',
-                  vertDimInch: '',
-                  mediaType: '',
-                  provider: '',
-                  videoId: ''
-                }
-
-                // Add entry data to data object
-                if (entry.entryType === IMAGE_ENTRY) {
-                  let imageObj = imageIdsToImage[entry.entryId]
-                  return {
-                    ...newEntry,
-                    path: imageObj.path,
-                    horizDimInch: imageObj.horizDimInch,
-                    vertDimInch: imageObj.vertDimInch,
-                    mediaType: imageObj.mediaType
-                  }
-                } else if (entry.entryType === VIDEO_ENTRY) {
-                  let videoObj = videoIdsToImage[entry.entryId]
-                  return {
-                    ...newEntry,
-                    provider: videoObj.provider,
-                    videoId: videoObj.videoId
-                  }
-                } else if (entry.entryType === OTHER_ENTRY) {
-                  let otherObj = otherMediaIdsToImage[entry.entryId]
-                  return {
-                    ...newEntry,
-                    path: otherObj.path
-                  }
-                }
+            return Promise.all([
+              Image.findAll({ where: { id: { $in: imageIds } } }),
+              Video.findAll({ where: { id: { $in: videoIds } } }),
+              OtherMedia.findAll({ where: { id: { $in: otherMediaIds } } }),
+              submissionsWithSubmittersPromise(entries)
+            ])
+              .then(([images, videos, otherMedia, submissionsWithSubmitters]) => {
+                // Create a mapping for type objects to their ids for easy assigning
+                const imageIdsToImage = images.reduce((obj, image) => ({
+                  ...obj,
+                  [image.id]: image
+                }), {})
+                const videoIdsToImage = videos.reduce((obj, video) => ({
+                  ...obj,
+                  [video.id]: video
+                }), {})
+                const otherMediaIdsToImage = otherMedia.reduce((obj, other) => ({
+                  ...obj,
+                  [other.id]: other
+                }), {})
+                // Format the data to be csv-stringified
+                return submissionsWithSubmitters.reduce((arr, { user, group, entries }) => {
+                  // create update entry objects that contain modified entry data plus:
+                  // path, vert and horiz dementions medaiType, provider, videoId
+                  const newSubmissionSummaries = entries.map(entry => {
+                    let entryData = entry.dataValues
+                    let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
+                      : entry.entryType === VIDEO_ENTRY ? 'Video'
+                        : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
+                    let newEntry =  {
+                      studentEmail: `${entryData.studentUsername}@rit.edu`,
+                      studentFirstName: user ? user.firstName: null,
+                      studentLastName: user ? user.lastName: null,
+                      isGroupSubmission: entryData.groupId ? true : null,
+                      groupParticipants: group ? group.participants : null,
+                      entryType: entryType,
+                      title: entryData.title,
+                      comment: entryData.comment,
+                      moreCopies: entryData.moreCopies,
+                      forSale: entryData.forSale,
+                      awardWon: entryData.awardWon,
+                      invited: entryData.invited,
+                      yearLevel: entryData.yearLevel,
+                      academicProgram: entryData.academicProgram,
+                      excludeFromJudging: entryData.excludeFromJudging,
+                      path: '',
+                      horizDimInch: '',
+                      vertDimInch: '',
+                      mediaType: '',
+                      provider: '',
+                      videoId: ''
+                    }
+                    // Add entry data to data object
+                    if (entry.entryType === IMAGE_ENTRY) {
+                      let imageObj = imageIdsToImage[entry.entryId]
+                      return {
+                        ...newEntry,
+                        path: imageObj.path,
+                        horizDimInch: imageObj.horizDimInch,
+                        vertDimInch: imageObj.vertDimInch,
+                        mediaType: imageObj.mediaType
+                      }
+                    } else if (entry.entryType === VIDEO_ENTRY) {
+                      let videoObj = videoIdsToImage[entry.entryId]
+                      return {
+                        ...newEntry,
+                        provider: videoObj.provider,
+                        videoId: videoObj.videoId
+                      }
+                    } else if (entry.entryType === OTHER_ENTRY) {
+                      let otherObj = otherMediaIdsToImage[entry.entryId]
+                      return {
+                        ...newEntry,
+                        path: otherObj.path
+                      }
+                    }
+                  })
+                  return [...arr, ...newSubmissionSummaries]
+                }, [])
               })
-              // Send csv data to browser
-              stringify(entriesWithTypeData, { header: true }, (err, output) => {
-                if (err) {
-                  console.error(err)
-                  res.status(500).send('500: Oops! Try again later.')
-                }
-                res.status(200)
-                  .type('text/csv')
-                  .attachment(`${show.name}.csv`)
-                  .send(output)
+              .then(entrySummaries => {
+                // Send csv data to browser
+                stringify(entrySummaries, { header: true }, (err, output) => {
+                  if (err) {
+                    console.error(err)
+                    res.status(500).send('500: Oops! Try again later.')
+                  }
+                  res.status(200)
+                    .type('text/csv')
+                    .attachment(`${show.name}.csv`)
+                    .send(output)
+                })
               })
-            })
           })
       })
   })
+
 router.route('/zips/:showId')
   .get(ensureAdminDownloadToken, (req, res, next) => {
     // find the show
@@ -180,136 +323,8 @@ router.route('/zips/:showId')
                 return entries
               })
           })
-          .then(entries => {
-            // Now we need to group images by who is submitting, to later enforce
-            // unique file names (despite non-unique titles for submissions, i.e.
-            // Untitled)
-            // Params:
-            //   entries: [Entry] with the `path` attribute set
-            // Evaluates to:
-            //   {
-            //     studentSubmissions: {
-            //       xxx1233: [entry, ...],
-            //       ...
-            //     },
-            //     groupSubmissions: {
-            //       4: [entry, ...],
-            //       ...
-            //     }
-            //   }
-
-            // maps usernames to their entries
-            // example:
-            // {
-            //   xxx1234: [entry, ...]
-            // }
-            const studentSubmissions = entries
-              .filter(entry => entry.isStudentSubmission())
-              .reduce((accum, elem) => ({
-                ...accum,
-                [elem.studentUsername]: [...(accum[elem.studentUsername] || []), elem]
-              }), {})
-
-            // maps group ids to their entries
-            // example:
-            // {
-            //   4: [entry, ...]
-            // }
-            const groupSubmissions = entries
-              .filter(entry => entry.isGroupSubmission())
-              .reduce((accum, elem) => ({
-                ...accum,
-                [elem.groupId]: [...(accum[elem.groupId] || []), elem]
-              }), {})
-
-            return {
-              studentSubmissions,
-              groupSubmissions
-            }
-          })
-          .then(({ studentSubmissions, groupSubmissions }) => {
-            // We need to query for the User and Group objects that go with each
-            // of the following usernames or group IDs, so we know their names
-            // Params:
-            //   {
-            //     studentSubmissions: {
-            //       xxx1233: [entry, ...],
-            //       ...
-            //     },
-            //     groupSubmissions: {
-            //       4: [entry, ...],
-            //       ...
-            //     }
-            //   }
-            // Evaluates to:
-            //   [
-            //     {
-            //       user: User,
-            //       entries: [...]
-            //     },
-            //     {
-            //       group: User,
-            //       entries: [...]
-            //     },
-            //     ...
-            //   ]
-
-            return Promise.all([
-              User.findAll({ where: { username: { $in: Object.keys(studentSubmissions) } } }),
-              Group.findAll({ where: { id: { $in: Object.keys(groupSubmissions) } } })
-            ])
-              .then(([users, groups]) => {
-                // construct a username -> User mapping
-                // {
-                //   "xxx1234": User,
-                //   ...
-                // }
-                const usernamesToUsers = users.reduce((obj, user) => ({
-                  ...obj,
-                  [user.username]: user
-                }), {})
-
-                // construct a groupId -> Group mapping
-                // {
-                //   4: Group,
-                //   ...
-                // }
-                const groupIdsToGroups = groups.reduce((obj, group) => ({
-                  ...obj,
-                  [group.id]: group
-                }), {})
-
-                // [
-                //   {
-                //     user: User,
-                //     entries: [entry, ...]
-                //   },
-                //   ...
-                // ]
-                const submissionsWithUsers = Object
-                  .entries(studentSubmissions)
-                  .map(([username, entries]) => ({
-                    user: usernamesToUsers[username],
-                    entries
-                  }))
-
-                // [
-                //   {
-                //     group: Group,
-                //     entries: [entry, ...]
-                //   },
-                //   ...
-                // ]
-                const submissionsWithGroups = Object
-                  .entries(groupSubmissions)
-                  .map(([groupId, entries]) => ({
-                    group: groupIdsToGroups[groupId],
-                    entries
-                  }))
-
-                return [...submissionsWithUsers, ...submissionsWithGroups]
-              })
-          })
+          .then(entries => groupEntriesBySubmitter(entries))
+          .then(({ studentSubmissions, groupSubmissions }) => getSubmitterData(studentSubmissions, groupSubmissions))
           .then(submissionsWithSubmitters => {
             // now we construct the calculated title for each entry
             // Evaluates to:
