@@ -20,6 +20,7 @@ import sequelize from '../config/sequelize'
 import { parseToken } from '../helpers/jwt'
 
 const readFileAsync = promisify(fs.readFile)
+const stringifyAsync = promisify(stringify)
 
 const IMAGE_DIR = config.get('upload:imageDir')
 const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
@@ -226,10 +227,10 @@ router.route('/csv/:showId')
                     let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
                       : entry.entryType === VIDEO_ENTRY ? 'Video'
                         : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
-                    let newEntry =  {
+                    let newEntry = {
                       studentEmail: `${entryData.studentUsername}@rit.edu`,
-                      studentFirstName: user ? user.firstName: null,
-                      studentLastName: user ? user.lastName: null,
+                      studentFirstName: user ? user.firstName : null,
+                      studentLastName: user ? user.lastName : null,
                       isGroupSubmission: entryData.groupId ? true : null,
                       groupParticipants: group ? group.participants : null,
                       entryType: entryType,
@@ -247,12 +248,12 @@ router.route('/csv/:showId')
                       horizDimInch: '',
                       vertDimInch: '',
                       mediaType: '',
-                      videoUrl: '',
+                      videoUrl: ''
                     }
                     // Add entry data to data object
                     if (entry.entryType === IMAGE_ENTRY) {
                       let imageObj = imageIdsToImage[entry.entryId]
-                      //TODO: change loclahost for deployment
+                      // TODO: change loclahost for deployment
                       return {
                         ...newEntry,
                         path: `//localhost:3000//static/uploads/${imageObj.path}`,
@@ -267,7 +268,6 @@ router.route('/csv/:showId')
                           ...newEntry,
                           videoUrl: `${YOUTUBE_BASE_URL}${videoObj.videoId}`
                         }
-
                       } else if (videoObj.provider === 'vimeo') {
                         return {
                           ...newEntry,
@@ -278,7 +278,7 @@ router.route('/csv/:showId')
                       let otherObj = otherMediaIdsToImage[entry.entryId]
                       return {
                         ...newEntry,
-                        path:  `//localhost:3000//static/uploads/${otherObj.path}`
+                        path: `//localhost:3000//static/uploads/${otherObj.path}`
                       }
                     }
                   })
@@ -308,18 +308,19 @@ router.route('/csv/:showId')
                   horizDimInch: 'Width (in.)',
                   vertDimInch: 'Height (in.)',
                   mediaType: 'Media Type',
-                  videoUrl: 'Video URL',
+                  videoUrl: 'Video URL'
                 }
-                stringify(entrySummaries, { header: true, columns: columns }, (err, output) => {
-                  if (err) {
+                stringifyAsync(entrySummaries, { header: true, columns: columns })
+                  .then(output => {
+                    res.status(200)
+                      .type('text/csv')
+                      .attachment(`${show.name}.csv`)
+                      .send(output)
+                  })
+                  .catch(err => {
                     console.error(err)
                     res.status(500).send('500: Oops! Try again later.')
-                  }
-                  res.status(200)
-                    .type('text/csv')
-                    .attachment(`${show.name}.csv`)
-                    .send(output)
-                })
+                  })
               })
           })
       })
