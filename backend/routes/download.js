@@ -253,10 +253,9 @@ router.route('/csv/:showId')
                     // Add entry data to data object
                     if (entry.entryType === IMAGE_ENTRY) {
                       let imageObj = imageIdsToImage[entry.entryId]
-                      // TODO: change loclahost for deployment
                       return {
                         ...newEntry,
-                        path: `//localhost:3000//static/uploads/${imageObj.path}`,
+                        path: `${config.get('STATIC_UPLOAD_BASE_URL')}${imageObj.path}`,
                         horizDimInch: imageObj.horizDimInch,
                         vertDimInch: imageObj.vertDimInch,
                         mediaType: imageObj.mediaType
@@ -278,7 +277,7 @@ router.route('/csv/:showId')
                       let otherObj = otherMediaIdsToImage[entry.entryId]
                       return {
                         ...newEntry,
-                        path: `//localhost:3000//static/uploads/${otherObj.path}`
+                        path: `${config.get('STATIC_UPLOAD_BASE_URL')}${otherObj.path}`
                       }
                     }
                   })
