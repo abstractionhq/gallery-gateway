@@ -5,7 +5,7 @@ import { Button } from 'reactstrap'
 const ShowDetailsTab = props => (
   <div>
     <p>
-      <Button>Generate CSV Report</Button>
+      <Button onClick={() => props.downloadCsv()}>Generate CSV Report</Button>
     </p>
     <p>
       <Button>Generate Gallery Guide</Button>
@@ -17,7 +17,8 @@ const ShowDetailsTab = props => (
 )
 
 ShowDetailsTab.propTypes = {
-  downloadZip: PropTypes.func.isRequired
+  downloadZip: PropTypes.func.isRequired,
+  downloadCsv: PropTypes.func.isRequired
 }
 
 export default ShowDetailsTab
