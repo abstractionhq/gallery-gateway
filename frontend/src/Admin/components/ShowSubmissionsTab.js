@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
@@ -12,10 +12,6 @@ import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
 import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
-
-// Alert Types
-const SUCCESS = 'SUCCESS'
-const ERROR = 'ERROR'
 
 const PhotoThumbnail = styled.img`
   height: auto;
@@ -49,8 +45,6 @@ class ShowSubmissionsTab extends Component {
     super(props)
 
     this.state = {
-      alertVisible: false,
-      alertType: '',
       isFinalizeConfirmationOpen: false,
       isSubmissionModalOpen: false,
       viewingSubmission: null
@@ -69,13 +63,6 @@ class ShowSubmissionsTab extends Component {
     })
   }
 
-  onDismissAlert = () => {
-    this.setState({
-      alertVisible: false,
-      alertType: ''
-    })
-  }
-
   onDisplayFinalizeConfirmation = () => {
     this.setState({
       isFinalizeConfirmationOpen: true
@@ -89,29 +76,10 @@ class ShowSubmissionsTab extends Component {
     })
   }
 
-  onDisplayAlert = type => {
-    this.setState({
-      alertVisible: true,
-      alertType: type
-    })
-  }
-
   updateInvitation = (id, value) => {
     const { updateInvite } = this.props
 
     updateInvite(id, value)
-      .then(() => {
-        this.onDisplayAlert(SUCCESS)
-        setTimeout(() => {
-          this.onDismissAlert()
-        }, 3000)
-      })
-      .catch(() => {
-        this.onDisplayAlert(ERROR)
-        setTimeout(() => {
-          this.onDismissAlert()
-        }, 3000)
-      })
   }
 
   render () {
@@ -119,37 +87,6 @@ class ShowSubmissionsTab extends Component {
 
     return (
       <Fragment>
-        {/* TODO: Remove alerts on this page */}
-        <Alert
-          color='success'
-          style={{
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            width: '100%',
-            zIndex: '5'
-          }}
-          isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
-          toggle={() => this.onDismissAlert()}
-          className='text-center'
-        >
-          Invitation Saved
-        </Alert>
-        <Alert
-          color='danger'
-          style={{
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            width: '100%',
-            zIndex: '5'
-          }}
-          isOpen={this.state.alertVisible && this.state.alertType === ERROR}
-          toggle={() => this.onDismissAlert()}
-          className='text-center'
-        >
-          There was an error updating the invitation
-        </Alert>
         <Modal isOpen={this.state.isFinalizeConfirmationOpen} style={{ top: '25%' }}>
           <ModalBody>
             This is a permanent action and will make invitations for this show
