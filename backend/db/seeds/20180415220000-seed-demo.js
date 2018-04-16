@@ -581,13 +581,6 @@ export function up (queryInterface, Sequelize) {
           updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
         },
         {
-          judgeUsername: 'user3',
-          entryId: treeEntryId,
-          value: 2,
-          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
-        },
-        {
           judgeUsername: 'user4',
           entryId: otherImageEntryId,
           value: 0,
