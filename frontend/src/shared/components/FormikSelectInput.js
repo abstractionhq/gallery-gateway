@@ -23,8 +23,8 @@ class FormikSelectInput extends Component {
         ),
         PropTypes.string // '' when empty
       ]),
-      onChange: PropTypes.func, // setFieldValue
-      onBlur: PropTypes.func // setFieldTouched
+      onChange: PropTypes.func.isRequired, // setFieldValue
+      onBlur: PropTypes.func.isRequired // setFieldTouched
     }).isRequired,
     options: PropTypes.array.isRequired
   }

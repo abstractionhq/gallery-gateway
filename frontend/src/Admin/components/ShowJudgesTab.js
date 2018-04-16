@@ -23,7 +23,7 @@ const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
     <Row style={{ marginBottom: '1.5rem' }}>
       <Col className='text-right'>
         <Link to={`/show/${show.id}/judges/assign`}>
-          <Button color='primary'>Manage Judges</Button>
+          <Button color='primary'>Assign Judges</Button>
         </Link>
       </Col>
     </Row>
@@ -55,7 +55,7 @@ const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
     ) : (
       <div className='text-center'>
         No judges are assigned to this show. Visit the{' '}
-        <Link to={`/show/${show.id}/judges/assign`}>"Manage Judges"</Link> page
+        <Link to={`/show/${show.id}/judges/assign`}>"Assign Judges"</Link> page
         to assign judges to this show.
       </div>
     )}

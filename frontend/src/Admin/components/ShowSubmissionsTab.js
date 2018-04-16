@@ -164,6 +164,7 @@ class ShowSubmissionsTab extends Component {
         <ReactTable
           defaultPageSize={20}
           data={show.entries}
+          defaultSorted={[{ id: 'score', desc: true }]}
           columns={[
             {
               Header: 'Row',
