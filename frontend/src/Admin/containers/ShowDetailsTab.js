@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import { getDownloadToken } from '../../shared/actions'
 import { downloadZip, downloadCsv } from '../actions'
@@ -15,4 +16,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     )
 })
 
-export default connect(null, mapDispatchToProps)(ShowDetailsTab)
+export default compose(connect(null, mapDispatchToProps))(ShowDetailsTab)
