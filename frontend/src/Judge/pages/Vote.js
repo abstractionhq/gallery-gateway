@@ -27,11 +27,11 @@ const Arrow = styled.span`
 
 const Previous = Arrow.extend`
   left: 25px;
-  padding: 225px 25px 200px 0; /* Create a larger click target */
+  padding: 35vh 25px 15vh 0; /* Create a larger click target */
 `
 
 const Next = Arrow.extend`
-  padding: 225px 0 200px 25px; /* Create a larger click target */
+  padding: 35vh 0 15vh 25px; /* Create a larger click target */
   right: 25px;
 `
 
@@ -99,39 +99,38 @@ class Vote extends Component {
         <Row
           style={{
             backgroundColor: '#777777',
-            maxHeight: '75vh',
-            minHeight: '70vh',
+            minHeight: 'calc(100vh - 56px)',
             paddingTop: '25px'
           }}
         >
-          <Col xs='1'>
-            {previous && previous.id ? (
-              <Previous onClick={() => setViewing(previous.id)}>
-                <FaChevronLeft size='4em' />
-              </Previous>
-            ) : null}
+          <Col xs='12' style={{ maxHeight: '60vh' }}>
+            <Row>
+              <Col xs='1'>
+                {previous && previous.id ? (
+                  <Previous onClick={() => setViewing(previous.id)}>
+                    <FaChevronLeft size='4em' />
+                  </Previous>
+                ) : null}
+              </Col>
+              <Col xs='10'>
+                <Progress>{currentIndex} / {totalSubmissions}</Progress>
+                {submission ? <Submission submission={submission} /> : null}
+              </Col>
+              <Col xs='1'>
+                {next && next.id ? (
+                  <Next onClick={() => setViewing(next.id)}>
+                    <FaChevronRight size='4em' />
+                  </Next>
+                ) : null}
+              </Col>
+            </Row>
           </Col>
-          <Col xs='10'>
-            <Progress>{currentIndex} / {totalSubmissions}</Progress>
-            {submission ? <Submission submission={submission} /> : null}
-          </Col>
-          <Col xs='1'>
-            {next && next.id ? (
-              <Next onClick={() => setViewing(next.id)}>
-                <FaChevronRight size='4em' />
-              </Next>
-            ) : null}
-          </Col>
-        </Row>
-        {submission ? (
-          <Row>
-            <Col>
-              <section>
-                <VotePanel submission={submission} vote={vote} />
-              </section>
+          {submission ? (
+            <Col xs='12'>
+              <VotePanel submission={submission} vote={vote} />
             </Col>
-          </Row>
-        ) : null}
+          ) : null}
+        </Row>
       </Container>
     )
   }

@@ -18,6 +18,17 @@ export const createLoading = namespace => type => ({
   }
 })
 
+// TODO: Identify deploy host (and set a protocol)
+const isProduction = process.env.NODE_ENV === 'production'
+export const HOST = isProduction ? '' : '//localhost:3000'
+export const LOGIN_PATH = `${HOST}/auth/login`
+export const DOWNLOAD_TOKEN_PATH = `${HOST}/auth/downloadToken`
+export const STATIC_PATH = `${HOST}/static/uploads/`
+export const IMAGE_UPLOAD_PATH = `${HOST}/static/upload/image`
+export const PDF_UPLOAD_PATH = `${HOST}/static/upload/pdf`
+export const ZIP_PATH = `${HOST}/zips/`
+export const GRAPHQL_PATH = `${HOST}/graphql`
+
 export const getImageThumbnail = path => {
   const [base, extn] = path.split('.')
   return `${base}_thumb.${extn}`

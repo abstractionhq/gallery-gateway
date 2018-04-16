@@ -39,6 +39,7 @@ class NavBar extends Component {
         <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>
           View as Admin |
         </NavLink>
+        {/* TODO: Move the | out of the link */}
       </NavItem>
     )
   }

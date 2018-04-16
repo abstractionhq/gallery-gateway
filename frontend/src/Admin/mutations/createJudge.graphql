@@ -3,6 +3,5 @@ mutation createJudge($input: UserInput!) {
     username
     firstName
     lastName
-    displayName
   }
 }

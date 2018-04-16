@@ -7,6 +7,7 @@ import PhotoSubmissionForm from '../containers/PhotoSubmissionForm'
 import VideoSubmissionForm from '../containers/VideoSubmissionForm'
 import OtherMediaSubmissionForm from '../containers/OtherMediaSubmissionForm'
 
+// TODO: Make more robust
 const addIdPropFromQueryParams = () => {
   return window.location.search.split('=')[1]
 }

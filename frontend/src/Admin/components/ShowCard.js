@@ -59,7 +59,7 @@ const ShowCard = props => (
             tag={Link}
             to={`show/${props.id}/judges/assign`}
           >
-            Manage Judges
+            Assign Judges
           </Button>
         </ButtonGroup>
       </Col>
