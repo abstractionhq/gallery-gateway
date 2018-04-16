@@ -1,5 +1,13 @@
 mutation createVideoEntry($input: VideoInput!) {
   createVideo(input: $input) {
     id
+    name
+    entryCap
+    entries {
+      id
+      student {
+        username
+      }
+    }
   }
 }

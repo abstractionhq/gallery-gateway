@@ -49,6 +49,7 @@ export default class NavBar extends Component {
                 <NavLink tag={Link} to='/' onClick={this.props.switchToJudge}>
                   View as Judge |
                 </NavLink>
+                {/* TODO: Move the | out of the link */}
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} to='/judges'>

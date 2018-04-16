@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import NavBar from '../components/NavBar'
 import { logout, switchToAdmin } from '../../shared/actions'
@@ -12,4 +13,6 @@ const mapDispatchToProps = dispatch => ({
   switchToAdmin: () => dispatch(switchToAdmin())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(NavBar)

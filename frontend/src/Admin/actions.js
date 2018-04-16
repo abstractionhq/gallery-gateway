@@ -4,6 +4,7 @@ import ShowQuery from './queries/show.graphql'
 import ShowsQuery from './queries/shows.graphql'
 import JudgesQuery from './queries/judges.graphql'
 import JudgesForShowQuery from './queries/judgesForShow.graphql'
+import { ZIP_PATH } from '../utils'
 
 export const LOADING_DATA = 'LOADING_DATA'
 export const FETCH_SHOW = 'FETCH_SHOW'
@@ -129,9 +130,18 @@ export const addJudge = judge => (dispatch, getState, client) => {
 export const downloadZip = showId => (dispatch, getState, client) => {
   const { shared: { auth: { downloadToken } } } = getState()
 
+  window.open(
+    `${ZIP_PATH}${showId}?token=${encodeURIComponent(downloadToken)}`,
+    '_self'
+  )
+}
+
+export const downloadCsv = showId => (dispatch, getState, client) => {
+  const { shared: { auth: { downloadToken } } } = getState()
+
   // TODO replace this with the deployed url
   window.open(
-    `//localhost:3000/zips/${showId}?token=${encodeURIComponent(
+    `//localhost:3000/csv/${showId}?token=${encodeURIComponent(
       downloadToken
     )}`,
     '_self'

@@ -1,5 +1,13 @@
 mutation createPhotoEntry($input: PhotoInput!) {
   createPhoto(input: $input) {
     id
+    name
+    entryCap
+    entries {
+      id
+      student {
+        username
+      }
+    }
   }
 }
