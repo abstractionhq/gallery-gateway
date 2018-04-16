@@ -19,13 +19,19 @@ query Show($id: ID!) {
     entries {
       id
       title
+      comment
       entryType
       invited
       score
+      yearLevel
+      academicProgram
+      forSale
+      moreCopies
       student {
         username
         firstName
         lastName
+        displayName
       }
       group {
         id
@@ -44,6 +50,7 @@ query Show($id: ID!) {
         horizDimInch
         vertDimInch
         path
+        mediaType
       }
       ... on OtherMedia {
         path
