@@ -153,7 +153,7 @@ const ShowSubmissionDetails = ({ submission }) => (
               href={`${STATIC_PATH}${submission.path}`}
               target='_blank'
             >
-              <Button color='primary'>Download</Button>
+              <Button color='primary'>View Image</Button>
             </a>
           </div>
         ) : null}
