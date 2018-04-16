@@ -108,7 +108,8 @@ const getSubmitterData = (studentSubmissions, groupSubmissions) => {
   //       entries: [...]
   //     },
   //     {
-  //       group: User,
+  //       group: Group,
+  //       user: User,
   //       entries: [...]
   //     },
   //     ...
@@ -156,18 +157,26 @@ const getSubmitterData = (studentSubmissions, groupSubmissions) => {
       // [
       //   {
       //     group: Group,
+      //     user: User,
       //     entries: [entry, ...]
       //   },
       //   ...
       // ]
       const submissionsWithGroups = Object
         .entries(groupSubmissions)
-        .map(([groupId, entries]) => ({
-          group: groupIdsToGroups[groupId],
-          entries
-        }))
+        .map(([groupId, entries]) => {
+          // We find the user who created the group so we can include them in the results
+          const group = groupIdsToGroups[groupId]
+          return group
+            .getCreator()
+            .then((user) => ({
+              group,
+              user,
+              entries
+            }))
+        })
 
-      return [...submissionsWithUsers, ...submissionsWithGroups]
+      return Promise.all([...submissionsWithUsers, ...submissionsWithGroups])
     })
 }
 
@@ -226,12 +235,12 @@ router.route('/csv/:showId')
                     let entryData = entry.dataValues
                     let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
                       : entry.entryType === VIDEO_ENTRY ? 'Video'
-                        : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
+                        : entry.entryType === OTHER_ENTRY ? 'Other' : ''
                     let newEntry = {
                       studentEmail: `${entryData.studentUsername}@rit.edu`,
                       studentFirstName: user ? user.firstName : null,
                       studentLastName: user ? user.lastName : null,
-                      isGroupSubmission: entryData.groupId ? true : null,
+                      isGroupSubmission: !!entryData.groupId,
                       groupParticipants: group ? group.participants : null,
                       entryType: entryType,
                       title: entryData.title,
@@ -356,8 +365,7 @@ router.route('/zips/:showId')
                 return entries
               })
           })
-          .then(entries => groupEntriesBySubmitter(entries))
-          .then(({ studentSubmissions, groupSubmissions }) => getSubmitterData(studentSubmissions, groupSubmissions))
+          .then((entries) => submissionsWithSubmittersPromise(entries))
           .then(submissionsWithSubmitters => {
             // now we construct the calculated title for each entry
             // Evaluates to:
@@ -372,7 +380,8 @@ router.route('/zips/:showId')
             return submissionsWithSubmitters.reduce((arr, { user, group, entries }) => {
               // ['Clark Kent - Daily Planet Office']
               const newSubmissionSummaries = entries.map(({ path, title, invited }) => {
-                const entryNamePrefix = `${(user ? `${user.lastName}, ${user.firstName}` : group.participants)} - ${title}`
+                // If this is a group submission, we insert the group participants in the name
+                const entryNamePrefix = `${user.lastName}, ${user.firstName}${group ? ` & ${group.participants}` : ''} - ${title}`
                 // enforce non-conflicting titles by adding (1), (2), ... to end of name
                 let proposedName = entryNamePrefix
                 let i = 1

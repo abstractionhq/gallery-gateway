@@ -125,9 +125,15 @@ describe('downloading a zip file', () => {
   )
 
   it('downloads a single group-submitted image', () =>
-    Promise.all([fakeShow({name: 'Honors Show'}), fakeGroup()])
-      .then(([show, group]) =>
-        fakeImageEntry({invited: true, path: 'imageB.jpg', group, show})
+    fakeUser({
+      username: 'jxs9324',
+      firstName: 'John',
+      lastName: 'Smith'
+    })
+      .then(user => Promise.all([fakeShow({name: 'Honors Show'}), fakeGroup({user})])
+        .then(([show, group]) => [show, group, user]))
+      .then(([show, group, user]) =>
+        fakeImageEntry({invited: true, path: 'imageB.jpg', group, show, user})
           .then(entry =>
             request(server)
               .get(`/zips/${entry.showId}?token=${token}`)
@@ -144,7 +150,7 @@ describe('downloading a zip file', () => {
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
                 const zobj = zip.file(
-                  `${show.name}/Invited/${group.participants} - ${entry.title}.jpg`
+                  `${show.name}/Invited/${user.lastName}, ${user.firstName} & ${group.participants} - ${entry.title}.jpg`
                 )
                 return zobj.async('nodebuffer')
                   .then(buf => {
