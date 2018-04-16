@@ -1,5 +1,13 @@
 mutation createOtherMediaEntry($input: OtherMediaInput!) {
   createOtherMedia(input: $input) {
     id
+    name
+    entryCap
+    entries {
+      id
+      student {
+        username
+      }
+    }
   }
 }

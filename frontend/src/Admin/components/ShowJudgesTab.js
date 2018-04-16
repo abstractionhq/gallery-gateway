@@ -54,8 +54,9 @@ const ShowJudgesTab = ({ voteCountByJudge, numEntries, show }) => (
       })
     ) : (
       <div className='text-center'>
-        No judges are assigned to this show. Visit the <Link to={`/show/${show.id}/judges/assign`}>"Assign Judges"</Link> page to
-        assign judges to this show.
+        No judges are assigned to this show. Visit the{' '}
+        <Link to={`/show/${show.id}/judges/assign`}>"Assign Judges"</Link> page
+        to assign judges to this show.
       </div>
     )}
   </Fragment>
