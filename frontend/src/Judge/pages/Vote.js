@@ -7,6 +7,8 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft'
 import FaChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight'
 import queryString from 'query-string'
+import { compose } from 'recompose'
+
 import { setViewing, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
 import VotePanel from '../containers/VotePanel'
@@ -26,12 +28,19 @@ const Arrow = styled.span`
 
 const Previous = Arrow.extend`
   left: 25px;
-  padding: 225px 25px 200px 0; /* Create a larger click target */
+  padding: 35vh 25px 15vh 0; /* Create a larger click target */
 `
 
 const Next = Arrow.extend`
-  padding: 225px 0 200px 25px; /* Create a larger click target */
+  padding: 35vh 0 15vh 25px; /* Create a larger click target */
   right: 25px;
+`
+
+const Progress = styled.div`
+  color: white;
+  position: absolute;
+  right: 0;
+  top: 0;
 `
 
 class Vote extends Component {
@@ -49,11 +58,15 @@ class Vote extends Component {
       id: PropTypes.string
     }),
     fetchVotes: PropTypes.func.isRequired,
-    vote: PropTypes.object
+    vote: PropTypes.object,
+    totalSubmissions: PropTypes.number.isRequired,
+    currentIndex: PropTypes.number.isRequired
   }
 
   static defaultProps = {
-    submission: null
+    submission: null,
+    totalSubmissions: 0,
+    currentIndex: 0
   }
 
   handleKeyInput = e => {
@@ -80,38 +93,45 @@ class Vote extends Component {
   }
 
   render () {
-    const { setViewing, submission, previous, next, vote } = this.props
+    const { setViewing, submission, previous, next, vote, totalSubmissions, currentIndex } = this.props
 
     return (
       <Container fluid>
-        <Row style={{ backgroundColor: '#777777', maxHeight: '75vh', minHeight: '70vh', paddingTop: '25px' }}>
-          <Col xs='1'>
-            {previous && previous.id ? (
-              <Previous onClick={() => setViewing(previous.id)}>
-                <FontAwesomeIcon icon={FaChevronLeft} size='4x' />
-              </Previous>
-            ) : null}
+        <Row
+          style={{
+            backgroundColor: '#777777',
+            minHeight: 'calc(100vh - 56px)',
+            paddingTop: '25px'
+          }}
+        >
+          <Col xs='12' style={{ maxHeight: '60vh' }}>
+            <Row>
+              <Col xs='1'>
+                {previous && previous.id ? (
+                  <Previous onClick={() => setViewing(previous.id)}>
+                    <FontAwesomeIcon icon={FaChevronLeft} size='4x' />
+                  </Previous>
+                ) : null}
+              </Col>
+              <Col xs='10'>
+                <Progress>{currentIndex} / {totalSubmissions}</Progress>
+                {submission ? <Submission submission={submission} /> : null}
+              </Col>
+              <Col xs='1'>
+                {next && next.id ? (
+                  <Next onClick={() => setViewing(next.id)}>
+                    <FontAwesomeIcon icon={FaChevronRight} size='4x' />
+                  </Next>
+                ) : null}
+              </Col>
+            </Row>
           </Col>
-          <Col xs='10'>
-            {submission ? <Submission submission={submission} /> : null}
-          </Col>
-          <Col xs='1'>
-            {next && next.id ? (
-              <Next onClick={() => setViewing(next.id)}>
-                <FontAwesomeIcon icon={FaChevronRight} size='4x' />
-              </Next>
-            ) : null}
-          </Col>
-        </Row>
-        {submission ? (
-          <Row>
-            <Col>
-              <section>
-                <VotePanel submission={submission} vote={vote} />
-              </section>
+          {submission ? (
+            <Col xs='12'>
+              <VotePanel submission={submission} vote={vote} />
             </Col>
-          </Row>
-        ) : null}
+          ) : null}
+        </Row>
       </Container>
     )
   }
@@ -164,7 +184,9 @@ const mapStateToProps = (state, ownProps) => {
       id: showId
     },
     submission: submissionId !== null ? submissions[submissionId] : null,
-    vote: submissionId !== null ? votes.byEntryId[submissionId] : null
+    vote: submissionId !== null ? votes.byEntryId[submissionId] : null,
+    currentIndex: viewing + 1,
+    totalSubmissions: order.length
   }
 
   // Show the previous button
@@ -194,4 +216,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Vote)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(Vote)

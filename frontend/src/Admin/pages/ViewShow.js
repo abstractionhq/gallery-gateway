@@ -4,10 +4,11 @@ import PropTypes from 'prop-types'
 import { TabContent, TabPane, Container, Row, Col } from 'reactstrap'
 import { RoutedTabs, NavTab } from 'react-router-tabs'
 import { Route, Switch } from 'react-router-dom'
+import { compose } from 'recompose'
 
 import ShowDetailsTab from '../containers/ShowDetailsTab'
-import ShowSubmissionsTab from '../components/ShowSubmissionsTab'
-import ShowJudgesTab from '../components/ShowJudgesTab'
+import ShowSubmissionsTab from '../containers/ShowSubmissionsTab'
+import ShowJudgesTab from '../containers/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 
 const ViewShow = props => {
@@ -87,16 +88,16 @@ ViewShow.propTypes = {
   }).isRequired
 }
 
-const withQuery = graphql(ShowQuery, {
-  options: ownProps => ({
-    variables: {
-      id: ownProps.match.params.id
-    }
-  }),
-  props: ({ data: { show, loading } }) => ({
-    show,
-    loading
+export default compose(
+  graphql(ShowQuery, {
+    options: ownProps => ({
+      variables: {
+        id: ownProps.match.params.id
+      }
+    }),
+    props: ({ data: { show, loading } }) => ({
+      show,
+      loading
+    })
   })
-})(ViewShow)
-
-export default withQuery
+)(ViewShow)

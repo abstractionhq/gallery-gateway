@@ -43,12 +43,14 @@ class OtherSubmissionForm extends Component {
       show: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf(PropTypes.shape({
-          id: PropTypes.string,
-          student: PropTypes.shape({
-            username: PropTypes.string
+        entries: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            student: PropTypes.shape({
+              username: PropTypes.string
+            })
           })
-        }))
+        )
       })
     }).isRequired,
     handleImageUpload: PropTypes.func.isRequired,
@@ -207,14 +209,12 @@ class OtherSubmissionForm extends Component {
           onSubmit={values => {
             const input = {
               entry: {
-                group: {
-                  name: '',
-                  creatorUsername: user.username,
-                  participants:
-                    values.submittingAsGroup === 'yes'
-                      ? values.groupParticipants
-                      : ''
-                },
+                group: values.submittingAsGroup === 'yes'
+                  ? {
+                    creatorUsername: user.username,
+                    participants: values.groupParticipants
+                  }
+                  : null,
                 studentUsername: user.username,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,

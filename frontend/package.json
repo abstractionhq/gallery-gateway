@@ -64,11 +64,10 @@
     "react-router-dom": "^4.2.2",
     "react-router-tabs": "^1.1.1",
     "react-select": "^1.2.1",
-    "react-table": "^6.7.4",
+    "react-table": "^6.8.0",
     "reactstrap": "^5.0.0-alpha.3",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
-    "redux-form": "^7.1.2",
     "redux-thunk": "^2.2.0",
     "styled-components": "^3.2.1",
     "yup": "^0.24.1"

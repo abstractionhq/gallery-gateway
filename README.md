@@ -43,7 +43,7 @@ Frontend:
 Backend:
 
 - [Express](https://expressjs.com/) as our web framework w/ [Apollo Server](https://github.com/apollographql/apollo-server) as our GraphQL server
-- [Sequelize](http://docs.sequelizejs.com/) as our ORM w/ [MySQL](https://www.mysql.com/) as our database
+- [Sequelize](http://docs.sequelizejs.com/) as our ORM w/ [MySQL](https://www.mysql.com/) (>= 5.7) as our database
 - [Passport](http://www.passportjs.org/) w/ [Passport SAML](https://github.com/bergie/passport-saml) for external user authentication
 - [JWT](https://jwt.io/) for API authentication & short lived tokens
 - [Multer](https://github.com/expressjs/multer) for file uploads

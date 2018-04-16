@@ -1,9 +1,10 @@
 mutation sendVote($input: VoteInput!) {
   vote(input: $input) {
-    id,
+    id
     entry {
       id
-    },
+      score
+    }
     value
   }
 }

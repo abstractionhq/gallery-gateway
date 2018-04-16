@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 
+import { LOGIN_PATH } from '../utils'
 import splash from 'assets/splash-page.jpg'
 
 const SplashImage = styled.div`
@@ -50,9 +51,7 @@ const Home = () => (
         <LoginContainer>
           <PageTitle>Gallery Gateway</PageTitle>
           <ButtonContainer>
-            <LoginButton href='http://localhost:3000/auth/login'>
-              Login
-            </LoginButton>
+            <LoginButton href={LOGIN_PATH}>Login</LoginButton>
           </ButtonContainer>
         </LoginContainer>
       </Col>

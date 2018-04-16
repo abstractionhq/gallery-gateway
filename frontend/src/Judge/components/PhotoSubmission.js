@@ -3,11 +3,14 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Lightbox from 'react-images'
 
+import { STATIC_PATH } from '../../utils'
+
 const Photo = styled.img`
   cursor: pointer;
   display: block;
   margin: 0 auto;
-  max-height: 90%;
+  max-height: 70vh;
+  max-width: 100%;
 `
 
 class PhotoSubmission extends Component {
@@ -37,11 +40,11 @@ class PhotoSubmission extends Component {
     return (
       <Fragment>
         <Photo
-          src={`//localhost:3000/static/uploads/${path}`}
+          src={`${STATIC_PATH}${path}`}
           onClick={() => this.openLightbox()}
         />
         <Lightbox
-          images={[{ src: `//localhost:3000/static/uploads/${path}` }]}
+          images={[{ src: `${STATIC_PATH}${path}` }]}
           isOpen={this.state.isLightboxOpen}
           onClose={() => this.closeLightbox()}
           showImageCount={false}
