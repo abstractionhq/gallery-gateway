@@ -2,7 +2,8 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Col } from 'reactstrap'
-import FaPDF from 'react-icons/lib/fa/file-pdf-o'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaPDF from '@fortawesome/fontawesome-free-regular/faFilePdf'
 
 import { getImageThumbnail } from '../../utils'
 
@@ -92,7 +93,7 @@ const renderSubmissionByType = submission => {
             href={`//localhost:3000/static/uploads/${submission.path}`}
             target='_blank'
           >
-            <FaPDF /> View PDF
+            <FontAwesomeIcon icon={FaPDF} className='align-middle' /> View PDF
           </a>
         )
       }

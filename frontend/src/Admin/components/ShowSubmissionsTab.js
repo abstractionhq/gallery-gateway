@@ -4,11 +4,12 @@ import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import FaYouTube from 'react-icons/lib/fa/youtube'
-import FaVimeo from 'react-icons/lib/fa/vimeo'
-import FaStar from 'react-icons/lib/fa/star'
-import FaStarOpen from 'react-icons/lib/fa/star-o'
-import FaBook from 'react-icons/lib/fa/book'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
+import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
+import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
+import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
+import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -209,13 +210,13 @@ class ShowSubmissionsTab extends Component {
                     )
                   case 'VIDEO':
                     if (submission.provider === 'youtube') {
-                      return <FaYouTube size='2em' />
+                      return <FontAwesomeIcon icon={FaYouTube} size='2x' />
                     } else {
-                      return <FaVimeo size='2em' />
+                      return <FontAwesomeIcon icon={FaVimeo} size='2x' />
                     }
                   case 'OTHER':
                     // TODO: Should ends with .jpg should render the image thumbnail?
-                    return <FaBook size='2em' />
+                    return <FontAwesomeIcon icon={FaBook} size='2x' />
                   default:
                     console.error(`Unexpected Type ${submission.entryType}`, submission)
                     return null
@@ -289,14 +290,14 @@ class ShowSubmissionsTab extends Component {
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, false)}
                   >
-                    <FaStar size='1.5em' style={{ color: 'gold' }} />
+                    <FontAwesomeIcon icon={FaStar} size='lg' className='align-middle' style={{ color: 'gold' }} />
                   </span>
                 ) : (
                   <span
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, true)}
                   >
-                    <FaStarOpen size='1.5em' />
+                    <FontAwesomeIcon icon={FaStarOpen} size='lg' className='align-middle' />
                   </span>
                 ),
               style: { textAlign: 'center' },
