@@ -34,7 +34,7 @@ const ensureAdminDownloadToken = (req, res, next) => {
     if (err || decoded.type !== ADMIN) {
       res.status(401)
         .type('html')
-        .send('permission denied')
+        .send('Permission Denied')
     } else {
       next()
     }
@@ -108,7 +108,8 @@ const getSubmitterData = (studentSubmissions, groupSubmissions) => {
   //       entries: [...]
   //     },
   //     {
-  //       group: User,
+  //       group: Group,
+  //       user: User,
   //       entries: [...]
   //     },
   //     ...
@@ -156,18 +157,26 @@ const getSubmitterData = (studentSubmissions, groupSubmissions) => {
       // [
       //   {
       //     group: Group,
+      //     user: User,
       //     entries: [entry, ...]
       //   },
       //   ...
       // ]
       const submissionsWithGroups = Object
         .entries(groupSubmissions)
-        .map(([groupId, entries]) => ({
-          group: groupIdsToGroups[groupId],
-          entries
-        }))
+        .map(([groupId, entries]) => {
+          // We find the user who created the group so we can include them in the results
+          const group = groupIdsToGroups[groupId]
+          return group
+            .getCreator()
+            .then((user) => ({
+              group,
+              user,
+              entries
+            }))
+        })
 
-      return [...submissionsWithUsers, ...submissionsWithGroups]
+      return Promise.all([...submissionsWithUsers, ...submissionsWithGroups])
     })
 }
 
@@ -226,12 +235,12 @@ router.route('/csv/:showId')
                     let entryData = entry.dataValues
                     let entryType = entry.entryType === IMAGE_ENTRY ? 'Image'
                       : entry.entryType === VIDEO_ENTRY ? 'Video'
-                        : entry.entryType === OTHER_ENTRY ? 'OtherMedia' : ''
+                        : entry.entryType === OTHER_ENTRY ? 'Other' : ''
                     let newEntry = {
                       studentEmail: `${entryData.studentUsername}@rit.edu`,
                       studentFirstName: user ? user.firstName : null,
                       studentLastName: user ? user.lastName : null,
-                      isGroupSubmission: entryData.groupId ? true : null,
+                      isGroupSubmission: !!entryData.groupId,
                       groupParticipants: group ? group.participants : null,
                       entryType: entryType,
                       title: entryData.title,
@@ -339,7 +348,6 @@ router.route('/zips/:showId')
             //   entries: [Entry]
             // Evaluates to:
             //   [Entry]
-
             const imageIds = entries.map((entry) => entry.entryId)
             return Image.findAll({ where: { id: { $in: imageIds } } })
               .then(images => {
@@ -357,8 +365,7 @@ router.route('/zips/:showId')
                 return entries
               })
           })
-          .then(entries => groupEntriesBySubmitter(entries))
-          .then(({ studentSubmissions, groupSubmissions }) => getSubmitterData(studentSubmissions, groupSubmissions))
+          .then((entries) => submissionsWithSubmittersPromise(entries))
           .then(submissionsWithSubmitters => {
             // now we construct the calculated title for each entry
             // Evaluates to:
@@ -373,11 +380,8 @@ router.route('/zips/:showId')
             return submissionsWithSubmitters.reduce((arr, { user, group, entries }) => {
               // ['Clark Kent - Daily Planet Office']
               const newSubmissionSummaries = entries.map(({ path, title, invited }) => {
-                const entryNamePrefix = (
-                  (user ? `${user.lastName} ${user.firstName}` : group.name) +
-                  ' - ' +
-                  title
-                )
+                // If this is a group submission, we insert the group participants in the name
+                const entryNamePrefix = `${user.lastName}, ${user.firstName}${group ? ` & ${group.participants}` : ''} - ${title}`
                 // enforce non-conflicting titles by adding (1), (2), ... to end of name
                 let proposedName = entryNamePrefix
                 let i = 1
@@ -401,33 +405,41 @@ router.route('/zips/:showId')
             // entrySummaries:
             // [
             //   {
-            //     name: 'First Last Title.jpg',
+            //     name: 'Last First - title.jpg',
             //     path: 'path/to/image.jpg',
             //     invited: true
             //   },
             //   ...
             // ]
             const zip = new JSZip()
-            entrySummaries.forEach((summary) => {
-              zip.file(
-                (summary.invited ? 'invited' : 'not invited') + '/' + summary.name,
-                readFileAsync(path.join(IMAGE_DIR, summary.path))
-              )
+            Promise.all(
+              entrySummaries.map((summary) => {
+                const filename = path.join(IMAGE_DIR, summary.path)
+                return readFileAsync(filename)
+                  .then((data) => {
+                    zip.file(`${show.name}/${summary.invited ? 'Invited' : 'Not Invited'}/${summary.name}`, data)
+                  })
+                  .catch((err) => {
+                    // eg. a file isn't found
+                    console.error(`There was an issue reading file: ${filename}`)
+                    console.error(err)
+                  })
+              })
+            ).then(() => {
+              res.status(200)
+                .type('zip')
+                .attachment(`${show.name}.zip`)
+
+              zip.generateNodeStream().pipe(res)
             })
-
-            res.status(200)
-              .type('zip')
-              .attachment(`${show.name}.zip`)
-
-            zip.generateNodeStream().pipe(res)
           })
       })
       .catch(sequelize.EmptyResultError, () => {
-        res.status(404).send('404: Show not found')
+        res.status(404).send('Show Not Found')
       })
       .catch(err => {
         console.error(err)
-        res.status(500).send('500: Oops! Try again later.')
+        res.status(500).send('Oops! Try again later.')
       })
   })
 

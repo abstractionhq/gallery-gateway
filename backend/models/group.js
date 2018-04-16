@@ -4,10 +4,6 @@ import sequelize from '../config/sequelize'
 import User from './user'
 
 const Group = sequelize.define('group', {
-  name: {
-    allowNull: false,
-    type: DataTypes.STRING
-  },
   creatorUsername: {
     allowNull: false,
     type: DataTypes.STRING

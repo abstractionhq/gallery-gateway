@@ -16,7 +16,6 @@ const createEntry = (entry, entryType, entryId, t) => {
   let groupPromise = Promise.resolve(null)
   if (entry.group) {
     groupPromise = Group.create({
-      name: entry.group.name,
       creatorUsername: entry.group.creatorUsername,
       participants: entry.group.participants
     }, { transaction: t })

@@ -9,33 +9,24 @@ import Other from '../models/other'
 import Vote from '../models/vote'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
-/**
- * Fake a User
- * @param {object} opts - optional, details about the user
- * @param {string} opts.type - type of user, default STUDENT
- * @param {string} opts.username - username, default faked
- * @return {Promise<User>} the user that was made
- */
 export function fakeUser (opts) {
   opts = opts || {}
   opts.type = opts.type || STUDENT
   opts.username = opts.username || faker.internet.userName()
   return User.create({
     username: opts.username,
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    firstName: opts.firstName || faker.name.firstName(),
+    lastName: opts.lastName || faker.name.lastName(),
     type: opts.type
   })
 }
 
 export function fakeGroup (opts) {
   opts = opts || {}
-  opts.name = opts.name !== undefined ? opts.name : faker.company.companyName()
   opts.participants = opts.participants !== undefined ? opts.participants : faker.lorem.words(5)
   const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
   return userPromise.then(user =>
     Group.create({
-      name: opts.name,
       participants: opts.participants,
       creatorUsername: user.username
     }))
