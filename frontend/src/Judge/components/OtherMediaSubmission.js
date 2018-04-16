@@ -5,14 +5,14 @@ import { Alert } from 'reactstrap'
 
 import pdf from 'assets/pdf.svg'
 import PhotoSubmission from '../components/PhotoSubmission'
+import { STATIC_PATH } from '../../utils'
 
 const PdfImg = styled.div`
   background-image: url(${pdf});
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  height: 300px;
-  max-height: 400px;
+  height: 50vh;
   min-height: 2em;
 `
 
@@ -22,6 +22,7 @@ const PdfWell = styled.a`
   color: white;
   display: flex;
   flex-direction: column;
+  height: 50vh;
   padding: 25px;
   text-align: center;
 
@@ -68,11 +69,7 @@ class OtherMediaSubmission extends Component {
           This submission may need to be viewed in person
         </Alert>
         {path.match('.pdf$') ? (
-          // TODO make this URL responsive to deploy environment
-          <PdfWell
-            href={`//localhost:3000/static/uploads/${path}`}
-            target='_blank'
-          >
+          <PdfWell href={`${STATIC_PATH}${path}`} target='_blank'>
             <PdfImg />
             <h4>Click to View</h4>
           </PdfWell>

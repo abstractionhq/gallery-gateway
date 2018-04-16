@@ -41,6 +41,7 @@ const createEntry = (entry, entryType, entryId, t) => {
         groupId: group ? group.id : null
       }, { transaction: t })
     })
+    .then(() => Show.findById(entry.showId))
 }
 
 // Rejects the promise if the supplied args indicate the student is doing a

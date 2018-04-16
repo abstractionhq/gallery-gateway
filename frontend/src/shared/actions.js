@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { push } from 'connected-react-router'
 
+import { DOWNLOAD_TOKEN_PATH } from '../utils'
+
 export const LOGIN_USER = 'LOGIN_USER'
 export const LOGOUT_USER = 'LOGOUT_USER'
 export const SWITCH_TO_JUDGE = 'SWITCH_TO_JUDGE'
@@ -46,8 +48,7 @@ export const switchToAdmin = () => (dispatch, getState, client) => {
 export const getDownloadToken = () => (dispatch, getState, client) => {
   const { shared: { auth: { token } } } = getState()
 
-  // TODO replace this with the actual deployed url
-  return fetch('//localhost:3000/auth/downloadToken', {
+  return fetch(DOWNLOAD_TOKEN_PATH, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`

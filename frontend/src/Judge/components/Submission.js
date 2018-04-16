@@ -13,6 +13,7 @@ const OTHER = 'OTHER'
 
 const Title = styled.h5`
   color: white;
+  padding-bottom: 10px;
   text-align: center;
 `
 

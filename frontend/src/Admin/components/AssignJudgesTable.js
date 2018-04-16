@@ -95,7 +95,6 @@ class AssignJudgesTable extends Component {
             selected={this.state.selectedUnassignedJudges}
             onChange={this.handleUnassignedJudgesChange}
           />
-          {/* TODO: Form and Button to Create a new Judge */}
         </Col>
         <Col xs='12' md='2' className='align-self-center'>
           <Row>

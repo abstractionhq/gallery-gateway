@@ -3,7 +3,9 @@ import { HttpLink, InMemoryCache } from 'apollo-client-preset'
 import { ApolloLink, concat } from 'apollo-link'
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 
-const httpLink = new HttpLink({uri: 'http://localhost:3000/graphql'}) // TODO: Read from .env
+import { GRAPHQL_PATH } from '../src/utils'
+
+const httpLink = new HttpLink({uri: GRAPHQL_PATH})
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -20,23 +22,23 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
     __schema: {
-      types: [ 
+      types: [
         {
-          "kind": "INTERFACE",
-          "name": "Entry",
-          "possibleTypes": [
+          kind: 'INTERFACE',
+          name: 'Entry',
+          possibleTypes: [
             {
-              "name": "Photo"
+              name: 'Photo'
             },
             {
-              "name": "Video"
+              name: 'Video'
             },
             {
-              "name": "OtherMedia"
+              name: 'OtherMedia'
             }
           ]
         }
-      ] 
+      ]
     }
   }
 })

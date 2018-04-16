@@ -10,7 +10,7 @@ import FaVimeo from 'react-icons/lib/fa/vimeo'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 
-import { getImageThumbnail } from '../../utils'
+import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -73,10 +73,7 @@ const EntryThumb = ({ entry }) => {
     case 'PHOTO':
       return (
         <PhotoThumbnail
-          // TODO (robert) make this URL responsive to deploy environment
-          src={`//localhost:3000/static/uploads/${getImageThumbnail(
-            entry.path
-          )}`}
+          src={`${STATIC_PATH}${getImageThumbnail(entry.path)}`}
         />
       )
     case 'VIDEO':
