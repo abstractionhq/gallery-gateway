@@ -28,12 +28,15 @@ const renderSubmissionByType = submission => {
         <Fragment>
           <PhotoThumbnail
             alt={submission.title}
+            // TODO replace this with deployed URL
             src={`//localhost:3000/static/uploads/${getImageThumbnail(
               submission.path
             )}`}
           />
           <dt>Dimensions</dt>
-          <dd>{submission.horizDimInch} in. × {submission.vertDimInch} in.</dd>
+          <dd>
+            {submission.horizDimInch} in. × {submission.vertDimInch} in.
+          </dd>
           <dt>Media Type</dt>
           <dd>{submission.mediaType}</dd>
         </Fragment>
@@ -44,7 +47,10 @@ const renderSubmissionByType = submission => {
           <Fragment>
             <dt>YouTube Video</dt>
             <dd>
-              <a href={`${YOUTUBE_BASE_URL}${submission.videoId}`}>
+              <a
+                href={`${YOUTUBE_BASE_URL}${submission.videoId}`}
+                target='_blank'
+              >
                 {`${YOUTUBE_BASE_URL}${submission.videoId}`}
               </a>
             </dd>
@@ -55,7 +61,10 @@ const renderSubmissionByType = submission => {
           <Fragment>
             <dt>Vimeo Video</dt>
             <dd>
-              <a href={`${VIMEO_BASE_URL}${submission.videoId}`}>
+              <a
+                href={`${VIMEO_BASE_URL}${submission.videoId}`}
+                target='_blank'
+              >
                 {`${VIMEO_BASE_URL}${submission.videoId}`}
               </a>
             </dd>
@@ -67,7 +76,11 @@ const renderSubmissionByType = submission => {
         <Fragment>
           <dt>Other</dt>
           <dd>
-            <a href={submission.path}>
+            <a
+              // TODO replace this with deployed URL
+              href={`//localhost:3000/static/uploads/${submission.path}`}
+              target='_blank'
+            >
               {submission.path}
             </a>
           </dd>
@@ -85,7 +98,11 @@ const ShowSubmissionDetails = ({ submission }) => (
       <h4 className='text-center'>Artist{submission.group ? 's' : null}</h4>
       <dl>
         <dt>Name</dt>
-        <dd>{submission.student.firstName} {submission.student.lastName} ({submission.student.username})</dd>
+        <dd>
+          {submission.student.firstName} {submission.student.lastName} ({
+            submission.student.username
+          })
+        </dd>
         {submission.student.displayName ? (
           <Fragment>
             <dt>Artist Name</dt>
@@ -115,6 +132,12 @@ const ShowSubmissionDetails = ({ submission }) => (
             <dd>{submission.comment}</dd>
           </Fragment>
         ) : null}
+        <dt>Score</dt>
+        <dd>{submission.score.toFixed(3)}</dd>
+        <dt>Invited</dt>
+        <dd>{submission.invited ? 'Yes' : 'No'}</dd>
+        <dt>Excluded from Judging</dt>
+        <dd>{submission.excludeFromJudging ? 'Yes' : 'No'}</dd>
         {renderSubmissionByType(submission)}
         <dt>For Sale?</dt>
         <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
@@ -137,6 +160,9 @@ ShowSubmissionDetails.propTypes = {
       displayName: PropTypes.string
     }),
     title: PropTypes.string.isRequired,
+    score: PropTypes.number.isRequired,
+    invited: PropTypes.bool,
+    excludeFromJudging: PropTypes.bool,
     comment: PropTypes.string,
     yearLevel: PropTypes.string.isRequired,
     academicProgram: PropTypes.string.isRequired,
