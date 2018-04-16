@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
 import FaChevronRight from 'react-icons/lib/fa/chevron-right'
 import queryString from 'query-string'
+import { compose } from 'recompose'
 
 import { setViewing, fetchSubmissions, fetchVotes } from '../actions'
 import Submission from '../components/Submission'
@@ -34,6 +35,13 @@ const Next = Arrow.extend`
   right: 25px;
 `
 
+const Progress = styled.div`
+  color: white;
+  position: absolute;
+  right: 0;
+  top: 0;
+`
+
 class Vote extends Component {
   static propTypes = {
     show: PropTypes.shape({
@@ -49,11 +57,15 @@ class Vote extends Component {
       id: PropTypes.string
     }),
     fetchVotes: PropTypes.func.isRequired,
-    vote: PropTypes.object
+    vote: PropTypes.object,
+    totalSubmissions: PropTypes.number.isRequired,
+    currentIndex: PropTypes.number.isRequired
   }
 
   static defaultProps = {
-    submission: null
+    submission: null,
+    totalSubmissions: 0,
+    currentIndex: 0
   }
 
   handleKeyInput = e => {
@@ -80,7 +92,7 @@ class Vote extends Component {
   }
 
   render () {
-    const { setViewing, submission, previous, next, vote } = this.props
+    const { setViewing, submission, previous, next, vote, totalSubmissions, currentIndex } = this.props
 
     return (
       <Container fluid>
@@ -101,6 +113,7 @@ class Vote extends Component {
                 ) : null}
               </Col>
               <Col xs='10'>
+                <Progress>{currentIndex} / {totalSubmissions}</Progress>
                 {submission ? <Submission submission={submission} /> : null}
               </Col>
               <Col xs='1'>
@@ -170,7 +183,9 @@ const mapStateToProps = (state, ownProps) => {
       id: showId
     },
     submission: submissionId !== null ? submissions[submissionId] : null,
-    vote: submissionId !== null ? votes.byEntryId[submissionId] : null
+    vote: submissionId !== null ? votes.byEntryId[submissionId] : null,
+    currentIndex: viewing + 1,
+    totalSubmissions: order.length
   }
 
   // Show the previous button
@@ -200,4 +215,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Vote)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(Vote)

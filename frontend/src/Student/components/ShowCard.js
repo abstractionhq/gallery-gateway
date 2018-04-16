@@ -133,9 +133,8 @@ const SubmittedEntries = ({ show }) =>
         <EntryThumb entry={entry} />
         {/* If after entry end and before judging end (or if the show is not finalized),
           display "Pending", else display invited or not invited */
-          moment().isBetween(show.entryEnd, show.judgingEnd) ||
-        !show.finalized ? (
-              <Pending>Pending</Pending>
+          moment().isBetween(show.entryEnd, show.judgingEnd) || !show.finalized ? (
+          <Pending>Pending</Pending>
             ) : moment().isAfter(show.judgingEnd) ? (
               entry.invited ? (
                 <Invited>Invited</Invited>

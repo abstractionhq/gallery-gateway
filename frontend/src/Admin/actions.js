@@ -135,3 +135,15 @@ export const downloadZip = showId => (dispatch, getState, client) => {
     '_self'
   )
 }
+
+export const downloadCsv = showId => (dispatch, getState, client) => {
+  const { shared: { auth: { downloadToken } } } = getState()
+
+  // TODO replace this with the deployed url
+  window.open(
+    `//localhost:3000/csv/${showId}?token=${encodeURIComponent(
+      downloadToken
+    )}`,
+    '_self'
+  )
+}
