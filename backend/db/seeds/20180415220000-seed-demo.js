@@ -8,13 +8,13 @@ import moment from 'moment'
 const imageUploadDir = 'uploads/images'
 const pdfUploadDir = 'uploads/pdfs'
 
-const FISH_JPG = 'https://farm6.staticflickr.com/5486/14501540216_73728d8fa9_o_d.jpg'
+const FISH_JPG = 'https://farm8.staticflickr.com/5486/14501540216_73728d8fa9_o_d.jpg'
 const TREE_JPG = 'https://farm8.staticflickr.com/7257/7054549621_002ec9afe0_o_d.jpg'
-const BOOK_JPG = 'https://farm9.staticflickr.com/8722/16184844574_77a3143176_o_d.jpg'
-const APPLES_JPG = 'https://farm2.staticflickr.com/1255/1172163196_aedc6863ef_o_d.jpg'
-const RUNNING_JPG = 'https://farm3.staticflickr.com/2113/32950307196_ebc0a1c660_o_d.jpg'
-const PURPLE_THING_JPG = 'https://farm4.staticflickr.com/3020/2687783841_ff4846cf1f_o_d.jpg'
-const BOOK_COVER_JPG = 'https://farm3.staticflickr.com/2916/14124533308_ce540f0e73_o_d.jpg'
+const BOOK_JPG = 'https://farm8.staticflickr.com/8722/16184844574_77a3143176_o_d.jpg'
+const APPLES_JPG = 'https://farm8.staticflickr.com/1255/1172163196_aedc6863ef_o_d.jpg'
+const RUNNING_JPG = 'https://farm8.staticflickr.com/2113/32950307196_ebc0a1c660_o_d.jpg'
+const PURPLE_THING_JPG = 'https://farm8.staticflickr.com/3020/2687783841_ff4846cf1f_o_d.jpg'
+const BOOK_COVER_JPG = 'https://farm8.staticflickr.com/2916/14124533308_ce540f0e73_o_d.jpg'
 const SAMPLE_PDF = 'https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf'
 
 const genThumbnail = (fpath) => {
@@ -50,6 +50,8 @@ const genThumbnail = (fpath) => {
     })
 }
 
+const genId = () => Math.floor(Math.random() * 9000 + 1000)
+
 const download = (url, destGuid, extn) => {
   // http downloading adapted from https://stackoverflow.com/q/11944932
   const dstDir = `${extn === 'jpg' ? imageUploadDir : pdfUploadDir}/${destGuid[0]}/${destGuid[1]}`
@@ -64,10 +66,19 @@ const download = (url, destGuid, extn) => {
         }
         const fpipe = fs.createWriteStream(dst)
         https.get(url, (response) => {
+          console.log('status', response.statusCode)
+          if (response.statusCode === 500) {
+            return setTimeout(
+              () => resolve(download(url, destGuid, extn)),
+              1000
+            )
+          }
           response.pipe(fpipe)
           fpipe.on('finish', () => {
-            fpipe.close(() => {
-              if (extn === 'jpg') {
+            fpipe.close((err) => {
+              if (err) {
+                reject(err)
+              } else if (extn === 'jpg') {
                 // Remember to gen thumbs
                 resolve(genThumbnail(dst))
               } else {
@@ -76,9 +87,8 @@ const download = (url, destGuid, extn) => {
             })
           })
         }).on('error', (err) => {
-          fs.unlink(dst)
-          reject(err)
-        })
+          fs.unlink(dst, () => reject(err))
+        }).end()
       }
     )
   }).then(() => {
@@ -99,18 +109,18 @@ export function up (queryInterface, Sequelize) {
   ])
     .then(() => {
       // create a show that's in judging
-      const showId = Math.floor(Math.random() * 900 + 100)
+      const showId = genId()
       const now = moment()
       return queryInterface.bulkInsert('shows', [
         {
           id: showId,
           name: 'Demo Show (In Judging)',
           description: '',
-          entryCap: 3,
-          entryStart: now.subtract(3, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
-          entryEnd: now.subtract(1, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
-          judgingStart: now.subtract(1, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
-          judgingEnd: now.add(1, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+          entryCap: 2,
+          entryStart: moment().subtract(3 * 7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+          entryEnd: moment().subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+          judgingStart: moment().subtract(6, 'days').format('YYYY-MM-DD HH:mm:ss'),
+          judgingEnd: moment().add(1, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
           finalized: 0,
           createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
@@ -120,12 +130,12 @@ export function up (queryInterface, Sequelize) {
     .then(ids => {
       // add all the images
       const now = moment()
-      const fishImageId = Math.floor(Math.random() * 900 + 100)
-      const treeImageId = Math.floor(Math.random() * 900 + 100)
-      const bookImageId = Math.floor(Math.random() * 900 + 100)
-      const applesImageId = Math.floor(Math.random() * 900 + 100)
-      const runningImageId = Math.floor(Math.random() * 900 + 100)
-      const purpleThingImageId = Math.floor(Math.random() * 900 + 100)
+      const fishImageId = genId()
+      const treeImageId = genId()
+      const bookImageId = genId()
+      const applesImageId = genId()
+      const runningImageId = genId()
+      const purpleThingImageId = genId()
       return queryInterface.bulkInsert('images', [
         {
           id: fishImageId,
@@ -193,8 +203,8 @@ export function up (queryInterface, Sequelize) {
     })
     .then(ids => {
       // add a vimeo and youtube entry
-      const vimeoVideoId = Math.floor(Math.random() * 900 + 100)
-      const youtubeVideoId = Math.floor(Math.random() * 900 + 100)
+      const vimeoVideoId = genId()
+      const youtubeVideoId = genId()
       const now = moment()
       return queryInterface.bulkInsert('videos', [
         {
@@ -219,8 +229,8 @@ export function up (queryInterface, Sequelize) {
     })
     .then(ids => {
       // add an image-other and a pdf-other
-      const imageOtherId = Math.floor(Math.random() * 900 + 100)
-      const pdfOtherId = Math.floor(Math.random() * 900 + 100)
+      const imageOtherId = genId()
+      const pdfOtherId = genId()
       const now = moment()
       return queryInterface.bulkInsert('others', [
         {
@@ -241,11 +251,11 @@ export function up (queryInterface, Sequelize) {
         pdfOtherId
       }))
     })
-    .then(({showId, fishImageId, treeImageId, bookImageId, ...ids}) => {
+    .then(ids => {
+      const {showId, fishImageId, treeImageId} = ids
       // make user 7 submit the fish and the tree and the hanging book
-      const fishEntryId = Math.floor(Math.random() * 900 + 100)
-      const treeEntryId = Math.floor(Math.random() * 900 + 100)
-      const hangingBookEntryId = Math.floor(Math.random() * 900 + 100)
+      const fishEntryId = genId()
+      const treeEntryId = genId()
       const now = moment()
       return queryInterface.bulkInsert('entries', [
         {
@@ -277,29 +287,401 @@ export function up (queryInterface, Sequelize) {
           academicProgram: 'Ceramics',
           createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        fishEntryId,
+        treeEntryId
+      }))
+    })
+    .then(ids => {
+      // user 6 submits hanging book and vimeo video
+      const { showId, bookImageId, vimeoVideoId } = ids
+      const hangingBookEntryId = genId()
+      const vimeoVideoEntryId = genId()
+      const now = moment()
+      return queryInterface.bulkInsert('entries', [
+        {
+          id: vimeoVideoEntryId,
+          showId,
+          studentUsername: 'user6',
+          entryType: 2,
+          entryId: vimeoVideoId,
+          title: 'Mountain Biking',
+          comment: '',
+          moreCopies: 1,
+          forSale: 0,
+          yearLevel: 'four',
+          academicProgram: 'Industrial Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
         },
         {
           id: hangingBookEntryId,
           showId,
-          studentUsername: 'user7',
+          studentUsername: 'user6',
           entryType: 1,
           entryId: bookImageId,
-          title: 'Rainfall in Paper',
+          title: 'Cloudy Mind and Lofty Goals',
           comment: '',
-          moreCopies: 0,
+          moreCopies: 1,
           forSale: 0,
-          yearLevel: 'five',
-          academicProgram: 'Ceramics',
+          yearLevel: 'four',
+          academicProgram: 'Industrial Design',
           createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
         }
       ]).then(() => ({
         ...ids,
-        showId,
-        fishEntryId,
-        treeEntryId,
-        hangingBookEntryId
+        hangingBookEntryId,
+        vimeoVideoEntryId
       }))
+    })
+    .then(ids => {
+      // User 8 submits the sample PDF and the purple thing
+      const { showId, purpleThingImageId, pdfOtherId } = ids
+      const purpleThingEntryId = genId()
+      const pdfEntryId = genId()
+      const now = moment()
+      return queryInterface.bulkInsert('entries', [
+        {
+          id: purpleThingEntryId,
+          showId,
+          studentUsername: 'user8',
+          entryType: 1,
+          entryId: purpleThingImageId,
+          title: 'Purple Saturday',
+          comment: '',
+          moreCopies: 1,
+          forSale: 0,
+          yearLevel: 'third',
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: pdfEntryId,
+          showId,
+          studentUsername: 'user8',
+          entryType: 3,
+          entryId: pdfOtherId,
+          title: 'The Adventures of Souper Manne',
+          comment: '',
+          moreCopies: 1,
+          forSale: 0,
+          yearLevel: 'third',
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        purpleThingEntryId,
+        pdfEntryId
+      }))
+    })
+    .then(ids => {
+      const group1Id = genId()
+      const group2Id = genId()
+      const now = moment()
+      return queryInterface.bulkInsert('groups', [
+        {
+          id: group1Id,
+          participants: 'John Renner, Michael Timbrook',
+          creatorUsername: 'user8',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: group2Id,
+          participants: 'Bob Ross, Carl Sagan',
+          creatorUsername: 'user6',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        group1Id,
+        group2Id
+      }))
+    })
+    .then(ids => {
+      // group 1 submits the youtube video
+      // group 2 submits the 'other' image
+      const { showId, group1Id, group2Id, youtubeVideoId, imageOtherId } = ids
+      const youtubeEntryId = genId()
+      const otherImageEntryId = genId()
+      const now = moment()
+      return queryInterface.bulkInsert('entries', [
+        {
+          id: youtubeEntryId,
+          showId,
+          studentUsername: 'user8',
+          groupId: group1Id,
+          entryType: 2,
+          entryId: youtubeVideoId,
+          title: 'Bees?',
+          comment: '',
+          moreCopies: 0,
+          forSale: 0,
+          yearLevel: 'third',
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: otherImageEntryId,
+          showId,
+          studentUsername: 'user6',
+          groupId: group2Id,
+          entryType: 3,
+          entryId: imageOtherId,
+          title: 'Exploratory Binding No. 1',
+          comment: '',
+          moreCopies: 1,
+          forSale: 1,
+          yearLevel: 'third',
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        youtubeEntryId,
+        otherImageEntryId
+      }))
+    })
+    .then(ids => {
+      // assign all judges to the show
+      const { showId } = ids
+      const now = moment()
+      return queryInterface.bulkInsert('user_shows', [
+        {
+          username: 'user2',
+          showId,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          username: 'user3',
+          showId,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          username: 'user4',
+          showId,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          username: 'user5',
+          showId,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ids)
+    })
+    .then(ids => {
+      // Have judges vote on things
+      const {
+        fishEntryId,
+        hangingBookEntryId,
+        purpleThingEntryId,
+        treeEntryId,
+        otherImageEntryId,
+        pdfEntryId,
+        vimeoVideoEntryId,
+        youtubeEntryId
+      } = ids
+      const now = moment()
+      return queryInterface.bulkInsert('votes', [
+        {
+          judgeUsername: 'user2',
+          entryId: fishEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: hangingBookEntryId,
+          value: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: purpleThingEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: treeEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: otherImageEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: pdfEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: vimeoVideoEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user2',
+          entryId: youtubeEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user3',
+          entryId: fishEntryId,
+          value: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user3',
+          entryId: hangingBookEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user3',
+          entryId: purpleThingEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user3',
+          entryId: treeEntryId,
+          value: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user3',
+          entryId: treeEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user4',
+          entryId: otherImageEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user4',
+          entryId: pdfEntryId,
+          value: 2,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user4',
+          entryId: vimeoVideoEntryId,
+          value: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user4',
+          entryId: youtubeEntryId,
+          value: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          judgeUsername: 'user5',
+          entryId: vimeoVideoEntryId,
+          value: 0,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ids)
+    })
+    .then(ids => {
+      const oldShowId = genId()
+      const now = moment()
+      return queryInterface.bulkInsert('shows', [
+        {
+          id: oldShowId,
+          name: 'Demo Show (Completed)',
+          description: '',
+          entryCap: 2,
+          entryStart: moment().subtract(10, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+          entryEnd: moment().subtract(9, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+          judgingStart: moment().subtract(9, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+          judgingEnd: moment().subtract(8, 'weeks').format('YYYY-MM-DD HH:mm:ss'),
+          finalized: 1,
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        oldShowId
+      }))
+    })
+    .then(ids => {
+      // Make user8 have one invited and one not invited old submission
+      const {oldShowId, runningImageId, applesImageId} = ids
+      const now = moment()
+      return queryInterface.bulkInsert('entries', [
+        {
+          showId: oldShowId,
+          studentUsername: 'user8',
+          entryType: 1,
+          entryId: runningImageId,
+          title: 'Runaway Stone',
+          comment: '',
+          moreCopies: 1,
+          forSale: 0,
+          yearLevel: 'third',
+          invited: 1,
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          showId: oldShowId,
+          studentUsername: 'user8',
+          entryType: 1,
+          entryId: applesImageId,
+          title: 'Harvest',
+          comment: '',
+          moreCopies: 1,
+          forSale: 0,
+          yearLevel: 'third',
+          invited: 0,
+          academicProgram: 'Graphic Design',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ids)
     })
 }
 

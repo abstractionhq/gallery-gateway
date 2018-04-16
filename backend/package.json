@@ -28,9 +28,10 @@
     "test-file": "cross-env NODE_ENV=test nyc mocha test/setup.js",
     "bootstrap": "babel-node ./bootstrap.js",
     "keygen": "babel-node keygen",
-    "sequelize": "babel-node ./node_modules/.bin/sequelize",
-    "migrate": "babel-node ./node_modules/.bin/sequelize db:migrate",
-    "seed": "babel-node ./node_modules/.bin/sequelize db:seed:all",
+    "sequelize": "babel-node ./node_modules/sequelize-cli/lib/sequelize",
+    "migrate": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:migrate",
+    "seed": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:seed:all",
+    "seed:demo": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:seed --seed 20180415220000-seed-demo.js",
     "lint": "eslint **/*.js --ignore-pattern coverage/"
   },
   "dependencies": {
