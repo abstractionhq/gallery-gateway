@@ -55,13 +55,13 @@ class AssignJudgesTable extends Component {
     this.props.fetchData()
   }
 
-  onDismissUnassignConfirmation () {
+  onDismissUnassignConfirmation = () => {
     this.setState({
       isUnassignConfirmationOpen: false
     })
   }
 
-  onDisplayUnassignConfirmation () {
+  onDisplayUnassignConfirmation = () => {
     this.setState({
       isUnassignConfirmationOpen: true
     })
@@ -113,7 +113,7 @@ class AssignJudgesTable extends Component {
         <Modal
           isOpen={this.state.isUnassignConfirmationOpen}
           toggle={this.onDismissUnassignConfirmation}
-          style={{ minWidth: '50%' }}
+          style={{ top: '25%' }}
         >
           <ModalHeader toggle={this.onDismissUnassignConfirmation}>
             Warning <FaExclamationTriangle />
@@ -160,6 +160,7 @@ class AssignJudgesTable extends Component {
                     block
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.assign()}
+                    disabled={!Object.keys(this.state.selectedUnassignedJudges).length}
                   >
                     Assign <FaLongArrowRight />
                   </Button>
@@ -172,6 +173,7 @@ class AssignJudgesTable extends Component {
                     block
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.onDisplayUnassignConfirmation()}
+                    disabled={!Object.keys(this.state.selectedAssignedJudges).length}
                   >
                     <FaLongArrowLeft /> Unassign
                   </Button>
