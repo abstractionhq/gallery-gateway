@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Col } from 'reactstrap'
+import FaPDF from 'react-icons/lib/fa/file-pdf-o'
 
 import { getImageThumbnail } from '../../utils'
 
@@ -72,20 +73,30 @@ const renderSubmissionByType = submission => {
         )
       }
     case OTHER:
-      return (
-        <Fragment>
-          <dt>Other</dt>
-          <dd>
-            <a
-              // TODO replace this with deployed URL
-              href={`//localhost:3000/static/uploads/${submission.path}`}
-              target='_blank'
-            >
-              {submission.path}
-            </a>
-          </dd>
-        </Fragment>
-      )
+      if (!submission.path) {
+        return null
+      } else if (submission.path.endsWith('.jpg')) {
+        return (
+          <PhotoThumbnail
+            alt={submission.title}
+            // TODO replace this with deployed URL
+            src={`//localhost:3000/static/uploads/${getImageThumbnail(
+              submission.path
+            )}`}
+          />
+        )
+      } else if (submission.path.endsWith('.pdf')) {
+        return (
+          <a
+            // TODO replace this with deployed URL
+            href={`//localhost:3000/static/uploads/${submission.path}`}
+            target='_blank'
+          >
+            <FaPDF /> View PDF
+          </a>
+        )
+      }
+      return null
     default:
       console.error(`Unexpected Type ${submission.entryType}`, submission)
       return null
@@ -134,9 +145,9 @@ const ShowSubmissionDetails = ({ submission }) => (
         ) : null}
         <dt>Score</dt>
         <dd>{submission.score.toFixed(3)}</dd>
-        <dt>Invited</dt>
+        <dt>Invited?</dt>
         <dd>{submission.invited ? 'Yes' : 'No'}</dd>
-        <dt>Excluded from Judging</dt>
+        <dt>Excluded from Judging?</dt>
         <dd>{submission.excludeFromJudging ? 'Yes' : 'No'}</dd>
         {renderSubmissionByType(submission)}
         <dt>For Sale?</dt>
