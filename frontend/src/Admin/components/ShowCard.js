@@ -19,6 +19,15 @@ const ShowCard = props => (
       <Link to={`show/${props.id}`}>{props.name}</Link>
     </h2>
     <Row>
+      <Col className='text-left'>
+        {moment().isBefore(moment(props.entryStart)) ? (
+          <h5> Pre Show </h5>
+        ) : (
+          <h5> During Submission Period </h5>
+        )}
+      </Col>
+    </Row>
+    <Row>
       <Col>
         <h4>Submission Period</h4>
         <dl>
