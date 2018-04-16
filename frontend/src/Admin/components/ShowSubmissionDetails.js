@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Button } from 'reactstrap'
 import FaPDF from 'react-icons/lib/fa/file-pdf-o'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
@@ -147,6 +147,16 @@ const ShowSubmissionDetails = ({ submission }) => (
         <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
         <dt>More Copies?</dt>
         <dd>{submission.moreCopies ? 'Yes' : 'No'}</dd>
+        {submission.entryType === PHOTO ? (
+          <div className='text-center'>
+            <a
+              href={`${STATIC_PATH}${submission.path}`}
+              target='_blank'
+            >
+              <Button color='primary'>Download</Button>
+            </a>
+          </div>
+        ) : null}
       </dl>
     </Col>
   </Row>
