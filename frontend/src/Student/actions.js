@@ -26,7 +26,7 @@ export const uploadImage = file => (dispatch, getState, client) => {
         }
       })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch((err) => dispatch(displayError(err.message)))
 }
 
 export const uploadPDF = file => (dispatch, getState, client) => {
@@ -48,7 +48,7 @@ export const uploadPDF = file => (dispatch, getState, client) => {
         }
       })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch((err) => dispatch(displayError(err.message)))
 }
 
 export const clearPreview = () => (dispatch, getState, client) => {
