@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import NavBar from '../components/NavBar'
 import { logout, switchToJudge } from '../../shared/actions'
@@ -8,4 +9,4 @@ const mapDispatchToProps = dispatch => ({
   switchToJudge: () => dispatch(switchToJudge())
 })
 
-export default connect(null, mapDispatchToProps)(NavBar)
+export default compose(connect(null, mapDispatchToProps))(NavBar)
