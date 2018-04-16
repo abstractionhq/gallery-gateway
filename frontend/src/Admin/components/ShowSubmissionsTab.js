@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Button, Modal, ModalBody, ModalFooter } from 'reactstrap'
+import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
+import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import FaYouTube from 'react-icons/lib/fa/youtube'
@@ -47,55 +48,73 @@ class ShowSubmissionsTab extends Component {
     super(props)
 
     this.state = {
-      alertVisible: true,
+      alertVisible: false,
       alertType: '',
-      isModalOpen: false
+      isFinalizeConfirmationOpen: false,
+      isSubmissionModalOpen: false,
+      viewingSubmission: null
     }
   }
 
-  toggleFinalizeInviteModal = finalize => {
-    const { finalizeInvites } = this.props
-
+  onDismissFinalizeConfirmation = () => {
     this.setState({
-      isModalOpen: !this.state.isModalOpen
+      isFinalizeConfirmationOpen: false
     })
-    if (finalize) {
-      finalizeInvites()
-    }
   }
 
-  onDismiss = () => {
+  onDismissSubmissionModal = () => {
+    this.setState({
+      isSubmissionModalOpen: false
+    })
+  }
+
+  onDismissAlert = () => {
     this.setState({
       alertVisible: false,
       alertType: ''
     })
   }
 
+  onDisplayFinalizeConfirmation = () => {
+    this.setState({
+      isFinalizeConfirmationOpen: true
+    })
+  }
+
+  onDisplaySubmissionModal = submission => {
+    this.setState({
+      isSubmissionModalOpen: true,
+      viewingSubmission: submission
+    })
+  }
+
+  onDisplayAlert = type => {
+    this.setState({
+      alertVisible: true,
+      alertType: type
+    })
+  }
+
   updateInvitation = (id, value) => {
     const { updateInvite } = this.props
+
     updateInvite(id, value)
       .then(() => {
-        this.setState({
-          alertVisible: true,
-          alertType: SUCCESS
-        })
+        this.onDisplayAlert(SUCCESS)
         setTimeout(() => {
-          this.onDismiss()
+          this.onDismissAlert()
         }, 3000)
       })
       .catch(() => {
-        this.setState({
-          alertVisible: true,
-          alertType: ERROR
-        })
+        this.onDisplayAlert(ERROR)
         setTimeout(() => {
-          this.onDismiss()
+          this.onDismissAlert()
         }, 3000)
       })
   }
 
   render () {
-    const { show } = this.props
+    const { show, finalizeInvites } = this.props
 
     return (
       <Fragment>
@@ -110,7 +129,7 @@ class ShowSubmissionsTab extends Component {
             zIndex: '5'
           }}
           isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
-          toggle={() => this.onDismiss()}
+          toggle={() => this.onDismissAlert()}
           className='text-center'
         >
           Invitation Saved
@@ -125,12 +144,12 @@ class ShowSubmissionsTab extends Component {
             zIndex: '5'
           }}
           isOpen={this.state.alertVisible && this.state.alertType === ERROR}
-          toggle={() => this.onDismiss()}
+          toggle={() => this.onDismissAlert()}
           className='text-center'
         >
           There was an error updating the invitation
         </Alert>
-        <Modal isOpen={this.state.isModalOpen} style={{ top: '25%' }}>
+        <Modal isOpen={this.state.isFinalizeConfirmationOpen} style={{ top: '25%' }}>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
@@ -138,13 +157,16 @@ class ShowSubmissionsTab extends Component {
           <ModalFooter>
             <Button
               color='secondary'
-              onClick={() => this.toggleFinalizeInviteModal(false)}
+              onClick={() => this.onDismissFinalizeConfirmation()}
             >
               Cancel
             </Button>{' '}
             <Button
               color='danger'
-              onClick={() => this.toggleFinalizeInviteModal(true)}
+              onClick={() => {
+                finalizeInvites()
+                this.onDismissFinalizeConfirmation()
+              }}
             >
               Continue
             </Button>
@@ -154,7 +176,7 @@ class ShowSubmissionsTab extends Component {
           <Button
             color={'primary'}
             disabled={show.finalized}
-            onClick={() => this.toggleFinalizeInviteModal(false)}
+            onClick={() => this.onDisplayFinalizeConfirmation()}
           >
             {show.finalized
               ? 'Invitations Are Public'
@@ -192,9 +214,10 @@ class ShowSubmissionsTab extends Component {
                       return <FaVimeo size='2em' />
                     }
                   case 'OTHER':
+                    // TODO: Should ends with .jpg should render the image thumbnail?
                     return <FaBook size='2em' />
                   default:
-                    console.log(submission.entryType)
+                    console.error(`Unexpected Type ${submission.entryType}`, submission)
                     return null
                 }
               },
@@ -204,7 +227,12 @@ class ShowSubmissionsTab extends Component {
             },
             {
               Header: 'Title',
-              accessor: 'title'
+              accessor: 'title',
+              Cell: ({ original: submission }) => (
+                <div style={{ cursor: 'pointer' }} onClick={() => this.onDisplaySubmissionModal(submission)}>
+                  {submission.title}
+                </div>
+              )
             },
             {
               id: 'artist',
@@ -276,6 +304,12 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
+        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal} style={{ minWidth: '50%' }}>
+          <ModalHeader toggle={this.onDismissSubmissionModal}></ModalHeader>
+          <ModalBody>
+            <ShowSubmissionDetails submission={this.state.viewingSubmission} />
+          </ModalBody>
+        </Modal>
       </Fragment>
     )
   }

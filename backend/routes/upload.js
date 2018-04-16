@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-
 import multer from 'multer'
 import mkdirp from 'mkdirp'
 import uuidv4 from 'uuid/v4'

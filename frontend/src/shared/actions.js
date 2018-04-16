@@ -1,3 +1,4 @@
+import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import { push } from 'connected-react-router'
 
@@ -48,17 +49,15 @@ export const switchToAdmin = () => (dispatch, getState, client) => {
 export const getDownloadToken = () => (dispatch, getState, client) => {
   const { shared: { auth: { token } } } = getState()
 
-  return fetch(DOWNLOAD_TOKEN_PATH, {
-    method: 'POST',
+  return axios.post(DOWNLOAD_TOKEN_PATH, null, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   })
-    .then(result => result.json())
-    .then(json =>
+    .then((res) => {
       dispatch({
         type: GET_DOWNLOAD_TOKEN,
-        payload: json.token
+        payload: res.data.token
       })
-    ) // TODO handle errors
+    }) // TODO handle errors
 }
