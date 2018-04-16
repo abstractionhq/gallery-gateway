@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Button } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaPDF from '@fortawesome/fontawesome-free-regular/faFilePdf'
 
-import { getImageThumbnail } from '../../utils'
+import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 // Submission types
 const VIDEO = 'VIDEO'
@@ -30,10 +30,7 @@ const renderSubmissionByType = submission => {
         <Fragment>
           <PhotoThumbnail
             alt={submission.title}
-            // TODO replace this with deployed URL
-            src={`//localhost:3000/static/uploads/${getImageThumbnail(
-              submission.path
-            )}`}
+            src={`${STATIC_PATH}${getImageThumbnail(submission.path)}`}
           />
           <dt>Dimensions</dt>
           <dd>
@@ -80,17 +77,13 @@ const renderSubmissionByType = submission => {
         return (
           <PhotoThumbnail
             alt={submission.title}
-            // TODO replace this with deployed URL
-            src={`//localhost:3000/static/uploads/${getImageThumbnail(
-              submission.path
-            )}`}
+            src={`${STATIC_PATH}${getImageThumbnail(submission.path)}`}
           />
         )
       } else if (submission.path.endsWith('.pdf')) {
         return (
           <a
-            // TODO replace this with deployed URL
-            href={`//localhost:3000/static/uploads/${submission.path}`}
+            href={`${STATIC_PATH}${submission.path}`}
             target='_blank'
           >
             <FontAwesomeIcon icon={FaPDF} className='align-middle' /> View PDF
@@ -155,6 +148,16 @@ const ShowSubmissionDetails = ({ submission }) => (
         <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
         <dt>More Copies?</dt>
         <dd>{submission.moreCopies ? 'Yes' : 'No'}</dd>
+        {submission.entryType === PHOTO ? (
+          <div className='text-center'>
+            <a
+              href={`${STATIC_PATH}${submission.path}`}
+              target='_blank'
+            >
+              <Button color='primary'>View Image</Button>
+            </a>
+          </div>
+        ) : null}
       </dl>
     </Col>
   </Row>
