@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import { Button, ButtonGroup, Row, Col } from 'reactstrap'
+import { Button, Row, Col } from 'reactstrap'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -20,48 +20,72 @@ const ShowCard = props => (
     </h2>
     <Row>
       <Col>
+        <h4>Submission Period</h4>
         <dl>
-          <dt>Submission Starts:</dt>
+          <dt>Opens:</dt>
           <dd>
-            <Moment format='YYYY/MM/DD'>{props.entryStart}</Moment>
+            <Moment format='MMMM D, YYYY'>{props.entryStart}</Moment>
           </dd>
-          <dt>Submission Ends:</dt>
+          <dt>Closes:</dt>
           <dd>
-            <Moment format='YYYY/MM/DD'>{props.entryEnd}</Moment>
+            <Moment format='MMMM D, YYYY'>{props.entryEnd}</Moment>
           </dd>
         </dl>
+        <Button
+          color='primary'
+          className='mr-4'
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`/show/${props.id}`}
+          block
+          outline
+        >
+          View Details
+        </Button>
+        <Button
+          color='warning'
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`/show/${props.id}/submissions`}
+          block
+          outline
+        >
+          View Submissions
+        </Button>
       </Col>
       <Col>
+        <h4>Judging Period</h4>
         <dl>
-          <dt>Judging Starts:</dt>
+          <dt>Opens:</dt>
           <dd>
-            <Moment format='YYYY/MM/DD'>{props.judgingStart}</Moment>
+            <Moment format='MMMM D, YYYY'>{props.judgingStart}</Moment>
           </dd>
-          <dt>Judging Ends:</dt>
+          <dt>Closes:</dt>
           <dd>
-            <Moment format='YYYY/MM/DD'>{props.judgingEnd}</Moment>
+            <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
           </dd>
         </dl>
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        <ButtonGroup>
-          <Button
-            style={{ cursor: 'pointer' }}
-            tag={Link}
-            to={`show/${props.id}`}
-          >
-            View Details
-          </Button>{' '}
-          <Button
-            style={{ cursor: 'pointer' }}
-            tag={Link}
-            to={`show/${props.id}/judges/assign`}
-          >
-            Assign Judges
-          </Button>
-        </ButtonGroup>
+        <Button
+          className='mr-4'
+          color='success'
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`/show/${props.id}/judges`}
+          block
+          outline
+        >
+          View Progress
+        </Button>
+        <Button
+          color='danger'
+          style={{ cursor: 'pointer' }}
+          tag={Link}
+          to={`/show/${props.id}/judges/assign`}
+          block
+          outline
+        >
+          Assign Judges
+        </Button>
       </Col>
     </Row>
   </Card>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Container } from 'reactstrap'
+import React, { Component, Fragment } from 'react'
+import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -9,10 +9,6 @@ import AssignJudgesTable from '../containers/AssignJudgesTable'
 import CreateJudgeForm from '../containers/CreateJudgeForm'
 import NotFound from '../../shared/components/NotFound'
 import { fetchShow } from '../actions'
-
-const Heading = styled.h1`
-  margin-bottom: 25px;
-`
 
 const FormContainer = styled.div`
   margin-top: 25px;
@@ -34,13 +30,22 @@ class AssignJudges extends Component {
 
   renderPage (show) {
     return (
-      <Container fluid>
-        <Heading>{show.name}</Heading>
-        <AssignJudgesTable showId={show.id} />
-        <FormContainer>
-          <CreateJudgeForm />
-        </FormContainer>
-      </Container>
+      <Fragment>
+        <Container>
+          <Row>
+            <Col>
+              <h1>{show.name}</h1>
+            </Col>
+          </Row>
+          <hr />
+        </Container>
+        <Container fluid>
+          <AssignJudgesTable showId={show.id} />
+          <FormContainer>
+            <CreateJudgeForm />
+          </FormContainer>
+        </Container>
+      </Fragment>
     )
   }
 
