@@ -2,8 +2,9 @@
 
 import { expect } from 'chai'
 
+import Vote from '../../models/vote'
 import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutations/show'
-import { fakeShow, fakeUser } from '../factories'
+import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId } from '../factories'
 
 describe('Show Resolvers', function () {
   describe('Create a show', function () {
@@ -112,24 +113,23 @@ describe('Show Resolvers', function () {
         removeFromShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
       ).to.throw(/Permission Denied/)
     })
-    it('Notifies when show does not exist', function (done) {
-      const input = {show: 50, usernames: ['user1']}
-      removeFromShow('', input, {auth: {type: 'ADMIN'}})
-        .catch((err) => {
-          expect(err).to.exist
-          expect(err.message).to.equal('Show Not Found')
-          done()
-        })
-    })
-    it('Does not allow an empty list of usernames', function (done) {
-      fakeShow().then((s) => {
-        const input = {showId: s.id, usernames: []}
-        removeFromShow('', input, {auth: {type: 'ADMIN'}})
+    it('Notifies when show does not exist', () =>
+      fakeShow().then(show => {
+        const input = {showId: show.id, usernames: ['user1']}
+        return removeFromShow('', input, {auth: {type: 'ADMIN'}})
           .catch((err) => {
             expect(err).to.exist
-            expect(err.message).to.equal('Please input one or more usernames')
-            done()
+            expect(err.message).to.equal('Show Not Found')
           })
+      })
+    )
+    it('Does not allow an empty list of usernames', function (done) {
+      fakeShow().then((s) => {
+        expect(() => {
+          const input = {showId: s.id, usernames: []}
+          removeFromShow('', input, {auth: {type: 'ADMIN'}})
+        }).to.throw(/Please input one or more usernames/)
+        done()
       })
     })
     it('Removes input users from show', function (done) {
@@ -145,5 +145,34 @@ describe('Show Resolvers', function () {
         })
       })
     })
+    it('Removes input users\'s votes from the show', () =>
+      Promise.all([fakeShow(), fakeUser(), fakeUser()])
+        .then(([show, user1, user2]) =>
+          show.addUsers([user1.username, user2.username])
+            .then(() => fakeImageEntry({show}))
+            .then(entry =>
+              fakeVoteReturnShowId({entry, user: user1})
+                .then(() => fakeVoteReturnShowId({entry, user: user2}))
+                .then(() => {
+                  const input = {showId: show.id, usernames: [user1.username]}
+                  return removeFromShow('', input, {auth: {type: 'ADMIN'}})
+                    .then((result) => {
+                      expect(result).to.exist
+                      expect(result).to.equal(true)
+                      // make sure that the judge's vote no longer exists
+                      return Vote.count({where: {judgeUsername: user1.username}})
+                        .then(count => {
+                          expect(count).to.eq(0)
+                        })
+                        // make sure the second judge's vote still exists
+                        .then(() => Vote.count({where: {judgeUsername: user2.username}}))
+                        .then(count => {
+                          expect(count).to.eq(1)
+                        })
+                    })
+                })
+            )
+        )
+    )
   })
 })

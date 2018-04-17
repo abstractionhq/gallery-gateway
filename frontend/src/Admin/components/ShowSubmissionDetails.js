@@ -81,10 +81,7 @@ const renderSubmissionByType = submission => {
         )
       } else if (submission.path.endsWith('.pdf')) {
         return (
-          <a
-            href={`${STATIC_PATH}${submission.path}`}
-            target='_blank'
-          >
+          <a href={`${STATIC_PATH}${submission.path}`} target='_blank'>
             <FaPDF /> View PDF
           </a>
         )
@@ -149,10 +146,7 @@ const ShowSubmissionDetails = ({ submission }) => (
         <dd>{submission.moreCopies ? 'Yes' : 'No'}</dd>
         {submission.entryType === PHOTO ? (
           <div className='text-center'>
-            <a
-              href={`${STATIC_PATH}${submission.path}`}
-              target='_blank'
-            >
+            <a href={`${STATIC_PATH}${submission.path}`} target='_blank'>
               <Button color='primary'>View Image</Button>
             </a>
           </div>

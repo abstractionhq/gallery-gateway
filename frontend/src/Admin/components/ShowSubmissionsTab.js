@@ -1,5 +1,12 @@
 import React, { Component, Fragment } from 'react'
-import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
@@ -9,6 +16,7 @@ import FaVimeo from 'react-icons/lib/fa/vimeo'
 import FaStar from 'react-icons/lib/fa/star'
 import FaStarOpen from 'react-icons/lib/fa/star-o'
 import FaBook from 'react-icons/lib/fa/book'
+import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -149,7 +157,14 @@ class ShowSubmissionsTab extends Component {
         >
           There was an error updating the invitation
         </Alert>
-        <Modal isOpen={this.state.isFinalizeConfirmationOpen} style={{ top: '25%' }}>
+        <Modal
+          isOpen={this.state.isFinalizeConfirmationOpen}
+          toggle={this.onDismissFinalizeConfirmation}
+          style={{ top: '25%' }}
+        >
+          <ModalHeader toggle={this.onDismissFinalizeConfirmation}>
+            Warning <FaExclamationTriangle />
+          </ModalHeader>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
@@ -217,7 +232,10 @@ class ShowSubmissionsTab extends Component {
                     // TODO: Should ends with .jpg should render the image thumbnail?
                     return <FaBook size='2em' />
                   default:
-                    console.error(`Unexpected Type ${submission.entryType}`, submission)
+                    console.error(
+                      `Unexpected Type ${submission.entryType}`,
+                      submission
+                    )
                     return null
                 }
               },
@@ -229,7 +247,10 @@ class ShowSubmissionsTab extends Component {
               Header: 'Title',
               accessor: 'title',
               Cell: ({ original: submission }) => (
-                <div style={{ cursor: 'pointer' }} onClick={() => this.onDisplaySubmissionModal(submission)}>
+                <div
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.onDisplaySubmissionModal(submission)}
+                >
                   {submission.title}
                 </div>
               )
@@ -304,8 +325,12 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
-        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal} style={{ minWidth: '50%' }}>
-          <ModalHeader toggle={this.onDismissSubmissionModal}></ModalHeader>
+        <Modal
+          isOpen={this.state.isSubmissionModalOpen}
+          toggle={this.onDismissSubmissionModal}
+          style={{ minWidth: '50%' }}
+        >
+          <ModalHeader toggle={this.onDismissSubmissionModal} />
           <ModalBody>
             <ShowSubmissionDetails submission={this.state.viewingSubmission} />
           </ModalBody>

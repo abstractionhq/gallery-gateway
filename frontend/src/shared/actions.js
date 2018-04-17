@@ -49,12 +49,13 @@ export const switchToAdmin = () => (dispatch, getState, client) => {
 export const getDownloadToken = () => (dispatch, getState, client) => {
   const { shared: { auth: { token } } } = getState()
 
-  return axios.post(DOWNLOAD_TOKEN_PATH, null, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-    .then((res) => {
+  return axios
+    .post(DOWNLOAD_TOKEN_PATH, null, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
       dispatch({
         type: GET_DOWNLOAD_TOKEN,
         payload: res.data.token
