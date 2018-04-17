@@ -13,6 +13,4 @@ const mapDispatchToProps = dispatch => ({
   switchToAdmin: () => dispatch(switchToAdmin())
 })
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
-)(NavBar)
+export default compose(connect(mapStateToProps, mapDispatchToProps))(NavBar)

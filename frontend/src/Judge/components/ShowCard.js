@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import { Button, Col } from 'reactstrap'
+import { Button, Row, Col } from 'reactstrap'
 import moment from 'moment'
 
 const Card = styled.div`
@@ -13,71 +13,60 @@ const Card = styled.div`
   padding: 10px;
   width: 100%;
 `
-const ButtonContainer = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-`
 
-const DuringJudging = ({ ownVotes, entries, judgingEnd, id }) => (
-  <div>
-    <Col>
-      <dl>
-        <dt>Judging Progress:</dt>
-        <dd>
-          {ownVotes.length} / {entries.length}
-        </dd>
-        <dt>Judging Ends:</dt>
-        <dd>
-          <Moment format='YYYY/MM/DD'>{judgingEnd}</Moment>
-        </dd>
-      </dl>
-    </Col>
-    <Col>
-      <ButtonContainer>
-        <Button
-          size='lg'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`show/${id}/vote`}
-        >
-          {ownVotes.length === 0
-            ? 'Start'
-            : ownVotes.length === entries.length ? 'Review' : 'Resume'}
-        </Button>
-      </ButtonContainer>
-    </Col>
-  </div>
+const BeforeJudging = () => (
+  <Col className='text-center mt-5'>
+    Judging hasn't started yet. Come back to vote soon!
+  </Col>
 )
 
-const BeforeJudging = ({ judgingStart, judgingEnd }) => (
-  <div>
-    <Col>
-      <div> Judging has not started yet. Come back to vote soon! </div>
-      <dl>
-        <dt>Judging Starts:</dt>
-        <dd>
-          <Moment format='YYYY/MM/DD'>{judgingStart}</Moment>
-        </dd>
-        <dt>Judging Ends:</dt>
-        <dd>
-          <Moment format='YYYY/MM/DD'>{judgingEnd}</Moment>
-        </dd>
-      </dl>
-    </Col>
-  </div>
+const DuringJudging = ({ ownVotes, entries, id }) => (
+  <Col>
+    <h4>Progress</h4>
+    <p>{ownVotes.length} / {entries.length}</p>
+    <Button
+      className='mt-5'
+      style={{ cursor: 'pointer' }}
+      color='primary'
+      block
+      tag={Link}
+      to={`show/${id}/vote`}
+    >
+      {ownVotes.length === 0
+        ? 'Start'
+        : ownVotes.length === entries.length ? 'Review' : 'Resume'}
+    </Button>
+  </Col>
 )
+
+// NOTE: We don't have to handle the 'isAfter' case because the card
+// will not be visible after the judging period has ended
+const renderBasedOnJudgingPeriod = (props) => {
+  if (moment().isBefore(moment(props.judgingStart))) {
+    return <BeforeJudging />
+  }
+  return <DuringJudging {...props} />
+}
 
 const ShowCard = props => (
   <Card>
-    <h2>
-      <Link to={`show/${props.id}`}>{props.name}</Link>
-    </h2>
-    {moment().isBefore(moment(props.judgingStart)) ? (
-      <BeforeJudging {...props} />
-    ) : (
-      <DuringJudging {...props} />
-    )}
+    <h2>{props.name}</h2>
+    <Row>
+      <Col>
+        <h4>Judging Period</h4>
+        <dl>
+          <dt>Opens:</dt>
+          <dd>
+            <Moment format='MMMM D, YYYY'>{props.judgingStart}</Moment>
+          </dd>
+          <dt>Closes:</dt>
+          <dd>
+            <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
+          </dd>
+        </dl>
+      </Col>
+      {renderBasedOnJudgingPeriod(props)}
+    </Row>
   </Card>
 )
 

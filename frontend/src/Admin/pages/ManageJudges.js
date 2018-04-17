@@ -69,6 +69,6 @@ const mapDispatchToProps = dispatch => ({
   fetchJudges: () => dispatch(fetchJudges())
 })
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
-)(ManageJudges)
+export default compose(connect(mapStateToProps, mapDispatchToProps))(
+  ManageJudges
+)

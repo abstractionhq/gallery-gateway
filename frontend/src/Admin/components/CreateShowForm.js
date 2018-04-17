@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, FormGroup, FormFeedback, Label, Button, Row, Col } from 'reactstrap'
+import {
+  Form,
+  FormGroup,
+  FormFeedback,
+  Label,
+  Button,
+  Row,
+  Col
+} from 'reactstrap'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
 import styled from 'styled-components'
@@ -12,7 +20,8 @@ import FormikDateRangePicker from '../../shared/components/FormikDateRangePicker
 // eg.
 //   startDate: yup.date(),
 //   endDate: yup.date().isAfter(yup.ref('startDate'), 'End Date must come after Start Date'),
-yup.addMethod(yup.date, 'isAfter', function isAfter (ref, msg) { // Can't use arrow function because we rely on 'this' referencing yup's internals
+yup.addMethod(yup.date, 'isAfter', function isAfter (ref, msg) {
+  // Can't use arrow function because we rely on 'this' referencing yup's internals
   return this.test({
     name: 'isAfter',
     exclusive: true, // Validation errors don't stack
@@ -67,19 +76,38 @@ class CreateShowForm extends Component {
         validationSchema={yup.object().shape({
           name: yup.string().required('Required'),
           description: yup.string(),
-          entryCap: yup.number().integer('Must be an integer').min(1, 'Must be at least 1').required('Required'),
-          entryStart: yup.date().nullable().required('Start Date is Required'),
-          entryEnd: yup.date()
+          entryCap: yup
+            .number()
+            .integer('Must be an integer')
+            .min(1, 'Must be at least 1')
+            .required('Required'),
+          entryStart: yup
+            .date()
             .nullable()
-            .isAfter(yup.ref('entryStart'), 'Submission End Date must be after Submission Start Date')
-            .required('End Date is Required'),
-          judgingStart: yup.date()
-            .nullable()
-            .isAfter(yup.ref('entryEnd'), 'Judging Start Date must be after Submission End Date')
             .required('Start Date is Required'),
-          judgingEnd: yup.date()
+          entryEnd: yup
+            .date()
             .nullable()
-            .isAfter(yup.ref('judgingStart'), 'Judging End Date must be after Judging Start Date')
+            .isAfter(
+              yup.ref('entryStart'),
+              'Submission End Date must be after Submission Start Date'
+            )
+            .required('End Date is Required'),
+          judgingStart: yup
+            .date()
+            .nullable()
+            .isAfter(
+              yup.ref('entryEnd'),
+              'Judging Start Date must be after Submission End Date'
+            )
+            .required('Start Date is Required'),
+          judgingEnd: yup
+            .date()
+            .nullable()
+            .isAfter(
+              yup.ref('judgingStart'),
+              'Judging End Date must be after Judging Start Date'
+            )
             .required('End Date is Required')
         })}
         onSubmit={values => {

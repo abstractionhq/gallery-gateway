@@ -8,6 +8,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout())
 })
 
-export default compose(
-  connect(null, mapDispatchToProps)
-)(NavBar)
+export default compose(connect(null, mapDispatchToProps))(NavBar)
