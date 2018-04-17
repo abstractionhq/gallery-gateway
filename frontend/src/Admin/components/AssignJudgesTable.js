@@ -26,8 +26,9 @@ class AssignJudgesTable extends Component {
     }),
     assign: PropTypes.func.isRequired,
     unassign: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     afterAssign: PropTypes.func.isRequired,
-    afterUnassign: PropTypes.func.isRequired
+    afterUnassign: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -57,7 +58,7 @@ class AssignJudgesTable extends Component {
           selectedUnassignedJudges: {},
           selectedAssignedJudges: {}
         })
-      })
+      }).catch(err => this.props.handleError(err.message))
     }
   }
 
@@ -72,7 +73,7 @@ class AssignJudgesTable extends Component {
           selectedUnassignedJudges: {},
           selectedAssignedJudges: {}
         })
-      })
+      }).catch(err => this.props.handleError(err.message))
     }
   }
 
