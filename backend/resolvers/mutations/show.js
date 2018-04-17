@@ -1,4 +1,7 @@
+import db from '../../config/sequelize'
 import Show from '../../models/show'
+import Vote from '../../models/vote'
+import Entry from '../../models/entry'
 import { UserError } from 'graphql-errors'
 import { ADMIN } from '../../constants'
 
@@ -46,14 +49,22 @@ export function removeFromShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')
   }
-  return Show.findOne({ where: { id: args.showId } }).then((show) => {
-    if (show === null) {
-      throw new UserError('Show Not Found')
-    }
-    if (args.usernames.length < 1) {
-      throw new UserError('Please input one or more usernames')
-    }
-    return show
-      .removeUsers(args.usernames)
-  }).then(() => { return true })
+  if (args.usernames.length < 1) {
+    throw new UserError('Please input one or more usernames')
+  }
+  return db.transaction(transaction =>
+    Show.findOne({ where: { id: args.showId }, transaction })
+      .then((show) => {
+        if (show === null) {
+          throw new UserError('Show Not Found')
+        }
+
+        return show.removeUsers(args.usernames, {transaction})
+      })
+      .then(() => Entry.findAll({where: {showId: args.showId}, transaction}))
+      .then(entries => {
+        const entryIds = entries.map(entry => entry.id)
+        return Vote.destroy({where: {entryId: entryIds, judgeUsername: args.usernames}, transaction})
+      })
+  ).then(() => { return true })
 }

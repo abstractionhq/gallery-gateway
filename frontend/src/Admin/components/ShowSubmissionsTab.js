@@ -16,6 +16,7 @@ import FaVimeo from 'react-icons/lib/fa/vimeo'
 import FaStar from 'react-icons/lib/fa/star'
 import FaStarOpen from 'react-icons/lib/fa/star-o'
 import FaBook from 'react-icons/lib/fa/book'
+import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -158,8 +159,12 @@ class ShowSubmissionsTab extends Component {
         </Alert>
         <Modal
           isOpen={this.state.isFinalizeConfirmationOpen}
+          toggle={this.onDismissFinalizeConfirmation}
           style={{ top: '25%' }}
         >
+          <ModalHeader toggle={this.onDismissFinalizeConfirmation}>
+            Warning <FaExclamationTriangle />
+          </ModalHeader>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
