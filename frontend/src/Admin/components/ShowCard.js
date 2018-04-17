@@ -43,7 +43,7 @@ const ShowCard = props => (
           View Details
         </Button>
         <Button
-          color='warning'
+          color='primary'
           style={{ cursor: 'pointer' }}
           tag={Link}
           to={`/show/${props.id}/submissions`}
@@ -67,7 +67,7 @@ const ShowCard = props => (
         </dl>
         <Button
           className='mr-4'
-          color='success'
+          color='primary'
           style={{ cursor: 'pointer' }}
           tag={Link}
           to={`/show/${props.id}/judges`}
@@ -77,7 +77,7 @@ const ShowCard = props => (
           View Progress
         </Button>
         <Button
-          color='danger'
+          color='primary'
           style={{ cursor: 'pointer' }}
           tag={Link}
           to={`/show/${props.id}/judges/assign`}
