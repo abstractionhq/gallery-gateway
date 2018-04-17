@@ -57,6 +57,6 @@ const mapDispatchToProps = dispatch => ({
   fetchData: showId => dispatch(fetchShow(showId))
 })
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
-)(AssignJudges)
+export default compose(connect(mapStateToProps, mapDispatchToProps))(
+  AssignJudges
+)

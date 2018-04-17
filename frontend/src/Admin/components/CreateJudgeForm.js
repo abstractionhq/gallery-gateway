@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Form, FormGroup, FormFeedback, Label, Button, Row, Col } from 'reactstrap'
+import {
+  Form,
+  FormGroup,
+  FormFeedback,
+  Label,
+  Button,
+  Row,
+  Col
+} from 'reactstrap'
 import { Formik, Field } from 'formik'
 import yup from 'yup'
 
@@ -44,13 +52,7 @@ class CreateJudgeForm extends Component {
 
           create(input).then(resetForm()) // Clear the form after submitted
         }}
-        render={({
-          values,
-          errors,
-          touched,
-          handleSubmit,
-          isSubmitting
-        }) => (
+        render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
             <h3>Add New Judge</h3>
             <Row>

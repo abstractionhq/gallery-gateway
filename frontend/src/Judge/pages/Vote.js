@@ -92,7 +92,15 @@ class Vote extends Component {
   }
 
   render () {
-    const { setViewing, submission, previous, next, vote, totalSubmissions, currentIndex } = this.props
+    const {
+      setViewing,
+      submission,
+      previous,
+      next,
+      vote,
+      totalSubmissions,
+      currentIndex
+    } = this.props
 
     return (
       <Container fluid>
@@ -113,7 +121,9 @@ class Vote extends Component {
                 ) : null}
               </Col>
               <Col xs='10'>
-                <Progress>{currentIndex} / {totalSubmissions}</Progress>
+                <Progress>
+                  {currentIndex} / {totalSubmissions}
+                </Progress>
                 {submission ? <Submission submission={submission} /> : null}
               </Col>
               <Col xs='1'>
@@ -215,6 +225,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
-)(Vote)
+export default compose(connect(mapStateToProps, mapDispatchToProps))(Vote)
