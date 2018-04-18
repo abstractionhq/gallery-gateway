@@ -32,6 +32,7 @@ class ShowSubmissionsTab extends Component {
   static propTypes = {
     updateInvite: PropTypes.func.isRequired,
     finalizeInvites: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     show: PropTypes.shape({
       finalized: PropTypes.bool.isRequired,
       entries: PropTypes.arrayOf(
@@ -84,13 +85,13 @@ class ShowSubmissionsTab extends Component {
   }
 
   updateInvitation = (id, value) => {
-    const { updateInvite } = this.props
+    const { updateInvite, handleError } = this.props
 
-    updateInvite(id, value)
+    updateInvite(id, value).catch(err => handleError(err.message))
   }
 
   render () {
-    const { show, finalizeInvites } = this.props
+    const { show, finalizeInvites, handleError } = this.props
 
     return (
       <Fragment>
@@ -116,7 +117,7 @@ class ShowSubmissionsTab extends Component {
             <Button
               color='danger'
               onClick={() => {
-                finalizeInvites()
+                finalizeInvites().catch(err => handleError(err.message))
                 this.onDismissFinalizeConfirmation()
               }}
             >

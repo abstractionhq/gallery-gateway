@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import { uploadImage, clearPreview } from '../actions'
+import { displayError } from '../../shared/actions'
 
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm'
 import CreatePhotoEntry from '../mutations/createPhotoEntry.graphql'
@@ -17,7 +18,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/')),
   handleUpload: file => dispatch(uploadImage(file)),
-  clearPreview: () => dispatch(clearPreview())
+  clearPreview: () => dispatch(clearPreview()),
+  handleError: (message) => dispatch(displayError(message))
   // TODO: Removing an image -> you upload, but change your mind; put a 'x' on the top right corner
 })
 

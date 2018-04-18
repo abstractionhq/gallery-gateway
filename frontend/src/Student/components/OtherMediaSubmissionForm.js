@@ -58,6 +58,7 @@ class OtherSubmissionForm extends Component {
     previewFile: PropTypes.object.isRequired,
     create: PropTypes.func.isRequired,
     done: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     clearPreview: PropTypes.func.isRequired
   }
 
@@ -155,7 +156,7 @@ class OtherSubmissionForm extends Component {
       return null
     }
 
-    const { create, done, user } = this.props
+    const { create, done, user, handleError } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
@@ -232,11 +233,13 @@ class OtherSubmissionForm extends Component {
             }
 
             // Create an entry, show the success modal, and then go to the dashboard
-            create(input).then(() => {
+            create(input)
+            .then(() => {
               this.setState({ showModal: true }, () => {
                 setTimeout(done, 2000)
               })
             })
+            .catch(err => handleError(err.message))
             // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (

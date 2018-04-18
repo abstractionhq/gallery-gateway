@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import { fetchVote } from '../actions'
+import { displayError } from '../../shared/actions'
 import VotePanel from '../components/VotePanel'
 import SendVote from '../mutations/sendVote.graphql'
 
@@ -11,7 +12,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchVote: submissionId => dispatch(fetchVote(submissionId))
+  fetchVote: submissionId => dispatch(fetchVote(submissionId)),
+  handleError: (message) => dispatch(displayError(message))
 })
 
 export default compose(

@@ -2,6 +2,7 @@ import { graphql } from 'react-apollo'
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
+import { displayError } from '../../shared/actions'
 
 import VideoSubmissionForm from '../components/VideoSubmissionForm'
 import CreateVideoEntry from '../mutations/createVideoEntry.graphql'
@@ -12,7 +13,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  done: () => dispatch(push('/'))
+  done: () => dispatch(push('/')),
+  handleError: (message) => dispatch(displayError(message))
 })
 
 export default compose(

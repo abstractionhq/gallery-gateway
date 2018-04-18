@@ -22,6 +22,7 @@ const VotingContainer = styled.div`
 
 class VotePanel extends Component {
   static propTypes = {
+    handleError: PropTypes.func.isRequired,
     makeVote: PropTypes.func.isRequired,
     vote: PropTypes.shape({
       value: PropTypes.number
@@ -45,7 +46,7 @@ class VotePanel extends Component {
   }
 
   handleVote = value => {
-    const { makeVote } = this.props
+    const { makeVote, handleError } = this.props
 
     makeVote(value)
       .then(() => {
@@ -56,6 +57,7 @@ class VotePanel extends Component {
           this.onDismiss()
         }, 2000)
       })
+      .catch(err => handleError(err.message))
   }
 
   handleKeyInput = e => {
