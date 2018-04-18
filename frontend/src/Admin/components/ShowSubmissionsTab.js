@@ -10,6 +10,7 @@ import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
 import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
 import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
+import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -87,7 +88,14 @@ class ShowSubmissionsTab extends Component {
 
     return (
       <Fragment>
-        <Modal isOpen={this.state.isFinalizeConfirmationOpen} style={{ top: '25%' }}>
+        <Modal
+          isOpen={this.state.isFinalizeConfirmationOpen}
+          toggle={this.onDismissFinalizeConfirmation}
+          style={{ top: '25%' }}
+        >
+          <ModalHeader toggle={this.onDismissFinalizeConfirmation}>
+            Warning <FontAwesomeIcon icon={FaExclamationTriangle} className='align-middle' />
+          </ModalHeader>
           <ModalBody>
             This is a permanent action and will make invitations for this show
             visible to all students.
