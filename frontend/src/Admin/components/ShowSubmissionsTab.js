@@ -1,5 +1,11 @@
 import React, { Component, Fragment } from 'react'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
@@ -163,7 +169,10 @@ class ShowSubmissionsTab extends Component {
                     // TODO: Should ends with .jpg should render the image thumbnail?
                     return <FontAwesomeIcon icon={FaBook} size='2x' />
                   default:
-                    console.error(`Unexpected Type ${submission.entryType}`, submission)
+                    console.error(
+                      `Unexpected Type ${submission.entryType}`,
+                      submission
+                    )
                     return null
                 }
               },
@@ -175,7 +184,10 @@ class ShowSubmissionsTab extends Component {
               Header: 'Title',
               accessor: 'title',
               Cell: ({ original: submission }) => (
-                <div style={{ cursor: 'pointer' }} onClick={() => this.onDisplaySubmissionModal(submission)}>
+                <div
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => this.onDisplaySubmissionModal(submission)}
+                >
                   {submission.title}
                 </div>
               )
@@ -250,8 +262,12 @@ class ShowSubmissionsTab extends Component {
             }
           ]}
         />
-        <Modal isOpen={this.state.isSubmissionModalOpen} toggle={this.onDismissSubmissionModal} style={{ minWidth: '50%' }}>
-          <ModalHeader toggle={this.onDismissSubmissionModal}></ModalHeader>
+        <Modal
+          isOpen={this.state.isSubmissionModalOpen}
+          toggle={this.onDismissSubmissionModal}
+          style={{ minWidth: '50%' }}
+        >
+          <ModalHeader toggle={this.onDismissSubmissionModal} />
           <ModalBody>
             <ShowSubmissionDetails submission={this.state.viewingSubmission} />
           </ModalBody>

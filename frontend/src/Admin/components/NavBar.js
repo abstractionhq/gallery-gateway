@@ -57,11 +57,6 @@ export default class NavBar extends Component {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to='/reports'>
-                  Reports
-                </NavLink>
-              </NavItem>
-              <NavItem>
                 <Link to='/' className='nav-link' onClick={this.props.logout}>
                   Logout
                 </Link>

@@ -10,7 +10,7 @@ export function up (queryInterface, Sequelize) {
       username: 'user2',
       firstName: 'Jane',
       lastName: 'Doe',
-      type: 'ADMIN'
+      type: 'JUDGE'
     },
     {
       username: 'user3',
@@ -34,7 +34,7 @@ export function up (queryInterface, Sequelize) {
       username: 'user6',
       firstName: 'Uma',
       lastName: 'Thurman',
-      type: 'JUDGE'
+      type: 'STUDENT'
     },
     {
       username: 'user7',

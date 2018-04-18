@@ -22,7 +22,7 @@ const CenteredSubHeading = styled.h2`
 `
 
 const ReassignButtonContainer = styled.div`
-  margin-bottom: 5em;
+  margin: 2em 0;
 `
 
 class AssignJudgesTable extends Component {
