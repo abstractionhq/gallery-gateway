@@ -1,6 +1,7 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
 
@@ -41,14 +42,16 @@ module.exports = {
       filename: '../index.html',
       template: './src/index.ejs'
     }),
-    new webpack.optimize.UglifyJsPlugin({
+    new UglifyJSPlugin({
       parallel: true,
       sourceMap: false,
-      compress: {
-        warnings: false
-      },
-      output: {
-        comments: false
+      uglifyOptions: {
+        compress: {
+          warnings: false
+        },
+        output: {
+          comments: false
+        }
       }
     }),
     new ExtractTextPlugin({
@@ -69,7 +72,7 @@ module.exports = {
       {
         test: /\.(graphql|gpl)$/,
         loaders: ['graphql-tag/loader'],
-        exclude: /node_moduels/
+        exclude: /node_modules/
       },
       {
         test: /\.css$/,
