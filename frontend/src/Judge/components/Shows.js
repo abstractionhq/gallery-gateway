@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -11,21 +11,39 @@ const NoShowsContainer = styled.div`
   transform: translate(-50%, -50%);
   font-size: large;
 `
-
-const Shows = ({ user, loading }) => (
-  <div>
-    {loading ? null : user.shows.length ? (
-      user.shows.map(show => <ShowCard key={show.id} {...show} />)
-    ) : (
+class Shows extends Component {
+  renderShows = user  => {
+    if (user && user.shows.length){
+      return user.shows.map(show => <ShowCard key={show.id} {...show} />)
+    } 
+    return (
       <NoShowsContainer>
         You are not currently assigned to any future shows
       </NoShowsContainer>
-    )}
-  </div>
-)
+    )
+  }
+
+  render () {
+    const { loading, user, error, handleError } = this.props
+
+    // TODO: Move this somewhere else. This makes the 'render' function impure and React throws a warning.
+    if (error) {
+      error.graphQLErrors.forEach((e) => {
+        handleError(e.message)
+      })
+    }
+
+    return (
+      <div>
+        {loading ? null : this.renderShows(user)}
+      </div>
+    )
+  }
+} 
 
 Shows.propTypes = {
   user: PropTypes.object,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.object
 }
 export default Shows
