@@ -78,6 +78,14 @@ class OtherSubmissionForm extends Component {
     props.clearPreview()
   }
 
+  componentDidUpdate() {
+    if (this.props.data.error) {
+      this.props.data.error.graphQLErrors.forEach((e) => {
+        this.props.handleError(e.message)
+      })
+    }
+  }
+
   renderFileUpload = (field, form) => {
     const { name } = field
     const { setFieldValue } = form
@@ -151,11 +159,7 @@ class OtherSubmissionForm extends Component {
     return null
   }
 
-  render () {
-    if (this.props.data.loading) {
-      return null
-    }
-
+  renderShow = () => {
     const { create, done, user, handleError } = this.props
     const forShow = {
       id: this.props.data.show.id,
@@ -421,6 +425,17 @@ class OtherSubmissionForm extends Component {
         <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
     )
+  }
+
+  render () {
+    if (this.props.loading) {
+      return null
+    }
+    if (this.props.data.show) {
+      return this.renderShow()
+    } else {
+      return null
+    }
   }
 }
 

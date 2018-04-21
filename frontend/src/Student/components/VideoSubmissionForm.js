@@ -60,6 +60,14 @@ class VideoSubmissionForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.data.error) {
+      this.props.data.error.graphQLErrors.forEach((e) => {
+        this.props.handleError(e.message)
+      })
+    }
+  }
+
   renderErrors = (touched, errors, field) => {
     // Render feedback if this field's been touched and has errors
     if (touched[field] && errors[field]) {
@@ -74,11 +82,7 @@ class VideoSubmissionForm extends Component {
     return null
   }
 
-  render () {
-    if (this.props.data.loading) {
-      return null
-    }
-
+  renderShow = () => {
     const { create, done, user, handleError } = this.props
     const forShow = {
       id: this.props.data.show.id,
@@ -348,6 +352,17 @@ class VideoSubmissionForm extends Component {
         <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
     )
+  }
+
+  render () {
+    if (this.props.loading) {
+      return null
+    }
+    if (this.props.data.show) {
+      return this.renderShow()
+    } else {
+      return null
+    }
   }
 }
 

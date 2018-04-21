@@ -52,7 +52,9 @@ class PhotoSubmissionForm extends Component {
             })
           })
         )
-      })
+      }),
+      error: PropTypes.object,
+      loading: PropTypes.bool
     }).isRequired,
     handleUpload: PropTypes.func.isRequired,
     previewImage: PropTypes.object.isRequired,
@@ -76,6 +78,14 @@ class PhotoSubmissionForm extends Component {
     // and comes back to this form, or a user makes a submission and comes back to
     // this page to make another submission.
     props.clearPreview()
+  }
+
+  componentDidUpdate() {
+    if (this.props.data.error) {
+      this.props.data.error.graphQLErrors.forEach((e) => {
+        this.props.handleError(e.message)
+      })
+    }
   }
 
   renderFileUpload = (field, form) => {
@@ -141,12 +151,8 @@ class PhotoSubmissionForm extends Component {
     return null
   }
 
-  render () {
-    if (this.props.data.loading) {
-      return null
-    }
-
-    const { create, done, user, handleError } = this.props
+  renderShow = () => {
+    const { create, done, user, handleError, loading } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
@@ -497,6 +503,17 @@ class PhotoSubmissionForm extends Component {
         <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
     )
+  }
+
+  render () {
+    if (this.props.loading) {
+      return null
+    }
+    if (this.props.data.show) {
+      return this.renderShow()
+    } else {
+      return null
+    }
   }
 }
 
