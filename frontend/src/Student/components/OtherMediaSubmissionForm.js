@@ -240,7 +240,6 @@ class OtherSubmissionForm extends Component {
               })
             })
             .catch(err => handleError(err.message))
-            // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>

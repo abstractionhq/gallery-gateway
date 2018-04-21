@@ -23,15 +23,17 @@ class Shows extends Component {
     return shows.map(show => <ShowCard key={show.id} show={show} />)
   }
 
-  render () {
-    const { loading, shows, error, handleError } = this.props
-
-    // TODO: Move this somewhere else. This makes the 'render' function impure and React throws a warning.
+  componentDidUpdate() {
+    const { error, handleError } = this.props
     if (error) {
       error.graphQLErrors.forEach((e) => {
         handleError(e.message)
       })
     }
+  }
+
+  render () {
+    const { loading, shows } = this.props
 
     return (
       <div>

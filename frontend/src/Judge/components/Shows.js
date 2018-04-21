@@ -12,6 +12,16 @@ const NoShowsContainer = styled.div`
   font-size: large;
 `
 class Shows extends Component {
+
+  componentDidUpdate() {
+    const { error, handleError } = this.props
+    if (error) {
+      error.graphQLErrors.forEach((e) => {
+        handleError(e.message)
+      })
+    }
+  }
+  
   renderShows = user  => {
     if (user && user.shows.length){
       return user.shows.map(show => <ShowCard key={show.id} {...show} />)
@@ -24,14 +34,7 @@ class Shows extends Component {
   }
 
   render () {
-    const { loading, user, error, handleError } = this.props
-
-    // TODO: Move this somewhere else. This makes the 'render' function impure and React throws a warning.
-    if (error) {
-      error.graphQLErrors.forEach((e) => {
-        handleError(e.message)
-      })
-    }
+    const { loading, user } = this.props
 
     return (
       <div>
