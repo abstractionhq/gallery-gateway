@@ -18,6 +18,7 @@ import yup from 'yup'
 import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
 import SubmitAsGroupRadio from './SubmitAsGroupRadio'
+import Loading from '../../shared/components/Loading'
 
 const Header = styled.h1`
   margin-bottom: 10px;
@@ -507,7 +508,7 @@ class PhotoSubmissionForm extends Component {
 
   render () {
     if (this.props.loading) {
-      return null
+      return <Loading />
     }
     if (this.props.data.show) {
       return this.renderShow()

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import ShowCard from '../components/ShowCard'
+import Loading from '../../shared/components/Loading'
 
 const NoShowsContainer = styled.div`
   font-size: large;
@@ -37,7 +38,7 @@ class Shows extends Component {
 
     return (
       <div>
-        {loading ? null : this.renderShows(shows)}
+        {loading ? <Loading /> : this.renderShows(shows)}
       </div>
     )
   } 

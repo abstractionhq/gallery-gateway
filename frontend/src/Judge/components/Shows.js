@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import ShowCard from '../components/ShowCard'
+import Loading from '../../shared/components/Loading'
 
 const NoShowsContainer = styled.div`
   position: fixed;
@@ -38,7 +39,7 @@ class Shows extends Component {
 
     return (
       <div>
-        {loading ? null : this.renderShows(user)}
+        {loading ? <Loading /> : this.renderShows(user)}
       </div>
     )
   }
