@@ -69,10 +69,24 @@ const test = {
   charset: 'utf8mb4'
 }
 
+const production = {
+  dialect: 'mysql',
+  host: HOST,
+  database: DB,
+  username: USER,
+  password: PASSWORD,
+  port: 3306,
+  operatorAliases: operatorAliases,
+  // See: https://mathiasbynens.be/notes/mysql-utf8mb4
+  // See: https://github.com/mysqljs/mysql#connection-options
+  charset: 'utf8mb4'
+}
+
 // Additonal exports so that sequelize-cli can read this config properly
 module.exports = {
   development,
   test,
+  production,
   default: {
     development,
     test
