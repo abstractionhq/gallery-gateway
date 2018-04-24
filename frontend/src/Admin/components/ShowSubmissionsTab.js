@@ -36,6 +36,7 @@ class ShowSubmissionsTab extends Component {
   static propTypes = {
     updateInvite: PropTypes.func.isRequired,
     finalizeInvites: PropTypes.func.isRequired,
+    updateExcludeFromJudging: PropTypes.func.isRequired,
     show: PropTypes.shape({
       finalized: PropTypes.bool.isRequired,
       entries: PropTypes.arrayOf(
@@ -60,7 +61,7 @@ class ShowSubmissionsTab extends Component {
       alertType: '',
       isFinalizeConfirmationOpen: false,
       isSubmissionModalOpen: false,
-      viewingSubmission: null
+      viewingSubmissionId: null
     }
   }
 
@@ -92,7 +93,7 @@ class ShowSubmissionsTab extends Component {
   onDisplaySubmissionModal = submission => {
     this.setState({
       isSubmissionModalOpen: true,
-      viewingSubmission: submission
+      viewingSubmissionId: submission.id
     })
   }
 
@@ -332,7 +333,9 @@ class ShowSubmissionsTab extends Component {
         >
           <ModalHeader toggle={this.onDismissSubmissionModal} />
           <ModalBody>
-            <ShowSubmissionDetails submission={this.state.viewingSubmission} />
+            <ShowSubmissionDetails
+            submission={this.props.show.entries.find(s => s.id === this.state.viewingSubmissionId)}  
+            updateExcludeFromJudging={this.props.updateExcludeFromJudging} />
           </ModalBody>
         </Modal>
       </Fragment>
