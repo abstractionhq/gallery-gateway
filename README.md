@@ -24,7 +24,7 @@ We followed a Distributed Scrum process with sprints lasting two weeks. We condu
 
 Our two primary metrics were Velocity and Code Coverage.
 
-See our [Interim Presentation](https://youtu.be/iLT2T8WT80Q?t=28m20s) and [Final Presentation]() for more details.
+See our [Interim Presentation](https://youtu.be/iLT2T8WT80Q?t=28m20s) and [Final Presentation](https://youtu.be/1mFXTtoqFw8?t=1h3m52s) for more details.
 
 ## Architecture
 
