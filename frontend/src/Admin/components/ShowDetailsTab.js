@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Button } from 'reactstrap'
 
-const ShowDetailsTab = ({downloadCsv, downloadZip, show}) => (
+const ShowDetailsTab = ({ downloadCsv, downloadZip, show }) => (
   <Row>
     <Col>
       {show.description ? (
@@ -16,27 +16,13 @@ const ShowDetailsTab = ({downloadCsv, downloadZip, show}) => (
     </Col>
     <Col>
       {/* TODO: Add Print / Download Icons Next to Buttons */}
-      <Button
-        color='dark'
-        outline
-        block
-      >
+      <Button color='dark' outline block>
         Print Gallery Guide
       </Button>
-      <Button
-        color='dark'
-        outline
-        block
-        onClick={() => downloadCsv()}
-      >
+      <Button color='dark' outline block onClick={() => downloadCsv()}>
         Download CSV Report
       </Button>
-      <Button
-        color='dark'
-        outline
-        block
-        onClick={() => downloadZip()}
-      >
+      <Button color='dark' outline block onClick={() => downloadZip()}>
         Download Photo Submissions ZIP
       </Button>
     </Col>

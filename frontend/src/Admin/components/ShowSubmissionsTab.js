@@ -306,10 +306,11 @@ class ShowSubmissionsTab extends Component {
               Header: 'Allowed',
               maxWidth: 75,
               sortable: false,
-              style: { textAlign: 'center'},
-              Cell: ({ original: submission }) => submission.excludeFromJudging ? 
-                <FaClose color='red' size='2em' /> 
-              : null
+              style: { textAlign: 'center' },
+              Cell: ({ original: submission }) =>
+                submission.excludeFromJudging ? (
+                  <FaClose color='red' size='2em' />
+                ) : null
             },
             {
               Header: 'Invited',
@@ -343,8 +344,11 @@ class ShowSubmissionsTab extends Component {
           <ModalHeader toggle={this.onDismissSubmissionModal} />
           <ModalBody>
             <ShowSubmissionDetails
-            submission={this.props.show.entries.find(s => s.id === this.state.viewingSubmissionId)}  
-            updateExcludeFromJudging={this.props.updateExcludeFromJudging} />
+              submission={this.props.show.entries.find(
+                s => s.id === this.state.viewingSubmissionId
+              )}
+              updateExcludeFromJudging={this.props.updateExcludeFromJudging}
+            />
           </ModalBody>
         </Modal>
       </Fragment>

@@ -23,7 +23,9 @@ const BeforeJudging = () => (
 const DuringJudging = ({ ownVotes, entries, id }) => (
   <Col>
     <h4>Progress</h4>
-    <p>{ownVotes.length} / {entries.filter(s => !s.excludeFromJudging).length}</p>
+    <p>
+      {ownVotes.length} / {entries.filter(s => !s.excludeFromJudging).length}
+    </p>
     <Button
       className='mt-5'
       style={{ cursor: 'pointer' }}
@@ -41,7 +43,7 @@ const DuringJudging = ({ ownVotes, entries, id }) => (
 
 // NOTE: We don't have to handle the 'isAfter' case because the card
 // will not be visible after the judging period has ended
-const renderBasedOnJudgingPeriod = (props) => {
+const renderBasedOnJudgingPeriod = props => {
   if (moment().isBefore(moment(props.judgingStart))) {
     return <BeforeJudging />
   }
