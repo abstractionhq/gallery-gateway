@@ -32,8 +32,14 @@ export function entries (_, args, req) {
     // Get all entries if no args given
     if (!args.showId && !args.studentUsername) {
       return Entry.all()
-    } else if (args.showId) { // Get entries by show
-      return Entry.findAll({ where: { showId: args.showId } })
+    } else if (args.showId) { 
+      // Get entries by show except those not excluded from judging
+      return Entry.findAll({ 
+        where: { 
+          showId: args.showId,
+          excludeFromJudging: false 
+        } 
+      })
     } else if (args.studentUsername) { // get entries by username
       return User.findById(args.studentUsername).then((student) => {
         return student.getOwnAndGroupEntries()

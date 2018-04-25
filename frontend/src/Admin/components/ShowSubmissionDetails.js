@@ -188,11 +188,11 @@ class ShowSubmissionDetails extends Component {
           <dt>Excluded from Judging?</dt>
           <dd>{submission.excludeFromJudging ? 'Yes' : 'No'}</dd>
           <Button
-          color={submission.excludeFromJudging ? 'primary' : 'warning' } 
+          color={submission.excludeFromJudging ? 'primary' : 'danger' } 
           size="sm"
           onClick={() => this.toggleExcludeFromJudging()}
           >
-          {submission.excludeFromJudging ? 'Allow in Judging' : 'Exclude from Judging'}
+          {submission.excludeFromJudging ? 'Include In Judging' : 'Exclude from Judging'}
           </Button>
           <dt>For Sale?</dt>
           <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
