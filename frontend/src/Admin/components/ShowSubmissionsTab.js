@@ -17,7 +17,7 @@ import FaStar from 'react-icons/lib/fa/star'
 import FaStarOpen from 'react-icons/lib/fa/star-o'
 import FaBook from 'react-icons/lib/fa/book'
 import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
-
+import FaClose from 'react-icons/lib/fa/close'
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 // Alert Types
@@ -301,6 +301,15 @@ class ShowSubmissionsTab extends Component {
               Header: 'Score',
               accessor: 'score',
               Cell: ({ original: submission }) => submission.score.toFixed(3)
+            },
+            {
+              Header: 'Allowed',
+              maxWidth: 75,
+              sortable: false,
+              style: { textAlign: 'center'},
+              Cell: ({ original: submission }) => submission.excludeFromJudging ? 
+                <FaClose color='red' size='2em' /> 
+              : null
             },
             {
               Header: 'Invited',
