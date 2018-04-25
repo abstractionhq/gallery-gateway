@@ -24,7 +24,7 @@ export function entries (_, args, req) {
           .indexOf(req.auth.username) >= 0
       )
   }
-
+  
   return hasPermissionPromise.then(hasPermission => {
     if (!hasPermission) {
       throw new UserError('Permission Denied')
@@ -36,8 +36,7 @@ export function entries (_, args, req) {
       // Get entries by show except those not excluded from judging
       return Entry.findAll({ 
         where: { 
-          showId: args.showId,
-          excludeFromJudging: false 
+          showId: args.showId
         } 
       })
     } else if (args.studentUsername) { // get entries by username

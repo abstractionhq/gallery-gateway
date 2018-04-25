@@ -23,7 +23,7 @@ const BeforeJudging = () => (
 const DuringJudging = ({ ownVotes, entries, id }) => (
   <Col>
     <h4>Progress</h4>
-    <p>{ownVotes.length} / {entries.length}</p>
+    <p>{ownVotes.length} / {entries.filter(s => !s.excludeFromJudging).length}</p>
     <Button
       className='mt-5'
       style={{ cursor: 'pointer' }}

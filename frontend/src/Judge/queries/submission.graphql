@@ -3,5 +3,6 @@ query Submission($id: ID!) {
     id
     title
     entryType
+    excludeFromJudging
   }
 }
