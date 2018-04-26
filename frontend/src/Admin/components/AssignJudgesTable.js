@@ -160,7 +160,9 @@ class AssignJudgesTable extends Component {
                     block
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.assign()}
-                    disabled={!Object.keys(this.state.selectedUnassignedJudges).length}
+                    disabled={
+                      !Object.keys(this.state.selectedUnassignedJudges).length
+                    }
                   >
                     Assign <FaLongArrowRight />
                   </Button>
@@ -173,7 +175,9 @@ class AssignJudgesTable extends Component {
                     block
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.onDisplayUnassignConfirmation()}
-                    disabled={!Object.keys(this.state.selectedAssignedJudges).length}
+                    disabled={
+                      !Object.keys(this.state.selectedAssignedJudges).length
+                    }
                   >
                     <FaLongArrowLeft /> Unassign
                   </Button>
