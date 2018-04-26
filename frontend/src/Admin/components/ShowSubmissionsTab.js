@@ -17,7 +17,7 @@ import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
 import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
 import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
-import FaClose from '@fortawesome/fontawesome-free-solid/times'
+import FaClose from '@fortawesome/fontawesome-free-solid/FaTimes'
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 const PhotoThumbnail = styled.img`
@@ -247,7 +247,7 @@ class ShowSubmissionsTab extends Component {
               style: { textAlign: 'center' },
               Cell: ({ original: submission }) =>
                 submission.excludeFromJudging ? (
-                  <FaClose color='red' size='2em' />
+                  <FontAwesomeIcon icon={FaClose} size='2x' color='red'/>
                 ) : null
             },
             {
