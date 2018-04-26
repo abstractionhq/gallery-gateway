@@ -13,6 +13,9 @@ query Shows($studentUsername: String!) {
       title
       entryType
       invited
+      group {
+        id
+      }
       ... on Video {
         provider
         videoId
