@@ -26,6 +26,22 @@ export function updateShow (_, args, req) {
     })
 }
 
+export function deleteShow (_, args, req) {
+  // Only admins can delete shows
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied')
+  }
+  return db.transaction(transaction =>
+    Show.findById(args.id, {transaction})
+      .then(show => {
+        if (!show) {
+          throw new UserError('Show now found')
+        }
+        return show.destroy({transaction})
+      })
+  )
+}
+
 export function assignToShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')

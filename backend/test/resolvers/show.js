@@ -5,6 +5,9 @@ import { expect } from 'chai'
 import Vote from '../../models/vote'
 import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutations/show'
 import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId } from '../factories'
+import { execGraphql } from '../util'
+import Show from '../../models/show'
+import Entry from '../../models/entry';
 
 describe('Show Resolvers', function () {
   describe('Create a show', function () {
@@ -55,6 +58,94 @@ describe('Show Resolvers', function () {
           done()
         })
     })
+  })
+  describe('Delete a show', () => {
+    it('does not let non-admins remove a show', () =>
+      fakeShow()
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'STUDENT' }
+          )
+            .then(result => {
+              expect(result.errors).to.be.length(1)
+            })
+            .then(() =>
+              // expect nothing to have been deleted
+              Show.count().then(numShows => {
+                expect(numShows).to.eq(1)
+              })
+            )
+        )
+    )
+    it('removes a simple show', () =>
+      fakeShow()
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0)
+              })
+            })
+        )
+    )
+    it('removes any attached entries', () =>
+      fakeShow()
+        .then(show => fakeImageEntry({show}).then(() => show))
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0)
+              })
+            })
+            .then(() => {
+              // ensure no entries exist in the db
+              return Entry.count().then(numEntries => {
+                expect(numEntries).to.eq(0)
+              })
+            })
+        )
+    )
+    it('removes despite assigned judges', () =>
+      Promise.all([fakeUser({ type: 'JUDGE' }), fakeShow()])
+        .then(([judge, show]) =>
+          show.addUser(judge)
+            .then(() => show)
+        )
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0)
+              })
+            })
+        )
+    )
   })
   describe('Assign to show', function () {
     it('Does not allow non-admins', function () {
