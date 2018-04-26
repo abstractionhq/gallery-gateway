@@ -39,7 +39,13 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { submissions } }) =>
-      dispatch({ type: FETCH_SUBMISSIONS, payload: { submissions, username } })
+      dispatch({
+        type: FETCH_SUBMISSIONS,
+        payload: {
+          submissions: submissions.filter(s => !s.excludeFromJudging),
+          username
+        }
+      })
     )
     .catch((err) => dispatch(displayError(err.message)))
 }

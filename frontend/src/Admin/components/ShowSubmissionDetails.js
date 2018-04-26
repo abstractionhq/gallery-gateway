@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Col, Button } from 'reactstrap'
@@ -94,100 +94,125 @@ const renderSubmissionByType = submission => {
   }
 }
 
-const ShowSubmissionDetails = ({ submission }) => (
-  <Row>
-    <Col>
-      <h4 className='text-center'>Artist{submission.group ? 's' : null}</h4>
-      <dl>
-        <dt>Name</dt>
-        <dd>
-          {submission.student.firstName} {submission.student.lastName} ({
-            submission.student.username
-          })
-        </dd>
-        {submission.student.displayName ? (
-          <Fragment>
-            <dt>Artist Name</dt>
-            <dd>{submission.student.displayName}</dd>
-          </Fragment>
-        ) : null}
-        <dt>Year Level</dt>
-        <dd>{submission.yearLevel}</dd>
-        <dt>Academic Program</dt>
-        <dd>{submission.academicProgram}</dd>
-        {submission.group ? (
-          <Fragment>
-            <dt>Group Members</dt>
-            <dd>{submission.group.participants}</dd>
-          </Fragment>
-        ) : null}
-      </dl>
-    </Col>
-    <Col>
-      <h4 className='text-center'>Submission</h4>
-      <dl>
-        <dt>Title</dt>
-        <dd>{submission.title}</dd>
-        {submission.comment ? (
-          <Fragment>
-            <dt>Artist&quot;s Comment</dt>
-            <dd>{submission.comment}</dd>
-          </Fragment>
-        ) : null}
-        <dt>Score</dt>
-        <dd>{submission.score.toFixed(3)}</dd>
-        <dt>Invited?</dt>
-        <dd>{submission.invited ? 'Yes' : 'No'}</dd>
-        <dt>Excluded from Judging?</dt>
-        <dd>{submission.excludeFromJudging ? 'Yes' : 'No'}</dd>
-        {renderSubmissionByType(submission)}
-        <dt>For Sale?</dt>
-        <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
-        <dt>More Copies?</dt>
-        <dd>{submission.moreCopies ? 'Yes' : 'No'}</dd>
-        {submission.entryType === PHOTO ? (
-          <div className='text-center'>
-            <a href={`${STATIC_PATH}${submission.path}`} target='_blank'>
-              <Button color='primary'>View Image</Button>
-            </a>
-          </div>
-        ) : null}
-      </dl>
-    </Col>
-  </Row>
-)
+class ShowSubmissionDetails extends Component {
+  static propTypes = {
+    submission: PropTypes.shape({
+      group: PropTypes.shape({
+        participants: PropTypes.string
+      }),
+      student: PropTypes.shape({
+        username: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired,
+        lastName: PropTypes.string.isRequired,
+        displayName: PropTypes.string
+      }),
+      title: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired,
+      invited: PropTypes.bool,
+      excludeFromJudging: PropTypes.bool,
+      comment: PropTypes.string,
+      yearLevel: PropTypes.string.isRequired,
+      academicProgram: PropTypes.string.isRequired,
+      forSale: PropTypes.bool.isRequired,
+      moreCopies: PropTypes.bool.isRequired,
+      entryType: PropTypes.string.isRequired,
+      // For Photo or Other Entries
+      path: PropTypes.string,
+      // For Photo Entries
+      horizDimInch: PropTypes.number,
+      vertDimInch: PropTypes.number,
+      mediaType: PropTypes.string,
+      // For Video Entries
+      provider: PropTypes.string,
+      videoId: PropTypes.string
+    }),
+    updateExcludeFromJudging: PropTypes.func.isRequired
+  }
 
-ShowSubmissionDetails.propTypes = {
-  submission: PropTypes.shape({
-    group: PropTypes.shape({
-      participants: PropTypes.string
-    }),
-    student: PropTypes.shape({
-      username: PropTypes.string.isRequired,
-      firstName: PropTypes.string.isRequired,
-      lastName: PropTypes.string.isRequired,
-      displayName: PropTypes.string
-    }),
-    title: PropTypes.string.isRequired,
-    score: PropTypes.number.isRequired,
-    invited: PropTypes.bool,
-    excludeFromJudging: PropTypes.bool,
-    comment: PropTypes.string,
-    yearLevel: PropTypes.string.isRequired,
-    academicProgram: PropTypes.string.isRequired,
-    forSale: PropTypes.bool.isRequired,
-    moreCopies: PropTypes.bool.isRequired,
-    entryType: PropTypes.string.isRequired,
-    // For Photo or Other Entries
-    path: PropTypes.string,
-    // For Photo Entries
-    horizDimInch: PropTypes.number,
-    vertDimInch: PropTypes.number,
-    mediaType: PropTypes.string,
-    // For Video Entries
-    provider: PropTypes.string,
-    videoId: PropTypes.string
-  })
+  constructor (props) {
+    super(props)
+  }
+
+  toggleExcludeFromJudging = () => {
+    const { updateExcludeFromJudging, submission } = this.props
+    updateExcludeFromJudging(submission.id, !submission.excludeFromJudging)
+    // TODO: handle errors
+  }
+
+  render () {
+    const { submission } = this.props
+    return (
+      <Row>
+        <Col>
+          <h4 className='text-center'>Artist{submission.group ? 's' : null}</h4>
+          <dl>
+            <dt>Name</dt>
+            <dd>
+              {submission.student.firstName} {submission.student.lastName} ({
+                submission.student.username
+              })
+            </dd>
+            {submission.student.displayName ? (
+              <Fragment>
+                <dt>Artist Name</dt>
+                <dd>{submission.student.displayName}</dd>
+              </Fragment>
+            ) : null}
+            <dt>Year Level</dt>
+            <dd>{submission.yearLevel}</dd>
+            <dt>Academic Program</dt>
+            <dd>{submission.academicProgram}</dd>
+            {submission.group ? (
+              <Fragment>
+                <dt>Group Members</dt>
+                <dd>{submission.group.participants}</dd>
+              </Fragment>
+            ) : null}
+          </dl>
+        </Col>
+        <Col>
+          <h4 className='text-center'>Submission</h4>
+          <dl>
+            <dt>Title</dt>
+            <dd>{submission.title}</dd>
+            {submission.comment ? (
+              <Fragment>
+                <dt>Artist&quot;s Comment</dt>
+                <dd>{submission.comment}</dd>
+              </Fragment>
+            ) : null}
+            <dt>Score</dt>
+            <dd>{submission.score.toFixed(3)}</dd>
+            <dt>Invited?</dt>
+            <dd>{submission.invited ? 'Yes' : 'No'}</dd>
+            {renderSubmissionByType(submission)}
+            <dt>Excluded from Judging?</dt>
+            <dd>{submission.excludeFromJudging ? 'Yes' : 'No'}</dd>
+            <Button
+              color={submission.excludeFromJudging ? 'primary' : 'danger'}
+              size='sm'
+              onClick={() => this.toggleExcludeFromJudging()}
+            >
+              {submission.excludeFromJudging
+                ? 'Include In Judging'
+                : 'Exclude from Judging'}
+            </Button>
+            <dt>For Sale?</dt>
+            <dd>{submission.forSale ? 'Yes' : 'No'}</dd>
+            <dt>More Copies?</dt>
+            <dd>{submission.moreCopies ? 'Yes' : 'No'}</dd>
+            {submission.entryType === PHOTO ? (
+              <div className='text-center'>
+                <a href={`${STATIC_PATH}${submission.path}`} target='_blank'>
+                  <Button color='primary'>View Image</Button>
+                </a>
+              </div>
+            ) : null}
+          </dl>
+        </Col>
+      </Row>
+    )
+  }
 }
 
 export default ShowSubmissionDetails

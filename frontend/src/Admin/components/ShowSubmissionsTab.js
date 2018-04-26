@@ -17,7 +17,7 @@ import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
 import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
 import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
-
+import FaClose from '@fortawesome/fontawesome-free-solid/times'
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 const PhotoThumbnail = styled.img`
@@ -33,6 +33,7 @@ class ShowSubmissionsTab extends Component {
     updateInvite: PropTypes.func.isRequired,
     finalizeInvites: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
+    updateExcludeFromJudging: PropTypes.func.isRequired,
     show: PropTypes.shape({
       finalized: PropTypes.bool.isRequired,
       entries: PropTypes.arrayOf(
@@ -55,7 +56,7 @@ class ShowSubmissionsTab extends Component {
     this.state = {
       isFinalizeConfirmationOpen: false,
       isSubmissionModalOpen: false,
-      viewingSubmission: null
+      viewingSubmissionId: null
     }
   }
 
@@ -80,7 +81,7 @@ class ShowSubmissionsTab extends Component {
   onDisplaySubmissionModal = submission => {
     this.setState({
       isSubmissionModalOpen: true,
-      viewingSubmission: submission
+      viewingSubmissionId: submission.id
     })
   }
 
@@ -240,6 +241,16 @@ class ShowSubmissionsTab extends Component {
               Cell: ({ original: submission }) => submission.score.toFixed(3)
             },
             {
+              Header: 'Allowed',
+              maxWidth: 75,
+              sortable: false,
+              style: { textAlign: 'center' },
+              Cell: ({ original: submission }) =>
+                submission.excludeFromJudging ? (
+                  <FaClose color='red' size='2em' />
+                ) : null
+            },
+            {
               Header: 'Invited',
               accessor: 'invited',
               Cell: ({ original: submission }) =>
@@ -270,7 +281,12 @@ class ShowSubmissionsTab extends Component {
         >
           <ModalHeader toggle={this.onDismissSubmissionModal} />
           <ModalBody>
-            <ShowSubmissionDetails submission={this.state.viewingSubmission} />
+            <ShowSubmissionDetails
+              submission={this.props.show.entries.find(
+                s => s.id === this.state.viewingSubmissionId
+              )}
+              updateExcludeFromJudging={this.props.updateExcludeFromJudging}
+            />
           </ModalBody>
         </Modal>
       </Fragment>

@@ -2,7 +2,9 @@ import MD5 from 'md5.js'
 
 // TODO: Identify deploy host (and set a protocol)
 const isProduction = process.env.NODE_ENV === 'production'
-export const HOST = isProduction ? '' : '//localhost:3000'
+export const HOST = isProduction
+  ? 'https://gallerygateway.rit.edu/backend'
+  : '//localhost:3000'
 export const LOGIN_PATH = `${HOST}/auth/login`
 export const DOWNLOAD_TOKEN_PATH = `${HOST}/auth/downloadToken`
 export const STATIC_PATH = `${HOST}/static/uploads/`
