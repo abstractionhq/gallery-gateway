@@ -18,7 +18,6 @@ export const createLoading = namespace => type => ({
   }
 })
 
-// TODO: Identify deploy host (and set a protocol)
 const isProduction = process.env.NODE_ENV === 'production'
 export const HOST = isProduction
   ? 'https://gallerygateway.rit.edu/backend'
