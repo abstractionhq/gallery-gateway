@@ -12,7 +12,6 @@ export function up (queryInterface, Sequelize) {
       return Promise.all([
         queryInterface.addConstraint('user_shows', ['username'], {
           type: 'FOREIGN KEY',
-          name: 'huuuu',
           references: {
             table: 'users',
             field: 'username'
@@ -22,7 +21,6 @@ export function up (queryInterface, Sequelize) {
         }),
         queryInterface.addConstraint('user_shows', ['showId'], {
           type: 'FOREIGN KEY',
-          name: 'jjjj',
           references: {
             table: 'shows',
             field: 'id'
