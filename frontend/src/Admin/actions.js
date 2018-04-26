@@ -1,5 +1,3 @@
-import Promise from 'bluebird'
-
 import ShowQuery from './queries/show.graphql'
 import ShowsQuery from './queries/shows.graphql'
 import JudgesQuery from './queries/judges.graphql'
@@ -76,7 +74,7 @@ export const fetchJudgesByAssignmentForShow = showId => (
     dispatch(fetchShows()),
     dispatch(fetchJudges())
   ])
-    .spread(({ data: { show }, loading }) => {
+    .then(([{ data: { show }, loading }]) => {
       if (loading) {
         dispatch({
           type: LOADING_DATA,
