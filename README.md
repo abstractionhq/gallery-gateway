@@ -81,6 +81,7 @@ Here are some useful resources on these tools and our architecture:
 - [GraphQL](http://graphql.org/)
 - [Apollo GraphQL](https://www.apollographql.com/)
 - [Apollo Developers Blog](https://dev-blog.apollodata.com/)
+- [How to GraphQL](https://www.howtographql.com/)
 - [The GitHub GraphQL API](https://githubengineering.com/the-github-graphql-api/)
 - [From REST to GraphQL](https://0x2a.sh/from-rest-to-graphql-b4e95e94c26b) by Jacob Gillespie
 - [awesome-graphql](https://github.com/chentsulin/awesome-graphql)
@@ -91,7 +92,49 @@ You'll need to be running both the frontend and backend for development. Check o
 
 ## Deployment
 
-_TODO_
+We deploy our application on Ubuntu 16.04.
+
+### Prequisites
+
+Install Node (8.x LTS) & NPM (>= 5.6)
+
+```sh
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+Install Yarn (>= 1.6)
+
+```sh
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update
+sudo apt-get install yarn
+```
+
+[Nginx](https://nginx.org/en/) and [Supervisor](http://supervisord.org/) must be installed and running.
+
+Additionally, setup HTTPS using [Let's Encrypt](https://letsencrypt.org/).
+
+### Deploy the App
+
+Run our `deploy/deploy.sh` script.
+
+It will:
+- Create a MySQL database if one does not exist (and set the character encoding to UTF-8)
+- Download this project's source from GitHub
+- Install and build the frontend
+- Install and build the backend
+- Migrate the database tables
+- Start the backend using Supervisor
+
+You will need to provide the MySQL database password, RSA keys used for JWT authentication (see below), and the Identity Provider Certificate.
+
+```sh
+cd /opt/node/gallerygateway/keys
+sudo openssl genrsa -out private.key 4096
+sudo openssl rsa -in private.key -outform PEM -pubout -out public.key
+```
 
 ## Maintenance
 
