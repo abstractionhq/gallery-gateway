@@ -7,7 +7,7 @@ import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutati
 import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId } from '../factories'
 import { execGraphql } from '../util'
 import Show from '../../models/show'
-import Entry from '../../models/entry';
+import Entry from '../../models/entry'
 
 describe('Show Resolvers', function () {
   describe('Create a show', function () {
