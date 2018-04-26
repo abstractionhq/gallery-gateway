@@ -126,6 +126,7 @@ class ShowSubmissionDetails extends Component {
       provider: PropTypes.string,
       videoId: PropTypes.string
     }),
+    handleError: PropTypes.func.isRequired,
     updateExcludeFromJudging: PropTypes.func.isRequired
   }
 
@@ -134,9 +135,9 @@ class ShowSubmissionDetails extends Component {
   }
 
   toggleExcludeFromJudging = () => {
-    const { updateExcludeFromJudging, submission } = this.props
-    updateExcludeFromJudging(submission.id, !submission.excludeFromJudging)
-    // TODO: handle errors
+    const { updateExcludeFromJudging, submission, handleError } = this.props
+    updateExcludeFromJudging(submission.id, 
+      !submission.excludeFromJudging).catch(err => handleError(err.message))
   }
 
   render () {

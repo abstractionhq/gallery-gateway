@@ -286,6 +286,7 @@ class ShowSubmissionsTab extends Component {
                 s => s.id === this.state.viewingSubmissionId
               )}
               updateExcludeFromJudging={this.props.updateExcludeFromJudging}
+              handleError={this.props.handleError}
             />
           </ModalBody>
         </Modal>
