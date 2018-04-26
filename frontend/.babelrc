@@ -4,8 +4,8 @@
       "env", {
         "loose": true,
         "modules": false,
-        "target": ["ie 10"],
-        "useBuiltIns": "entry"
+        "target": ["ie 11"],
+        "useBuiltIns": true
       }
     ],
     "stage-0",
@@ -24,7 +24,7 @@
             "loose": true,
             "modules": "commonjs",
             "target": ["ie 10"],
-            "useBuiltIns": "entry"
+            "useBuiltIns": true
           }
         ],
         "stage-0",
