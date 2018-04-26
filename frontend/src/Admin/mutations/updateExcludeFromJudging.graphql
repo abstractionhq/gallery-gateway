@@ -1,0 +1,6 @@
+mutation updateExcludeFromJudging($id: ID! $input: EntryUpdate!) {
+  updateEntry(id: $id, input: $input) {
+    id,
+    excludeFromJudging
+  }
+}
