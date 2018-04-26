@@ -25,11 +25,21 @@ const ShowCard = props => (
         <dl>
           <dt>Opens:</dt>
           <dd>
-            <Moment title={moment(props.entryStart).format('MMMM D, YYYY hh:mm:ss a')} format='MMMM D, YYYY'>{props.entryStart}</Moment>
+            <Moment
+              title={moment(props.entryStart).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.entryStart}
+            </Moment>
           </dd>
           <dt>Closes:</dt>
           <dd>
-            <Moment title={moment(props.entryEnd).format('MMMM D, YYYY hh:mm:ss a')} format='MMMM D, YYYY'>{props.entryEnd}</Moment>
+            <Moment
+              title={moment(props.entryEnd).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.entryEnd}
+            </Moment>
           </dd>
         </dl>
         <Button
@@ -59,11 +69,23 @@ const ShowCard = props => (
         <dl>
           <dt>Opens:</dt>
           <dd>
-            <Moment title={moment(props.judgingStart).format('MMMM D, YYYY hh:mm:ss a')} format='MMMM D, YYYY'>{props.judgingStart}</Moment>
+            <Moment
+              title={moment(props.judgingStart).format(
+                'MMMM D, YYYY hh:mm:ss a'
+              )}
+              format='MMMM D, YYYY'
+            >
+              {props.judgingStart}
+            </Moment>
           </dd>
           <dt>Closes:</dt>
           <dd>
-            <Moment title={moment(props.judgingEnd).format('MMMM D, YYYY hh:mm:ss a')} format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
+            <Moment
+              title={moment(props.judgingEnd).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.judgingEnd}
+            </Moment>
           </dd>
         </dl>
         <Button

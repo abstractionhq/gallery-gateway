@@ -156,7 +156,10 @@ const ShowCard = props => (
       <Col className='text-right'>
         <div>
           <h5>
-            {props.show.entries.filter(e => !e.group).length}/{props.show.entryCap} Individual Submissions
+            {props.show.entries.filter(e => !e.group).length}/{
+              props.show.entryCap
+            }{' '}
+            Individual Submissions
           </h5>
         </div>
         {moment().isAfter(moment(props.show.entryEnd)) ? (
@@ -164,7 +167,9 @@ const ShowCard = props => (
         ) : (
           <div>
             Accepting Submissions Until:{' '}
-            <Moment format='MMMM D, YYYY hh:mm:ss a'>{props.show.entryEnd}</Moment>
+            <Moment format='MMMM D, YYYY hh:mm:ss a'>
+              {props.show.entryEnd}
+            </Moment>
           </div>
         )}
       </Col>

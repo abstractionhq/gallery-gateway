@@ -59,7 +59,9 @@ const ShowCard = props => (
         <dl>
           <dt>Opens:</dt>
           <dd>
-            <Moment format='MMMM D, YYYY hh:mm:ss a'>{props.judgingStart}</Moment>
+            <Moment format='MMMM D, YYYY hh:mm:ss a'>
+              {props.judgingStart}
+            </Moment>
           </dd>
           <dt>Closes:</dt>
           <dd>
