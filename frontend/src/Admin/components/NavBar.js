@@ -52,8 +52,8 @@ export default class NavBar extends Component {
                 {/* TODO: Move the | out of the link */}
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to='/judges'>
-                  Judges
+                <NavLink tag={Link} to='/users'>
+                  Users
                 </NavLink>
               </NavItem>
               <NavItem>

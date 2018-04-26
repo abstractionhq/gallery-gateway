@@ -1,0 +1,7 @@
+query Admins {
+  admins: users(type: ADMIN) {
+    username
+    firstName
+    lastName
+  }
+}

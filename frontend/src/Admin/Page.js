@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import ViewShow from './pages/ViewShow'
 import CreateShow from './pages/CreateShow'
 import AssignJudges from './pages/AssignJudges'
-import ManageJudges from './pages/ManageJudges'
+import ManageUsers from './pages/ManageUsers'
 
 import Layout from './components/Layout'
 import NotFound from '../shared/components/NotFound'
@@ -17,7 +17,7 @@ const Admin = () => (
       <Route exact path='/show/new' component={CreateShow} />
       <Route exact path='/show/:id/judges/assign' component={AssignJudges} />
       <Route path='/show/:id' component={ViewShow} />
-      <Route exact path='/judges' component={ManageJudges} />
+      <Route path='/users' component={ManageUsers} />
       <Route component={NotFound} />
     </Switch>
   </Layout>

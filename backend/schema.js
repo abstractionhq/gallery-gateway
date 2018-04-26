@@ -238,6 +238,7 @@ type Query {
 
 type Mutation {
     createJudge(input: UserInput!): User
+    createAdmin(input: UserInput!): User
     updatePermissions(input: PermissionInput!): User
     updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User

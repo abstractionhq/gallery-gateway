@@ -2,6 +2,7 @@ import Promise from 'bluebird'
 
 import ShowQuery from './queries/show.graphql'
 import ShowsQuery from './queries/shows.graphql'
+import AdminsQuery from './queries/admins.graphql'
 import JudgesQuery from './queries/judges.graphql'
 import JudgesForShowQuery from './queries/judgesForShow.graphql'
 import { displayError } from '../shared/actions'
@@ -10,12 +11,14 @@ import { ZIP_PATH, CSV_PATH } from '../utils'
 export const LOADING_DATA = 'LOADING_DATA'
 export const FETCH_SHOW = 'FETCH_SHOW'
 export const FETCH_SHOWS = 'FETCH_SHOWS'
+export const FETCH_ADMINS = 'FETCH_ADMINS'
 export const FETCH_JUDGES = 'FETCH_JUDGES'
 export const FETCH_JUDGES_FOR_SHOW = 'FETCH_JUDGES_FOR_SHOW'
 export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW =
   'FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW'
 export const ASSIGN_JUDGES_TO_SHOW = 'ASSIGN_JUDGES_TO_SHOW'
 export const REMOVE_JUDGES_FROM_SHOW = 'REMOVE_JUDGES_FROM_SHOW'
+export const ADD_ADMIN = 'ADD_ADMIN'
 export const ADD_JUDGE = 'ADD_JUDGE'
 
 export const fetchShow = showId => (dispatch, getState, client) => {
@@ -35,6 +38,15 @@ export const fetchShows = () => (dispatch, getState, client) => {
     .query({ query: ShowsQuery }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { shows } }) =>
       dispatch({ type: FETCH_SHOWS, payload: shows })
+    )
+    .catch(err => dispatch(displayError(err.message)))
+}
+
+export const fetchAdmins = () => (dispatch, getState, client) => {
+  return client
+    .query({ query: AdminsQuery }) // TODO: Dispatch loading action & loading finished action
+    .then(({ data: { admins } }) =>
+      dispatch({ type: FETCH_ADMINS, payload: admins })
     )
     .catch(err => dispatch(displayError(err.message)))
 }
@@ -118,6 +130,13 @@ export const removeJudgesFromShow = (showId, usernames) => (
       id: showId,
       usernames
     }
+  })
+}
+
+export const addAdmin = admin => (dispatch, getState, client) => {
+  dispatch({
+    type: ADD_ADMIN,
+    payload: admin
   })
 }
 
