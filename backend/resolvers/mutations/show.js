@@ -4,12 +4,27 @@ import Vote from '../../models/vote'
 import Entry from '../../models/entry'
 import { UserError } from 'graphql-errors'
 import { ADMIN } from '../../constants'
+import moment from 'moment-timezone'
 
 export function createShow (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')
   }
-  return Show.create(args.input)
+  // Handle timezones, start times to midnight and end times to 11:59:59
+  const entryStart = moment(args.input.entryStart).tz("America/New_York").startOf('day')
+  const entryEnd= moment(args.input.entryEnd).tz("America/New_York").endOf('day')
+  const judgingStart = moment(args.input.judgingStart).tz("America/New_York").startOf('day')
+  const judgingEnd = moment(args.input.judgingEnd).tz("America/New_York").endOf('day')
+  const newShow = {
+    name: args.input.name,
+    description: args.input.description,
+    entryStart: entryStart,
+    entryEnd: entryEnd,
+    judgingStart: judgingStart,
+    judgingEnd: judgingEnd,
+    entryCap: args.input.entryCap
+  }
+  return Show.create(newShow)
 }
 
 export function updateShow (_, args, req) {
