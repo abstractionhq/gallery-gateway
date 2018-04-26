@@ -29,15 +29,20 @@ class ShowDetailsTab extends Component {
   }
 
   state = {
-    deleteModalShown: false
+    deleteModalShown: false,
+    deleteInProgress: false
   }
 
-  constructor (props) {
-    super(props)
+  onDeleteInProgress () {
+    this.setState({
+      deleteInProgress: true
+    })
+  }
 
-    this.state = {
-      deleteModalShown: false
-    }
+  onDeleteFinished () {
+    this.setState({
+      deleteInProgress: false
+    })
   }
 
   onShowDeleteModal () {
@@ -130,7 +135,14 @@ class ShowDetailsTab extends Component {
             </Button>{' '}
             <Button
               color='danger'
-              onClick={() => deleteShow().then(() => doneDeleteShow())}
+              disabled={this.state.deleteInProgress}
+              onClick={() => {
+                this.onDeleteInProgress()
+                deleteShow().then(() => {
+                  this.onDeleteFinished()
+                  doneDeleteShow()
+                })
+              }}
             >
               Continue
             </Button>
