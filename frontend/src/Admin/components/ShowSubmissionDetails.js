@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Row, Col, Button } from 'reactstrap'
-import FaPDF from 'react-icons/lib/fa/file-pdf-o'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaPDF from '@fortawesome/fontawesome-free-regular/faFilePdf'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -125,6 +126,7 @@ class ShowSubmissionDetails extends Component {
       provider: PropTypes.string,
       videoId: PropTypes.string
     }),
+    handleError: PropTypes.func.isRequired,
     updateExcludeFromJudging: PropTypes.func.isRequired
   }
 
@@ -133,9 +135,11 @@ class ShowSubmissionDetails extends Component {
   }
 
   toggleExcludeFromJudging = () => {
-    const { updateExcludeFromJudging, submission } = this.props
-    updateExcludeFromJudging(submission.id, !submission.excludeFromJudging)
-    // TODO: handle errors
+    const { updateExcludeFromJudging, submission, handleError } = this.props
+    updateExcludeFromJudging(
+      submission.id,
+      !submission.excludeFromJudging
+    ).catch(err => handleError(err.message))
   }
 
   render () {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import { uploadImage, uploadPDF, clearPreview } from '../actions'
+import { displayError } from '../../shared/actions'
 
 import OtherMediaSubmissionForm from '../components/OtherMediaSubmissionForm'
 import CreateOtherMediaEntry from '../mutations/createOtherMediaEntry.graphql'
@@ -18,7 +19,8 @@ const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/')),
   handlePDFUpload: file => dispatch(uploadPDF(file)),
   handleImageUpload: file => dispatch(uploadImage(file)),
-  clearPreview: () => dispatch(clearPreview())
+  clearPreview: () => dispatch(clearPreview()),
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

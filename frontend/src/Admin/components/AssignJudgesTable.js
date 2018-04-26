@@ -10,9 +10,10 @@ import {
 } from 'reactstrap'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left'
-import FaLongArrowRight from 'react-icons/lib/fa/long-arrow-right'
-import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaLongArrowLeft from '@fortawesome/fontawesome-free-solid/faLongArrowAltLeft'
+import FaLongArrowRight from '@fortawesome/fontawesome-free-solid/faLongArrowAltRight'
+import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
 
 import JudgesTable from '../components/JudgesTable'
 
@@ -34,6 +35,7 @@ class AssignJudgesTable extends Component {
     }),
     assign: PropTypes.func.isRequired,
     unassign: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     afterAssign: PropTypes.func.isRequired,
     afterUnassign: PropTypes.func.isRequired
   }
@@ -71,14 +73,17 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedUnassignedJudges)
 
     if (judges.length) {
-      this.props.assign(judges).then(() => {
-        this.props.afterAssign(judges)
-        // Reset the checkboxes
-        this.setState({
-          selectedUnassignedJudges: {},
-          selectedAssignedJudges: {}
+      this.props
+        .assign(judges)
+        .then(() => {
+          this.props.afterAssign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
         })
-      })
+        .catch(err => this.props.handleError(err.message))
     }
   }
 
@@ -86,14 +91,17 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedAssignedJudges)
 
     if (judges.length) {
-      this.props.unassign(judges).then(() => {
-        this.props.afterUnassign(judges)
-        // Reset the checkboxes
-        this.setState({
-          selectedUnassignedJudges: {},
-          selectedAssignedJudges: {}
+      this.props
+        .unassign(judges)
+        .then(() => {
+          this.props.afterUnassign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
         })
-      })
+        .catch(err => this.props.handleError(err.message))
     }
   }
 
@@ -116,7 +124,11 @@ class AssignJudgesTable extends Component {
           style={{ top: '25%' }}
         >
           <ModalHeader toggle={this.onDismissUnassignConfirmation}>
-            Warning <FaExclamationTriangle />
+            Warning{' '}
+            <FontAwesomeIcon
+              icon={FaExclamationTriangle}
+              className='align-middle'
+            />
           </ModalHeader>
           <ModalBody>
             <p>
@@ -130,7 +142,7 @@ class AssignJudgesTable extends Component {
               onClick={() => this.onDismissUnassignConfirmation()}
             >
               Cancel
-            </Button>{' '}
+            </Button>
             <Button
               color='danger'
               onClick={() => {
@@ -164,7 +176,11 @@ class AssignJudgesTable extends Component {
                       !Object.keys(this.state.selectedUnassignedJudges).length
                     }
                   >
-                    Assign <FaLongArrowRight />
+                    Assign{' '}
+                    <FontAwesomeIcon
+                      icon={FaLongArrowRight}
+                      className='align-middle'
+                    />
                   </Button>
                 </ReassignButtonContainer>
               </Col>
@@ -179,7 +195,11 @@ class AssignJudgesTable extends Component {
                       !Object.keys(this.state.selectedAssignedJudges).length
                     }
                   >
-                    <FaLongArrowLeft /> Unassign
+                    <FontAwesomeIcon
+                      icon={FaLongArrowLeft}
+                      className='align-middle'
+                    />{' '}
+                    Unassign
                   </Button>
                 </ReassignButtonContainer>
               </Col>

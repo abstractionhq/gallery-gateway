@@ -1,6 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { HttpLink, InMemoryCache } from 'apollo-client-preset'
-import { ApolloLink, concat } from 'apollo-link'
+import { ApolloLink } from 'apollo-link'
+import { onError } from 'apollo-link-error'
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 
 import { GRAPHQL_PATH } from '../src/utils'
@@ -17,6 +18,17 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   })
 
   return forward(operation)
+})
+
+const errorMiddleware = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    // TODO
+    console.log(graphQLErrors)
+  }
+  if (networkError) {
+    // TODO
+    console.log(networkError)
+  }
 })
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -44,7 +56,11 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 })
 
 const client = new ApolloClient({
-  link: concat(authMiddleware, httpLink),
+  link: ApolloLink.from([
+    errorMiddleware,
+    authMiddleware,
+    httpLink
+  ]),
   cache: new InMemoryCache({
     dataIdFromObject: o => {
       switch (o.__typename) {

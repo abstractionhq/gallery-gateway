@@ -1,7 +1,8 @@
 import React from 'react'
 import { Label, FormGroup, UncontrolledTooltip } from 'reactstrap'
 import { Field } from 'formik'
-import FaQuestionCircle from 'react-icons/lib/fa/question-circle'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
 export default function SubmitAsGroupRadio ({
   values,
@@ -29,7 +30,11 @@ export default function SubmitAsGroupRadio ({
           ) : (
             <span className='ml-2 text-muted'>
               No&nbsp;
-              <FaQuestionCircle className='align-middle' id='noSingleHelp' />
+              <FontAwesomeIcon
+                icon={FaQuestionCircle}
+                className='align-middle'
+                id='noSingleHelp'
+              />
               <UncontrolledTooltip target='noSingleHelp'>
                 <p className='text-left'>
                   You have reached your individual submission limit for this
