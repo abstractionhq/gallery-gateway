@@ -140,6 +140,7 @@ class OtherSubmissionForm extends Component {
           <span>
             <p>Click or drop to upload your file.</p>
             <p>Only *.jpg, *.jpeg, and *.pdf files will be accepted.</p>
+            <p>(50MB Maximum File Size)</p>
           </span>
         )}
       </Dropzone>

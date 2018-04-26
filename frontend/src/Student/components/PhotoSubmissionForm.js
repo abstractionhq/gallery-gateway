@@ -132,6 +132,7 @@ class PhotoSubmissionForm extends Component {
           <span>
             <p>Click or drop to upload your file.</p>
             <p>Only *.jpg and *.jpeg images will be accepted.</p>
+            <p>(50MB Maximum File Size)</p>
           </span>
         )}
       </Dropzone>
@@ -153,7 +154,7 @@ class PhotoSubmissionForm extends Component {
   }
 
   renderShow = () => {
-    const { create, done, user, handleError, loading } = this.props
+    const { create, done, user, handleError } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name

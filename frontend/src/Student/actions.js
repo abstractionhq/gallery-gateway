@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import pdf from 'assets/pdf.svg'
 import { IMAGE_UPLOAD_PATH, PDF_UPLOAD_PATH } from '../utils'
+import { displayError } from '../shared/actions'
 
 export const UPLOAD_IMAGE = 'UPLOAD_IMAGE'
 export const UPLOAD_PDF = 'UPLOAD_PDF'
@@ -26,7 +27,16 @@ export const uploadImage = file => (dispatch, getState, client) => {
         }
       })
     )
-    .catch(err => dispatch(displayError(err.message)))
+    .catch(err => {
+      let message
+      if (err.response.status === 413) {
+        message = 'That file is too large. Files must be smaller than 50MB.'
+      } else {
+        message = err.message
+      }
+
+      dispatch(displayError(message))
+    })
 }
 
 export const uploadPDF = file => (dispatch, getState, client) => {
@@ -48,7 +58,16 @@ export const uploadPDF = file => (dispatch, getState, client) => {
         }
       })
     )
-    .catch(err => dispatch(displayError(err.message)))
+    .catch(err => {
+      let message
+      if (err.response.status === 413) {
+        message = 'That file is too large. Files must be smaller than 50MB.'
+      } else {
+        message = err.message
+      }
+
+      dispatch(displayError(message))
+    })
 }
 
 export const clearPreview = () => (dispatch, getState, client) => {

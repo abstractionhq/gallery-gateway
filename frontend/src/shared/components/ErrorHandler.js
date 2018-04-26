@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaExclamationCircle from '@fortawesome/fontawesome-free-solid/faExclamationCircle'
 
 class ErrorHandler extends Component {
   constructor (props) {
@@ -33,10 +35,11 @@ class ErrorHandler extends Component {
                 justifyContent: 'center'
               }}
             >
+              <FontAwesomeIcon icon={FaExclamationCircle} size='3x' />
               <h1>Something went wrong.</h1>
-              <p>
+              <p style={{ maxWidth: '50%' }}>
                 Please clear your browser cache and cookies and then refresh the
-                page. If the issue persists, please contact a site
+                page.<br/>If the issue persists, please contact a site
                 administrator.
               </p>
             </Col>
