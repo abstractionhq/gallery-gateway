@@ -11,15 +11,33 @@ import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 const Entry = sequelize.define('entry', {
   showId: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'shows',
+      key: 'id'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   studentUsername: {
     allowNull: true,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    references: {
+      model: 'users',
+      key: 'username'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   groupId: {
     allowNull: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'groups',
+      key: 'id'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   entryType: {
     allowNull: false,
