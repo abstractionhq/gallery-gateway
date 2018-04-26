@@ -8,10 +8,6 @@ const NO = 0
 const MAYBE = 1
 const YES = 2
 
-// Alert Types
-const SUCCESS = 'SUCCESS'
-const ERROR = 'ERROR'
-
 const VotingContainer = styled.div`
   left: 0;
   margin: 10px auto;
@@ -26,6 +22,7 @@ const VotingContainer = styled.div`
 
 class VotePanel extends Component {
   static propTypes = {
+    handleError: PropTypes.func.isRequired,
     makeVote: PropTypes.func.isRequired,
     vote: PropTypes.shape({
       value: PropTypes.number
@@ -49,27 +46,18 @@ class VotePanel extends Component {
   }
 
   handleVote = value => {
-    const { makeVote } = this.props
+    const { makeVote, handleError } = this.props
 
     makeVote(value)
       .then(() => {
         this.setState({
-          alertVisible: true,
-          alertType: SUCCESS
+          alertVisible: true
         })
         setTimeout(() => {
           this.onDismiss()
-        }, 3000)
+        }, 2000)
       })
-      .catch(() => {
-        this.setState({
-          alertVisible: true,
-          alertType: ERROR
-        })
-        setTimeout(() => {
-          this.onDismiss()
-        }, 3000)
-      })
+      .catch(err => handleError(err.message))
   }
 
   handleKeyInput = e => {
@@ -139,19 +127,11 @@ class VotePanel extends Component {
         </ButtonGroup>
         <Alert
           color='success'
-          isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
-          toggle={() => this.onDismiss()}
+          isOpen={this.state.alertVisible}
           className='text-center'
+          style={{ position: 'fixed', bottom: '0', right: '0', margin: '10px' }}
         >
           Vote Saved
-        </Alert>
-        <Alert
-          color='danger'
-          isOpen={this.state.alertVisible && this.state.alertType === ERROR}
-          toggle={() => this.onDismiss()}
-          className='text-center'
-        >
-          There was an error saving your vote.
         </Alert>
       </VotingContainer>
     )
