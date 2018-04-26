@@ -22,7 +22,10 @@
       "es6": true
     }
   },
-  "eslintIgnore": ["build/*", "coverage/*"],
+  "eslintIgnore": [
+    "build/*",
+    "coverage/*"
+  ],
   "scripts": {
     "start": "npm run build && node ./build/main.js",
     "watch": "backpack",

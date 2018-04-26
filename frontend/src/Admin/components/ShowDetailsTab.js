@@ -10,11 +10,12 @@ import {
   ModalHeader
 } from 'reactstrap'
 
-import FaPrint from 'react-icons/lib/fa/print'
-import FaTable from 'react-icons/lib/fa/table'
-import FaArchive from 'react-icons/lib/fa/file-archive-o'
-import FaTrash from 'react-icons/lib/fa/trash-o'
-import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaPrint from '@fortawesome/fontawesome-free-solid/faPrint'
+import FaTable from '@fortawesome/fontawesome-free-solid/faTable'
+import FaArchive from '@fortawesome/fontawesome-free-solid/faFileArchive'
+import FaTrash from '@fortawesome/fontawesome-free-solid/faTrashAlt'
+import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
 
 class ShowDetailsTab extends Component {
   static propTypes = {
@@ -80,7 +81,8 @@ class ShowDetailsTab extends Component {
           </Col>
           <Col>
             <Button color='dark' className='text-left' outline block>
-              <FaPrint /> Print Gallery Guide
+              <FontAwesomeIcon icon={FaPrint} className='align-middle' /> Print
+              Gallery Guide
             </Button>
             <Button
               color='dark'
@@ -89,7 +91,8 @@ class ShowDetailsTab extends Component {
               block
               onClick={() => downloadCsv()}
             >
-              <FaTable /> Download CSV Report
+              <FontAwesomeIcon icon={FaTable} className='align-middle' />{' '}
+              Download CSV Report
             </Button>
             <Button
               color='dark'
@@ -98,7 +101,8 @@ class ShowDetailsTab extends Component {
               block
               onClick={() => downloadZip()}
             >
-              <FaArchive /> Download Photo Submissions ZIP
+              <FontAwesomeIcon icon={FaArchive} className='align-middle' />{' '}
+              Download Photo Submissions ZIP
             </Button>
             <Button
               color='danger'
@@ -107,7 +111,7 @@ class ShowDetailsTab extends Component {
               block
               onClick={() => this.onShowDeleteModal()}
             >
-              <FaTrash /> Delete
+              <FontAwesomeIcon icon={FaTrash} className='align-middle' /> Delete
             </Button>
           </Col>
         </Row>
@@ -117,7 +121,11 @@ class ShowDetailsTab extends Component {
           style={{ top: '25%' }}
         >
           <ModalHeader toggle={() => this.onDismissDeleteModal()}>
-            Warning <FaExclamationTriangle />
+            Warning{' '}
+            <FontAwesomeIcon
+              icon={FaExclamationTriangle}
+              className='align-middle'
+            />
           </ModalHeader>
           <ModalBody>
             <p>This is a permanent action.</p>
