@@ -65,14 +65,14 @@ export const getDownloadToken = () => (dispatch, getState, client) => {
     }) // TODO handle errors
 }
 
-export const displayError = (message) => (dispatch, getState, client) => {
+export const displayError = message => (dispatch, getState, client) => {
   dispatch({
     type: DISPLAY_ERROR,
     payload: message
   })
 }
 
-export const dismissError = (index) => (dispatch, getState, client) => {
+export const dismissError = index => (dispatch, getState, client) => {
   dispatch({
     type: DISMISS_ERROR,
     payload: index

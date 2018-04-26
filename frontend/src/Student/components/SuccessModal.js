@@ -21,7 +21,11 @@ const SuccessModal = props => (
       }}
     >
       <h4 className='modal-title' style={{ width: '100%' }}>
-        <FontAwesomeIcon icon={FaCheckCircle} size='3x' style={{ margin: '0 auto' }} />
+        <FontAwesomeIcon
+          icon={FaCheckCircle}
+          size='3x'
+          style={{ margin: '0 auto' }}
+        />
       </h4>
     </div>
     <ModalBody style={{ padding: '40px 0' }}>

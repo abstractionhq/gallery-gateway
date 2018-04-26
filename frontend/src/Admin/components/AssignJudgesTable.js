@@ -37,7 +37,7 @@ class AssignJudgesTable extends Component {
     unassign: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,
     afterAssign: PropTypes.func.isRequired,
-    afterUnassign: PropTypes.func.isRequired,
+    afterUnassign: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -73,14 +73,17 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedUnassignedJudges)
 
     if (judges.length) {
-      this.props.assign(judges).then(() => {
-        this.props.afterAssign(judges)
-        // Reset the checkboxes
-        this.setState({
-          selectedUnassignedJudges: {},
-          selectedAssignedJudges: {}
+      this.props
+        .assign(judges)
+        .then(() => {
+          this.props.afterAssign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
         })
-      }).catch(err => this.props.handleError(err.message))
+        .catch(err => this.props.handleError(err.message))
     }
   }
 
@@ -88,14 +91,17 @@ class AssignJudgesTable extends Component {
     const judges = Object.keys(this.state.selectedAssignedJudges)
 
     if (judges.length) {
-      this.props.unassign(judges).then(() => {
-        this.props.afterUnassign(judges)
-        // Reset the checkboxes
-        this.setState({
-          selectedUnassignedJudges: {},
-          selectedAssignedJudges: {}
+      this.props
+        .unassign(judges)
+        .then(() => {
+          this.props.afterUnassign(judges)
+          // Reset the checkboxes
+          this.setState({
+            selectedUnassignedJudges: {},
+            selectedAssignedJudges: {}
+          })
         })
-      }).catch(err => this.props.handleError(err.message))
+        .catch(err => this.props.handleError(err.message))
     }
   }
 
@@ -118,7 +124,11 @@ class AssignJudgesTable extends Component {
           style={{ top: '25%' }}
         >
           <ModalHeader toggle={this.onDismissUnassignConfirmation}>
-            Warning <FontAwesomeIcon icon={FaExclamationTriangle} className='align-middle' />
+            Warning{' '}
+            <FontAwesomeIcon
+              icon={FaExclamationTriangle}
+              className='align-middle'
+            />
           </ModalHeader>
           <ModalBody>
             <p>
@@ -166,7 +176,11 @@ class AssignJudgesTable extends Component {
                       !Object.keys(this.state.selectedUnassignedJudges).length
                     }
                   >
-                    Assign <FontAwesomeIcon icon={FaLongArrowRight} className='align-middle' />
+                    Assign{' '}
+                    <FontAwesomeIcon
+                      icon={FaLongArrowRight}
+                      className='align-middle'
+                    />
                   </Button>
                 </ReassignButtonContainer>
               </Col>
@@ -181,7 +195,11 @@ class AssignJudgesTable extends Component {
                       !Object.keys(this.state.selectedAssignedJudges).length
                     }
                   >
-                    <FontAwesomeIcon icon={FaLongArrowLeft} className='align-middle' /> Unassign
+                    <FontAwesomeIcon
+                      icon={FaLongArrowLeft}
+                      className='align-middle'
+                    />{' '}
+                    Unassign
                   </Button>
                 </ReassignButtonContainer>
               </Col>

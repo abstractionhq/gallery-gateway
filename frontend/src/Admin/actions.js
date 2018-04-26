@@ -27,21 +27,25 @@ export const fetchShow = showId => (dispatch, getState, client) => {
       }
     }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { show } }) => dispatch({ type: FETCH_SHOW, payload: show }))
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchShows = () => (dispatch, getState, client) => {
   return client
     .query({ query: ShowsQuery }) // TODO: Dispatch loading action & loading finished action
-    .then(({ data: { shows } }) => dispatch({ type: FETCH_SHOWS, payload: shows }))
-    .catch((err) => dispatch(displayError(err.message)))
+    .then(({ data: { shows } }) =>
+      dispatch({ type: FETCH_SHOWS, payload: shows })
+    )
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudges = () => (dispatch, getState, client) => {
   return client
     .query({ query: JudgesQuery }) // TODO: Dispatch loading action & loading finished action
-    .then(({ data: { judges } }) => dispatch({ type: FETCH_JUDGES, payload: judges }))
-    .catch((err) => dispatch(displayError(err.message)))
+    .then(({ data: { judges } }) =>
+      dispatch({ type: FETCH_JUDGES, payload: judges })
+    )
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
@@ -55,7 +59,7 @@ export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
     .then(({ data: { show } }) =>
       dispatch({ type: FETCH_JUDGES_FOR_SHOW, payload: show })
     )
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudgesByAssignmentForShow = showId => (
@@ -86,7 +90,7 @@ export const fetchJudgesByAssignmentForShow = showId => (
         })
       }
     })
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const assignJudgesToShow = (showId, usernames) => (

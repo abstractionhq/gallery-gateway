@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchVote: submissionId => dispatch(fetchVote(submissionId)),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

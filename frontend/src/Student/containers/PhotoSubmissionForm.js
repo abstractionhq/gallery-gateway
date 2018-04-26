@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/')),
   handleUpload: file => dispatch(uploadImage(file)),
   clearPreview: () => dispatch(clearPreview()),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
   // TODO: Removing an image -> you upload, but change your mind; put a 'x' on the top right corner
 })
 

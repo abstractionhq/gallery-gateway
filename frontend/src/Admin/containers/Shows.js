@@ -7,7 +7,7 @@ import Shows from '../components/Shows'
 import { displayError } from '../../shared/actions'
 
 const mapDispatchToProps = dispatch => ({
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

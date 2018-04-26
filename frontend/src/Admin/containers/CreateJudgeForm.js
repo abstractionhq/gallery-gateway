@@ -9,7 +9,7 @@ import { displayError } from '../../shared/actions'
 
 const mapDispatchToProps = dispatch => ({
   myAddJudge: judge => dispatch(addJudge(judge)),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

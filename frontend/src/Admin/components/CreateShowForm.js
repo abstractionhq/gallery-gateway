@@ -113,8 +113,8 @@ class CreateShowForm extends Component {
         })}
         onSubmit={values => {
           create(values)
-          .then(done())
-          .catch(err => handleError(err.message))
+            .then(done())
+            .catch(err => handleError(err.message))
         }}
         render={({
           values,

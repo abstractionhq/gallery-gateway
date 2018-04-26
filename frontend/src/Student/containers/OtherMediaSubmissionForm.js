@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => ({
   handlePDFUpload: file => dispatch(uploadPDF(file)),
   handleImageUpload: file => dispatch(uploadImage(file)),
   clearPreview: () => dispatch(clearPreview()),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

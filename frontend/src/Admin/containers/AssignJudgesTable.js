@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch, { showId }) => ({
   fetchData: () => dispatch(fetchJudgesByAssignmentForShow(showId)),
   afterAssign: usernames => dispatch(assignJudgesToShow(showId, usernames)),
   afterUnassign: usernames => dispatch(removeJudgesFromShow(showId, usernames)),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

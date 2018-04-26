@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Alert } from 'reactstrap'
 
-const ErrorMessage = (props) => (
+const ErrorMessage = props => (
   <Alert color='danger' isOpen toggle={props.onDismiss}>
     {props.message}
   </Alert>

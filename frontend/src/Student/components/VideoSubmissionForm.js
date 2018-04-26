@@ -61,9 +61,9 @@ class VideoSubmissionForm extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.data.error) {
-      this.props.data.error.graphQLErrors.forEach((e) => {
+      this.props.data.error.graphQLErrors.forEach(e => {
         this.props.handleError(e.message)
       })
     }
@@ -165,12 +165,12 @@ class VideoSubmissionForm extends Component {
 
             // Create an entry, show the success modal, and then go to the dashboard
             create(input)
-            .then(() => {
-              this.setState({ showModal: true }, () => {
-                setTimeout(done, 2000)
+              .then(() => {
+                this.setState({ showModal: true }, () => {
+                  setTimeout(done, 2000)
+                })
               })
-            })
-            .catch(err => handleError(err.message))
+              .catch(err => handleError(err.message))
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>

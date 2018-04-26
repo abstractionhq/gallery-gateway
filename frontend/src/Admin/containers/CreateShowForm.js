@@ -4,14 +4,13 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { displayError } from '../../shared/actions'
 
-
 import ShowsQuery from '../queries/shows.graphql'
 import CreateShowMutation from '../mutations/createShow.graphql'
 import CreateShowForm from '../components/CreateShowForm'
 
 const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/')),
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

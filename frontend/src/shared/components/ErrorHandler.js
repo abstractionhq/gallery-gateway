@@ -23,9 +23,22 @@ class ErrorHandler extends Component {
       return (
         <Container>
           <Row>
-            <Col className='text-center' style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center' }}>
+            <Col
+              className='text-center'
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                justifyContent: 'center'
+              }}
+            >
               <h1>Something went wrong.</h1>
-              <p>Please clear your browser cache and cookies and then refresh the page. If the issue persists, please contact a site administrator.</p>
+              <p>
+                Please clear your browser cache and cookies and then refresh the
+                page. If the issue persists, please contact a site
+                administrator.
+              </p>
             </Col>
           </Row>
         </Container>

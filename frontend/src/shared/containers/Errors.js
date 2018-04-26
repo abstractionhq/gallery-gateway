@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  dismiss: (index) => dispatch(dismissError(index))
+  dismiss: index => dispatch(dismissError(index))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Errors)

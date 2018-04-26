@@ -9,7 +9,7 @@ import FinalizeShowInvites from '../mutations/finalizeShowInvites.graphql'
 import UpdateExcludeFromJudging from '../mutations/updateExcludeFromJudging.graphql'
 
 const mapDispatchToProps = (dispatch, { showId }) => ({
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

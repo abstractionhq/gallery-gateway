@@ -24,7 +24,7 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
     .then(({ data: { submission } }) =>
       dispatch({ type: FETCH_SUBMISSION, payload: submission })
     )
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchSubmissions = showId => (dispatch, getState, client) => {
@@ -47,7 +47,7 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
         }
       })
     )
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchVotes = showId => (dispatch, getState, client) => {
@@ -65,7 +65,7 @@ export const fetchVotes = showId => (dispatch, getState, client) => {
     .then(({ data: { votes } }) =>
       dispatch({ type: FETCH_VOTES, payload: { votes, showId } })
     )
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchVote = submissionId => (dispatch, getState, client) => {
@@ -79,7 +79,7 @@ export const fetchVote = submissionId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { vote } }) => dispatch({ type: FETCH_VOTE, payload: vote }))
-    .catch((err) => dispatch(displayError(err.message)))
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const setViewing = (showId, entryId) => (dispatch, getState, client) => {

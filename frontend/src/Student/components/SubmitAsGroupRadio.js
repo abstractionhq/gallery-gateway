@@ -30,7 +30,11 @@ export default function SubmitAsGroupRadio ({
           ) : (
             <span className='ml-2 text-muted'>
               No&nbsp;
-              <FontAwesomeIcon icon={FaQuestionCircle} className='align-middle' id='noSingleHelp' />
+              <FontAwesomeIcon
+                icon={FaQuestionCircle}
+                className='align-middle'
+                id='noSingleHelp'
+              />
               <UncontrolledTooltip target='noSingleHelp'>
                 <p className='text-left'>
                   You have reached your individual submission limit for this

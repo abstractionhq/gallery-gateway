@@ -52,8 +52,8 @@ class CreateJudgeForm extends Component {
           }
 
           create(input)
-          .then(resetForm()) // Clear the form after submitted
-          .catch(err => this.props.handleError(err.message))
+            .then(resetForm()) // Clear the form after submitted
+            .catch(err => this.props.handleError(err.message))
         }}
         render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>

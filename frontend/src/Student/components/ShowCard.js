@@ -157,7 +157,10 @@ const ShowCard = props => (
       <Col className='text-right'>
         <div>
           <h5>
-            {props.show.entries.filter(e => !e.group).length}/{props.show.entryCap} Individual Submissions
+            {props.show.entries.filter(e => !e.group).length}/{
+              props.show.entryCap
+            }{' '}
+            Individual Submissions
           </h5>
         </div>
         {moment().isAfter(moment(props.show.entryEnd)) ? (

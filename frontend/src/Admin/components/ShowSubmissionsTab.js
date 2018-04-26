@@ -1,11 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
@@ -102,7 +96,11 @@ class ShowSubmissionsTab extends Component {
           style={{ top: '25%' }}
         >
           <ModalHeader toggle={this.onDismissFinalizeConfirmation}>
-            Warning <FontAwesomeIcon icon={FaExclamationTriangle} className='align-middle' />
+            Warning{' '}
+            <FontAwesomeIcon
+              icon={FaExclamationTriangle}
+              className='align-middle'
+            />
           </ModalHeader>
           <ModalBody>
             This is a permanent action and will make invitations for this show
@@ -247,7 +245,7 @@ class ShowSubmissionsTab extends Component {
               style: { textAlign: 'center' },
               Cell: ({ original: submission }) =>
                 submission.excludeFromJudging ? (
-                  <FontAwesomeIcon icon={FaClose} size='2x' color='red'/>
+                  <FontAwesomeIcon icon={FaClose} size='2x' color='red' />
                 ) : null
             },
             {
@@ -259,14 +257,23 @@ class ShowSubmissionsTab extends Component {
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, false)}
                   >
-                    <FontAwesomeIcon icon={FaStar} size='lg' className='align-middle' style={{ color: 'gold' }} />
+                    <FontAwesomeIcon
+                      icon={FaStar}
+                      size='lg'
+                      className='align-middle'
+                      style={{ color: 'gold' }}
+                    />
                   </span>
                 ) : (
                   <span
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, true)}
                   >
-                    <FontAwesomeIcon icon={FaStarOpen} size='lg' className='align-middle' />
+                    <FontAwesomeIcon
+                      icon={FaStarOpen}
+                      size='lg'
+                      className='align-middle'
+                    />
                   </span>
                 ),
               style: { textAlign: 'center' },

@@ -136,8 +136,10 @@ class ShowSubmissionDetails extends Component {
 
   toggleExcludeFromJudging = () => {
     const { updateExcludeFromJudging, submission, handleError } = this.props
-    updateExcludeFromJudging(submission.id, 
-      !submission.excludeFromJudging).catch(err => handleError(err.message))
+    updateExcludeFromJudging(
+      submission.id,
+      !submission.excludeFromJudging
+    ).catch(err => handleError(err.message))
   }
 
   render () {

@@ -7,7 +7,13 @@ import ErrorMessage from './ErrorMessage'
 const Errors = ({ errors, dismiss }) => {
   return (
     <Container>
-      {errors.map((error, index) => <ErrorMessage key={index} message={error} onDismiss={() => dismiss(index)} />)}
+      {errors.map((error, index) => (
+        <ErrorMessage
+          key={index}
+          message={error}
+          onDismiss={() => dismiss(index)}
+        />
+      ))}
     </Container>
   )
 }

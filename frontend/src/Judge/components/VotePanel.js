@@ -51,7 +51,7 @@ class VotePanel extends Component {
     makeVote(value)
       .then(() => {
         this.setState({
-          alertVisible: true,
+          alertVisible: true
         })
         setTimeout(() => {
           this.onDismiss()

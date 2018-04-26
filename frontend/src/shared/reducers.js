@@ -64,12 +64,10 @@ const errors = (state = [], action) => {
       }
 
       // Append the error to the end of the list
-      return [
-        ...state,
-        action.payload
-      ]
+      return [...state, action.payload]
     case actions.DISMISS_ERROR:
-      if (action.payload === undefined) { // We can get 0 as a payload
+      if (action.payload === undefined) {
+        // We can get 0 as a payload
         return state
       }
 

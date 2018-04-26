@@ -6,19 +6,18 @@ import ShowsQuery from '../queries/shows.graphql'
 import Shows from '../components/Shows'
 import { displayError } from '../../shared/actions'
 
-
 const mapStateToProps = state => ({
-  studentUsername: state.shared.auth.user.username,
+  studentUsername: state.shared.auth.user.username
 })
 
 const mapDispatchToProps = dispatch => ({
-  handleError: (message) => dispatch(displayError(message))
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ShowsQuery, {
-    props: ({ data: { shows, loading , error} }) => ({
+    props: ({ data: { shows, loading, error } }) => ({
       shows,
       loading,
       error

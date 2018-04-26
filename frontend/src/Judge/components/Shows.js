@@ -13,20 +13,19 @@ const NoShowsContainer = styled.div`
   font-size: large;
 `
 class Shows extends Component {
-
-  componentDidUpdate() {
+  componentDidUpdate () {
     const { error, handleError } = this.props
     if (error) {
-      error.graphQLErrors.forEach((e) => {
+      error.graphQLErrors.forEach(e => {
         handleError(e.message)
       })
     }
   }
-  
-  renderShows = user  => {
-    if (user && user.shows.length){
+
+  renderShows = user => {
+    if (user && user.shows.length) {
       return user.shows.map(show => <ShowCard key={show.id} {...show} />)
-    } 
+    }
     return (
       <NoShowsContainer>
         You are not currently assigned to any future shows
@@ -37,13 +36,9 @@ class Shows extends Component {
   render () {
     const { loading, user } = this.props
 
-    return (
-      <div>
-        {loading ? <Loading /> : this.renderShows(user)}
-      </div>
-    )
+    return <div>{loading ? <Loading /> : this.renderShows(user)}</div>
   }
-} 
+}
 
 Shows.propTypes = {
   user: PropTypes.object,
