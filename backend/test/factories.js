@@ -9,6 +9,13 @@ import Other from '../models/other'
 import Vote from '../models/vote'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 
+// Helper for faking shows
+Date.prototype.addDays = function (days) { // eslint-disable-line no-extend-native
+  var date = new Date(this.valueOf())
+  date.setDate(date.getDate() + days)
+  return date
+}
+
 export function fakeUser (opts) {
   opts = opts || {}
   opts.type = opts.type || STUDENT
@@ -37,10 +44,10 @@ export function fakeShow (opts) {
   opts.name = opts.name || faker.name.title()
   opts.description = opts.description || faker.name.jobDescriptor()
   opts.entryCap = opts.entryCap || 3
-  opts.entryStart = opts.entryStart || faker.date.between('2015-01-01', '2015-01-02')
-  opts.entryEnd = opts.entryEnd || faker.date.between('2015-01-03', '2015-01-04')
-  opts.judgingStart = opts.judgingStart || faker.date.between('2015-01-05', '2015-01-06')
-  opts.judgingEnd = opts.judgingEnd || faker.date.between('2015-01-07', '2015-01-08')
+  opts.entryStart = opts.entryStart || faker.date.between(new Date(), new Date().addDays(1))
+  opts.entryEnd = opts.entryEnd || faker.date.between(new Date().addDays(2), new Date().addDays(3))
+  opts.judgingStart = opts.judgingStart || faker.date.between(new Date().addDays(4), new Date().addDays(5))
+  opts.judgingEnd = opts.judgingEnd || faker.date.between(new Date().addDays(6), new Date().addDays(7))
   opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   opts.excludeFromJudging = opts.excludeFromJudging === undefined ? faker.random.boolean() : opts.excludeFromJudging
   return Show.create({
