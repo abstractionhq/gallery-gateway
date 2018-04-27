@@ -39,7 +39,7 @@ class ErrorHandler extends Component {
               <h1>Something went wrong.</h1>
               <p style={{ maxWidth: '50%' }}>
                 Please clear your browser cache and cookies and then refresh the
-                page.<br/>If the issue persists, please contact a site
+                page.<br />If the issue persists, please contact a site
                 administrator.
               </p>
             </Col>

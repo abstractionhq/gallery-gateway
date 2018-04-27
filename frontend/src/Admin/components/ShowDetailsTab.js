@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Button } from 'reactstrap'
+import { Link } from 'react-router-dom'
 
 const ShowDetailsTab = ({ downloadCsv, downloadZip, show }) => (
   <Row>
@@ -16,7 +17,14 @@ const ShowDetailsTab = ({ downloadCsv, downloadZip, show }) => (
     </Col>
     <Col>
       {/* TODO: Add Print / Download Icons Next to Buttons */}
-      <Button color='dark' outline block>
+      <Button
+        color='dark'
+        outline
+        block
+        tag={Link}
+        to={`/show/${show.id}/print`}
+        target='_blank'
+      >
         Print Gallery Guide
       </Button>
       <Button color='dark' outline block onClick={() => downloadCsv()}>
