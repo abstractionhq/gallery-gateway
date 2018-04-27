@@ -1,0 +1,3 @@
+mutation deleteShow($id: ID!) {
+  deleteShow(id: $id)
+}
