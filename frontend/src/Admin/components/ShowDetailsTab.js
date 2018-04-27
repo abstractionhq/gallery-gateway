@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
   Row,
@@ -80,7 +81,15 @@ class ShowDetailsTab extends Component {
             <dd>{show.entryCap}</dd>
           </Col>
           <Col>
-            <Button color='dark' className='text-left' outline block>
+            <Button
+              color='dark'
+              className='text-left'
+              outline
+              block
+              tag={Link}
+              to={`/show/${show.id}/print`}
+              target='_blank'
+            >
               <FontAwesomeIcon icon={FaPrint} className='align-middle' /> Print
               Gallery Guide
             </Button>
