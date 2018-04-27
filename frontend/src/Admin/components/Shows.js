@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ShowCard from '../components/ShowCardCopy'
+import ShowCard from '../components/ShowCard'
 
 const Shows = ({ shows, loading }) => (
   <div>

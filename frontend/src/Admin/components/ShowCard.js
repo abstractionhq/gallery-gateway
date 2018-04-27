@@ -1,10 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import Moment from 'react-moment'
+import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
-import { Button, Row, Col } from 'reactstrap'
+import Moment from 'react-moment'
+import BeforeSubmission from './BeforeSubmission'
+import DuringSubmission from './DuringSubmission'
+import DuringJudging from './DuringJudging'
+import AfterShowEnd from './AfterShowEnd'
+import EntrySummary from './EntrySummary'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -14,100 +19,139 @@ const Card = styled.div`
   width: 100%;
 `
 
-const ShowCard = props => (
-  <Card>
-    <h2>
-      <Link to={`show/${props.id}`}>{props.name}</Link>
-    </h2>
-    <Row>
-      <Col className='text-left'>
-        {moment().isBefore(moment(props.entryStart)) ? (
-          <h5> Pre Show </h5>
-        ) : (
-          <h5> During Submission Period </h5>
-        )}
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        <h4>Submission Period</h4>
+const ShowCardCopy = props => {
+  const cardBody = (() => {
+    const currentTime = moment(Date.now())
+    const isAfterEntryStart = currentTime >= moment(props.entryStart)
+    const isBeforeEntryEnd = currentTime < moment(props.entryEnd)
+    const isAfterJudgingStart = currentTime >= moment(props.judgingStart)
+    const isBeforeJudgingEnd = currentTime < moment(props.judgingEnd)
+    const isAfterJudgingEnd = currentTime >= moment(props.judgingEnd)
+    const isAfterEntryEnd = currentTime >= moment(props.entryEnd)
+    const isBeforeJudgingStart = currentTime < moment(props.judgingStart)
+    // Closed
+    if (isAfterJudgingEnd) {
+      return <AfterShowEnd entryStart={props.entryStart} judgingEnd={props.judgingEnd}/>
+    }
+    // Judging
+    if (isAfterJudgingStart && isBeforeJudgingEnd) {
+      return <DuringJudging judgingEnd={props.judgingEnd}/>
+    }
+    // Between Submission and Judging
+    if (isAfterEntryEnd && isBeforeJudgingStart) {
+      return (
         <dl>
-          <dt>Opens:</dt>
+          <dt>Submissions Begin:</dt>
           <dd>
             <Moment format='MMMM D, YYYY'>{props.entryStart}</Moment>
           </dd>
-          <dt>Closes:</dt>
+          <dt>Submission Closes:</dt>
           <dd>
             <Moment format='MMMM D, YYYY'>{props.entryEnd}</Moment>
           </dd>
-        </dl>
-        <Button
-          color='primary'
-          className='mr-4'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`/show/${props.id}`}
-          block
-          outline
-        >
-          View Details
-        </Button>
-        <Button
-          color='primary'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`/show/${props.id}/submissions`}
-          block
-          outline
-        >
-          View Submissions
-        </Button>
-      </Col>
-      <Col>
-        <h4>Judging Period</h4>
-        <dl>
-          <dt>Opens:</dt>
+          <dt>Judging Begins:</dt>
           <dd>
             <Moment format='MMMM D, YYYY'>{props.judgingStart}</Moment>
           </dd>
-          <dt>Closes:</dt>
+          <dt>Judging Closes:</dt>
           <dd>
             <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
           </dd>
         </dl>
-        <Button
-          className='mr-4'
-          color='primary'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`/show/${props.id}/judges`}
-          block
-          outline
-        >
-          View Progress
-        </Button>
-        <Button
-          color='primary'
-          style={{ cursor: 'pointer' }}
-          tag={Link}
-          to={`/show/${props.id}/judges/assign`}
-          block
-          outline
-        >
-          Assign Judges
-        </Button>
-      </Col>
-    </Row>
-  </Card>
-)
+      )
+    }
+    // Submission
+    if (isAfterEntryStart && isBeforeEntryEnd) {
+      return (
+        <div>
+          <DuringSubmission entryStart={props.entryStart} entryEnd={props.entryEnd}/>
+          <EntrySummary
+            totalEntries={props.entries.length}
+            totalPhotos={props.entries.filter(entry => entry.entryType === 'PHOTO').length}
+            totalVideos={props.entries.filter(entry => entry.entryType === 'VIDEO').length}
+            totalOther={props.entries.filter(entry => entry.entryType === 'OTHER').length}
+          />
+        </div>
+      )
+    }
+    // PreSubmission
+    return (
+      <BeforeSubmission
+        entryStart={props.entryStart} entryEnd={props.entryEnd}
+        judgingStart={props.judgingStart} judgingEnd={props.judgingEnd}
+      />
+    )
+  })()
+  return (
+    <Card>
+      <h2>
+        <Link to={`show/${props.id}`}>{props.name}</Link>
+      </h2>
+      {cardBody}
+      <Row>
+        <Col>
+          <Button
+            color='primary'
+            className='mr-4'
+            style={{ cursor: 'pointer' }}
+            tag={Link}
+            to={`/show/${props.id}`}
+            block
+            outline
+          >
+            View Details
+          </Button>
+          <Button
+            color='primary'
+            style={{ cursor: 'pointer' }}
+            tag={Link}
+            to={`/show/${props.id}/submissions`}
+            block
+            outline
+          >
+            View Submissions
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            className='mr-4'
+            color='primary'
+            style={{ cursor: 'pointer' }}
+            tag={Link}
+            to={`/show/${props.id}/judges`}
+            block
+            outline
+          >
+            View Progress
+          </Button>
+          <Button
+            color='primary'
+            style={{ cursor: 'pointer' }}
+            tag={Link}
+            to={`/show/${props.id}/judges/assign`}
+            block
+            outline
+          >
+            Assign Judges
+          </Button>
+        </Col>
+      </Row>
+    </Card>
+  )
+}
 
-ShowCard.propTypes = {
+ShowCardCopy.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   entryStart: PropTypes.string.isRequired,
   entryEnd: PropTypes.string.isRequired,
   judgingStart: PropTypes.string.isRequired,
-  judgingEnd: PropTypes.string.isRequired
+  judgingEnd: PropTypes.string.isRequired,
+  entries: PropTypes.arrayOf(
+    PropTypes.shape({
+      entryType: PropTypes.string.isRequired
+    })
+  )
 }
 
-export default ShowCard
+export default ShowCardCopy
