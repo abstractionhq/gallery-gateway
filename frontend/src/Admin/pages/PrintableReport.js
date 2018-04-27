@@ -34,13 +34,18 @@ const VIMEO_BASE_URL = 'https://vimeo.com/'
 
 class PrintableReport extends Component {
   state = {
-    loadedImagePaths: new Set(),
     allImagesLoaded: false
+  }
+
+  loadedImagePaths = new Set()
+
+  componentDidMount () {
+    document.title = `Gallery Guide - ${this.props.show.name}`
   }
 
   onImageLoaded (path) {
     // Trigger print after all images have been loaded
-    this.state.loadedImagePaths.add(path)
+    this.loadedImagePaths.add(path)
 
     const entriesWithImage = this.props.displayEntries.filter(
       e => e.path && e.path.endsWith('.jpg')
@@ -48,7 +53,7 @@ class PrintableReport extends Component {
     const allPaths = entriesWithImage.map(e => e.path)
 
     // If all paths are now loaded, we are ready to print
-    if (allPaths.every(path => this.state.loadedImagePaths.has(path))) {
+    if (allPaths.every(path => this.loadedImagePaths.has(path))) {
       this.setState({
         allImagesLoaded: true
       })
