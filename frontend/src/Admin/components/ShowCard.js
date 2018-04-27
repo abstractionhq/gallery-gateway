@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 import Moment from 'react-moment'
 import moment from 'moment'
 import { Button, Row, Col } from 'reactstrap'
-import BeforeSubmission from './BeforeSubmission'
-import DuringSubmission from './DuringSubmission'
-import DuringJudging from './DuringJudging'
-import AfterShowEnd from './AfterShowEnd'
 
 const Card = styled.div`
   background-color: #f8f9fa;

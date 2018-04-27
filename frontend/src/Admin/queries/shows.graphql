@@ -13,5 +13,8 @@ query Shows {
     judges {
       username
     }
+    entries {
+      entryType
+    }
   }
 }
