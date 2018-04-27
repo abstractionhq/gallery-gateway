@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'reactstrap'
 import styled from 'styled-components'
-import FaChevronLeft from 'react-icons/lib/fa/chevron-left'
-import FaChevronRight from 'react-icons/lib/fa/chevron-right'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft'
+import FaChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight'
 import queryString from 'query-string'
 import { compose } from 'recompose'
 
@@ -116,7 +117,7 @@ class Vote extends Component {
               <Col xs='1'>
                 {previous && previous.id ? (
                   <Previous onClick={() => setViewing(previous.id)}>
-                    <FaChevronLeft size='4em' />
+                    <FontAwesomeIcon icon={FaChevronLeft} size='4x' />
                   </Previous>
                 ) : null}
               </Col>
@@ -129,7 +130,7 @@ class Vote extends Component {
               <Col xs='1'>
                 {next && next.id ? (
                   <Next onClick={() => setViewing(next.id)}>
-                    <FaChevronRight size='4em' />
+                    <FontAwesomeIcon icon={FaChevronRight} size='4x' />
                   </Next>
                 ) : null}
               </Col>

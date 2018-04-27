@@ -9,6 +9,8 @@ export const LOGOUT_USER = 'LOGOUT_USER'
 export const SWITCH_TO_JUDGE = 'SWITCH_TO_JUDGE'
 export const SWITCH_TO_ADMIN = 'SWITCH_TO_ADMIN'
 export const GET_DOWNLOAD_TOKEN = 'GET_DOWNLOAD_TOKEN'
+export const DISPLAY_ERROR = 'DISPLAY_ERROR'
+export const DISMISS_ERROR = 'DISMISS_ERROR'
 
 export const shouldLogin = () => {
   return !!window.localStorage.getItem('_token_v1')
@@ -61,4 +63,18 @@ export const getDownloadToken = () => (dispatch, getState, client) => {
         payload: res.data.token
       })
     }) // TODO handle errors
+}
+
+export const displayError = message => (dispatch, getState, client) => {
+  dispatch({
+    type: DISPLAY_ERROR,
+    payload: message
+  })
+}
+
+export const dismissError = index => (dispatch, getState, client) => {
+  dispatch({
+    type: DISMISS_ERROR,
+    payload: index
+  })
 }

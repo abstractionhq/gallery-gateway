@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import FaPlusCircle from 'react-icons/lib/fa/plus-circle'
-import FaBook from 'react-icons/lib/fa/book'
-import FaYouTube from 'react-icons/lib/fa/youtube'
-import FaVimeo from 'react-icons/lib/fa/vimeo'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle'
+import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
+import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
+import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 
@@ -83,9 +84,9 @@ const EntryThumb = ({ entry }) => {
           : `https://vimeo.com/${entry.videoId}`
       const icon =
         entry.provider === 'youtube' ? (
-          <FaYouTube size='3em' />
+          <FontAwesomeIcon icon={FaYouTube} size='3x' />
         ) : (
-          <FaVimeo size='3em' />
+          <FontAwesomeIcon icon={FaVimeo} size='3x' />
         )
       return (
         <a href={url} target='_blank'>
@@ -98,7 +99,7 @@ const EntryThumb = ({ entry }) => {
     case 'OTHER':
       return (
         <EntryNoThumbContainer>
-          <FaBook size='3em' />
+          <FontAwesomeIcon icon={FaBook} size='3x' />
           <h5>{entry.title}</h5>
         </EntryNoThumbContainer>
       )
@@ -114,7 +115,7 @@ const NewSubmission = ({ show }) => (
     className='text-center align-self-center d-flex justify-content-center align-items-center'
   >
     <Link to={`/submit?to=${show.id}`}>
-      <FaPlusCircle size='3em' />
+      <FontAwesomeIcon icon={FaPlusCircle} size='3x' />
       <h5 className='mt-1'>New Submission</h5>
     </Link>
   </Col>

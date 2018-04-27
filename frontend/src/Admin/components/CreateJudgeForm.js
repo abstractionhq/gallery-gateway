@@ -14,7 +14,8 @@ import yup from 'yup'
 
 class CreateJudgeForm extends Component {
   static propTypes = {
-    create: PropTypes.func.isRequired
+    create: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired
   }
 
   renderErrors = (touched, errors, field) => {
@@ -50,7 +51,9 @@ class CreateJudgeForm extends Component {
             lastName: values.lastName
           }
 
-          create(input).then(resetForm()) // Clear the form after submitted
+          create(input)
+            .then(resetForm()) // Clear the form after submitted
+            .catch(err => this.props.handleError(err.message))
         }}
         render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>

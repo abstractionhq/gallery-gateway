@@ -13,6 +13,10 @@ import styled from 'styled-components'
 
 const NavBarContainer = styled.div`
   margin-bottom: 25px;
+
+  @media print {
+    display: none !important;
+  }
 `
 
 export default class NavBar extends Component {

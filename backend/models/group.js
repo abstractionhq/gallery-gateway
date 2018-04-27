@@ -6,7 +6,13 @@ import User from './user'
 const Group = sequelize.define('group', {
   creatorUsername: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    references: {
+      model: 'users',
+      key: 'username'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   participants: {
     allowNull: false,

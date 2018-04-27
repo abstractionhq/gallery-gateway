@@ -7,11 +7,23 @@ import { ALLOWED_VOTE_VALUES } from '../constants'
 const Vote = sequelize.define('vote', {
   judgeUsername: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'username'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   entryId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'entry',
+      key: 'id'
+    },
+    onDelete: 'cascade',
+    onUpdate: 'cascade'
   },
   value: {
     type: DataTypes.INTEGER,

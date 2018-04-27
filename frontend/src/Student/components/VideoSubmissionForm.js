@@ -16,6 +16,7 @@ import yup from 'yup'
 
 import SuccessModal from './SuccessModal'
 import SubmitAsGroupRadio from './SubmitAsGroupRadio'
+import Loading from '../../shared/components/Loading'
 
 const Header = styled.h1`
   margin-bottom: 10px;
@@ -49,13 +50,22 @@ class VideoSubmissionForm extends Component {
       })
     }).isRequired,
     create: PropTypes.func.isRequired,
-    done: PropTypes.func.isRequired
+    done: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired
   }
 
   constructor (props) {
     super(props)
     this.state = {
       showModal: false
+    }
+  }
+
+  componentDidUpdate () {
+    if (this.props.data.error) {
+      this.props.data.error.graphQLErrors.forEach(e => {
+        this.props.handleError(e.message)
+      })
     }
   }
 
@@ -73,12 +83,8 @@ class VideoSubmissionForm extends Component {
     return null
   }
 
-  render () {
-    if (this.props.data.loading) {
-      return null
-    }
-
-    const { create, done, user } = this.props
+  renderShow = () => {
+    const { create, done, user, handleError } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
@@ -158,12 +164,13 @@ class VideoSubmissionForm extends Component {
             }
 
             // Create an entry, show the success modal, and then go to the dashboard
-            create(input).then(() => {
-              this.setState({ showModal: true }, () => {
-                setTimeout(done, 2000)
+            create(input)
+              .then(() => {
+                this.setState({ showModal: true }, () => {
+                  setTimeout(done, 2000)
+                })
               })
-            })
-            // TODO: Catch errors and display them to the user. Keep the form filled and don't redirect.
+              .catch(err => handleError(err.message))
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>
@@ -346,6 +353,17 @@ class VideoSubmissionForm extends Component {
         <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
     )
+  }
+
+  render () {
+    if (this.props.loading) {
+      return <Loading />
+    }
+    if (this.props.data.show) {
+      return this.renderShow()
+    } else {
+      return null
+    }
   }
 }
 

@@ -1,28 +1,18 @@
 import React, { Component, Fragment } from 'react'
-import {
-  Alert,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
-} from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from 'react-table'
 import ShowSubmissionDetails from './ShowSubmissionDetails'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import FaYouTube from 'react-icons/lib/fa/youtube'
-import FaVimeo from 'react-icons/lib/fa/vimeo'
-import FaStar from 'react-icons/lib/fa/star'
-import FaStarOpen from 'react-icons/lib/fa/star-o'
-import FaBook from 'react-icons/lib/fa/book'
-import FaExclamationTriangle from 'react-icons/lib/fa/exclamation-triangle'
-import FaClose from 'react-icons/lib/fa/close'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
+import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
+import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
+import FaStar from '@fortawesome/fontawesome-free-solid/faStar'
+import FaStarOpen from '@fortawesome/fontawesome-free-regular/faStar'
+import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
+import FaClose from '@fortawesome/fontawesome-free-solid/faTimes'
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
-
-// Alert Types
-const SUCCESS = 'SUCCESS'
-const ERROR = 'ERROR'
 
 const PhotoThumbnail = styled.img`
   height: auto;
@@ -36,6 +26,7 @@ class ShowSubmissionsTab extends Component {
   static propTypes = {
     updateInvite: PropTypes.func.isRequired,
     finalizeInvites: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
     updateExcludeFromJudging: PropTypes.func.isRequired,
     show: PropTypes.shape({
       finalized: PropTypes.bool.isRequired,
@@ -57,8 +48,6 @@ class ShowSubmissionsTab extends Component {
     super(props)
 
     this.state = {
-      alertVisible: false,
-      alertType: '',
       isFinalizeConfirmationOpen: false,
       isSubmissionModalOpen: false,
       viewingSubmissionId: null
@@ -77,13 +66,6 @@ class ShowSubmissionsTab extends Component {
     })
   }
 
-  onDismissAlert = () => {
-    this.setState({
-      alertVisible: false,
-      alertType: ''
-    })
-  }
-
   onDisplayFinalizeConfirmation = () => {
     this.setState({
       isFinalizeConfirmationOpen: true
@@ -97,74 +79,28 @@ class ShowSubmissionsTab extends Component {
     })
   }
 
-  onDisplayAlert = type => {
-    this.setState({
-      alertVisible: true,
-      alertType: type
-    })
-  }
-
   updateInvitation = (id, value) => {
-    const { updateInvite } = this.props
+    const { updateInvite, handleError } = this.props
 
-    updateInvite(id, value)
-      .then(() => {
-        this.onDisplayAlert(SUCCESS)
-        setTimeout(() => {
-          this.onDismissAlert()
-        }, 3000)
-      })
-      .catch(() => {
-        this.onDisplayAlert(ERROR)
-        setTimeout(() => {
-          this.onDismissAlert()
-        }, 3000)
-      })
+    updateInvite(id, value).catch(err => handleError(err.message))
   }
 
   render () {
-    const { show, finalizeInvites } = this.props
+    const { show, finalizeInvites, handleError } = this.props
 
     return (
       <Fragment>
-        {/* TODO: Remove alerts on this page */}
-        <Alert
-          color='success'
-          style={{
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            width: '100%',
-            zIndex: '5'
-          }}
-          isOpen={this.state.alertVisible && this.state.alertType === SUCCESS}
-          toggle={() => this.onDismissAlert()}
-          className='text-center'
-        >
-          Invitation Saved
-        </Alert>
-        <Alert
-          color='danger'
-          style={{
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            width: '100%',
-            zIndex: '5'
-          }}
-          isOpen={this.state.alertVisible && this.state.alertType === ERROR}
-          toggle={() => this.onDismissAlert()}
-          className='text-center'
-        >
-          There was an error updating the invitation
-        </Alert>
         <Modal
           isOpen={this.state.isFinalizeConfirmationOpen}
           toggle={this.onDismissFinalizeConfirmation}
           style={{ top: '25%' }}
         >
           <ModalHeader toggle={this.onDismissFinalizeConfirmation}>
-            Warning <FaExclamationTriangle />
+            Warning{' '}
+            <FontAwesomeIcon
+              icon={FaExclamationTriangle}
+              className='align-middle'
+            />
           </ModalHeader>
           <ModalBody>
             This is a permanent action and will make invitations for this show
@@ -180,7 +116,7 @@ class ShowSubmissionsTab extends Component {
             <Button
               color='danger'
               onClick={() => {
-                finalizeInvites()
+                finalizeInvites().catch(err => handleError(err.message))
                 this.onDismissFinalizeConfirmation()
               }}
             >
@@ -225,13 +161,13 @@ class ShowSubmissionsTab extends Component {
                     )
                   case 'VIDEO':
                     if (submission.provider === 'youtube') {
-                      return <FaYouTube size='2em' />
+                      return <FontAwesomeIcon icon={FaYouTube} size='2x' />
                     } else {
-                      return <FaVimeo size='2em' />
+                      return <FontAwesomeIcon icon={FaVimeo} size='2x' />
                     }
                   case 'OTHER':
                     // TODO: Should ends with .jpg should render the image thumbnail?
-                    return <FaBook size='2em' />
+                    return <FontAwesomeIcon icon={FaBook} size='2x' />
                   default:
                     console.error(
                       `Unexpected Type ${submission.entryType}`,
@@ -309,7 +245,7 @@ class ShowSubmissionsTab extends Component {
               style: { textAlign: 'center' },
               Cell: ({ original: submission }) =>
                 submission.excludeFromJudging ? (
-                  <FaClose color='red' size='2em' />
+                  <FontAwesomeIcon icon={FaClose} size='2x' color='red' />
                 ) : null
             },
             {
@@ -321,14 +257,23 @@ class ShowSubmissionsTab extends Component {
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, false)}
                   >
-                    <FaStar size='1.5em' style={{ color: 'gold' }} />
+                    <FontAwesomeIcon
+                      icon={FaStar}
+                      size='lg'
+                      className='align-middle'
+                      style={{ color: 'gold' }}
+                    />
                   </span>
                 ) : (
                   <span
                     style={{ cursor: 'pointer' }}
                     onClick={() => this.updateInvitation(submission.id, true)}
                   >
-                    <FaStarOpen size='1.5em' />
+                    <FontAwesomeIcon
+                      icon={FaStarOpen}
+                      size='lg'
+                      className='align-middle'
+                    />
                   </span>
                 ),
               style: { textAlign: 'center' },
@@ -348,6 +293,7 @@ class ShowSubmissionsTab extends Component {
                 s => s.id === this.state.viewingSubmissionId
               )}
               updateExcludeFromJudging={this.props.updateExcludeFromJudging}
+              handleError={this.props.handleError}
             />
           </ModalBody>
         </Modal>

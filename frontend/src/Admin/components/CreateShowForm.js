@@ -45,7 +45,8 @@ const CalendarContainer = styled.div`
 class CreateShowForm extends Component {
   static propTypes = {
     create: PropTypes.func.isRequired,
-    done: PropTypes.func.isRequired
+    done: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired
   }
 
   renderErrors = (touched, errors, field) => {
@@ -60,7 +61,7 @@ class CreateShowForm extends Component {
   }
 
   render () {
-    const { create, done } = this.props
+    const { create, done, handleError } = this.props
 
     return (
       <Formik
@@ -111,7 +112,9 @@ class CreateShowForm extends Component {
             .required('End Date is Required')
         })}
         onSubmit={values => {
-          create(values).then(done())
+          create(values)
+            .then(done())
+            .catch(err => handleError(err.message))
         }}
         render={({
           values,
