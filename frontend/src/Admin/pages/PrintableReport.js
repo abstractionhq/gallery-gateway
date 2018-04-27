@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import ShowForPrinting from '../queries/showForPrinting.graphql'
 import { STATIC_PATH } from '../../utils'
+import Loading from '../../shared/components/Loading'
 
 const PageContainer = styled.div`
   font-size: 16pt;
@@ -20,13 +21,21 @@ const PageContainer = styled.div`
     page-break-after: always;
   }
 `
+const LoadingContainer = styled.div`
+  margin-bottom: 25px;
+
+  @media print {
+    display: none !important;
+  }
+`
 
 const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
 const VIMEO_BASE_URL = 'https://vimeo.com/'
 
 class PrintableReport extends Component {
   state = {
-    loadedImagePaths: new Set()
+    loadedImagePaths: new Set(),
+    allImagesLoaded: false
   }
 
   onImageLoaded (path) {
@@ -40,7 +49,10 @@ class PrintableReport extends Component {
 
     // If all paths are now loaded, we are ready to print
     if (allPaths.every(path => this.state.loadedImagePaths.has(path))) {
-      window.print()
+      this.setState({
+        allImagesLoaded: true
+      })
+      setTimeout(window.print, 1000)
     }
   }
 
@@ -48,11 +60,16 @@ class PrintableReport extends Component {
     const { loading, show, displayEntries: entries } = this.props
 
     if (loading) {
-      return 'loading...'
+      return <Loading />
     }
 
     return (
       <Fragment>
+        {this.state.allImagesLoaded || entries.length === 0 ? null : (
+          <LoadingContainer>
+            <Loading />
+          </LoadingContainer>
+        )}
         <PageContainer>
           <h1>Gallery Guide</h1>
           <h2>{show.name}</h2>
