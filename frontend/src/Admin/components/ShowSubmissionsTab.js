@@ -8,10 +8,10 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
 import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
 import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
-import FaStar from '@fortawesome/fontawesome-free-solid/FaStar'
-import FaStarOpen from '@fortawesome/fontawesome-free-regular/FaStar'
+import FaStar from '@fortawesome/fontawesome-free-solid/faStar'
+import FaStarOpen from '@fortawesome/fontawesome-free-regular/faStar'
 import FaExclamationTriangle from '@fortawesome/fontawesome-free-solid/faExclamationTriangle'
-import FaClose from '@fortawesome/fontawesome-free-solid/FaTimes'
+import FaClose from '@fortawesome/fontawesome-free-solid/faTimes'
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
 const PhotoThumbnail = styled.img`
