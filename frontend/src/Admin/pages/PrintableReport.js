@@ -25,19 +25,31 @@ const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v='
 const VIMEO_BASE_URL = 'https://vimeo.com/'
 
 class PrintableReport extends Component {
-  componentDidMount () {
-    window.print()
+  state = {
+    loadedImagePaths: new Set()
+  }
+
+  onImageLoaded (path) {
+    // Trigger print after all images have been loaded
+    this.state.loadedImagePaths.add(path)
+
+    const entriesWithImage = this.props.displayEntries.filter(
+      e => e.path && e.path.endsWith('.jpg')
+    )
+    const allPaths = entriesWithImage.map(e => e.path)
+
+    // If all paths are now loaded, we are ready to print
+    if (allPaths.every(path => this.state.loadedImagePaths.has(path))) {
+      window.print()
+    }
   }
 
   render () {
-    const { loading, show } = this.props
+    const { loading, show, displayEntries: entries } = this.props
 
     if (loading) {
       return 'loading...'
     }
-
-    // Only display details about invited entries that weren't excluded
-    const entries = show.entries.filter(e => e.invited && !e.excludeFromJudging)
 
     return (
       <Fragment>
@@ -67,6 +79,7 @@ class PrintableReport extends Component {
                 <img
                   src={`${STATIC_PATH}${entry.path}`}
                   alt='submission'
+                  onLoad={() => this.onImageLoaded(entry.path)}
                   style={{
                     width: 'auto',
                     height: 'auto',
@@ -144,6 +157,9 @@ export default compose(
     }),
     props: ({ data: { show, loading } }) => ({
       show,
+      displayEntries: loading
+        ? null
+        : show.entries.filter(e => e.invited && !e.excludeFromJudging),
       loading
     })
   })
