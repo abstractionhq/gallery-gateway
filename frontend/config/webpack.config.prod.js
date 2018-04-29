@@ -9,12 +9,15 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    Main: './src/app.js',
+    Main: [
+      './src/app.js',
+      // 'react-dates' needs to be in the same bundle where it's initialized (See: 'src/index.js')
+      'react-dates'
+    ],
     Lib: [
       'formik',
       'yup',
       'moment',
-      'react-dates',
       'react-dropzone',
       'react-images',
       'react-moment',
@@ -63,9 +66,7 @@ module.exports = {
     new webpack.NamedChunksPlugin(),
     // Set 'process.env.NODE_ENV' to 'production'
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
     // Ignore unused 'moment' locale files
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
