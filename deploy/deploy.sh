@@ -120,6 +120,7 @@ stderr_logfile_maxbytes=1MB
 stderr_logfile_backups=10
 stderr_capture_maxbytes=1MB
 stderr_events_enabled=false
+user=$NODE_USER
 SUPERVISORCONF
 
 #
