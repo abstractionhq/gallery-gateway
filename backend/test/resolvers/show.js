@@ -25,14 +25,10 @@ describe('Show Resolvers', function () {
         createShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
       ).to.throw(/Permission Denied/)
     })
-    it('Does not allow null values', function (done) {
-      createShow('', {}, {auth: {type: 'ADMIN'}})
-        .catch((err) => {
-          expect(err).to.exist
-          const result = err.message.match(/notNull Violation/)
-          expect(result).to.not.equal(null)
-          done()
-        })
+    it('Does not allow null values', function () {
+      expect(() =>
+        createShow('', {}, {auth: {type: 'ADMIN'}})
+      ).to.throw(/Cannot read property 'entryStart' of undefined/)
     })
     it('Creates a show', function (done) {
       const input = { input: {

@@ -1,0 +1,39 @@
+query Show($id: ID!) {
+  show(id: $id) {
+    id
+    name
+    entries {
+      id
+      title
+      comment
+      entryType
+      invited
+      forSale
+      moreCopies
+      excludeFromJudging
+      student {
+        username
+        firstName
+        lastName
+        displayName
+      }
+      group {
+        id
+        participants
+      }
+      ... on Video {
+        provider
+        videoId
+      }
+      ... on Photo {
+        horizDimInch
+        vertDimInch
+        path
+        mediaType
+      }
+      ... on OtherMedia {
+        path
+      }
+    }
+  }
+}
