@@ -4,7 +4,7 @@ import Moment from 'react-moment'
 
 const AfterShowEnd = props => (
   <div>
-    <h5> Closed Show </h5>
+    <h4> Closed Show </h4>
     <Moment format='MMMM D, YYYY'>{props.entryStart}</Moment>
     -
     <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>

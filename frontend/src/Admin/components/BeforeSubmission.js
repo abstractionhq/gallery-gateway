@@ -4,7 +4,7 @@ import Moment from 'react-moment'
 
 const BeforeSubmission = props => (
   <div>
-    <h5> Pre Show </h5>
+    <h4> Pre Show </h4>
     <dl>
       <dt>Opens:</dt>
       <dd>

@@ -19,7 +19,7 @@ const Card = styled.div`
   width: 100%;
 `
 
-const ShowCardCopy = props => {
+const ShowCard = props => {
   const cardBody = (() => {
     const currentTime = moment(Date.now())
     const isAfterEntryStart = currentTime >= moment(props.entryStart)
@@ -140,7 +140,7 @@ const ShowCardCopy = props => {
   )
 }
 
-ShowCardCopy.propTypes = {
+ShowCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   entryStart: PropTypes.string.isRequired,
@@ -154,4 +154,4 @@ ShowCardCopy.propTypes = {
   )
 }
 
-export default ShowCardCopy
+export default ShowCard
