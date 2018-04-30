@@ -12,8 +12,6 @@ config
 
 config.set('auth', auth)
 config.set('upload', upload)
-config.set('api:prefix', 'api')
-config.set('api:version', 'v1')
 
 config.defaults({
   NODE_ENV: 'development'
