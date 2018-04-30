@@ -4,7 +4,7 @@ import Moment from 'react-moment'
 
 const DuringSubmission = props => (
   <div>
-    <h5> Submitting </h5>
+    <h4> Submitting </h4>
     <dl>
       <dt>Opens:</dt>
       <dd>
