@@ -3,7 +3,7 @@ import { VIDEO_ENTRY, ALLOWED_VIDEO_PROVIDERS } from '../constants'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 
-export default sequelize.define('video', {
+const Video = sequelize.define('video', {
   provider: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -24,13 +24,6 @@ export default sequelize.define('video', {
   }
 },
 {
-  instanceMethods: {
-    getEntry () {
-      return Entry.findOne({
-        where: {entryType: VIDEO_ENTRY, entryId: this.id}
-      })
-    }
-  },
   validate: {
     allowed_provider () {
       if (!ALLOWED_VIDEO_PROVIDERS.has(this.provider)) {
@@ -39,3 +32,9 @@ export default sequelize.define('video', {
     }
   }
 })
+
+Video.prototype.getEntry = function getEntry () {
+  return Entry.findOne({where: {entryType: VIDEO_ENTRY, entryId: this.id}})
+}
+
+export default Video
