@@ -50,11 +50,9 @@ class LoginSwitch extends Component {
       case 'STUDENT':
         return <StudentPage />
       default:
-        // If for some reason, we receive an unknown user type, render the splash page
-        // TODO: Make an error page that says:
-        // 'Oops! An error occurred. Try clearing your storage and
-        // cookies and refreshing the page. If the problem persists, contact ______.'
-        return <HomePage />
+        // If for some reason, we receive an unknown user type, throw an error,
+        // so that the error boundary can catch it and render the error page
+        throw new Error('Unknown User Type')
     }
   }
 }

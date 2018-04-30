@@ -62,7 +62,8 @@ export const getDownloadToken = () => (dispatch, getState, client) => {
         type: GET_DOWNLOAD_TOKEN,
         payload: res.data.token
       })
-    }) // TODO handle errors
+    })
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const displayError = message => (dispatch, getState, client) => {
