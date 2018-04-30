@@ -4,8 +4,8 @@ module.exports = {
     'standard'
   ],
   env: {
-    "node": true,
-    "es6": true,
-    "mocha": true
+    node: true,
+    es6: true,
+    mocha: true
   }
 }
