@@ -34,7 +34,7 @@ class LoginSwitch extends Component {
   render () {
     const { user, performingRole } = this.props
 
-    if (!user) {
+    if (!user.type) {
       return <HomePage />
     }
 
