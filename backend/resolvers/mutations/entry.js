@@ -1,5 +1,5 @@
 import db from '../../config/sequelize'
-
+import moment from 'moment'
 import { UserError } from 'graphql-errors'
 import Entry from '../../models/entry'
 import Image from '../../models/image'
@@ -90,7 +90,7 @@ const isSubmissionEntryOpen = (
 ) => {
   return Show.findById(showId, { transaction: t, rejectOnEmpty: true })
     .then(show => {
-      if (new Date(show.entryEnd) > new Date()) {
+      if (moment().isBefore(moment(show.entryEnd))) {
         return Promise.resolve()
       } else {
         throw new UserError('Submission deadline has ended')
