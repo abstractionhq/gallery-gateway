@@ -7,6 +7,7 @@ import {
   assignJudgesToShow,
   removeJudgesFromShow
 } from '../actions'
+import { displayError } from '../../shared/actions'
 
 import JudgesQuery from '../queries/judges.graphql'
 import JudgesForShowQuery from '../queries/judgesForShow.graphql'
@@ -40,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, { showId }) => ({
   fetchData: () => dispatch(fetchJudgesByAssignmentForShow(showId)),
   afterAssign: usernames => dispatch(assignJudgesToShow(showId, usernames)),
-  afterUnassign: usernames => dispatch(removeJudgesFromShow(showId, usernames))
+  afterUnassign: usernames => dispatch(removeJudgesFromShow(showId, usernames)),
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(

@@ -4,8 +4,8 @@
       "env", {
         "loose": true,
         "modules": false,
-        "target": ["ie 10"],
-        "useBuiltIns": "entry"
+        "target": ["ie 11"],
+        "useBuiltIns": true
       }
     ],
     "stage-0",
@@ -14,7 +14,17 @@
   "env": {
     "production": {
       "plugins": [
-        "transform-react-remove-prop-types"
+        "transform-react-remove-prop-types",
+        ["transform-imports", {
+          "reactstrap": {
+            "transform": "reactstrap/lib/${member}",
+            "preventFullImport": true
+          },
+          "lodash": {
+            "transform": "lodash/${member}",
+            "preventFullImport": true
+          }
+        }]
       ]
     },
     "test": {
@@ -24,7 +34,7 @@
             "loose": true,
             "modules": "commonjs",
             "target": ["ie 10"],
-            "useBuiltIns": "entry"
+            "useBuiltIns": true
           }
         ],
         "stage-0",

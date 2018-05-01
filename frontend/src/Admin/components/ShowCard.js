@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Row, Col, Button } from 'reactstrap'
+import { Button, Row, Col } from 'reactstrap'
 import moment from 'moment'
 import Moment from 'react-moment'
 import BeforeSubmission from './BeforeSubmission'
@@ -43,19 +43,41 @@ const ShowCard = props => {
         <dl>
           <dt>Submissions Begin:</dt>
           <dd>
-            <Moment format='MMMM D, YYYY'>{props.entryStart}</Moment>
+            <Moment
+              title={moment(props.entryStart).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.entryStart}
+            </Moment>
           </dd>
           <dt>Submission Closes:</dt>
           <dd>
-            <Moment format='MMMM D, YYYY'>{props.entryEnd}</Moment>
+            <Moment
+              title={moment(props.entryEnd).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.entryEnd}
+            </Moment>
           </dd>
           <dt>Judging Begins:</dt>
           <dd>
-            <Moment format='MMMM D, YYYY'>{props.judgingStart}</Moment>
+            <Moment
+              title={moment(props.judgingStart).format(
+                'MMMM D, YYYY hh:mm:ss a'
+              )}
+              format='MMMM D, YYYY'
+            >
+              {props.judgingStart}
+            </Moment>
           </dd>
           <dt>Judging Closes:</dt>
           <dd>
-            <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
+            <Moment
+              title={moment(props.judgingEnd).format('MMMM D, YYYY hh:mm:ss a')}
+              format='MMMM D, YYYY'
+            >
+              {props.judgingEnd}
+            </Moment>
           </dd>
         </dl>
       )

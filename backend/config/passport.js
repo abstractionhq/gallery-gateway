@@ -25,18 +25,22 @@ export const samlStrategy = new saml.Strategy({
   disableRequestedAuthnContext: true
 }, function (profile, done) {
   // We've received login success, we need to look up the user
-  const email = profile.email || ''
-  const user = email.replace('@example.com', '')
-  if (!user) {
-    return done('No user property found', null)
+  if (config.get('NODE_ENV') !== 'production') {
+    profile.uid = profile.email.replace('@example.com', '')
+    profile.givenName = 'Unknown'
+    profile.sn = 'Unknown'
+  }
+
+  if (!profile.uid || !profile.givenName || !profile.sn) {
+    return done('Profile is missing a property', null)
   }
 
   User
     .findOrCreate({
-      where: { username: user },
+      where: { username: profile.uid },
       defaults: {
-        firstName: 'Unknown',
-        lastName: 'Unknown',
+        firstName: profile.givenName,
+        lastName: profile.sn,
         type: STUDENT
       }
     })

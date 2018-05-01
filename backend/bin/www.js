@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+// NOTE: This is the entrypoint for Backpack (https://github.com/jaredpalmer/backpack)
 import app from '../server'
 import nconf from '../config'
 

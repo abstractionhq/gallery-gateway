@@ -13,6 +13,10 @@ import styled from 'styled-components'
 
 const NavBarContainer = styled.div`
   margin-bottom: 25px;
+
+  @media print {
+    display: none !important;
+  }
 `
 
 export default class NavBar extends Component {
@@ -47,10 +51,17 @@ export default class NavBar extends Component {
             <Nav className='ml-auto' navbar>
               <NavItem>
                 <NavLink tag={Link} to='/' onClick={this.props.switchToJudge}>
-                  View as Judge |
+                  View as Judge
                 </NavLink>
-                {/* TODO: Move the | out of the link */}
               </NavItem>
+              <li>
+                <span
+                  className='text-muted d-md-block d-none'
+                  style={{ padding: '8px', cursor: 'default' }}
+                >
+                  |
+                </span>
+              </li>
               <NavItem>
                 <NavLink tag={Link} to='/judges'>
                   Judges

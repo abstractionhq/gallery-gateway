@@ -4,13 +4,13 @@ import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
 
 // Initialize Global Imports
-import 'moment-timezone' // See: https://github.com/headzoo/react-moment#timezone-support
 import 'react-dates/initialize' // See: https://github.com/airbnb/react-dates#initialize
 
 import apollo from '../config/apollo'
 import history from './history'
 import store from './store'
 
+import ErrorHandler from './shared/components/ErrorHandler'
 import LoginSwitch from './shared/components/LoginSwitch'
 
 // Import Global CSS
@@ -22,7 +22,9 @@ const Root = () => (
   <ApolloProvider client={apollo}>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <LoginSwitch />
+        <ErrorHandler>
+          <LoginSwitch />
+        </ErrorHandler>
       </ConnectedRouter>
     </Provider>
   </ApolloProvider>

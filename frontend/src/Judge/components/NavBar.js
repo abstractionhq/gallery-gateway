@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import {
@@ -35,12 +35,21 @@ class NavBar extends Component {
 
   renderSwitchToAdmin = () => {
     return (
-      <NavItem>
-        <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>
-          View as Admin |
-        </NavLink>
-        {/* TODO: Move the | out of the link */}
-      </NavItem>
+      <Fragment>
+        <NavItem>
+          <NavLink tag={Link} to='/' onClick={this.props.switchToAdmin}>
+            View as Admin
+          </NavLink>
+        </NavItem>
+        <li>
+          <span
+            className='text-muted d-md-block d-none'
+            style={{ padding: '8px', cursor: 'default' }}
+          >
+            |
+          </span>
+        </li>
+      </Fragment>
     )
   }
 

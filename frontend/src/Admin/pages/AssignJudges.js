@@ -50,6 +50,7 @@ class AssignJudges extends Component {
   }
 
   render () {
+    // TODO: Show loading if loading so that 'Not Found' doesn't flash on valid shows
     return this.props.show ? this.renderPage(this.props.show) : <NotFound />
   }
 }

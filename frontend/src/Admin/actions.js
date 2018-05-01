@@ -1,9 +1,8 @@
-import Promise from 'bluebird'
-
 import ShowQuery from './queries/show.graphql'
 import ShowsQuery from './queries/shows.graphql'
 import JudgesQuery from './queries/judges.graphql'
 import JudgesForShowQuery from './queries/judgesForShow.graphql'
+import { displayError } from '../shared/actions'
 import { ZIP_PATH, CSV_PATH } from '../utils'
 
 export const LOADING_DATA = 'LOADING_DATA'
@@ -24,27 +23,27 @@ export const fetchShow = showId => (dispatch, getState, client) => {
       variables: {
         id: showId
       }
-    })
+    }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { show } }) => dispatch({ type: FETCH_SHOW, payload: show }))
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchShows = () => (dispatch, getState, client) => {
   return client
-    .query({ query: ShowsQuery })
+    .query({ query: ShowsQuery }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { shows } }) =>
       dispatch({ type: FETCH_SHOWS, payload: shows })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudges = () => (dispatch, getState, client) => {
   return client
-    .query({ query: JudgesQuery })
+    .query({ query: JudgesQuery }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { judges } }) =>
       dispatch({ type: FETCH_JUDGES, payload: judges })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
@@ -54,11 +53,11 @@ export const fetchJudgesForShow = showId => (dispatch, getState, client) => {
       variables: {
         id: showId
       }
-    })
+    }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { show } }) =>
       dispatch({ type: FETCH_JUDGES_FOR_SHOW, payload: show })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchJudgesByAssignmentForShow = showId => (
@@ -76,10 +75,10 @@ export const fetchJudgesByAssignmentForShow = showId => (
     dispatch(fetchShows()),
     dispatch(fetchJudges())
   ])
-    .spread(({ data: { show }, loading }) => {
+    .then(([{ data: { show }, loading }]) => {
       if (loading) {
         dispatch({
-          type: LOADING_DATA,
+          type: LOADING_DATA, // TODO: Do something w/ this
           payload: {}
         })
       } else {
@@ -89,7 +88,7 @@ export const fetchJudgesByAssignmentForShow = showId => (
         })
       }
     })
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const assignJudgesToShow = (showId, usernames) => (

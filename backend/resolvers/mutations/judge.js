@@ -16,8 +16,13 @@ export function createJudge (_, args, req) {
           type: JUDGE
         }
         return User.create(user)
+      } else if (user.type === STUDENT) {
+        // If a student user is found, update this to a judge
+        user.type = JUDGE
+        user.firstName = args.input.firstName
+        user.lastName = args.input.lastName
+        return user.save()
       }
-
       throw new UserError('Username Already Exists')
     })
 }

@@ -5,9 +5,11 @@ import { compose } from 'recompose'
 import CreateJudgeMutation from '../mutations/createJudge.graphql'
 import CreateJudgeForm from '../components/CreateJudgeForm'
 import { addJudge } from '../actions'
+import { displayError } from '../../shared/actions'
 
 const mapDispatchToProps = dispatch => ({
-  myAddJudge: judge => dispatch(addJudge(judge))
+  myAddJudge: judge => dispatch(addJudge(judge)),
+  handleError: message => dispatch(displayError(message))
 })
 
 export default compose(
@@ -18,7 +20,6 @@ export default compose(
         mutate({
           variables: { input: judge }
         }).then(({ data: { createJudge } }) => myAddJudge(createJudge))
-      // TODO catch errors
     })
   })
 )(CreateJudgeForm)

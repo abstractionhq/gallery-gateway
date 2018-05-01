@@ -2,6 +2,7 @@ import { push } from 'connected-react-router'
 
 import SubmissionQuery from './queries/submission.graphql'
 import SubmissionsQuery from './queries/submissions.graphql'
+import { displayError } from '../shared/actions'
 import ShowVotes from './queries/showVotes.graphql'
 import GetVote from './queries/entryVote.graphql'
 
@@ -23,7 +24,7 @@ export const fetchSubmission = submissionId => (dispatch, getState, client) => {
     .then(({ data: { submission } }) =>
       dispatch({ type: FETCH_SUBMISSION, payload: submission })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchSubmissions = showId => (dispatch, getState, client) => {
@@ -38,9 +39,15 @@ export const fetchSubmissions = showId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { submissions } }) =>
-      dispatch({ type: FETCH_SUBMISSIONS, payload: { submissions, username } })
+      dispatch({
+        type: FETCH_SUBMISSIONS,
+        payload: {
+          submissions: submissions.filter(s => !s.excludeFromJudging),
+          username
+        }
+      })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchVotes = showId => (dispatch, getState, client) => {
@@ -58,7 +65,7 @@ export const fetchVotes = showId => (dispatch, getState, client) => {
     .then(({ data: { votes } }) =>
       dispatch({ type: FETCH_VOTES, payload: { votes, showId } })
     )
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const fetchVote = submissionId => (dispatch, getState, client) => {
@@ -72,7 +79,7 @@ export const fetchVote = submissionId => (dispatch, getState, client) => {
       }
     })
     .then(({ data: { vote } }) => dispatch({ type: FETCH_VOTE, payload: vote }))
-    .catch(console.error) // TODO: Handle the error
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const setViewing = (showId, entryId) => (dispatch, getState, client) => {
