@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Button, Row, Col } from 'reactstrap'
+import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
 import Moment from 'react-moment'
 import BeforeSubmission from './BeforeSubmission'
@@ -21,14 +21,14 @@ const Card = styled.div`
 
 const ShowCard = props => {
   const cardBody = (() => {
-    const currentTime = moment(Date.now())
-    const isAfterEntryStart = currentTime >= moment(props.entryStart)
-    const isBeforeEntryEnd = currentTime < moment(props.entryEnd)
-    const isAfterJudgingStart = currentTime >= moment(props.judgingStart)
-    const isBeforeJudgingEnd = currentTime < moment(props.judgingEnd)
-    const isAfterJudgingEnd = currentTime >= moment(props.judgingEnd)
-    const isAfterEntryEnd = currentTime >= moment(props.entryEnd)
-    const isBeforeJudgingStart = currentTime < moment(props.judgingStart)
+    const currentTime = moment()
+    const isAfterEntryStart = currentTime.isAfter(moment(props.entryStart))
+    const isBeforeEntryEnd = currentTime.isBefore(moment(props.entryEnd))
+    const isAfterJudgingStart = currentTime.isAfter(moment(props.judgingStart))
+    const isBeforeJudgingEnd = currentTime.isBefore(moment(props.judgingEnd))
+    const isAfterJudgingEnd = currentTime.isAfter(moment(props.judgingEnd))
+    const isAfterEntryEnd = currentTime.isAfter(moment(props.entryEnd))
+    const isBeforeJudgingStart = currentTime.isBefore(moment(props.judgingStart))
     // Closed
     if (isAfterJudgingEnd) {
       return <AfterShowEnd entryStart={props.entryStart} judgingEnd={props.judgingEnd}/>
@@ -40,46 +40,28 @@ const ShowCard = props => {
     // Between Submission and Judging
     if (isAfterEntryEnd && isBeforeJudgingStart) {
       return (
-        <dl>
-          <dt>Submissions Begin:</dt>
-          <dd>
-            <Moment
-              title={moment(props.entryStart).format('MMMM D, YYYY hh:mm:ss a')}
-              format='MMMM D, YYYY'
-            >
-              {props.entryStart}
-            </Moment>
-          </dd>
-          <dt>Submission Closes:</dt>
-          <dd>
-            <Moment
-              title={moment(props.entryEnd).format('MMMM D, YYYY hh:mm:ss a')}
-              format='MMMM D, YYYY'
-            >
-              {props.entryEnd}
-            </Moment>
-          </dd>
-          <dt>Judging Begins:</dt>
-          <dd>
-            <Moment
-              title={moment(props.judgingStart).format(
-                'MMMM D, YYYY hh:mm:ss a'
-              )}
-              format='MMMM D, YYYY'
-            >
-              {props.judgingStart}
-            </Moment>
-          </dd>
-          <dt>Judging Closes:</dt>
-          <dd>
-            <Moment
-              title={moment(props.judgingEnd).format('MMMM D, YYYY hh:mm:ss a')}
-              format='MMMM D, YYYY'
-            >
-              {props.judgingEnd}
-            </Moment>
-          </dd>
-        </dl>
+        <Row>
+          <Col>
+            <dt>Submissions Begin:</dt>
+            <dd>
+              <Moment format='MMMM D, YYYY'>{props.entryStart}</Moment>
+            </dd>
+            <dt>Submission Closes:</dt>
+            <dd>
+              <Moment format='MMMM D, YYYY'>{props.entryEnd}</Moment>
+            </dd>
+          </Col>
+          <Col>
+            <dt>Judging Begins:</dt>
+            <dd>
+              <Moment format='MMMM D, YYYY'>{props.judgingStart}</Moment>
+            </dd>
+            <dt>Judging Closes:</dt>
+            <dd>
+              <Moment format='MMMM D, YYYY'>{props.judgingEnd}</Moment>
+            </dd>
+          </Col>
+        </Row>
       )
     }
     // Submission
