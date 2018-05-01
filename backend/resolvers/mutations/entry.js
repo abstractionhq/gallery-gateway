@@ -1,5 +1,5 @@
 import db from '../../config/sequelize'
-
+import moment from 'moment'
 import { UserError } from 'graphql-errors'
 import Entry from '../../models/entry'
 import Image from '../../models/image'
@@ -78,6 +78,26 @@ const canMakeMoreSingleEntries = (
     )
 }
 
+const isSubmissionEntryOpen = (
+  {
+    input: {
+      entry: {
+        showId
+      }
+    }
+  },
+  t
+) => {
+  return Show.findById(showId, { transaction: t, rejectOnEmpty: true })
+    .then(show => {
+      if (moment().isBefore(moment(show.entryEnd))) {
+        return Promise.resolve()
+      } else {
+        throw new UserError('Submission deadline has ended')
+      }
+    })
+}
+
 export function updateEntry (_, args, req) {
   // Only admins can update entries
   if (req.auth.type !== ADMIN) {
@@ -98,14 +118,17 @@ export function createPhoto (_, args, req) {
   return db.transaction(t =>
     canMakeMoreSingleEntries(args, t)
       .then(() =>
-        Image.create({
-          path: args.input.path,
-          horizDimInch: args.input.horizDimInch,
-          vertDimInch: args.input.vertDimInch,
-          mediaType: args.input.mediaType
-        }, { transaction: t })
-          .then(image =>
-            createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
+        isSubmissionEntryOpen(args, t)
+          .then(() =>
+            Image.create({
+              path: args.input.path,
+              horizDimInch: args.input.horizDimInch,
+              vertDimInch: args.input.vertDimInch,
+              mediaType: args.input.mediaType
+            }, { transaction: t })
+              .then(image =>
+                createEntry(args.input.entry, IMAGE_ENTRY, image.id, t)
+              )
           )
       )
   )
@@ -123,12 +146,15 @@ export function createVideo (_, args, req) {
   return db.transaction(t =>
     canMakeMoreSingleEntries(args, t)
       .then(() =>
-        Video.create({
-          provider: type,
-          videoId: id
-        }, { transaction: t })
-          .then(video =>
-            createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
+        isSubmissionEntryOpen(args, t)
+          .then(() =>
+            Video.create({
+              provider: type,
+              videoId: id
+            }, { transaction: t })
+              .then(video =>
+                createEntry(args.input.entry, VIDEO_ENTRY, video.id, t)
+              )
           )
       )
   )
@@ -142,11 +168,14 @@ export function createOtherMedia (_, args, req) {
   return db.transaction(t =>
     canMakeMoreSingleEntries(args, t)
       .then(() =>
-        Other.create({
-          path: args.input.path
-        }, { transaction: t })
-          .then(other =>
-            createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
+        isSubmissionEntryOpen(args, t)
+          .then(() =>
+            Other.create({
+              path: args.input.path
+            }, { transaction: t })
+              .then(other =>
+                createEntry(args.input.entry, OTHER_ENTRY, other.id, t)
+              )
           )
       )
   )
