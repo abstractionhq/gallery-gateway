@@ -108,8 +108,16 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/
+        loaders: 'babel-loader',
+        exclude: (modulePath) => {
+          // It's typically a best practice for 'node_modules' to transpile
+          // their code to ES5 when published to npm, so normally we would exclude
+          // all 'node_modules' from being transpiled. However, the dependencies
+          // 'query-string' and 'strict-uri-encode' don't transpile their output,
+          // so we have to in order to support IE11.
+          return /node_modules/.test(modulePath) &&
+              !/node_modules(\/|\\)(query-string|strict-uri-encode)/.test(modulePath)
+        }
       },
       {
         test: /\.(graphql|gpl)$/,
