@@ -4,7 +4,6 @@ import { ConnectedRouter } from 'connected-react-router'
 import { Provider } from 'react-redux'
 
 // Initialize Global Imports
-import 'moment-timezone' // See: https://github.com/headzoo/react-moment#timezone-support
 import 'react-dates/initialize' // See: https://github.com/airbnb/react-dates#initialize
 
 import apollo from '../config/apollo'

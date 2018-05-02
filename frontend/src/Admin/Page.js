@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard'
 import ViewShow from './pages/ViewShow'
+import PrintableReport from './pages/PrintableReport'
 import CreateShow from './pages/CreateShow'
 import AssignJudges from './pages/AssignJudges'
 import ManageUsers from './pages/ManageUsers'
@@ -16,6 +17,7 @@ const Admin = () => (
       <Route exact path='/' component={Dashboard} />
       <Route exact path='/show/new' component={CreateShow} />
       <Route exact path='/show/:id/judges/assign' component={AssignJudges} />
+      <Route path='/show/:id/print' component={PrintableReport} />
       <Route path='/show/:id' component={ViewShow} />
       <Route path='/users' component={ManageUsers} />
       <Route component={NotFound} />

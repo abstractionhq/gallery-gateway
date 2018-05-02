@@ -1,10 +1,22 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai'
+import config from '../../config'
+import fs from 'fs'
+import uuidv4 from 'uuid/v4'
+import mkdirp from 'mkdirp'
 
 import Vote from '../../models/vote'
 import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutations/show'
-import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId } from '../factories'
+import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId, fakeOtherEntry } from '../factories'
+import { execGraphql } from '../util'
+import Show from '../../models/show'
+import Entry from '../../models/entry'
+import Image from '../../models/image'
+import Other from '../../models/other'
+
+const imageDir = config.get('upload:imageDir')
+const pdfDir = config.get('upload:pdfDir')
 
 describe('Show Resolvers', function () {
   describe('Create a show', function () {
@@ -13,14 +25,10 @@ describe('Show Resolvers', function () {
         createShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
       ).to.throw(/Permission Denied/)
     })
-    it('Does not allow null values', function (done) {
-      createShow('', {}, {auth: {type: 'ADMIN'}})
-        .catch((err) => {
-          expect(err).to.exist
-          const result = err.message.match(/notNull Violation/)
-          expect(result).to.not.equal(null)
-          done()
-        })
+    it('Does not allow null values', function () {
+      expect(() =>
+        createShow('', {}, {auth: {type: 'ADMIN'}})
+      ).to.throw(/Cannot read property 'entryStart' of undefined/)
     })
     it('Creates a show', function (done) {
       const input = { input: {
@@ -55,6 +63,129 @@ describe('Show Resolvers', function () {
           done()
         })
     })
+  })
+  describe('Delete a show', () => {
+    it('does not let non-admins remove a show', () =>
+      fakeShow()
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'STUDENT' }
+          )
+            .then(result => {
+              expect(result.errors).to.be.length(1)
+            })
+            .then(() =>
+              // expect nothing to have been deleted
+              Show.count().then(numShows => {
+                expect(numShows).to.eq(1)
+              })
+            )
+        )
+    )
+    it('removes a simple show', () =>
+      fakeShow()
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0)
+              })
+            })
+        )
+    )
+    it('removes any attached entries', () => {
+      const uuid1 = uuidv4()
+      const path1 = `${uuid1[0]}/${uuid1[1]}/${uuid1}.jpg`
+      const path1thumb = `${uuid1[0]}/${uuid1[1]}/${uuid1}_thumb.jpg`
+      mkdirp.sync(`${imageDir}/${uuid1[0]}/${uuid1[1]}`)
+      fs.closeSync(fs.openSync(`${imageDir}/${path1}`, 'w'))
+      fs.closeSync(fs.openSync(`${imageDir}/${path1thumb}`, 'w'))
+      const uuid2 = uuidv4()
+      const path2 = `${uuid2[0]}/${uuid2[1]}/${uuid2}.pdf`
+      mkdirp.sync(`${pdfDir}/${uuid2[0]}/${uuid2[1]}`)
+      fs.closeSync(fs.openSync(`${pdfDir}/${path2}`, 'w'))
+      return fakeShow()
+        .then(show => fakeImageEntry({show, path: path1}).then(() => show))
+        .then(show => fakeOtherEntry({show, path: path2}).then(() => show))
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0, 'should have no shows')
+              })
+            })
+            .then(() => {
+              // ensure no entries exist in the db
+              return Entry.count().then(numEntries => {
+                expect(numEntries).to.eq(0, 'should have no entries')
+              })
+            })
+            .then(() => {
+              // ensure no Images exist in the db
+              return Image.count().then(numImages => {
+                expect(numImages).to.eq(0, 'should have no images')
+              })
+            })
+            .then(() => {
+              // ensure no Images exist in the db
+              return Other.count().then(numOthers => {
+                expect(numOthers).to.eq(0, 'should have no other entries')
+              })
+            })
+            .then(() => {
+              // Ensure that all files were deleted
+              expect(
+                fs.existsSync(`${imageDir}/${path1}`)
+              ).to.eq(false, 'path1 should not exist')
+              expect(
+                fs.existsSync(`${imageDir}/${path1thumb}`)
+              ).to.eq(false, 'path1 should not exist')
+              expect(
+                fs.existsSync(`${pdfDir}/${path2}`)
+              ).to.eq(false, 'path2 should not exist')
+            })
+        )
+    })
+    it('removes despite assigned judges', () =>
+      Promise.all([fakeUser({ type: 'JUDGE' }), fakeShow()])
+        .then(([judge, show]) =>
+          show.addUser(judge)
+            .then(() => show)
+        )
+        .then(show =>
+          execGraphql(`
+            mutation {
+              deleteShow(id: ${show.id})
+            }
+          `,
+          { type: 'ADMIN' }
+          )
+            .then(() => {
+              // ensure no shows exist in the db
+              return Show.count().then(numShows => {
+                expect(numShows).to.eq(0)
+              })
+            })
+        )
+    )
   })
   describe('Assign to show', function () {
     it('Does not allow non-admins', function () {

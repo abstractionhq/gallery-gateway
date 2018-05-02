@@ -1,5 +1,5 @@
 import axios from 'axios'
-import jwt from 'jsonwebtoken'
+import decodeJWT from 'jwt-decode'
 import { push } from 'connected-react-router'
 
 import { DOWNLOAD_TOKEN_PATH } from '../utils'
@@ -18,7 +18,7 @@ export const shouldLogin = () => {
 
 export const login = () => (dispatch, getState, client) => {
   const token = window.localStorage.getItem('_token_v1')
-  const user = jwt.decode(token)
+  const user = decodeJWT(token)
   dispatch({
     type: LOGIN_USER,
     payload: {
@@ -62,7 +62,8 @@ export const getDownloadToken = () => (dispatch, getState, client) => {
         type: GET_DOWNLOAD_TOKEN,
         payload: res.data.token
       })
-    }) // TODO handle errors
+    })
+    .catch(err => dispatch(displayError(err.message)))
 }
 
 export const displayError = message => (dispatch, getState, client) => {

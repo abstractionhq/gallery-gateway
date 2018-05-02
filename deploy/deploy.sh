@@ -37,29 +37,29 @@ cd $DEST_FOLDER;
 cd `ls`;
 
 PROJECT_ROOT=`pwd`;
+NODE_ENV=production
 
 #
-# Install & Build the Frontend
+# Install dependencies & Build the Frontend
 #
-cd frontend;
-NODE_ENV=production
+cd $PROJECT_ROOT/frontend;
 yarn install;
 yarn run build;
+
+#
+# Install dependencies & Build the Backend
+#
+cd $PROJECT_ROOT/backend;
+npm install;
+npm run build;
 
 #
 # Move the Frontend to Static Site Directory
 #
 # Remove any existing builds
+cd $PROJECT_ROOT/frontend;
 sudo rm -r /var/www/html/*;
 sudo cp -r dist/* /var/www/html/;
-
-#
-# Build the Backend
-#
-cd ..;
-cd backend;
-npm install;
-npm run build;
 
 #
 # Take down old server
@@ -80,6 +80,7 @@ sudo chown $NODE_USER /opt/node/gallerygateway/uploads;
 #
 # Copy backend files into place
 #
+cd $PROJECT_ROOT/backend;
 sudo cp build/main.js /opt/node/gallerygateway/;
 sudo rm -r /opt/node/gallerygateway/node_modules;
 sudo mv node_modules /opt/node/gallerygateway/;
@@ -119,11 +120,13 @@ stderr_logfile_maxbytes=1MB
 stderr_logfile_backups=10
 stderr_capture_maxbytes=1MB
 stderr_events_enabled=false
+user=$NODE_USER
 SUPERVISORCONF
 
 #
 # Migrate the database
 #
+cd $PROJECT_ROOT/backend;
 cp /opt/node/gallerygateway/.env .env;
 # stub some keys -- we don't need them, but they must exist for node to migrate
 mkdir keys;

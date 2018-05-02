@@ -168,7 +168,9 @@ const ShowCard = props => (
         ) : (
           <div>
             Accepting Submissions Until:{' '}
-            <Moment format='MMMM D, YYYY'>{props.show.entryEnd}</Moment>
+            <Moment format='MMMM D, YYYY hh:mm:ss a'>
+              {props.show.entryEnd}
+            </Moment>
           </div>
         )}
       </Col>
