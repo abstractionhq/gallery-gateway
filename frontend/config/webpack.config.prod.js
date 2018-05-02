@@ -108,8 +108,11 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/
+        loaders: 'babel-loader',
+        exclude: (modulePath) => {
+          return /node_modules/.test(modulePath) &&
+              !/node_modules(\/|\\)(query-string|strict-uri-encode)/.test(modulePath)
+        }
       },
       {
         test: /\.(graphql|gpl)$/,
