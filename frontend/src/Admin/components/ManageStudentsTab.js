@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Row, Col } from 'reactstrap'
 
-import ShowCard from '../components/ShowCard'
+import UsersTable from './UsersTable'
 import Loading from '../../shared/components/Loading'
 
-class Shows extends Component {
+class ManageStudentsTab extends Component {
   static propTypes = {
-    shows: PropTypes.array.isRequired,
+    students: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.object
   }
 
   static defaultProps = {
-    shows: []
+    students: []
   }
 
   componentDidUpdate () {
@@ -25,18 +26,16 @@ class Shows extends Component {
   }
 
   render () {
-    const { loading, shows } = this.props
+    const { loading, students } = this.props
 
     return (
-      <div>
-        {loading ? (
-          <Loading />
-        ) : (
-          shows.map(show => <ShowCard key={show.id} {...show} />)
-        )}
-      </div>
+      <Row>
+        <Col xs='12'>
+          {loading ? <Loading /> : <UsersTable data={students} />}
+        </Col>
+      </Row>
     )
   }
 }
 
-export default Shows
+export default ManageStudentsTab

@@ -2,28 +2,28 @@ import { graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
-import CreateJudgeMutation from '../mutations/createJudge.graphql'
+import CreateAdminMutation from '../mutations/createAdmin.graphql'
 import CreateUserForm from '../components/CreateUserForm'
-import { addJudge } from '../actions'
+import { addAdmin } from '../actions'
 import { displayError } from '../../shared/actions'
 
 const mapStateToProps = () => ({
-  heading: 'Add New Judge'
+  heading: 'Add New Admin'
 })
 
 const mapDispatchToProps = dispatch => ({
-  myAddJudge: judge => dispatch(addJudge(judge)),
+  myAddAdmin: admin => dispatch(addAdmin(admin)),
   handleError: message => dispatch(displayError(message))
 })
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(CreateJudgeMutation, {
-    props: ({ mutate, ownProps: { myAddJudge } }) => ({
-      create: judge =>
+  graphql(CreateAdminMutation, {
+    props: ({ mutate, ownProps: { myAddAdmin } }) => ({
+      create: admin =>
         mutate({
-          variables: { input: judge }
-        }).then(({ data: { createJudge } }) => myAddJudge(createJudge))
+          variables: { input: admin }
+        }).then(({ data: { createAdmin } }) => myAddAdmin(createAdmin))
     })
   })
 )(CreateUserForm)
