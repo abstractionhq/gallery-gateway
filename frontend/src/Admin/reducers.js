@@ -56,6 +56,40 @@ const shows = (state = {}, action) => {
 //   user1: { username: 'user1', firstName... }
 //   user2: { username: 'user2', firstName... }
 // }
+const admins = (state = {}, action) => {
+  switch (action.type) {
+    case actions.FETCH_ADMINS:
+      if (!action.payload.length) {
+        return state
+      }
+
+      const admins = action.payload.reduce((accum, admin) => {
+        accum[admin.username] = admin
+        return accum
+      }, {})
+      return {
+        ...state,
+        ...admins
+      }
+    case actions.ADD_ADMIN:
+      if (!action.payload.username) {
+        return state
+      }
+
+      return {
+        ...state,
+        [action.payload.username]: action.payload
+      }
+    default:
+      return state
+  }
+}
+
+// Example State:
+// {
+//   user1: { username: 'user1', firstName... }
+//   user2: { username: 'user2', firstName... }
+// }
 const judges = (state = {}, action) => {
   switch (action.type) {
     case actions.FETCH_JUDGES:
@@ -140,6 +174,7 @@ const ui = (state = {}, action) => {
 
 export default combineReducers({
   shows,
+  admins,
   judges,
   assignments,
   ui

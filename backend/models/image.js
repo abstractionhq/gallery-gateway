@@ -3,7 +3,7 @@ import { IMAGE_ENTRY } from '../constants'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 
-export default sequelize.define('image', {
+const Image = sequelize.define('image', {
   path: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -32,13 +32,6 @@ export default sequelize.define('image', {
   }
 },
 {
-  instanceMethods: {
-    getEntry () {
-      return Entry.findOne({
-        where: {entryType: IMAGE_ENTRY, entryId: this.id}
-      })
-    }
-  },
   validate: {
     dimensionsPositiveValidation () {
       if (this.vertDimInch <= 0) {
@@ -50,3 +43,9 @@ export default sequelize.define('image', {
     }
   }
 })
+
+Image.prototype.getEntry = function getEntry () {
+  return Entry.findOne({where: {entryType: IMAGE_ENTRY, entryId: this.id}})
+}
+
+export default Image

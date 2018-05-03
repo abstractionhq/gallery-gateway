@@ -1,3 +1,4 @@
+import fetch from 'unfetch'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink, InMemoryCache } from 'apollo-client-preset'
 import { ApolloLink } from 'apollo-link'
@@ -6,7 +7,7 @@ import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
 
 import { GRAPHQL_PATH } from '../src/utils'
 
-const httpLink = new HttpLink({uri: GRAPHQL_PATH})
+const httpLink = new HttpLink({uri: GRAPHQL_PATH, fetch})
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers

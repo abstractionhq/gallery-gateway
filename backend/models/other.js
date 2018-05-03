@@ -3,7 +3,7 @@ import { OTHER_ENTRY } from '../constants'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 
-export default sequelize.define('other', {
+const Other = sequelize.define('other', {
   path: {
     type: DataTypes.STRING,
     allowNull: true
@@ -16,13 +16,10 @@ export default sequelize.define('other', {
     allowNull: false,
     type: DataTypes.DATE
   }
-},
-{
-  instanceMethods: {
-    getEntry () {
-      return Entry.findOne({
-        where: {entryType: OTHER_ENTRY, entryId: this.id}
-      })
-    }
-  }
 })
+
+Other.prototype.getEntry = function getEntry () {
+  return Entry.findOne({where: {entryType: OTHER_ENTRY, entryId: this.id}})
+}
+
+export default Other

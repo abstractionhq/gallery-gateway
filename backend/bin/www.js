@@ -3,5 +3,5 @@ import app from '../server'
 import nconf from '../config'
 
 const server = app.listen(nconf.get('PORT') || 3000, () => {
-  console.log(`Express server listening on port ${server.address().port}`) // eslint-disable-line no-console
+  console.log(`Express server listening on port ${server.address().port}`)
 })

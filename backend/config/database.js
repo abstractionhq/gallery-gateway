@@ -7,7 +7,7 @@ const PASSWORD = config.get('ABSTRACTION_DB_PASS')
 const HOST = config.get('ABSTRACTION_DB_HOST')
 
 const Op = Sequelize.Op
-const operatorAliases = {
+const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
   $gte: Op.gte,
@@ -51,7 +51,7 @@ const development = {
   username: USER,
   password: PASSWORD,
   port: 3306,
-  operatorAliases: operatorAliases,
+  operatorsAliases,
   // See: https://mathiasbynens.be/notes/mysql-utf8mb4
   // See: https://github.com/mysqljs/mysql#connection-options
   charset: 'utf8mb4'
@@ -65,7 +65,7 @@ const test = {
   password: PASSWORD,
   port: 3306,
   logging: false,
-  operatorsAliases: operatorAliases,
+  operatorsAliases,
   charset: 'utf8mb4'
 }
 
@@ -76,7 +76,7 @@ const production = {
   username: USER,
   password: PASSWORD,
   port: 3306,
-  operatorAliases: operatorAliases,
+  operatorsAliases,
   // See: https://mathiasbynens.be/notes/mysql-utf8mb4
   // See: https://github.com/mysqljs/mysql#connection-options
   charset: 'utf8mb4'

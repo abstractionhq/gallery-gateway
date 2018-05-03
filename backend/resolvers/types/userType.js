@@ -22,7 +22,7 @@ export default {
       if (args.date) {
         return getShows({
           where: {
-            judgingEnd: {gte: args.date}
+            judgingEnd: {$gte: args.date}
           },
           order: [['judgingStart', 'DESC']]
         })

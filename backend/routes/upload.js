@@ -19,7 +19,7 @@ const PDF = 'PDF'
 function storage (dir, extn) {
   return multer.diskStorage({
     destination: (req, file, callback) => {
-      callback(null, dir) // TODO: See if we want a ./year/images
+      callback(null, dir)
     },
     filename: (req, file, callback) => {
       // Generate a unique id for the file
@@ -40,7 +40,7 @@ const imageUpload = multer({
 
 const pdfUpload = multer({
   storage: storage(pdfDir, 'pdf'),
-  limits: { fileSize: 50000000, files: 1 }, // TODO: Figure out max pdf size
+  limits: { fileSize: 50000000, files: 1 }, // Max 50 MB
   fileFilter: pdfTypeFilter
 }).single('pdf') // Form field key needs to be 'pdf' w/ pdf data as the value
 

@@ -12,10 +12,11 @@ import {
 import { Formik, Field } from 'formik'
 import yup from 'yup'
 
-class CreateJudgeForm extends Component {
+class CreateUserForm extends Component {
   static propTypes = {
     create: PropTypes.func.isRequired,
-    handleError: PropTypes.func.isRequired
+    handleError: PropTypes.func.isRequired,
+    heading: PropTypes.string.isRequired
   }
 
   renderErrors = (touched, errors, field) => {
@@ -30,7 +31,7 @@ class CreateJudgeForm extends Component {
   }
 
   render () {
-    const { create } = this.props
+    const { create, handleError, heading } = this.props
 
     return (
       <Formik
@@ -53,11 +54,11 @@ class CreateJudgeForm extends Component {
 
           create(input)
             .then(resetForm()) // Clear the form after submitted
-            .catch(err => this.props.handleError(err.message))
+            .catch(err => handleError(err.message))
         }}
         render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
-            <h3>Add New Judge</h3>
+            <h3>{heading}</h3>
             <Row>
               <Col md='6' xs='12'>
                 <FormGroup>
@@ -123,4 +124,4 @@ class CreateJudgeForm extends Component {
   }
 }
 
-export default CreateJudgeForm
+export default CreateUserForm

@@ -238,6 +238,7 @@ type Query {
 
 type Mutation {
     createJudge(input: UserInput!): User
+    createAdmin(input: UserInput!): User
     updatePermissions(input: PermissionInput!): User
     updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User
@@ -268,5 +269,8 @@ input OrderByItem {
 `
 
 const schema = makeExecutableSchema({typeDefs, resolvers})
-// addMockFunctionsToSchema({schema});
+
+// NOTE: Uncomment in development to have schema endpoints mocked
+// addMockFunctionsToSchema({schema})
+
 export default schema

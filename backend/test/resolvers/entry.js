@@ -208,6 +208,29 @@ describe('Entry Mutations', function () {
           })
       })
 
+      it('rejects entries that are past the submission date', function () {
+        return Promise.all([fakeUser(), fakeShow({entryStart: '2015-09-09', entryEnd: '2015-10-10'})])
+          .then((models) => {
+            const user = models[0]
+            const show = models[1]
+            const args = {
+              input: {
+                entry: standardEntry(user, show),
+                path: 'a/path.jpg',
+                horizDimInch: 1.2,
+                vertDimInch: 1.3,
+                mediaType: 'mymedia'
+              }
+            }
+            return createPhoto({}, args, { auth: { type: 'ADMIN' } })
+              .then(() => Promise.reject(new Error('should have rejected')))
+              .catch((e) => {
+                expect(e.message).to.match(/Submission deadline has ended/)
+                return Promise.resolve()
+              })
+          })
+      })
+
       it('rejects submitting beyond the limit', () =>
         Promise.all([fakeUser({ type: 'STUDENT' }), fakeShow({ entryCap: 1 })])
           .then(([user, show]) =>

@@ -22,10 +22,10 @@ export function createShow (_, args, req) {
     throw new UserError('Permission Denied')
   }
   // Handle timezones, start times to midnight and end times to 11:59:59
-  const entryStart = moment(args.input.entryStart).tz("America/New_York").startOf('day')
-  const entryEnd= moment(args.input.entryEnd).tz("America/New_York").endOf('day')
-  const judgingStart = moment(args.input.judgingStart).tz("America/New_York").startOf('day')
-  const judgingEnd = moment(args.input.judgingEnd).tz("America/New_York").endOf('day')
+  const entryStart = moment(args.input.entryStart).tz('America/New_York').startOf('day')
+  const entryEnd = moment(args.input.entryEnd).tz('America/New_York').endOf('day')
+  const judgingStart = moment(args.input.judgingStart).tz('America/New_York').startOf('day')
+  const judgingEnd = moment(args.input.judgingEnd).tz('America/New_York').endOf('day')
   const newShow = {
     name: args.input.name,
     description: args.input.description,

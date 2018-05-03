@@ -22,7 +22,7 @@ class ShowDetailsTab extends Component {
   static propTypes = {
     show: PropTypes.shape({
       description: PropTypes.string,
-      entryCap: PropTypes.string.isRequired
+      entryCap: PropTypes.number.isRequired
     }).isRequired,
     downloadZip: PropTypes.func.isRequired,
     downloadCsv: PropTypes.func.isRequired,

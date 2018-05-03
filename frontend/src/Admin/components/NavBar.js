@@ -63,8 +63,8 @@ export default class NavBar extends Component {
                 </span>
               </li>
               <NavItem>
-                <NavLink tag={Link} to='/judges'>
-                  Judges
+                <NavLink tag={Link} to='/users/judges'>
+                  Users
                 </NavLink>
               </NavItem>
               <NavItem>
