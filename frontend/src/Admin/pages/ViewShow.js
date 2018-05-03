@@ -11,10 +11,15 @@ import ShowSubmissionsTab from '../containers/ShowSubmissionsTab'
 import ShowJudgesTab from '../containers/ShowJudgesTab'
 import ShowQuery from '../queries/show.graphql'
 import Loading from '../../shared/components/Loading'
+import NotFound from '../../shared/components/NotFound'
 
 const ViewShow = props => {
   if (props.loading) {
     return <Loading />
+  }
+
+  if (!props.show) {
+    return <NotFound />
   }
 
   return (

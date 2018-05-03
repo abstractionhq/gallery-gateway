@@ -4,7 +4,7 @@ import { Alert } from 'reactstrap'
 
 const ErrorMessage = props => (
   <Alert color='danger' isOpen toggle={props.onDismiss}>
-    {props.message}
+    {props.message.replace(/GraphQL error: /,'')}
   </Alert>
 )
 
