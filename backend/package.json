@@ -32,12 +32,10 @@
     "build": "backpack build",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 5000 test/setup.js test/**/*.js",
     "test-file": "cross-env NODE_ENV=test nyc mocha test/setup.js",
-    "bootstrap": "babel-node ./bootstrap.js",
     "keygen": "babel-node keygen",
     "sequelize": "babel-node ./node_modules/sequelize-cli/lib/sequelize",
     "migrate": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:migrate",
     "seed": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:seed:all",
-    "seed:demo": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:seed --seed 20180415220000-seed-demo.js",
     "lint": "eslint **/*.js"
   },
   "dependencies": {
@@ -66,6 +64,7 @@
     "passport": "^0.4.0",
     "passport-saml": "^0.30.0",
     "sequelize": "^4.15.0",
+    "sequelize-cli": "^3.1.0",
     "sharp": "^0.20.1",
     "umzug": "^2.1.0",
     "uuid": "^3.1.0"
@@ -88,7 +87,6 @@
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "nyc": "^11.2.1",
-    "sequelize-cli": "^3.1.0",
     "standard": "^10.0.3",
     "supertest": "^3.0.0"
   }
