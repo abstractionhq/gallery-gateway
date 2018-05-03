@@ -1,5 +1,12 @@
 #! /bin/bash
 
+##################################################
+#                                                #
+#    This script will deploy Gallery Gateway.    #
+#    It is intended to be run on Ubuntu 16.04.   #
+#                                                #
+##################################################
+
 NODE_USER='www-data';
 SCRIPT_ROOT=`pwd`;
 
@@ -64,7 +71,6 @@ sudo cp -r dist/* /var/www/html/;
 #
 # Take down old server
 #
-
 sudo supervisorctl stop gallerygateway > /dev/null;
 
 #
@@ -128,7 +134,7 @@ SUPERVISORCONF
 #
 cd $PROJECT_ROOT/backend;
 cp /opt/node/gallerygateway/.env .env;
-# stub some keys -- we don't need them, but they must exist for node to migrate
+# Stub some keys -- we don't need them, but they must exist for node to migrate
 mkdir keys;
 touch keys/idp_cert.pem;
 touch keys/private.key;
@@ -136,17 +142,14 @@ touch keys/public.key;
 NODE_ENV=development npm install;
 npm run migrate;
 
-
 #
 # Start new server
 #
-
 sudo service supervisor restart
 
 #
 # Warn about missing certificates, if not found
 #
-
 if [ ! -f /opt/node/gallerygateway/keys/idp_cert.pem ]; then
         echo "Warning: /opt/node/gallerygateway/keys/idp_cert.pem not found." >&2;
         echo "    Please install the identity provider certificate" >&2;
@@ -171,7 +174,14 @@ rm -r $DEST_FOLDER "$DEST_FOLDER.zip";
 # Finish
 #
 cat << FINMSG
-+----------------------+
-| Finished installing. |
-+----------------------+
+   ______      ____                   ______      __
+  / ____/___ _/ / /__  _______  __   / ____/___ _/ /____ _      ______ ___  __
+ / / __/ __ '/ / / _ \/ ___/ / / /  / / __/ __ '/ __/ _ \ | /| / / __ '/ / / /
+/ /_/ / /_/ / / /  __/ /  / /_/ /  / /_/ / /_/ / /_/  __/ |/ |/ / /_/ / /_/ /
+\____/\__,_/_/_/\___/_/   \__, /   \____/\__,_/\__/\___/|__/|__/\__,_/\__, /
+                         /____/                                      /____/
+
++----------------------------------------------------------------------------+
+|                            Finished installing.                            |
++----------------------------------------------------------------------------+
 FINMSG
