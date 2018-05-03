@@ -16,69 +16,71 @@ import NotFound from '../../shared/components/NotFound'
 const ViewShow = props => {
   if (props.loading) {
     return <Loading />
-  } else if (!props.show){
-     return <NotFound />
-  } else {
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <h1>{props.show.name}</h1>
-          </Col>
-        </Row>
-  
-        <hr />
-  
-        {/* We must use 'match.url' as the base because it contains the show id */}
-        <RoutedTabs
-          startPathWith={props.match.url}
-          className='nav nav-tabs'
-          style={{ marginBottom: '1rem' }}
-        >
-          {/* 'replace={false} makes it so tab navigation is in the browser history */}
-          <NavTab exact to='' replace={false} className='nav-item nav-link'>
-            Details
-          </NavTab>
-          <NavTab
-            exact
-            to='/submissions'
-            replace={false}
-            className='nav-item nav-link'
-          >
-            Submissions
-          </NavTab>
-          <NavTab
-            exact
-            to='/judges'
-            replace={false}
-            className='nav-item nav-link'
-          >
-            Judges
-          </NavTab>
-        </RoutedTabs>
-  
-        <TabContent>
-          <TabPane>
-            <Switch>
-              <Route
-                exact
-                path={`${props.match.path}`}
-                render={() => <ShowDetailsTab show={props.show} />}
-              />
-              <Route
-                path={`${props.match.path}/submissions`}
-                render={() => <ShowSubmissionsTab show={props.show} />}
-              />
-              <Route
-                path={`${props.match.path}/judges`}
-                render={() => <ShowJudgesTab show={props.show} />}
-              />
-            </Switch>
-          </TabPane>
-        </TabContent>
-      </Container>
-    )
   }
+
+  if (!props.show) {
+    return <NotFound />
+  }
+
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <h1>{props.show.name}</h1>
+        </Col>
+      </Row>
+
+      <hr />
+
+      {/* We must use 'match.url' as the base because it contains the show id */}
+      <RoutedTabs
+        startPathWith={props.match.url}
+        className='nav nav-tabs'
+        style={{ marginBottom: '1rem' }}
+      >
+        {/* 'replace={false} makes it so tab navigation is in the browser history */}
+        <NavTab exact to='' replace={false} className='nav-item nav-link'>
+          Details
+        </NavTab>
+        <NavTab
+          exact
+          to='/submissions'
+          replace={false}
+          className='nav-item nav-link'
+        >
+          Submissions
+        </NavTab>
+        <NavTab
+          exact
+          to='/judges'
+          replace={false}
+          className='nav-item nav-link'
+        >
+          Judges
+        </NavTab>
+      </RoutedTabs>
+
+      <TabContent>
+        <TabPane>
+          <Switch>
+            <Route
+              exact
+              path={`${props.match.path}`}
+              render={() => <ShowDetailsTab show={props.show} />}
+            />
+            <Route
+              path={`${props.match.path}/submissions`}
+              render={() => <ShowSubmissionsTab show={props.show} />}
+            />
+            <Route
+              path={`${props.match.path}/judges`}
+              render={() => <ShowJudgesTab show={props.show} />}
+            />
+          </Switch>
+        </TabPane>
+      </TabContent>
+    </Container>
+  )
 }
 
 ViewShow.propTypes = {
