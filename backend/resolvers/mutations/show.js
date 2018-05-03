@@ -36,9 +36,6 @@ export function createShow (_, args, req) {
     entryCap: args.input.entryCap
   }
   return Show.create(newShow)
-  .catch(() => {
-    throw new UserError('Show failed to be created')
-  })
 }
 
 export function updateShow (_, args, req) {
@@ -52,8 +49,6 @@ export function updateShow (_, args, req) {
         fields: ['name', 'description',
           'entryCap', 'finalized']
       })
-    }).catch(() => {
-      throw new UserError('Show failed to update')
     })
 }
 
