@@ -75,6 +75,7 @@ Here are some useful resources on these tools and our architecture:
 - [Live React: Hot Reloading with Time Travel](https://www.youtube.com/watch?v=xsSnOQynTHs) by Dan Abramov
 - [10 Tips for Better Redux Architecture](https://medium.com/javascript-scene/10-tips-for-better-redux-architecture-69250425af44) by Eric Elliott
 - [Learn Redux](https://learnredux.com/) by Wes Bos
+- [Redux Developer Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
 
 #### GraphQL
 
@@ -85,6 +86,7 @@ Here are some useful resources on these tools and our architecture:
 - [The GitHub GraphQL API](https://githubengineering.com/the-github-graphql-api/)
 - [From REST to GraphQL](https://0x2a.sh/from-rest-to-graphql-b4e95e94c26b) by Jacob Gillespie
 - [awesome-graphql](https://github.com/chentsulin/awesome-graphql)
+- [Apollo Client Developer Tools](https://chrome.google.com/webstore/detail/apollo-client-developer-t/jdkknkkbebbapilgoeccciglkfbmbnfm?hl=en-US)
 
 ## Development
 
