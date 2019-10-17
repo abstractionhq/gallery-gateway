@@ -1,3 +1,3 @@
 FROM kristophjunge/test-saml-idp
 
-EXPOSE 80 443
+EXPOSE 8080 8443
