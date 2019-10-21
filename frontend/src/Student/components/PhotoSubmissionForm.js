@@ -18,6 +18,7 @@ import yup from 'yup'
 import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
 import SubmitAsGroupRadio from './SubmitAsGroupRadio'
+import HomeTownInput from './HometownInput'
 import Loading from '../../shared/components/Loading'
 
 const Header = styled.h1`
@@ -39,7 +40,8 @@ const ButtonContainer = styled.div`
 class PhotoSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
-      username: PropTypes.string
+      username: PropTypes.string,
+      hometown: PropTypes.string
     }).isRequired,
     data: PropTypes.shape({
       show: PropTypes.shape({
@@ -159,6 +161,7 @@ class PhotoSubmissionForm extends Component {
       id: this.props.data.show.id,
       name: this.props.data.show.name
     }
+    const defaultHometown = user.hometown || '';
 
     // calculate whether the user is beyond their single submissions
     const numSingleEntries = this.props.data.show.entries.reduce(
@@ -183,7 +186,9 @@ class PhotoSubmissionForm extends Component {
             vertDimInch: '',
             forSale: 'no',
             moreCopies: 'no',
-            path: ''
+            path: '',
+            includeHometown: 'no',
+            hometown: defaultHometown
           }}
           validationSchema={yup.object().shape({
             academicProgram: yup.string().required('Required'),
@@ -198,6 +203,14 @@ class PhotoSubmissionForm extends Component {
             }),
             title: yup.string().required('Required'),
             comment: yup.string(),
+            includeHometown: yup
+              .string()
+              .required('Required')
+              .oneOf(['yes','no']),
+            hometown: yup.string().when('includeHometown', {
+              is: 'yes',
+              then: yup.string().required('Required')
+            }),
             mediaType: yup
               .string()
               .required('Required')
@@ -230,6 +243,7 @@ class PhotoSubmissionForm extends Component {
                       participants: values.groupParticipants
                     }
                     : null,
+                hometown: values.includeHometown === 'yes' ? values.hometown : null,
                 studentUsername: user.username,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
@@ -335,6 +349,12 @@ class PhotoSubmissionForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'comment')}
                   </FormGroup>
+                  <HomeTownInput
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    renderErrors={this.renderErrors}
+                  />
                   <FormGroup>
                     <Label>Type of Media</Label>
                     <FormikSelectInput
