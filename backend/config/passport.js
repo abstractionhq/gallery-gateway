@@ -22,7 +22,12 @@ export const samlStrategy = new saml.Strategy({
   // Identity Provider's public key
   cert: samlConfig.cert,
   validateInResponseTo: false,
-  disableRequestedAuthnContext: true
+  disableRequestedAuthnContext: true,
+
+  //forces user to reauthenticate every time they log on
+  // TODO for testing purposes only, remember to remove
+  forceAuthn: true
+
 }, function (profile, done) {
   // We've received login success, we need to look up the user
   if (config.get('NODE_ENV') !== 'production') {

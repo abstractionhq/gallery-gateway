@@ -161,11 +161,7 @@ class PhotoSubmissionForm extends Component {
     }
 
     // calculate whether the user is beyond their single submissions
-    const numSingleEntries = this.props.data.show.entries.reduce(
-      // if 'student' is non-null, this is a single submission
-      (n, entry) => (entry.student ? n + 1 : n),
-      0
-    )
+    const numSingleEntries = this.props.data.show.entries.filter(e => !e.group).length
     const canSubmitAsSingle = numSingleEntries < this.props.data.show.entryCap
 
     return (
@@ -230,7 +226,7 @@ class PhotoSubmissionForm extends Component {
                       participants: values.groupParticipants
                     }
                     : null,
-                studentUsername: user.username,
+                studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
                 yearLevel: values.yearLevel,

@@ -5,7 +5,9 @@ query Show($id: ID!) {
     entryCap
     entries {
       id
-      # we need the student to tell if this is a group submission or not
+      group{
+        id
+      }
       student {
         username
       }
