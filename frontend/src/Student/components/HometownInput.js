@@ -1,8 +1,6 @@
 import React from "react";
-import { Label, FormGroup, UncontrolledTooltip } from "reactstrap";
+import { Label, FormGroup } from "reactstrap";
 import { Field } from "formik";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import FaQuestionCircle from "@fortawesome/fontawesome-free-solid/faQuestionCircle";
 
 export default function HometownInput({
   values,
