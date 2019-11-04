@@ -15,6 +15,7 @@ type User {
     firstName: String!
     lastName: String!
     displayName: String
+    hometown: String
     type: UserType!
     entries: [Entry]
     shows(date: Date): [Show]
@@ -115,6 +116,7 @@ input EntryInput {
     title: String!
     comment: String
     forSale: Boolean
+    hometown: String
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean

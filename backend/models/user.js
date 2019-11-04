@@ -21,6 +21,10 @@ const User = sequelize.define('user', {
     allowNull: false,
     notEmpty: true
   },
+  hometown: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   displayName: {
     type: DataTypes.STRING
   },
