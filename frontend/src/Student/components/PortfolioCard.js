@@ -9,6 +9,7 @@ import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
 import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
 import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import Flippy, { FrontSide, BackSide } from 'react-flippy';
+import ReactCardFlip from 'react-card-flip';
 import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
 
@@ -25,7 +26,7 @@ const Card = styled.div`
 const PhotoThumbnail = styled.img`
   height: auto;
   margin-bottom: 10px;
-  max-height: 10em;
+  max-height: 7em;
   max-width: 100%;
   min-width: 4em;
   width: auto;
@@ -39,6 +40,7 @@ const EntryNoThumbContainer = styled.div`
 `
 const EntryContainer = styled.div`
   width: inherit;
+  height: inherit;
 `
 
 const Pending = styled.div`
@@ -109,6 +111,7 @@ const EntryThumb = ({ entry }) => {
   }
 }
 
+
 const NewSubmission = ({ show }) => (
   <Col
     style={{ minHeight: '10em' }}
@@ -122,6 +125,45 @@ const NewSubmission = ({ show }) => (
   </Col>
 )
 
+class FlipCard extends React.Component {
+  constructor() {
+    super();
+      this.state = {
+      isFlipped: false
+    };
+    this.flip = this.flip.bind(this);
+    this.unflip = this.unflip.bind(this);
+  }
+
+  flip(e) {
+    e.preventDefault();
+    this.setState({ isFlipped: true});
+  }
+
+  unflip(e) {
+    e.preventDefault();
+    this.setState({ isFlipped: false});
+  }
+ 
+  render() {
+    return (
+      <EntryContainer onMouseLeave={this.unflip} onMouseEnter={this.flip}>
+      <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection="horizontal" style={{minHeight: '8em'}}>
+      <div key={'front'} style={{minHeight: '10em'}}>
+          <EntryThumb entry={this.props.picture} />
+          <Button color='secondary' style={{width: '100%'}} className="fixed-bottom" onClick={this.flip}>Options...</Button>
+        </div>
+ 
+        <div key={'back'} style={{minHeight: '10em'}}>
+        <Button color='primary' style={{width: '100%'}} className="mb-4" >View</Button>
+        <Button color='primary' style={{width: '100%'}} >Update</Button>
+        <Button color='danger' style={{width: '100%' }} className="fixed-bottom">Delete</Button>
+        </div>
+      </ReactCardFlip>
+      </EntryContainer>
+    )
+  }
+}
 const SubmittedEntries = ({ show }) =>
   show.entries.map(entry => (
     <Col
@@ -131,39 +173,33 @@ const SubmittedEntries = ({ show }) =>
     title={entry.title}
     key={entry.id}
   >
-    <Flippy
-    flipOnHover={true} // default false
-    flipOnClick={false} // default false
+    <FlipCard picture={entry} style={{width: '100%', height: '100%'}}>
+    </FlipCard>
+        {/* <EntryContainer>
+    <Flippy id="flippy"
+    flipOnHover={false} // default false
+    flipOnClick={true} // default false
     flipDirection="horizontal" // horizontal or vertical
     ref={(r) => this.flippy = r} // to use toggle method like this.flippy.toggle()
     // if you pass isFlipped prop component will be controlled component.
     // and other props, which will go to div
-    style={{ width: '200px', height: '200px' }} /// these are optional style, it is not necessary
+    style={{ width: '100%', height: '100%' }} /// these are optional style, it is not necessary
   >
-    <FrontSide>
-      <EntryContainer>
+    <FrontSide style={{width: '100%', height: '100%'}}>
         <EntryThumb entry={entry} />
-        {/* If after entry end and before judging end (or if the show is not finalized),
-          display "Pending", else display invited or not invited */
-          moment().isBetween(show.entryEnd, show.judgingEnd) ||
-        !show.finalized ? (
-              <Pending>Pending</Pending>
-            ) : moment().isAfter(show.judgingEnd) ? (
-              entry.invited ? (
-                <Invited>Invited</Invited>
-              ) : (
-                <NotInvited>Not Invited</NotInvited>
-              )
-            ) : null}
-      </EntryContainer>
+        <Button color='secondary' style={{width: '100%'}} >
+         Options...
+  </Button>
     </FrontSide>
     <BackSide
       style={{ backgroundColor: '#175852'}}>
       ROCKS
     </BackSide>
   </Flippy>
+  </EntryContainer> */}
   </Col>
   ))
+
 
 const PortfolioCard = props => (
   <Card>
