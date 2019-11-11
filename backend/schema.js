@@ -71,6 +71,29 @@ input ShowInput {
     entryCap: Int!
 }
 
+type PortfolioPeriod {
+    id: ID!
+    name: String!
+    description: String
+    entryStart: Date!
+    entryEnd: Date!
+    judgingStart: Date!
+    judgingEnd: Date!
+    finalized: Boolean
+    judges: [User]
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+input PortfolioPeriodInput {
+    name: String!
+    description: String
+    entryStart: Date!
+    entryEnd: Date!
+    judgingStart: Date!
+    judgingEnd: Date!
+}
+
 input ShowUpdate {
     name: String
     description: String
@@ -250,6 +273,8 @@ type Mutation {
     deleteShow(id: ID!): Boolean
     assignToShow(showId: ID!, usernames: [String]!): Boolean
     removeFromShow(showId: ID!, usernames: [String]!): Boolean
+
+    createPortfolioPeriod(input: PortfolioPeriodInput!): PortfolioPeriod
 
     createPhoto(input: PhotoInput!): Show
     createVideo(input: VideoInput!): Show
