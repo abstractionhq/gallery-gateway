@@ -51,7 +51,16 @@ const createEntry = (entry, entryType, entryId, t) => {
           )
         }
 
+        if (user.displayName != entry.displayName){
+          userUpdatePromise = User.update(
+            {
+              displayName: entry.displayName
+            },
+            { where: {username: entry.studentUsername}}
+          )
+        }
         delete newEntry['hometown'];
+        delete newEntry['displayName'];
         return userUpdatePromise.then(()=>
           Entry.create({
             ...newEntry,

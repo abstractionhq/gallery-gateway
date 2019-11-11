@@ -19,6 +19,7 @@ import SuccessModal from './SuccessModal'
 import SubmitAsGroupRadio from './SubmitAsGroupRadio'
 import Loading from '../../shared/components/Loading'
 import HomeTownInput from './HometownInput'
+import DisplayNameInput from './DisplayNameInput'
 
 const Header = styled.h1`
   margin-bottom: 10px;
@@ -40,7 +41,8 @@ class OtherSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
       username: PropTypes.string,
-      hometown: PropTypes.string
+      hometown: PropTypes.string,
+      displayName: PropTypes.string
     }).isRequired,
     data: PropTypes.shape({
       show: PropTypes.shape({
@@ -164,7 +166,7 @@ class OtherSubmissionForm extends Component {
   }
 
   renderShow = () => {
-    const { create, done, user, handleError, handleHometown } = this.props
+    const { create, done, user, handleError, handleHometown, handleDisplayName } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
@@ -172,6 +174,8 @@ class OtherSubmissionForm extends Component {
 
     const defaultHometown = user.hometown || '';
     const hometownNeeded = !user.hometown;
+    const defaultDisplayName = user.displayName || '';
+    const displayNameNeeded = !user.displayName;
 
     // calculate whether the user is beyond their single submissions
     const numSingleEntries = this.props.data.show.entries.filter(e => !e.group).length
@@ -190,7 +194,8 @@ class OtherSubmissionForm extends Component {
             forSale: 'no',
             moreCopies: 'no',
             path: '',
-            hometown: defaultHometown
+            hometown: defaultHometown,
+            displayName: defaultDisplayName
           }}
           validationSchema={yup.object().shape({
             academicProgram: yup.string().required('Required'),
@@ -206,6 +211,7 @@ class OtherSubmissionForm extends Component {
             title: yup.string().required('Required'),
             comment: yup.string(),
             hometown: yup.string().required('Required'),
+            displayName: yup.string().required('Required'),
             forSale: yup
               .string()
               .required('Required')
@@ -246,6 +252,9 @@ class OtherSubmissionForm extends Component {
             create(input)
               .then(()=>{
                 handleHometown(values.hometown)
+              })
+              .then(()=>{
+                handleDisplayName(values.displayName)
               })
               .then(() => {
                 this.setState({ showModal: true }, () => {
@@ -326,6 +335,13 @@ class OtherSubmissionForm extends Component {
                   </FormGroup>
                   <HomeTownInput
                     hometownNeeded={hometownNeeded}
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    renderErrors={this.renderErrors}
+                  />
+                  <DisplayNameInput
+                    displayNameNeeded={displayNameNeeded}
                     values={values}
                     touched={touched}
                     errors={errors}
