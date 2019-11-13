@@ -163,6 +163,8 @@ class PhotoSubmissionForm extends Component {
       id: this.props.data.show.id,
       name: this.props.data.show.name
     }
+    const defaultHometown = user.hometown || '';
+    const hometownNeeded = !user.hometown;
     const defaultDisplayName= user.displayName || '';
     const displayNameNeeded = !user.displayName;
 
@@ -186,6 +188,7 @@ class PhotoSubmissionForm extends Component {
             forSale: 'no',
             moreCopies: 'no',
             path: '',
+            hometown: defaultHometown,
             displayName: defaultDisplayName
           }}
           validationSchema={yup.object().shape({
