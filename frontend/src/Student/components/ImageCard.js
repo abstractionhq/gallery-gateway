@@ -1,17 +1,14 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import Moment from 'react-moment'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle'
 import FaBook from '@fortawesome/fontawesome-free-solid/faBook'
 import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
 import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
-import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import ReactCardFlip from 'react-card-flip';
-import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
+import { Row, Col, Button } from 'reactstrap'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -34,6 +31,48 @@ const EntryContainer = styled.div`
   width: inherit;
   height: inherit;
 `
+
+const Pending = styled.div`
+  background-color: #fff3cd;
+  border: 1px solid transparent;
+  border-color: #ffeeba;
+  border-radius: 0.25rem;
+  color: #856404;
+  position: relative;
+  width: inherit;
+`
+const Invited = styled.div`
+  background-color: #d4edda;
+  border: 1px solid transparent;
+  border-color: #c3e6cb;
+  border-radius: 0.25rem;
+  color: #155724;
+  position: relative;
+  width: inherit;
+`
+
+const NotInvited = styled.div`
+  background-color: #d6d8d9;
+  border: 1px solid transparent;
+  border-color: #c6c8ca;
+  border-radius: 0.25rem;
+  color: #1b1e21;
+  position: relative;
+  width: inherit;
+`
+
+const NewSubmission = ({ show }) => (
+  <Col
+    style={{ minHeight: '10em' }}
+    md={show.entries.length > 0 ? '3' : null}
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+  >
+    <Link to={`/submit?to=${show.id}`}>
+      <FontAwesomeIcon icon={FaPlusCircle} size='3x' />
+      <h5 className='mt-1'>New Submission</h5>
+    </Link>
+  </Col>
+)
 
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
@@ -105,15 +144,16 @@ class FlipCard extends React.Component {
  
         <div key={'back'} style={{minHeight: '10em',
           padding: 5,
-          backgroundColor: 'rgba(0,0,0,0.5)',
+          boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+          transition: '0.3s',
           borderRadius: '0.25rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: "column",}}>
         <Button color='primary' style={{width: '100%'}} >View</Button>
-        <Button color='primary' style={{width: '100%', marginBottom: '1em', marginTop: '1em'd}} >Update</Button>
-        <Button color='danger' style={{width: '100%' }}>Delete</Button>
+        {moment().isBefore(this.props.show.entryEnd) && (<Button color='primary' style={{width: '100%', marginBottom: '1em', marginTop: '1em'}} >Update</Button>)}
+        {moment().isBefore(this.props.show.entryEnd) && (<Button color='danger' style={{width: '100%' }}>Delete</Button>)}
         </div>
       </ReactCardFlip>
       </EntryContainer>
@@ -121,53 +161,22 @@ class FlipCard extends React.Component {
   }
 }
 
-class DarkCard extends React.Component {
-  constructor() {
-    super();
-      this.state = {
-      isHovered: false
-    };
-    this.hover = this.hover.bind(this);
-    this.leave = this.leave.bind(this);
-  }
+const ShowEntry = ({entry, show})=>(     
+  <EntryContainer>
+  <EntryThumb entry={entry} />
+  {/* If after entry end and before judging end (or if the show is not finalized),
+    display "Pending", else display invited or not invited */
+    moment().isBetween(show.entryEnd, show.judgingEnd) ||
+  !show.finalized ? (
+        <Pending>Pending</Pending>
+      ) : moment().isAfter(show.judgingEnd) ? (
+        entry.invited ? (
+          <Invited>Invited</Invited>
+        ) : (
+          <NotInvited>Not Invited</NotInvited>
+        )
+      ) : null}
+</EntryContainer>
+)
 
-  hover(e) {
-    e.preventDefault();
-    this.setState({ isHovered: true});
-  }
-
-  leave(e) {
-    e.preventDefault();
-    this.setState({ isHovered: false});
-  }
- 
-  render() {
-    return (
-      <EntryContainer onMouseLeave={this.leave} onMouseEnter={this.hover} style = {{minHeight: '10em'}}>
-          <EntryThumb entry={this.props.picture} />
-          {!this.state.isHovered && (<Button color='secondary' style={{width: '100%'}} onClick={this.hover}>Options...</Button>)}
-          {this.state.isHovered && (<div class= "align-content-around d-flex" style= 
-        {{position: 'absolute',
-          padding: 5,
-          top: 0,
-          right: 10,
-          left: 10,
-          alignItems: 'center',
-          flexDirection: "column",
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          borderRadius: '0.25rem',
-          minHeight: '10em',
-          display: 'flex',
-          justifyContent: 'center'}}
-          >
-              
-        <Button color='primary' style={{width: '100%'}}>View</Button>
-        <Button color='primary' style={{width: '100%', marginBottom: '1em', marginTop: '1em'}}>Update</Button>
-        <Button color='danger' style={{width: '100%' }}>Delete</Button>
-        </div>)}
-      </EntryContainer>
-    )
-  }
-}
-
-export {FlipCard, DarkCard}
+export {FlipCard, NewSubmission, ShowEntry}
