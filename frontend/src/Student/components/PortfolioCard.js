@@ -87,16 +87,25 @@ const NewSubmission = ({ show }) => (
 
 const SubmittedEntries = ({ show }) =>
   show.entries.map(entry => (
-    <Col
-    md='3'
+    <Col md='6'
     className='text-center align-self-center d-flex justify-content-center align-items-center'
     style={{ minHeight: '10em' }}
     title={entry.title}
-    key={entry.id}
+    key={entry.id}>
+    <Col
+    md='6'
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+    style={{ minHeight: '10em' }}
   >
-    {/* <FlipCard picture={entry} style={{width: '100%', height: '100%'}}>
-    </FlipCard> */}
+    <FlipCard picture={entry} style={{width: '100%', height: '100%'}}>
+    </FlipCard>
+    </Col>
 
+<Col
+    md='6'
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+    style={{ minHeight: '10em' }}
+  >
     <DarkCard picture={entry} style={{width: '100%', height: '100%'}}>
     </DarkCard>
         {/* <EntryContainer>
@@ -121,6 +130,7 @@ const SubmittedEntries = ({ show }) =>
     </BackSide>
   </Flippy>
   </EntryContainer> */}
+  </Col>
   </Col>
   ))
 

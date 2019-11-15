@@ -103,10 +103,17 @@ class FlipCard extends React.Component {
           <Button color='secondary' style={{width: '100%'}} className="fixed-bottom" onClick={this.flip}>Options...</Button>
         </div>
  
-        <div key={'back'} style={{minHeight: '10em'}}>
-        <Button color='primary' style={{width: '100%'}} className="mb-4" >View</Button>
-        <Button color='primary' style={{width: '100%'}} >Update</Button>
-        <Button color='danger' style={{width: '100%' }} className="fixed-bottom">Delete</Button>
+        <div key={'back'} style={{minHeight: '10em',
+          padding: 5,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          borderRadius: '0.25rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: "column",}}>
+        <Button color='primary' style={{width: '100%'}} >View</Button>
+        <Button color='primary' style={{width: '100%', marginBottom: '1em', marginTop: '1em'd}} >Update</Button>
+        <Button color='danger' style={{width: '100%' }}>Delete</Button>
         </div>
       </ReactCardFlip>
       </EntryContainer>
