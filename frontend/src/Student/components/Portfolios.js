@@ -17,7 +17,7 @@ class Portfolios extends Component {
     if (shows.length === 0) {
       return (
         <NoShowsContainer>
-          No show calls are currently in progress. Check back soon!
+          The portfolio period is not currently open. Check back soon!
         </NoShowsContainer>
       )
     }
