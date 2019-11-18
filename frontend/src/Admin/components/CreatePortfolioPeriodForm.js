@@ -69,6 +69,7 @@ class CreatePortfolioPeriodForm extends Component {
         initialValues={{
           name: initialName,
           description: '',
+          numPieces: 10,
           entryStart: null,
           entryEnd: null,
           judgingStart: null,
@@ -77,6 +78,11 @@ class CreatePortfolioPeriodForm extends Component {
         validationSchema={yup.object().shape({
           name: yup.string().required('Required'),
           description: yup.string(),
+          numPieces: yup
+            .number()
+            .integer('Must be an integer')
+            .min(1, 'Must be at least 1')
+            .required('Required'),
           entryStart: yup
             .date()
             .nullable()
@@ -144,6 +150,19 @@ class CreatePortfolioPeriodForm extends Component {
                     rows={3}
                   />
                   {this.renderErrors(touched, errors, 'description')}
+                </FormGroup>
+                <FormGroup>
+                  <Label>Number of Pieces per Portfolio</Label>
+                  <Field
+                    type='number'
+                    min='1'
+                    step='1'
+                    id='numPieces'
+                    name='numPieces'
+                    className='form-control'
+                    required
+                  />
+                  {this.renderErrors(touched, errors, 'entryCap')}
                 </FormGroup>
               </Col>
               <Col xs={6}>

@@ -15,6 +15,8 @@ import * as UserQuery from './queries/userQuery'
 import * as UserMutations from './mutations/user'
 import * as VoteMutations from './mutations/vote'
 import * as VoteQuery from './queries/voteQuery'
+import * as PortfolioPeriodQuery from './queries/portfolioPeriodQuery'
+import * as PortfolioPeriodMutations from './mutations/portfolioPeriod'
 
 export default {
   ...Entry,
@@ -30,12 +32,14 @@ export default {
     ...EntryQuery,
     ...UserQuery,
     ...ShowQuery,
-    ...VoteQuery
+    ...VoteQuery,
+    ...PortfolioPeriodQuery
   },
   Mutation: {
     ...EntryMutations,
     ...ShowMutations,
     ...UserMutations,
-    ...VoteMutations
+    ...VoteMutations,
+    ...PortfolioPeriodMutations
   }
 }

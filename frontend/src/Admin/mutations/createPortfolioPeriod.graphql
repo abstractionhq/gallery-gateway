@@ -3,6 +3,7 @@ mutation createPortfolioPeriod($input: PortfolioPeriodInput!) {
     id
     name
     description
+    numPieces
     entryStart
     entryEnd
     judgingStart

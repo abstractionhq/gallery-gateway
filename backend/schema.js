@@ -75,6 +75,7 @@ type PortfolioPeriod {
     id: ID!
     name: String!
     description: String
+    numPieces: Int!
     entryStart: Date!
     entryEnd: Date!
     judgingStart: Date!
@@ -88,6 +89,7 @@ type PortfolioPeriod {
 input PortfolioPeriodInput {
     name: String!
     description: String
+    numPieces: Int!
     entryStart: Date!
     entryEnd: Date!
     judgingStart: Date!
@@ -252,6 +254,7 @@ type Query {
     show(id: ID!): Show
     groups: [Group]
     shows(orderBy: OrderByItem, studentUsername: String): [Show]
+    portfolioPeriods(orderBy: OrderByItem, studentUsername: String): [PortfolioPeriod]
     vote(entryId: ID!, judgeUsername: String!): Vote
     votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo

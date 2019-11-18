@@ -3,6 +3,7 @@ query PortfolioPeriods {
     id
     name
     description
+    numPieces
     entryStart
     entryEnd
     judgingStart
