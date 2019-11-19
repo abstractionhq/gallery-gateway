@@ -42,7 +42,17 @@ const createEntry = (entry, entryType, entryId, t) => {
       return userFindPromise.then(user => {
 
         let userUpdatePromise = Promise.resolve(null)
-        if (user.hometown != entry.hometown){
+
+        if (user.hometown != entry.hometown && user.displayName != entry.displayName){
+          userUpdatePromise = User.update(
+            {
+              hometown: entry.hometown,
+              displayName: entry.displayName
+            },
+            { where: {username: entry.studentUsername}}
+          )
+        }
+        else if (user.hometown != entry.hometown){
           userUpdatePromise = User.update(
             {
               hometown: entry.hometown
@@ -51,7 +61,7 @@ const createEntry = (entry, entryType, entryId, t) => {
           )
         }
 
-        if (user.displayName != entry.displayName){
+        else if (user.displayName != entry.displayName){
           userUpdatePromise = User.update(
             {
               displayName: entry.displayName
@@ -60,7 +70,6 @@ const createEntry = (entry, entryType, entryId, t) => {
           )
         }
         delete newEntry['hometown'];
-        delete newEntry['displayName'];
         return userUpdatePromise.then(()=>
           Entry.create({
             ...newEntry,
