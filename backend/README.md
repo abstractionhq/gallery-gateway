@@ -10,7 +10,7 @@ You'll need [Node](https://nodejs.org/en/download/) >= 8.x and [npm](https://doc
 
 You'll need to be running [MySQL](https://www.mysql.com/downloads/) and [SimpleSAMLphp](https://simplesamlphp.org/). In development, our preferred method is to run them using [Docker](https://docs.docker.com/install/).
 
-*Note: Docker desktop is only available on Unix systems, as a result, the project may need to be run on a virtual machine. For this project, we used a Linux VM running on [Virtual Box](https://www.virtualbox.org/)*
+*Note: Docker desktop is only available on Unix systems, as a result, the project may need to be run on a virtual machine. For this iteration of the project, we used a Linux VM running on [Virtual Box](https://www.virtualbox.org/)*
 
 ### Installation
 
