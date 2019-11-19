@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Moment from 'react-moment'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
-import {ShowEntry, NewSubmission} from './ImageCard'
+import {FlipCard, NewSubmission} from './ImageCard'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -16,41 +16,46 @@ const Card = styled.div`
 
 const SubmittedEntries = ({ show }) =>
   show.entries.map(entry => (
-    <Col
-      md='3'
-      className='text-center align-self-center d-flex justify-content-center align-items-center'
-      style={{ minHeight: '10em' }}
-      title={entry.title}
-      key={entry.id}
-    >
-      <ShowEntry entry={entry} show={show}>
-      </ShowEntry>
-    </Col>
+    <Col md='3'
+    className='mb-3 text-center align-self-center d-flex justify-content-center align-items-center'
+    style={{ minHeight: '10em' }}
+    title={entry.title}
+    key={entry.id}>
+    <FlipCard picture={entry} show={show} style={{width: '100%', height: '100%'}}>
+    </FlipCard>
+  </Col>
   ))
 
-const ShowCard = props => (
+
+const PortfolioCard = props => (
   <Card>
     <Row>
-      <Col style={{ display: 'flex' }}>
-        <h2 style={{ alignSelf: 'flex-end', margin: 0 }}>{props.show.name}</h2>
-      </Col>
-      <Col className='text-right'>
+      <Col>
+        <div><h2>{props.show.name}</h2></div>
         <div>
           <h5>
             {props.show.entries.filter(e => !e.group).length}/{
               props.show.entryCap
             }{' '}
-            Individual Submissions
+            Pieces
           </h5>
         </div>
+      </Col>
+      <Col className='text-right'>
+
         {moment().isAfter(moment(props.show.entryEnd)) ? (
-          <div>No Longer Accepting Submissions</div>
+          <div>No Longer Accepting Applications</div>
         ) : (
           <div>
-            Accepting Submissions Until:{' '}
+          <div>
+          <h2><Button color='primary'>Apply</Button></h2>
+          </div>
+          <div>
+            Accepting Applications Until:{' '}
             <Moment format='MMMM D, YYYY hh:mm:ss a'>
               {props.show.entryEnd}
             </Moment>
+          </div>
           </div>
         )}
       </Col>
@@ -67,7 +72,7 @@ const ShowCard = props => (
   </Card>
 )
 
-ShowCard.propTypes = {
+PortfolioCard.propTypes = {
   show: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
@@ -90,10 +95,10 @@ ShowCard.propTypes = {
   }).isRequired
 }
 
-ShowCard.defaultProps = {
+PortfolioCard.defaultProps = {
   show: {
     entries: []
   }
 }
 
-export default ShowCard
+export default PortfolioCard
