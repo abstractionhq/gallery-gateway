@@ -37,7 +37,7 @@ const PortfolioCard = props => (
             {props.show.entries.filter(e => !e.group).length}/{
               props.show.entryCap
             }{' '}
-            Submissions
+            Pieces
           </h5>
         </div>
       </Col>

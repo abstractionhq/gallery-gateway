@@ -17,7 +17,7 @@ class Portfolios extends Component {
     if (shows.length === 0) {
       return (
         <NoShowsContainer>
-          The portfolio period is not currently open. Check back soon!
+          The scholarship period is not currently open. Check back soon!
         </NoShowsContainer>
       )
     }
