@@ -28,6 +28,7 @@
   ],
   "scripts": {
     "start": "npm run build && node ./build/main.js",
+    "debug": "npm run build && node --inspect ./build/main.js",
     "watch": "backpack",
     "build": "backpack build",
     "test": "cross-env NODE_ENV=test nyc mocha --timeout 5000 test/setup.js test/**/*.js",
