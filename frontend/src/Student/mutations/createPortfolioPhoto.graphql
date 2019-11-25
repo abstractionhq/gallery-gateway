@@ -1,0 +1,13 @@
+mutation createPortfolioPhoto($input: PhotoInput!) {
+  createPortfolioPhoto(input: $input) {
+    id
+    name
+    entryCap
+    entries {
+      id
+      student {
+        username
+      }
+    }
+  }
+}
