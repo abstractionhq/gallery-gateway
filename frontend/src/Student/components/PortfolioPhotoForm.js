@@ -39,7 +39,6 @@ class PortfolioPhotoForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
       username: PropTypes.string,
-      hometown: PropTypes.string
     }).isRequired,
     data: PropTypes.shape({
       show: PropTypes.shape({
@@ -154,13 +153,11 @@ class PortfolioPhotoForm extends Component {
   }
 
   renderShow = () => {
-    const { create, done, user, handleError, handleHometown } = this.props
+    const { create, done, user, handleError} = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
     }
-    const defaultHometown = user.hometown || '';
-    const hometownNeeded = !user.hometown;
 
     // calculate whether the user is beyond their single submissions
     const numSingleEntries = this.props.data.show.entries.filter(e => !e.group).length
@@ -172,32 +169,19 @@ class PortfolioPhotoForm extends Component {
           initialValues={{
             academicProgram: '',
             yearLevel: '',
-            submittingAsGroup: canSubmitAsSingle ? 'no' : 'yes',
-            groupParticipants: '',
             title: 'Untitled',
             comment: '',
             mediaType: '',
             horizDimInch: '',
             vertDimInch: '',
-            forSale: 'no',
             moreCopies: 'no',
-            path: '',
-            hometown: defaultHometown
+            path: ''
           }}
           validationSchema={yup.object().shape({
             academicProgram: yup.string().required('Required'),
             yearLevel: yup.string().required('Required'),
-            submittingAsGroup: yup
-              .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
-            groupParticipants: yup.string().when('submittingAsGroup', {
-              is: 'yes',
-              then: yup.string().required('Required')
-            }),
             title: yup.string().required('Required'),
             comment: yup.string(),
-            hometown: yup.string().required('Required'),
             mediaType: yup
               .string()
               .required('Required')
@@ -209,39 +193,17 @@ class PortfolioPhotoForm extends Component {
             vertDimInch: yup
               .number()
               .required('Required')
-              .positive('Height Must be Positive'),
-            forSale: yup
-              .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
-            moreCopies: yup
-              .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
-            path: yup.string().required('Required')
+              .positive('Height Must be Positive')
           })}
           onSubmit={values => {
             const input = {
               entry: {
-                group:
-                  values.submittingAsGroup === 'yes'
-                    ? {
-                      creatorUsername: user.username,
-                      participants: values.groupParticipants
-                    }
-                    : null,
-                hometown: values.hometown,
-                studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
+                studentUsername: user.username,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
                 yearLevel: values.yearLevel,
                 title: values.title,
                 comment: values.comment,
-                forSale: values.forSale === 'yes',
-                // Must select 'forSale = yes' first
-                // So, if you select 'forSale = yes', 'moreCopies = yes', 'forSale = no' => 'moreCopies' will be false
-                moreCopies:
-                  values.forSale === 'yes' && values.moreCopies === 'yes'
               },
               mediaType: values.mediaType.value,
               horizDimInch: values.horizDimInch,
@@ -251,9 +213,6 @@ class PortfolioPhotoForm extends Component {
 
             // Create an entry, show the success modal, and then go to the dashboard
             create(input)
-              .then(()=>{
-                handleHometown(values.hometown)
-              })
               .then(() => {
                 this.setState({ showModal: true }, () => {
                   setTimeout(done, 2000)
@@ -297,19 +256,6 @@ class PortfolioPhotoForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'yearLevel')}
                   </FormGroup>
-                  {values.submittingAsGroup === 'yes' ? (
-                    <FormGroup>
-                      <Label>List the names of your other group members.</Label>
-                      <Field
-                        type='text'
-                        id='groupParticipants'
-                        name='groupParticipants'
-                        className='form-control'
-                        required
-                      />
-                      {this.renderErrors(touched, errors, 'groupParticipants')}
-                    </FormGroup>
-                  ) : null}
                   <FormGroup>
                     <Label>Title</Label>
                     <Field
