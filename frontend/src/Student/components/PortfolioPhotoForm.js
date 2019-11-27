@@ -41,17 +41,20 @@ class PortfolioPhotoForm extends Component {
       username: PropTypes.string,
     }).isRequired,
     data: PropTypes.shape({
-      show: PropTypes.shape({
+      period: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
-        entries: PropTypes.arrayOf(
-          PropTypes.shape({
-            id: PropTypes.string,
-            student: PropTypes.shape({
-              username: PropTypes.string
+        portfolio: PropTypes.shape({
+          id: PropTypes.string,
+          student: PropTypes.shape({
+            username: PropTypes.string
+          }),
+          pieces: PropTypes.arrayOf(
+            PropTypes.shape({
+              id: PropTypes.string
             })
-          })
-        )
+          )
+        })
       }),
       error: PropTypes.object,
       loading: PropTypes.bool
@@ -152,16 +155,30 @@ class PortfolioPhotoForm extends Component {
     return null
   }
 
-  renderShow = () => {
-    const { create, done, user, handleError} = this.props
-    const forShow = {
-      id: this.props.data.show.id,
-      name: this.props.data.show.name
+  createPiece = (values) => {
+    const input = {
+      piece: {
+        portfolioId: this.props.portfolio.id,
+        title: values.title,
+        comment: values.comment,
+      },
+      mediaType: values.mediaType.value,
+      horizDimInch: values.horizDimInch,
+      vertDimInch: values.vertDimInch,
+      path: values.path
     }
 
-    // calculate whether the user is beyond their single submissions
-    const numSingleEntries = this.props.data.show.entries.filter(e => !e.group).length
-    const canSubmitAsSingle = numSingleEntries < this.props.data.show.entryCap
+    // Create an entry, show the success modal, and then go to the dashboard
+    create(input).then(() => {
+      this.setState({ showModal: true }, () => {
+        setTimeout(done, 2000)
+      })
+    })
+    .catch(err => handleError(err.message))
+  }
+
+  renderShow = () => {
+    const { create, done, user, handleError} = this.props
 
     return (
       <Fragment>
@@ -174,7 +191,6 @@ class PortfolioPhotoForm extends Component {
             mediaType: '',
             horizDimInch: '',
             vertDimInch: '',
-            moreCopies: 'no',
             path: ''
           }}
           validationSchema={yup.object().shape({
@@ -195,30 +211,24 @@ class PortfolioPhotoForm extends Component {
               .required('Required')
               .positive('Height Must be Positive')
           })}
-          onSubmit={values => {
-            const input = {
-              entry: {
-                studentUsername: user.username,
-                showId: forShow.id,
-                academicProgram: values.academicProgram,
-                yearLevel: values.yearLevel,
-                title: values.title,
-                comment: values.comment,
-              },
-              mediaType: values.mediaType.value,
-              horizDimInch: values.horizDimInch,
-              vertDimInch: values.vertDimInch,
-              path: values.path
-            }
 
-            // Create an entry, show the success modal, and then go to the dashboard
-            create(input)
-              .then(() => {
-                this.setState({ showModal: true }, () => {
-                  setTimeout(done, 2000)
-                })
+          onSubmit={values => {
+            if(!this.props.portfolio){
+              create({
+                portfolio:{
+                  studentUsername: user.username,
+                  periodId: this.props.data.period.id,
+                  academicProgram: values.academicProgram,
+                  yearLevel: values.yearLevel,
+                }
+              }).then((result) => {
+                this.props.portfolio = result
+                this.createPiece(values)
               })
-              .catch(err => handleError(err.message))
+            }
+            else{
+              this.createPiece(values)
+            }
           }}
           render={({
             values,

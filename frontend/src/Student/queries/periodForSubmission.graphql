@@ -1,7 +1,8 @@
-mutation createPortfolioPhoto($input: PortfolioPhotoInput!) {
-  createPortfolioPhoto(input: $input) {
+query Period($id: ID!) {
+  period(id: $id) {
     id
     name
+    entryCap
     portfolio{
       id
       student {
@@ -9,7 +10,7 @@ mutation createPortfolioPhoto($input: PortfolioPhotoInput!) {
       }
       pieces {
         id
-      }  
+      }     
     }
   }
 }
