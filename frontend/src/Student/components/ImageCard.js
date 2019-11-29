@@ -74,6 +74,19 @@ const NewSubmission = ({ show }) => (
   </Col>
 )
 
+const NewPiece = ({ show }) => (
+  <Col
+    style={{ minHeight: '10em' }}
+    md={show.entries.length > 0 ? '3' : null}
+    className='text-center align-self-center d-flex justify-content-center align-items-center'
+  >
+    <Link to={`/add?to=${show.id}`}>
+      <FontAwesomeIcon icon={FaPlusCircle} size='3x' />
+      <h5 className='mt-1'>New Piece</h5>
+    </Link>
+  </Col>
+)
+
 const EntryThumb = ({ entry }) => {
   switch (entry.entryType) {
     case 'PHOTO':
@@ -179,4 +192,4 @@ const ShowEntry = ({entry, show})=>(
 </EntryContainer>
 )
 
-export {FlipCard, NewSubmission, ShowEntry}
+export {FlipCard, NewSubmission, ShowEntry, NewPiece}

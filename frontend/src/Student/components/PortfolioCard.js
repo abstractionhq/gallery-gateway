@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Moment from 'react-moment'
 import { Row, Col, Button } from 'reactstrap'
 import moment from 'moment'
-import {FlipCard, NewSubmission} from './ImageCard'
+import {FlipCard, NewPiece} from './ImageCard'
 
 const Card = styled.div`
   background-color: #f8f9fa;
@@ -64,7 +64,7 @@ const PortfolioCard = props => (
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
       <Fragment>
         {moment().isBefore(props.show.entryEnd) ? (
-          <NewSubmission {...props} />
+          <NewPiece {...props} />
         ) : null}
         <SubmittedEntries {...props} />
       </Fragment>
