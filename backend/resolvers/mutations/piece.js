@@ -1,63 +1,70 @@
 import db from "../../config/sequelize";
+import { Op } from "sequelize";
 import moment from "moment";
 import { UserError } from "graphql-errors";
 import Image from "../../models/image";
 import Video from "../../models/video";
 import Other from "../../models/other";
-import Group from "../../models/group";
-import Show from "../../models/show";
-import User from "../../models/user";
 import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY, VIDEO_ENTRY } from "../../constants";
 import { allowedToSubmit, parseVideo } from "../../helpers/submission";
 import Portfolio from "../../models/portfolio";
 import PortfolioPeriod from "../../models/portfolioPeriod";
+import Piece from "../../models/piece";
 
 // Creates an Piece based on the 'PieceInput' schema
 const createPiece = (piece, entryType, pieceId, t) => {
-  return groupPromise
-    .then(group => {
-      // We now have access to a Group instance (from attributes above).
-      // The only thing left to do is create the Entry object, which is (mostly)
-      // described by the `entry` parameter. We must first remove its `group`
-      // property and replace it with the group's ID, since our orm recognizes
-      // groupId, not a Group
+  let existingId = piece.portfolioId;
+  let portolioPromise =
+    existingId === null ? Promise.resolve(existingId) : createNewPortfolio(piece, t);
+  return portolioPromise.then(portfolioId=> {
+    delete piece['studentUsername']
+    delete piece['yearLevel']
+    delete piece['academicProgram']
+    return Piece.create({
+      ...piece,
+      pieceType: entryType,
+      pieceId,
+      portfolioId
+    }, {transaction: t})
+  })
+};
 
-      let userFindPromise = Promise.resolve(null);
-      if (entry.studentUsername) {
-        userFindPromise = User.findById(entry.studentUsername);
-      }
-
-      // clone the object
-      let newEntry = Object.assign({}, entry);
-      // remove the 'group' property
-      delete newEntry["group"];
-      // create the new Entry with select properties filled-in
-      return userFindPromise.then(user => {
-        let userUpdatePromise = Promise.resolve(null);
-        if (user.hometown != entry.hometown) {
-          userUpdatePromise = User.update(
-            {
-              hometown: entry.hometown
-            },
-            { where: { username: entry.studentUsername } }
-          );
+const createNewPortfolio = (
+  { studentUsername, yearLevel, academicProgram },
+  t
+) => {
+  const now = new Date();
+  // find if there's an open period
+  return PortfolioPeriod.find(
+    {
+      where: {
+        entryEnd: {
+          [Op.gt]: now
+        },
+        entryStart: {
+          [Op.lt]: now
         }
-
-        delete newEntry["hometown"];
-        return userUpdatePromise.then(() =>
-          Entry.create(
-            {
-              ...newEntry,
-              entryType: entryType,
-              entryId: entryId,
-              groupId: group ? group.id : null
-            },
-            { transaction: t }
-          )
-        );
-      });
+      }
+    },
+    { transaction: t }
+  )
+    .then(period => {
+      if (!period) {
+        throw new UserError("There is not an open Portfolio Period");
+      }
+      // Make new portfolio
+      return Portfolio.create(
+        {
+          portfolioPeriodId: period.id,
+          studentUsername,
+          yearLevel,
+          academicProgram,
+          submitted: false
+        },
+        { transaction: t }
+      );
     })
-    .then(() => Show.findById(entry.showId));
+    .then(portfolio => portfolio.id); // return the id
 };
 
 const isSubmissionEntryOpen = (
@@ -73,15 +80,15 @@ const isSubmissionEntryOpen = (
         transaction: t,
         rejectOnEmpty: true
       }).then(portfolio => {
-        PortfolioPeriod.findById(portfolio.portfolioPeriodId, {transaction: t}).then(
-          portfolioPeriod => {
-            if (moment().isBefore(moment(portfolioPeriod.entryEnd))) {
-              return Promise.resolve();
-            } else {
-              throw new UserError("Submission deadline has ended");
-            }
+        PortfolioPeriod.findById(portfolio.portfolioPeriodId, {
+          transaction: t
+        }).then(portfolioPeriod => {
+          if (moment().isBefore(moment(portfolioPeriod.entryEnd))) {
+            return Promise.resolve();
+          } else {
+            throw new UserError("Submission deadline has ended");
           }
-        );
+        });
       })
     : Promise.resolve();
 };
