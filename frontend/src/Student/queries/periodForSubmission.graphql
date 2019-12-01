@@ -1,16 +1,6 @@
-query Period($id: ID!) {
-  period(id: $id) {
+query portfolioPeriod($id: ID!) {
+  portfolioPeriod(id: $id) {
     id
     name
-    entryCap
-    portfolio{
-      id
-      student {
-        username
-      }
-      pieces {
-        id
-      }     
-    }
   }
 }

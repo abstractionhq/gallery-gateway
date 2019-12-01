@@ -15,22 +15,30 @@ import Piece from "../../models/piece";
 const createPiece = (piece, entryType, pieceId, t) => {
   let existingId = piece.portfolioId;
   let portolioPromise =
-    existingId === null ? Promise.resolve(existingId) : createNewPortfolio(piece, t);
-  return portolioPromise.then(portfolioId=> {
-    delete piece['studentUsername']
-    delete piece['yearLevel']
-    delete piece['academicProgram']
-    return Piece.create({
-      ...piece,
-      pieceType: entryType,
-      pieceId,
-      portfolioId
-    }, {transaction: t})
-  })
+    existingId !== null
+      ? Promise.resolve(existingId)
+      : createNewPortfolio(piece, t);
+  return portolioPromise
+    .then(portfolioId => {
+      delete piece["studentUsername"];
+      delete piece["yearLevel"];
+      delete piece["academicProgram"];
+      delete piece["periodId"]
+      return Piece.create(
+        {
+          ...piece,
+          pieceType: entryType,
+          pieceId,
+          portfolioId
+        },
+        { transaction: t }
+      );
+    })
+    .then(newPiece => Portfolio.findById(newPiece.portfolioId));
 };
 
 const createNewPortfolio = (
-  { studentUsername, yearLevel, academicProgram },
+  { studentUsername, yearLevel, academicProgram, periodId },
   t
 ) => {
   const now = new Date();
@@ -38,6 +46,7 @@ const createNewPortfolio = (
   return PortfolioPeriod.find(
     {
       where: {
+        id: periodId,
         entryEnd: {
           [Op.gt]: now
         },
@@ -50,12 +59,12 @@ const createNewPortfolio = (
   )
     .then(period => {
       if (!period) {
-        throw new UserError("There is not an open Portfolio Period");
+        throw new UserError("This Portfolio Period is not open.");
       }
       // Make new portfolio
       return Portfolio.create(
         {
-          portfolioPeriodId: period.id,
+          portfolioPeriodId: periodId,
           studentUsername,
           yearLevel,
           academicProgram,
@@ -70,34 +79,26 @@ const createNewPortfolio = (
 const isSubmissionEntryOpen = (
   {
     input: {
-      piece: { portfolioId }
+      piece: { periodId }
     }
   },
   t
 ) => {
-  return portfolioId
-    ? Portfolio.findById(portfolioId, {
-        transaction: t,
-        rejectOnEmpty: true
-      }).then(portfolio => {
-        PortfolioPeriod.findById(portfolio.portfolioPeriodId, {
-          transaction: t
-        }).then(portfolioPeriod => {
-          if (moment().isBefore(moment(portfolioPeriod.entryEnd))) {
-            return Promise.resolve();
-          } else {
-            throw new UserError("Submission deadline has ended");
-          }
-        });
-      })
-    : Promise.resolve();
+  if (!periodId) {
+    throw new UserError("Submission not associated with Portfolio Period");
+  }
+  return PortfolioPeriod.findById(periodId, {
+    transaction: t
+  }).then(portfolioPeriod => {
+    if (moment().isBefore(moment(portfolioPeriod.entryEnd))) {
+      return Promise.resolve();
+    } else {
+      throw new UserError("Submission deadline has ended");
+    }
+  });
 };
 
-export function createPhoto(_, args, req) {
-  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
-    // don't allow non-admins to submit work claiming to be from someone else
-    throw new UserError("Permission Denied");
-  }
+export function createPortfolioPhoto(_, args, req) {
   return db.transaction(t =>
     isSubmissionEntryOpen(args, t).then(() =>
       Image.create(
@@ -113,11 +114,7 @@ export function createPhoto(_, args, req) {
   );
 }
 
-export function createVideo(_, args, req) {
-  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
-    // don't allow non-admins to submit work claiming to be from someone else
-    throw new UserError("Permission Denied");
-  }
+/*export*/ function createPortfolioVideo(_, args, req) {
   const { type, id } = parseVideo(args.input.url);
   if (!type || !id) {
     throw new UserError(
@@ -137,11 +134,7 @@ export function createVideo(_, args, req) {
   );
 }
 
-export function createOtherMedia(_, args, req) {
-  if (req.auth.type !== ADMIN && !allowedToSubmit(args, req)) {
-    // don't allow non-admins to submit work claiming to be from someone else
-    throw new UserError("Permission Denied");
-  }
+/*export*/ function createPortfolioOtherMedia(_, args, req) {
   return db.transaction(t =>
     isSubmissionEntryOpen(args, t).then(() =>
       Other.create(

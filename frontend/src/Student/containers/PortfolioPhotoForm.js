@@ -8,6 +8,7 @@ import { displayError} from '../../shared/actions'
 
 import CreatePortfolioPhoto from '../mutations/createPortfolioPhoto.graphql'
 import PeriodForSubmission from '../queries/periodForSubmission.graphql'
+import PortfolioByPeriod from '../queries/portfolioByPeriod.graphql'
 import PortfolioPhotoForm from '../components/PortfolioPhotoForm'
 
 const mapStateToProps = state => ({
@@ -34,9 +35,18 @@ export default compose(
     })
   }),
   graphql(PeriodForSubmission, {
+    name: "portfolioPeriod",
     options: ownProps => ({
       variables: {
         id: ownProps.id
+      }
+    })
+  }),
+  graphql(PortfolioByPeriod, {
+    name: "portfolio",
+    options: ownProps => ({
+      variables: {
+        periodId: ownProps.id,
       }
     })
   })

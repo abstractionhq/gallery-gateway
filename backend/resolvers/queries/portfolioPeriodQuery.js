@@ -10,6 +10,10 @@ const isRequestingOwnUser = (req, args) => {
   );
 };
 
+export function portfolioPeriod (_, args, req) {
+  return PortfolioPeriod.findById(args.id)
+}
+
 export function portfolioPeriods(_, args, req) {
   // Students can only look at their own portfolios
   // TODO: uncomment the student stuff for when students are

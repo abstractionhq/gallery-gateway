@@ -1,15 +1,9 @@
 mutation createPortfolioPhoto($input: PortfolioPhotoInput!) {
   createPortfolioPhoto(input: $input) {
     id
-    name
-    portfolio{
+    pieces{
       id
-      student {
-        username
-      }
-      pieces {
-        id
-      }  
+      title
     }
   }
 }

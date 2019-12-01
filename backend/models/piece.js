@@ -5,7 +5,7 @@ import Image from "./image";
 import Video from "./video";
 import Other from "./other";
 
-const Piece = sequelize.define("Piece", {
+const Piece = sequelize.define("piece", {
   portfolioId: {
     type: DataTypes.INTEGER,
     references: {

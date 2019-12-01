@@ -189,6 +189,42 @@ input PhotoInput {
     mediaType: String!
 }
 
+type Portfolio {
+    id: ID!
+    portfolioPeriod: PortfolioPeriod
+    student: User
+    yearLevel: String
+    academicProgram: String
+    pieces: [Piece]
+}
+
+type Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    entryType: String
+}
+
+input PieceInput {
+    studentUsername: String!
+    portfolioId: Int
+    title: String!
+    comment: String
+    yearLevel: String
+    academicProgram: String
+    entryType: String
+    periodId: Int
+}
+
+input PortfolioPhotoInput {
+    piece: PieceInput
+    path: String!
+    horizDimInch: Float!
+    vertDimInch: Float!
+    mediaType: String!
+}
+
 type Video implements Entry {
     id: ID!
     group: Group
@@ -254,6 +290,9 @@ type Query {
     show(id: ID!): Show
     groups: [Group]
     shows(orderBy: OrderByItem, studentUsername: String): [Show]
+    portfolio(id: ID!): Portfolio
+    portfolioByPeriod(periodId: ID!, studentUsername: String): Portfolio
+    portfolioPeriod(id: ID!): PortfolioPeriod
     portfolioPeriods(orderBy: OrderByItem, studentUsername: String): [PortfolioPeriod]
     vote(entryId: ID!, judgeUsername: String!): Vote
     votes(showId: ID!, judgeUsername: String): [Vote]
@@ -280,6 +319,7 @@ type Mutation {
     createPortfolioPeriod(input: PortfolioPeriodInput!): PortfolioPeriod
 
     createPhoto(input: PhotoInput!): Show
+    createPortfolioPhoto(input: PortfolioPhotoInput!): Portfolio
     createVideo(input: VideoInput!): Show
     createOtherMedia(input: OtherMediaInput!): Show
     updateEntry(id: ID!, input: EntryUpdate!): Entry
