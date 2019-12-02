@@ -205,7 +205,6 @@ class PhotoSubmissionForm extends Component {
             title: yup.string().required('Required'),
             comment: yup.string(),
             hometown: yup.string().required('Required'),
-            displayName: yup.string().required('Required'),
             mediaType: yup
               .string()
               .required('Required')

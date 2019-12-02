@@ -47,26 +47,14 @@ export default function DisplayNameInput({
           <Label>Pseudonym</Label>
           <Field
             type="text"
-            id="pseudonym"
-            name="pseudonym"
+            id="displayName"
+            name="displayName"
             className="form-control"
             required
           />
-          {renderErrors(touched, errors, "pseudonym")}
+          {renderErrors(touched, errors, "displayName")}
         </FormGroup>
       )}
     </React.Fragment>
-    <FormGroup>
-      <Label>Display Name</Label>
-      <Field
-        type="text"
-        id="displayName"
-        name="displayName"
-        className="form-control"
-        disabled = {!displayNameNeeded}
-        required
-      />
-      {renderErrors(touched, errors, "displayName")}
-    </FormGroup>
   );
 }

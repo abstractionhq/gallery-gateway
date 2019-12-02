@@ -211,7 +211,6 @@ class OtherSubmissionForm extends Component {
             title: yup.string().required('Required'),
             comment: yup.string(),
             hometown: yup.string().required('Required'),
-            displayName: yup.string().required('Required'),
             forSale: yup
               .string()
               .required('Required')
