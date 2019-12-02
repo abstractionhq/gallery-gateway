@@ -35,12 +35,12 @@ const ButtonContainer = styled.div`
   margin-top: 50px;
 `;
 
-class PortfolioPhotoForm extends Component {
+class PortfolioVideoForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
       username: PropTypes.string
     }).isRequired,
-    portfolioPeriod: PropTypes.shape({
+    data: PropTypes.shape({
       period: PropTypes.shape({
         id: PropTypes.string,
         name: PropTypes.string,
@@ -59,16 +59,6 @@ class PortfolioPhotoForm extends Component {
       error: PropTypes.object,
       loading: PropTypes.bool
     }).isRequired,
-    handleUpload: PropTypes.func.isRequired,
-    previewImage: PropTypes.object.isRequired,
-    create: PropTypes.func.isRequired,
-    done: PropTypes.func.isRequired,
-    handleError: PropTypes.func.isRequired,
-    clearPreview: PropTypes.func.isRequired
-  };
-
-  static defaultProps = {
-    previewImage: {}
   };
 
   constructor(props) {
@@ -76,14 +66,9 @@ class PortfolioPhotoForm extends Component {
     this.state = {
       showModal: false
     };
-    // We clear any uploaded files.
-    // This resets the field if a user uploads a file, navigates to another page,
-    // and comes back to this form, or a user makes a submission and comes back to
-    // this page to make another submission.
-    props.clearPreview();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.props.portfolioPeriod.error) {
       this.props.portfolioPeriod.error.graphQLErrors.forEach(e => {
         this.props.handleError(e.message);
@@ -96,69 +81,19 @@ class PortfolioPhotoForm extends Component {
     }
   }
 
-  renderFileUpload = (field, form) => {
-    const { name } = field;
-    const { setFieldValue } = form;
-    const { handleUpload, previewImage } = this.props;
-
-    return (
-      <Dropzone
-        name={name}
-        accept="image/jpeg"
-        multiple={false}
-        style={{
-          alignItems: "center",
-          cursor: "pointer",
-          display: "flex",
-          height: "250px",
-          justifyContent: "center",
-          textAlign: "center"
-        }}
-        activeStyle={{
-          borderColor: "#6c6",
-          backgroundColor: "#eee"
-        }}
-        rejectStyle={{
-          borderColor: "#c66",
-          backgroundColor: "#eee"
-        }}
-        className="form-control"
-        onDrop={acceptedFiles => {
-          const image = acceptedFiles[0]; // Only 1 image per submission
-          handleUpload(image).then(() => {
-            // Need to use 'this.props' here to get the most up-to-date value – 'previewImage' above will be out-of-date
-            setFieldValue(name, this.props.previewImage.path);
-          });
-
-          // TODO: If there was previously an image, and someone uploads a new image, send a delete request to the old image before uploading the new image
-        }}
-      >
-        {previewImage.preview ? (
-          <PreviewImage src={previewImage.preview} />
-        ) : (
-          <span>
-            <p>Click or drop to upload your file.</p>
-            <p>Only *.jpg and *.jpeg images will be accepted.</p>
-            <p>(50MB Maximum File Size)</p>
-          </span>
-        )}
-      </Dropzone>
-    );
-  };
-
   renderErrors = (touched, errors, field) => {
     // Render feedback if this field's been touched and has errors
     if (touched[field] && errors[field]) {
       return (
-        <FormFeedback style={{ display: "block" }}>
+        <FormFeedback style={{ display: 'block' }}>
           {errors[field]}
         </FormFeedback>
-      );
+      )
     }
 
     // Otherwise, don't render anything
-    return null;
-  };
+    return null
+  }
 
   renderShow = () => {
     const { create, done, user, handleError } = this.props;
@@ -176,28 +111,17 @@ class PortfolioPhotoForm extends Component {
             yearLevel: existingYear ? existingYear : "",
             title: "Untitled",
             comment: "",
-            mediaType: "",
-            horizDimInch: "",
-            vertDimInch: "",
-            path: ""
+            url: ''
           }}
           validationSchema={yup.object().shape({
             academicProgram: yup.string().required("Required"),
             yearLevel: yup.string().required("Required"),
             title: yup.string().required("Required"),
             comment: yup.string(),
-            mediaType: yup
+            url: yup
               .string()
-              .required("Required")
-              .nullable(), // react-select uses 'null' to represent when the value is cleared
-            horizDimInch: yup
-              .number()
-              .required("Required")
-              .positive("Width Must be Positive"),
-            vertDimInch: yup
-              .number()
-              .required("Required")
-              .positive("Height Must be Positive")
+              .required('Required')
+              .url('Must be a valid URL')
           })}
           onSubmit={values => {
             const portfolioId =
@@ -216,10 +140,7 @@ class PortfolioPhotoForm extends Component {
                 academicProgram: values.academicProgram,
                 yearLevel: values.yearLevel
               },
-              mediaType: values.mediaType.value,
-              horizDimInch: values.horizDimInch,
-              vertDimInch: values.vertDimInch,
-              path: values.path
+              url: values.url
             };
         
             // Create an entry, show the success modal, and then go to the dashboard
@@ -236,15 +157,13 @@ class PortfolioPhotoForm extends Component {
             values,
             errors,
             touched,
-            setFieldValue,
-            setFieldTouched,
             handleSubmit,
             isSubmitting
           }) => (
             <Form onSubmit={handleSubmit} style={{ marginBottom: "75px" }}>
               <Row>
                 <Col xs="12" md="8" style={{ margin: "0 auto" }}>
-                  <Header>New Photo Submission</Header>
+                  <Header>New Video Submission</Header>
                   <SubHeader>{forPortfolioPeriod.name}</SubHeader>
                   <FormGroup>
                     <Label>Academic Program</Label>
@@ -293,74 +212,16 @@ class PortfolioPhotoForm extends Component {
                     {this.renderErrors(touched, errors, "comment")}
                   </FormGroup>
                   <FormGroup>
-                    <Label>Type of Media</Label>
-                    <FormikSelectInput
-                      id="mediaType"
-                      name="mediaType"
-                      field="mediaType"
-                      input={{
-                        onChange: setFieldValue,
-                        onBlur: setFieldTouched,
-                        value: values.mediaType
-                      }}
-                      options={[
-                        {
-                          value: "Chromogenic Print",
-                          label: "Chromogenic Print"
-                        },
-                        { value: "Inkjet Print", label: "Inkjet Print" }
-                      ]}
-                      placeholder={"Select or create option..."}
+                    <Label>YouTube or Vimeo Video URL</Label>
+                    <Field
+                      type='url'
+                      id='url'
+                      name='url'
+                      className='form-control'
+                      placeholder='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
                       required
                     />
-                    {this.renderErrors(touched, errors, "mediaType")}
-                  </FormGroup>
-                  <FormGroup>
-                    <Label>Dimensions (inches)</Label>
-                    <div className="input-group">
-                      <Label for="horizDimInch" hidden>
-                        Width
-                      </Label>
-                      <Field
-                        type="number"
-                        id="horizDimInch"
-                        name="horizDimInch"
-                        className="form-control"
-                        placeholder="width"
-                        required
-                        style={{
-                          borderTopLeftRadius: "0.25rem",
-                          borderBottomLeftRadius: "0.25rem"
-                        }}
-                      />
-                      <div className="input-group-prepend input-group-append">
-                        <span className="input-group-text">x</span>
-                      </div>
-                      <Label for="vertDimInch" hidden>
-                        Height
-                      </Label>
-                      <Field
-                        type="number"
-                        id="vertDimInch"
-                        name="vertDimInch"
-                        className="form-control"
-                        placeholder="height"
-                        required
-                      />
-                    </div>
-                    {this.renderErrors(touched, errors, "horizDimInch")}
-                    {this.renderErrors(touched, errors, "vertDimInch")}
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="path">Photo</Label>
-                    <Field
-                      id="path"
-                      name="path"
-                      render={({ field, form }) =>
-                        this.renderFileUpload(field, form)
-                      }
-                    />
-                    {this.renderErrors(touched, errors, "path")}
+                    {this.renderErrors(touched, errors, 'url')}
                   </FormGroup>
                   <ButtonContainer>
                     <Link to={`/add?to=${forPortfolioPeriod.id}`}>
@@ -407,4 +268,4 @@ class PortfolioPhotoForm extends Component {
   }
 }
 
-export default PortfolioPhotoForm;
+export default PortfolioVideoForm;

@@ -4,8 +4,8 @@ import { Container } from 'reactstrap'
 
 import PortfolioFormChooser from '../components/PortfolioFormChooser'
 import PortfolioPhotoForm from '../containers/PortfolioPhotoForm'
-import VideoSubmissionForm from '../containers/VideoSubmissionForm'
-import OtherMediaSubmissionForm from '../containers/OtherMediaSubmissionForm'
+import PortfolioVideoForm from '../containers/PortfolioVideoForm'
+import PortfolioOtherMediaForm from '../containers/PortfolioOtherMediaForm'
 
 // TODO: Make more robust
 const addIdPropFromQueryParams = () => {
@@ -28,13 +28,13 @@ const Add = props => (
       <Route
         exact
         path='/add/video'
-        render={() => <VideoSubmissionForm id={addIdPropFromQueryParams()} />}
+        render={() => <PortfolioVideoForm id={addIdPropFromQueryParams()} />}
       />
       <Route
         exact
         path='/add/other'
         render={() => (
-          <OtherMediaSubmissionForm id={addIdPropFromQueryParams()} />
+          <PortfolioOtherMediaForm id={addIdPropFromQueryParams()} />
         )}
       />
     </Switch>

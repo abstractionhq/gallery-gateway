@@ -46,7 +46,7 @@ const PortfolioFormChooser = props => (
       </Col>
       <Col xs='12' sm='6' md='4'>
         <Link
-          to={`/submit/video?to=${props.id}`}
+          to={`/add/video?to=${props.id}`}
           style={{ textDecoration: 'none', display: 'block' }}
           className='bg-light'
         >
@@ -59,7 +59,7 @@ const PortfolioFormChooser = props => (
       </Col>
       <Col xs='12' md='4'>
         <Link
-          to={`/submit/other?to=${props.id}`}
+          to={`/add/other?to=${props.id}`}
           style={{ textDecoration: 'none', display: 'block' }}
           className='bg-light'
         >
