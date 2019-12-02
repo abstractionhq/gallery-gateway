@@ -1,0 +1,20 @@
+query PortfolioPeriods {
+  shows(orderBy: { sort: "entryStart", direction: DESC }) {
+    id
+    name
+    description
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+    entryCap
+    createdAt
+    updatedAt
+    judges {
+      username
+    }
+    entries {
+      entryType
+    }
+  }
+}
