@@ -5,6 +5,7 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import FaQuestionCircle from "@fortawesome/fontawesome-free-solid/faQuestionCircle";
 
 export default function DisplayNameInput({
+  values,
   touched,
   errors,
   displayNameNeeded,
