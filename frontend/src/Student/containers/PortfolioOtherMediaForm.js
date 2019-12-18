@@ -6,7 +6,7 @@ import { compose } from 'recompose'
 import { uploadImage, clearPreview } from '../actions'
 import { displayError} from '../../shared/actions'
 
-import CreatePortfolioOtherMedia from '../mutations/CreatePortfolioOtherMedia.graphql'
+import CreatePortfolioOtherMedia from '../mutations/createPortfolioOtherMedia.graphql'
 import PeriodForSubmission from '../queries/periodForSubmission.graphql'
 import PortfolioByPeriod from '../queries/portfolioByPeriod.graphql'
 import PortfolioOtherMediaForm from '../components/PortfolioOtherMediaForm'

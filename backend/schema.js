@@ -225,6 +225,16 @@ input PortfolioPhotoInput {
     mediaType: String!
 }
 
+input PortfolioVideoInput {
+    piece: PieceInput
+    url: String!
+}
+
+input PortfolioOtherMediaInput {
+    piece: PieceInput
+    path: String
+}
+
 type Video implements Entry {
     id: ID!
     group: Group
@@ -321,7 +331,9 @@ type Mutation {
     createPhoto(input: PhotoInput!): Show
     createPortfolioPhoto(input: PortfolioPhotoInput!): Portfolio
     createVideo(input: VideoInput!): Show
+    createPortfolioVideo(input: PortfolioVideoInput!): Portfolio
     createOtherMedia(input: OtherMediaInput!): Show
+    createPortfolioOtherMedia(input: PortfolioOtherMediaInput!): Portfolio
     updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote

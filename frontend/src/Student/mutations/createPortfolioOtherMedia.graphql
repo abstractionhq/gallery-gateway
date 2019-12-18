@@ -1,5 +1,5 @@
 mutation createPortfolioOtherMedia($input: PortfolioOtherMediaInput!) {
-  createPortfolioPhoto(input: $input) {
+  createPortfolioOtherMedia(input: $input) {
     id
     pieces{
       id

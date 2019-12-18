@@ -1,5 +1,5 @@
-mutation createPortfolioViedo($input: PortfolioVideoInput!) {
-  createPortfolioPhoto(input: $input) {
+mutation createPortfolioVideo($input: PortfolioVideoInput!) {
+  createPortfolioVideo(input: $input) {
     id
     pieces{
       id

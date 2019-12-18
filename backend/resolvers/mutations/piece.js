@@ -114,7 +114,7 @@ export function createPortfolioPhoto(_, args, req) {
   );
 }
 
-/*export*/ function createPortfolioVideo(_, args, req) {
+export function createPortfolioVideo(_, args, req) {
   const { type, id } = parseVideo(args.input.url);
   if (!type || !id) {
     throw new UserError(
@@ -134,7 +134,7 @@ export function createPortfolioPhoto(_, args, req) {
   );
 }
 
-/*export*/ function createPortfolioOtherMedia(_, args, req) {
+export function createPortfolioOtherMedia(_, args, req) {
   return db.transaction(t =>
     isSubmissionEntryOpen(args, t).then(() =>
       Other.create(
