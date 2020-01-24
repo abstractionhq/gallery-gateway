@@ -82,10 +82,10 @@ describe('downloading a zip file', () => {
             expect(res.headers['content-disposition'])
               .to.eq('attachment; filename="myShow.zip"', 'file name must be show name')
           })
-          .then(res => JSZip.loadAsync(res.body))
+          .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
           .then(zip => {
             expect(Object.keys(zip.files).length)
-              .to.eq(0, 'should have no files')
+              .to.eq(0, 'Files Present: ' + Object.keys(zip.files) + '\nshould have no files')
           })
       )
   )
@@ -102,13 +102,13 @@ describe('downloading a zip file', () => {
                   .buffer()
                   .parse(binaryParser)
                   .expect(200)
-                  .then(res => JSZip.loadAsync(res.body))
+                  .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
                   .then(zip => {
                     // Expect the zip to have
                     // folders "Honors Show/Invited/" and
                     // a file "Honors Show/Invited/<Expected Title>.jpg" -- with appropriate content
                     expect(Object.keys(zip.files).length)
-                      .to.eq(3, 'should have only one file and two directories')
+                      .to.eq(3, 'Files Present: ' + Object.keys(zip.files) + '\nshould have only one file and two directories')
                     expect(zip.files[`${show.name}/`]).to.exist
                     expect(zip.files[`${show.name}/Invited/`]).to.exist
                     const zobj = zip.file(
@@ -140,13 +140,13 @@ describe('downloading a zip file', () => {
               .buffer()
               .parse(binaryParser)
               .expect(200)
-              .then(res => JSZip.loadAsync(res.body))
+              .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
               .then(zip => {
                 // Expect the zip to have
                 // folders "Honors Show/Invited/" and
                 // a file "Honors Show/Invited/<Expected Title>.jpg" -- with appropriate content
                 expect(Object.keys(zip.files).length)
-                  .to.eq(3, 'should have only one file and two directories')
+                  .to.eq(3, 'Files Present: ' + Object.keys(zip.files) + '\nshould have only one file and two directories')
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
                 const zobj = zip.file(
@@ -173,10 +173,10 @@ describe('downloading a zip file', () => {
             .buffer()
             .parse(binaryParser)
             .expect(200)
-            .then(res => JSZip.loadAsync(res.body))
+            .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
             .then(zip => {
               expect(Object.keys(zip.files).length)
-                .to.eq(4, 'should have two folders and two files')
+                .to.eq(4, 'Files Present: ' + Object.keys(zip.files) + '\nshould have two folders and two files')
               expect(zip.files[`${show.name}/`]).to.exist
               expect(zip.files[`${show.name}/Invited/`]).to.exist
               // NOTE: we don't know which is fileA or fileB, just need to
@@ -213,7 +213,7 @@ describe('downloading a zip file', () => {
               .buffer()
               .parse(binaryParser)
               .expect(200)
-              .then(res => JSZip.loadAsync(res.body))
+              .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
               .then(zip => {
                 expect(Object.keys(zip.files).length).to.eq(3)
                 expect(zip.files[`${show.name}/`]).to.exist
@@ -233,7 +233,7 @@ describe('downloading a zip file', () => {
               .buffer()
               .parse(binaryParser)
               .expect(200)
-              .then(res => JSZip.loadAsync(res.body))
+              .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
               .then(zip => {
                 expect(Object.keys(zip.files).length).to.eq(3)
                 expect(zip.files[`${show.name}/`]).to.exist
