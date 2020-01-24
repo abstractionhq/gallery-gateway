@@ -42,7 +42,7 @@ const createEntry = (entry, entryType, entryId, t) => {
       return userFindPromise.then(user => {
 
         let userUpdatePromise = Promise.resolve(null)
-        if (user.hometown != entry.hometown){
+        if (!group && user.hometown != entry.hometown){
           userUpdatePromise = User.update(
             {
               hometown: entry.hometown
