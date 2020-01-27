@@ -196,6 +196,8 @@ type Portfolio {
     yearLevel: String
     academicProgram: String
     pieces: [Piece]
+    createdAt: Date!
+    updatedAt: Date!
 }
 
 type Piece {
@@ -203,7 +205,7 @@ type Piece {
     portfolio: Portfolio
     title: String
     comment: String
-    entryType: String
+    pieceType: String
 }
 
 input PieceInput {
@@ -302,6 +304,7 @@ type Query {
     shows(orderBy: OrderByItem, studentUsername: String): [Show]
     portfolio(id: ID!): Portfolio
     portfolioByPeriod(periodId: ID!, studentUsername: String): Portfolio
+    portfoliosByStudent(orderBy: OrderByItem, studentUsername: String): [Portfolio]
     portfolioPeriod(id: ID!): PortfolioPeriod
     portfolioPeriods(orderBy: OrderByItem, studentUsername: String): [PortfolioPeriod]
     vote(entryId: ID!, judgeUsername: String!): Vote

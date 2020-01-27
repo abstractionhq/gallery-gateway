@@ -1,0 +1,22 @@
+query PortfoliosByStudent($studentUsername: String!) {
+  portfoliosByStudent(orderBy: { sort: "entryStart", direction: DESC }, studentUsername: $studentUsername) {
+    id
+    createdAt
+    updatedAt
+    pieces {
+      id
+      title
+      pieceType
+      #... on Video {
+      #  provider
+      #  videoId
+      #}
+      #... on Photo {
+      #  path
+      #}
+      #... on OtherMedia {
+      #  path
+      #}
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import ShowsQuery from '../queries/shows.graphql'
+import PortfoliosQuery from '../queries/portfoliosByStudent.graphql'
 import Portfolios from '../components/Portfolios'
 import { displayError } from '../../shared/actions'
 
@@ -27,5 +28,13 @@ export default compose(
         studentUsername: ownProps.studentUsername
       }
     })
+  }),
+  graphql(PortfoliosQuery,{
+    name: "portfolios",
+    options: ownProps => ({
+      variables: {
+        studentUsername: ownProps.studentUsername
+      }
+    })    
   })
 )(Portfolios)
