@@ -8,7 +8,7 @@ import moment from 'moment'
 const imageUploadDir = 'uploads/images'
 const pdfUploadDir = 'uploads/pdfs'
 
-const FISH_JPG = 'https://farm8.staticflickr.com/5486/14501540216_73728d8fa9_o_d.jpg'
+const FISH_JPG = 'https://farm8.staticflickr.com/7257/7054549621_002ec9afe0_o_d.jpg' // flickr url broke :( 'https://farm8.staticflickr.com/5486/14501540216_73728d8fa9_o_d.jpg'
 const TREE_JPG = 'https://farm8.staticflickr.com/7257/7054549621_002ec9afe0_o_d.jpg'
 const BOOK_JPG = 'https://farm8.staticflickr.com/8722/16184844574_77a3143176_o_d.jpg'
 const APPLES_JPG = 'https://farm8.staticflickr.com/1255/1172163196_aedc6863ef_o_d.jpg'
