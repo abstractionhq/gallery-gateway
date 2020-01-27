@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
 
-import UsersTable from './UsersTable'
+import StudentsTable from './StudentsTable'
 import Loading from '../../shared/components/Loading'
 
 class ManageStudentsTab extends Component {
@@ -31,7 +31,7 @@ class ManageStudentsTab extends Component {
     return (
       <Row>
         <Col xs='12'>
-          {loading ? <Loading /> : <UsersTable data={students} />}
+          {loading ? <Loading /> : <StudentsTable data={students} />}
         </Col>
       </Row>
     )

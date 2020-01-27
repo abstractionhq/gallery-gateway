@@ -3,5 +3,6 @@ query Students {
     username
     firstName
     lastName
+    hometown
   }
 }
