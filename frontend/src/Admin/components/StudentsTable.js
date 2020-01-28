@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
+import {Row, Col} from 'reactstrap'
+import EditHometown from './EditHometown'
 
-const UsersTable = props => (
+class StudentsTable extends Component {
+  static propTypes = {
+    create: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
+    data: PropTypes.array.isRequired
+  }
+  
+  static defaultProps = {
+    data: []
+  }
+
+
+  render() {
+    const { data, handleError, create } = this.props
+
+  return(
   <ReactTable
-    data={props.data}
+    data = {data}
     columns={[
       {
         Header: 'Last Name',
@@ -20,22 +37,17 @@ const UsersTable = props => (
       },
       {
         Header: 'Hometown',
-        accessor: 'hometown'
+        Cell: ({ original }) => (
+          <EditHometown create={create} handleError={handleError} student={original}></EditHometown>
+        )
       }
     ]}
     defaultPageSize={10}
     defaultSorted={[{ id: 'lastName', desc: false }]}
     resizable={false}
     className='-striped -highlight'
-  />
-)
-
-UsersTable.propTypes = {
-  data: PropTypes.array.isRequired
+  />)
+  }
 }
 
-UsersTable.defaultProps = {
-  data: []
-}
-
-export default UsersTable
+export default StudentsTable

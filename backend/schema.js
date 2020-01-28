@@ -26,6 +26,7 @@ input UserInput {
     firstName: String!
     lastName: String!
     displayName: String
+    hometown: String
 }
 
 input PermissionInput {
