@@ -8,6 +8,8 @@ import Group from './types/groupType'
 import Show from './types/showType'
 import Vote from './types/voteType'
 import Portfolio from './types/portfolioType'
+import Piece from './types/pieceType'
+import PhotoPiece from './types/photoPieceType'
 import * as EntryMutations from './mutations/entry'
 import * as EntryQuery from './queries/entryQuery'
 import * as ShowMutations from './mutations/show'
@@ -31,7 +33,9 @@ export default {
   ...Group,
   ...Show,
   ...Vote,
+  ...Piece,
   ...Portfolio,
+  ...PhotoPiece,
   Query: {
     ...EntryQuery,
     ...UserQuery,

@@ -200,12 +200,25 @@ type Portfolio {
     updatedAt: Date!
 }
 
-type Piece {
+interface Piece {
     id: ID!
     portfolio: Portfolio
     title: String
     comment: String
     pieceType: String
+}
+
+type PhotoPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+
+    path: String!
+    horizDimInch: Float
+    vertDimInch: Float
+    mediaType: String
 }
 
 input PieceInput {
@@ -258,6 +271,17 @@ type Video implements Entry {
     videoId: String!
 }
 
+type VideoPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+
+    provider: String!
+    videoId: String!
+}
+
 input VideoInput {
     entry: EntryInput
     url: String!
@@ -280,6 +304,16 @@ type OtherMedia implements Entry {
     votes: [Vote]
     excludeFromJudging: Boolean
 
+    path: String!
+}
+
+type OtherMediaPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+    
     path: String!
 }
 

@@ -11,9 +11,9 @@ query PortfoliosByStudent($studentUsername: String!) {
       #  provider
       #  videoId
       #}
-      #... on Photo {
-      #  path
-      #}
+      ... on PhotoPiece {
+        path
+      }
       #... on OtherMedia {
       #  path
       #}

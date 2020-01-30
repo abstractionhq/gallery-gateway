@@ -4,6 +4,8 @@ import Portfolio from "./portfolio";
 import Image from "./image";
 import Video from "./video";
 import Other from "./other";
+import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
+
 
 const Piece = sequelize.define("piece", {
   portfolioId: {
