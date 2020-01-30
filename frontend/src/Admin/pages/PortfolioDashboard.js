@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col, Button } from 'reactstrap'
 
-import Portfolios from '../containers/Portfolio'
+import PortfolioPeriod from '../containers/PortfolioPeriod'
 
 const PortfolioDashboard = () => (
   <Container>
@@ -24,7 +24,7 @@ const PortfolioDashboard = () => (
     </Row>
     <Row>
       <Col>
-        <Portfolios />
+        <PortfolioPeriod/>
       </Col>
     </Row>
   </Container>
