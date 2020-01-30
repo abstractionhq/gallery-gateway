@@ -8,7 +8,6 @@ export default function DisplayNameInput({
   values,
   touched,
   errors,
-  displayNameNeeded,
   renderErrors
 }) {
   return (
