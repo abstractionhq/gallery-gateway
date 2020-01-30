@@ -43,5 +43,29 @@ const createUser = (_, args, req, type) => {
     })
 }
 
+export const updateUser = (_, args, req) => {
+  if (req.auth.type !== ADMIN) {
+    throw new UserError('Permission Denied')
+  }
+  return User.findOne({where: {username: args.input.username}})
+    .then((user) => {
+
+      //the user does not exist so throw an error
+      if (user === null) {
+        throw new UserError('User Does Not Exist')
+      }
+
+      // at the moment we're only using this to update hometown
+      // more lines should be added to update other user attributes
+
+      // no need to check type since giving an admin a hometown should be impossible, 
+      // and also wouldnt break anything.
+
+      user.hometown = args.input.hometown
+      return user.save()
+    })
+
+}
+
 export const createAdmin = (_, args, req) => createUser(_, args, req, ADMIN)
 export const createJudge = (_, args, req) => createUser(_, args, req, JUDGE)

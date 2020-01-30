@@ -1,8 +1,0 @@
-mutation editUser($input: UserInput!) {
-  editUser(input: $input) {
-    username
-    firstName
-    lastName
-    hometown
-  }
-}

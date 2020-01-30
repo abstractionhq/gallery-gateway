@@ -38,7 +38,8 @@ class StudentsTable extends Component {
       {
         Header: 'Hometown',
         Cell: ({ original }) => (
-          <EditHometown create={create} handleError={handleError} student={original}></EditHometown>
+          <div><EditHometown create={create} handleError={handleError} student={original}></EditHometown>
+          </div>
         )
       }
     ]}

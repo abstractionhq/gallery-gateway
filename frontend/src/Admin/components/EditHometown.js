@@ -20,7 +20,7 @@ class EditHometown extends Component {
       username: PropTypes.string.isRequired,
       firstName: PropTypes.string.isRequired,
       lastName: PropTypes.string.isRequired,
-      homeTown: PropTypes.string
+      hometown: PropTypes.string
     }).isRequired
   }
 
@@ -44,36 +44,36 @@ class EditHometown extends Component {
           username: student.username,
           firstName: student.firstName,
           lastName: student.lastName,
-          homeTown: student.homeTown || '',
+          hometown: student.hometown,
           isEditing: 'no',
         }}
         validationSchema={yup.object().shape({
           username: yup.string().required('Required'),
           firstName: yup.string().required('Required'),
           lastName: yup.string().required('Required'),
-          homeTown: yup.string().nullable()
+          hometown: yup.string().nullable()
         })}
         onSubmit={values => {
           const input = {
             username: values.username.toLowerCase(),
             firstName: values.firstName,
             lastName: values.lastName,
-            homeTown: values.homeTown
+            hometown: values.hometown
           }
 
           create(input)
-            .then(values.isEditing = 'no') //turn off edit mode
+            .then(values.isEditing = 'no').then(this.forceUpdate()).then(this.isSubmitting = false) //turn off edit mode
             .catch(err => handleError(err.message))
         }}
-        render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
+        render={({ values, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
-           {values.submittingAsGroup === 'yes' ? (
+           {values.isEditing == 'yes' ? (
             <Row>
               <Col>
                 <Field
                     type='text'
-                    id='homeTown'
-                    name='homeTown'
+                    id='hometown'
+                    name='hometown'
                     className='form-control'
                   />
               </Col> 
@@ -94,7 +94,10 @@ class EditHometown extends Component {
             (
             <Row>
               <Col>{values.hometown}</Col> 
-              <Col><div onClick={values.isEditing = values.isEditing == 'no' ? 'yes' : 'no'} style={ { }}>Edit</div></Col>
+              <Col><Button onClick = {()=>{
+                values.isEditing = 'yes'
+                this.forceUpdate()
+                }}>Edit</Button></Col>
             </Row>
             )}
           </Form>

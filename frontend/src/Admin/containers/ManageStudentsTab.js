@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import ManageStudentsTab from '../components/ManageStudentsTab'
 import StudentsQuery from '../queries/students.graphql'
-import EditUserMutation from '../mutations/editUser.graphql'
+import UpdateUserMutation from '../mutations/updateUser.graphql'
 import { displayError } from '../../shared/actions'
 
 const mapDispatchToProps = (dispatch) => ({
@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  graphql(EditUserMutation, {
+  graphql(UpdateUserMutation, {
     props: ({ mutate }) => ({
       create: entry =>
         mutate({
