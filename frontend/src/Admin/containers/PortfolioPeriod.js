@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import PortfolioPeriodsQuery from '../queries/portfolioPeriods.graphql'
-import Portfolios from '../components/Portfolio'
+import PortfolioPeriod from '../components/PortfolioPeriod'
 import { displayError } from '../../shared/actions'
 
 const mapDispatchToProps = dispatch => ({
@@ -19,4 +19,4 @@ export default compose(
       error
     })
   })
-)(Portfolios)
+)(PortfolioPeriod)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import PortfolioCard from '../components/PortfolioCard'
+import PortfolioPeriodCard from '../components/PortfolioPeriodCard'
 import Loading from '../../shared/components/Loading'
 
 class Portfolios extends Component {
@@ -32,7 +32,7 @@ class Portfolios extends Component {
                 {loading ? (
                     <Loading />
                 ) : (
-                    shows.map(show => <PortfolioCard key={show.id} {...show} />)
+                    shows.map(show => <PortfolioPeriodCard key={show.id} {...show} />)
                 )}
             </div>
         )
