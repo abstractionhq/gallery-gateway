@@ -63,7 +63,7 @@ export default class NavBar extends Component {
                 </span>
               </li>
               <NavItem>
-                <NavLink tag={Link} to='/portfolios'>
+                <NavLink tag={Link} to='/portfolio'>
                   Portfolio Dashboard
                 </NavLink>
               </NavItem>

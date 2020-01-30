@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col, Button } from 'reactstrap'
 
-import Portfolios from '../containers/Portfolios'
+import Portfolios from '../containers/Portfolio'
 
 const PortfolioDashboard = () => (
   <Container>
@@ -16,7 +16,7 @@ const PortfolioDashboard = () => (
           className='btn-block'
           style={{ cursor: 'pointer' }}
           tag={Link}
-          to='/show/new'
+          to='/portfolio/new'
         >
           Create Portfolio Period
         </Button>

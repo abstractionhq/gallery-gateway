@@ -17,7 +17,7 @@ const Admin = () => (
   <Layout>
     <Switch>
       <Route exact path='/' component={Dashboard} />
-      <Route exact path='/portfolios' component={PortfolioDashboard}/>
+      <Route exact path='/portfolio' component={PortfolioDashboard}/>
       <Route exact path='/show/new' component={CreateShow} />
       <Route exact path='/portfolio/new' component={CreatePortfolioPeriod} />
       <Route exact path='/show/:id/judges/assign' component={AssignJudges} />
