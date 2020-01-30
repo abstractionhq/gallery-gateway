@@ -62,7 +62,7 @@ class EditHometown extends Component {
           }
 
           create(input)
-            .then(values.isEditing = 'no').then(this.forceUpdate()).then(this.isSubmitting = false) //turn off edit mode
+            .then(values.isEditing = 'no').then(this.forceUpdate()) //turn off edit mode
             .catch(err => handleError(err.message))
         }}
         render={({ values, handleSubmit, isSubmitting }) => (
@@ -85,7 +85,6 @@ class EditHometown extends Component {
                   float: 'right',
                   width: '150px'
                 }}
-                disabled={isSubmitting}
               >
                 Done
               </Button> 
