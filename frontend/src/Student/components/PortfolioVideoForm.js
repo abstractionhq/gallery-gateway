@@ -251,7 +251,7 @@ class PortfolioVideoForm extends Component {
             </Form>
           )}
         />
-        <SuccessModal isOpen={this.state.showModal} />
+        <SuccessModal isOpen={this.state.showModal} type="portfolio" />
       </Fragment>
     );
   };

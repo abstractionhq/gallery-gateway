@@ -13,15 +13,15 @@ const NoShowsContainer = styled.div`
   transform: translate(-50%, -50%);
 `
 class Portfolios extends Component {
-  renderShows = shows => {
-    if (shows.length === 0) {
+  renderPortfolios = portfolios => {
+    if (!portfolios || portfolios.length === 0) {
       return (
         <NoShowsContainer>
           The scholarship period is not currently open. Check back soon!
         </NoShowsContainer>
       )
     }
-    return shows.map(show => <PortfolioCard key={show.id} show={show} />)
+    return portfolios.map(portfolios => <PortfolioCard key={portfolios.id} portfolio={portfolios} />)
   }
 
   componentDidUpdate () {
@@ -34,9 +34,9 @@ class Portfolios extends Component {
   }
 
   render () {
-    const { loading, shows } = this.props
+    const { loading, portfolios : {portfoliosByStudent}} = this.props
 
-    return <div>{loading ? <Loading /> : this.renderShows(shows)}</div>
+    return <div>{loading ? <Loading /> : this.renderPortfolios(portfoliosByStudent)}</div>
   }
 }
 

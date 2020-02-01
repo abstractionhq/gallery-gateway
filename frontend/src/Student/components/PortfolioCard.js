@@ -14,14 +14,14 @@ const Card = styled.div`
   width: 100%;
 `
 
-const SubmittedEntries = ({ show }) =>
-  show.entries.map(entry => (
+const SubmittedEntries = ({ portfolio }) =>
+  portfolio.pieces.map(piece => (
     <Col md='3'
     className='mb-3 text-center align-self-center d-flex justify-content-center align-items-center'
     style={{ minHeight: '10em' }}
-    title={entry.title}
-    key={entry.id}>
-    <FlipCard picture={entry} show={show} style={{width: '100%', height: '100%'}}>
+    title={piece.title}
+    key={piece.id}>
+    <FlipCard picture={piece} portfolio={portfolio} style={{width: '100%', height: '100%'}}>
     </FlipCard>
   </Col>
   ))
@@ -31,11 +31,11 @@ const PortfolioCard = props => (
   <Card>
     <Row>
       <Col>
-        <div><h2>{props.show.name}</h2></div>
+        <div><h2>{props.portfolio.portfolioPeriod.name}</h2></div>
         <div>
           <h5>
-            {props.show.entries.filter(e => !e.group).length}/{
-              props.show.entryCap
+            {props.portfolio.pieces.length}/{
+              props.portfolio.portfolioPeriod.numPieces
             }{' '}
             Pieces
           </h5>
@@ -43,7 +43,7 @@ const PortfolioCard = props => (
       </Col>
       <Col className='text-right'>
 
-        {moment().isAfter(moment(props.show.entryEnd)) ? (
+        {moment().isAfter(moment(props.portfolio.portfolioPeriod.entryEnd)) ? (
           <div>No Longer Accepting Applications</div>
         ) : (
           <div>
@@ -53,7 +53,7 @@ const PortfolioCard = props => (
           <div>
             Accepting Applications Until:{' '}
             <Moment format='MMMM D, YYYY hh:mm:ss a'>
-              {props.show.entryEnd}
+              {props.portfolio.portfolioPeriod.entryEnd}
             </Moment>
           </div>
           </div>
@@ -63,7 +63,8 @@ const PortfolioCard = props => (
     <hr />
     <Row style={{ minHeight: '250px' }} className='align-items-center'>
       <Fragment>
-        {moment().isBefore(props.show.entryEnd) ? (
+        {moment().isBefore(props.portfolio.portfolioPeriod.entryEnd)
+        && props.portfolio.pieces.length < props.portfolio.portfolioPeriod.numPieces? (
           <NewPiece {...props} />
         ) : null}
         <SubmittedEntries {...props} />

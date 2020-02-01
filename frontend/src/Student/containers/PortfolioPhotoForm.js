@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  done: () => dispatch(push('/')),
+  done: () => dispatch(push('/portfolio')),
   handleUpload: file => dispatch(uploadImage(file)),
   clearPreview: () => dispatch(clearPreview()),
   handleError: message => dispatch(displayError(message))
