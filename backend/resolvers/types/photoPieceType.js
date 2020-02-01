@@ -4,7 +4,6 @@ export default {
   PhotoPiece: {
     ...PieceBase,
     path (piece) {
-      debugger;
       return piece.getImage().then(image => image.path)
     },
     horizDimInch (piece) {

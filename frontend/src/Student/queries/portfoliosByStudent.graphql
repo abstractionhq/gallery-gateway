@@ -7,16 +7,16 @@ query PortfoliosByStudent($studentUsername: String!) {
       id
       title
       pieceType
-      #... on Video {
-      #  provider
-      #  videoId
-      #}
+      ... on VideoPiece {
+        provider
+        videoId
+      }
       ... on PhotoPiece {
         path
       }
-      #... on OtherMedia {
-      #  path
-      #}
+      ... on OtherMediaPiece {
+        path
+      }
     }
   }
 }

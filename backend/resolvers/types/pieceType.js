@@ -2,7 +2,6 @@ import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from "../../constants";
 
 export const PieceBase = {
   pieceType(piece) {
-    debugger;
     if (piece.pieceType === IMAGE_ENTRY) {
       return "PHOTO";
     } else if (piece.pieceType === VIDEO_ENTRY) {

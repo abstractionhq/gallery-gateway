@@ -10,6 +10,8 @@ import Vote from './types/voteType'
 import Portfolio from './types/portfolioType'
 import Piece from './types/pieceType'
 import PhotoPiece from './types/photoPieceType'
+import VideoPiece from './types/videoPieceType'
+import OtherMediaPiece from './types/otherMediaPieceType'
 import * as EntryMutations from './mutations/entry'
 import * as EntryQuery from './queries/entryQuery'
 import * as ShowMutations from './mutations/show'
@@ -36,6 +38,8 @@ export default {
   ...Piece,
   ...Portfolio,
   ...PhotoPiece,
+  ...VideoPiece,
+  ...OtherMediaPiece,
   Query: {
     ...EntryQuery,
     ...UserQuery,
