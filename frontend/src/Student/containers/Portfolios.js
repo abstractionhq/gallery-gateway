@@ -17,20 +17,12 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(ShowsQuery, {
-    props: ({ data: { shows, loading, error } }) => ({
-      shows,
+  graphql(PortfoliosQuery,{
+    props: ({ data: {loading, portfoliosByStudent, error}}) => ({
       loading,
+      portfolios: portfoliosByStudent,
       error
     }),
-    options: ownProps => ({
-      variables: {
-        studentUsername: ownProps.studentUsername
-      }
-    })
-  }),
-  graphql(PortfoliosQuery,{
-    name: "portfolios",
     options: ownProps => ({
       variables: {
         studentUsername: ownProps.studentUsername

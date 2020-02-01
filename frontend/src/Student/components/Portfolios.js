@@ -34,9 +34,9 @@ class Portfolios extends Component {
   }
 
   render () {
-    const { loading, portfolios : {portfoliosByStudent}} = this.props
+    const { loading, portfolios } = this.props
 
-    return <div>{loading ? <Loading /> : this.renderPortfolios(portfoliosByStudent)}</div>
+    return <div>{loading ? <Loading /> : this.renderPortfolios(portfolios)}</div>
   }
 }
 
