@@ -13,8 +13,8 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(null, mapDispatchToProps),
   graphql(PortfolioPeriodsQuery, {
-    props: ({ ownProps, data: { shows, loading, error } }) => ({
-      shows,
+    props: ({ ownProps, data: { portfolioPeriods, loading, error } }) => ({
+      portfolioPeriods,
       loading,
       error
     })

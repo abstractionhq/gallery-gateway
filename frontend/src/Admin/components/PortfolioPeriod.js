@@ -6,13 +6,13 @@ import Loading from '../../shared/components/Loading'
 
 class Portfolios extends Component {
     static propTypes = {
-        shows: PropTypes.array.isRequired,
+        portfolioPeriods: PropTypes.array.isRequired,
         loading: PropTypes.bool.isRequired,
         error: PropTypes.object
     }
 
     static defaultProps = {
-        shows: []
+        portfolioPeriods: []
     }
 
     componentDidUpdate () {
@@ -25,14 +25,14 @@ class Portfolios extends Component {
     }
 
     render () {
-        const { loading, shows } = this.props
+        const { loading, portfolioPeriods } = this.props
 
         return (
             <div>
                 {loading ? (
                     <Loading />
                 ) : (
-                    shows.map(show => <PortfolioPeriodCard key={show.id} {...show} />)
+                    portfolioPeriods.map(period => <PortfolioPeriodCard key={period.id} {...period} />)
                 )}
             </div>
         )

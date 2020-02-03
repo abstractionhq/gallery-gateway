@@ -28,19 +28,14 @@ const FormattedDate = (props) => (
   </Moment>
 )
 
-class PortfolioCard extends Component {
+class PortfolioPeriodCard extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     entryStart: PropTypes.string.isRequired,
     entryEnd: PropTypes.string.isRequired,
     judgingStart: PropTypes.string.isRequired,
-    judgingEnd: PropTypes.string.isRequired,
-    entries: PropTypes.arrayOf(
-      PropTypes.shape({
-        entryType: PropTypes.string.isRequired
-      })
-    )
+    judgingEnd: PropTypes.string.isRequired
   }
 
   renderOpenClose = (opens, closes) => (
@@ -56,7 +51,9 @@ class PortfolioCard extends Component {
     </Fragment>
   )
 
+  /*
   renderSubmissionSummary = (props) => {
+
     const totalSubmissions = props.entries.length
     const totalPhotoSubmissions = props.entries.filter(entry => entry.entryType === 'PHOTO').length
     const totalVideoSubmissions = props.entries.filter(entry => entry.entryType === 'VIDEO').length
@@ -86,8 +83,9 @@ class PortfolioCard extends Component {
       </Fragment>
     )
   }
+  */
 
-  renderClosedShow = ({ entryStart, judgingEnd }) => (
+  renderClosedPeriod = ({ entryStart, judgingEnd }) => (
     <Row>
       <Col className='mb-3'>
         <h4>Closed Portfolio Period</h4>
@@ -114,7 +112,7 @@ class PortfolioCard extends Component {
     const isShowClosed = now.isAfter(moment(judgingEnd))
 
     if (isShowClosed) {
-      return this.renderClosedShow(props)
+      return this.renderClosedPeriod(props)
     }
 
     // Dynamically set the sub-heading based on the show state
@@ -136,7 +134,7 @@ class PortfolioCard extends Component {
     }
 
     // We render Submission Period and Judging Period in two columns,
-    // except for when the show is in submission, we render the summary info
+    // except for when the portfolio period is in submission, we render the summary info
     // in the second column and move the judging info below the submission period info
     return (
       <Row>
@@ -154,7 +152,7 @@ class PortfolioCard extends Component {
         </Col>
         <Col xs='12' md='6'>
           {isShowInSubmission
-            ? this.renderSubmissionSummary(props)
+            ? <Fragment/> //this.renderSubmissionSummary(props)
             : (
               <Fragment>
                 <h4>Judging Period</h4>
@@ -231,4 +229,4 @@ class PortfolioCard extends Component {
   }
 }
 
-export default PortfolioCard
+export default PortfolioPeriodCard
