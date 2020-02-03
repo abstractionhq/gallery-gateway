@@ -61,7 +61,13 @@ export const updateUser = (_, args, req) => {
       // no need to check type since giving an admin a hometown should be impossible, 
       // and also wouldnt break anything.
 
+      //not sure how the database does with undefined vs null, this is just a precaution
+      if (args.input.hometown == undefined){
+        user.hometown = null
+      }
+      else {
       user.hometown = args.input.hometown
+      }
       return user.save()
     })
 

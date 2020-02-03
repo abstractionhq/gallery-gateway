@@ -69,22 +69,20 @@ class EditHometown extends Component {
           <Form onSubmit={handleSubmit}>
            {values.isEditing == 'yes' ? (
             <Row>
-              <Col>
+              <Col>        
                 <Field
+                    style={{
+                      width: '10em'
+                    }}
                     type='text'
                     id='hometown'
                     name='hometown'
                     className='form-control'
                   />
               </Col> 
-              <Button
+              <Button 
+                className='mr-4'
                 type='submit'
-                color='primary'
-                style={{
-                  cursor: 'pointer',
-                  float: 'right',
-                  width: '150px'
-                }}
               >
                 Done
               </Button> 
