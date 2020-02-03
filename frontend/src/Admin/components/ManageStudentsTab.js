@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
 
-import UsersTable from './UsersTable'
+import StudentsTable from './StudentsTable'
 import Loading from '../../shared/components/Loading'
 
 class ManageStudentsTab extends Component {
   static propTypes = {
     students: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
-    error: PropTypes.object
+    error: PropTypes.object,
+    create: PropTypes.func.isRequired,
+    handleError: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -26,12 +28,12 @@ class ManageStudentsTab extends Component {
   }
 
   render () {
-    const { loading, students } = this.props
+    const { loading, students, handleError, create } = this.props
 
     return (
       <Row>
         <Col xs='12'>
-          {loading ? <Loading /> : <UsersTable data={students} />}
+          {loading ? <Loading /> : <StudentsTable data={students} handleError={handleError} create={create}/>}
         </Col>
       </Row>
     )
