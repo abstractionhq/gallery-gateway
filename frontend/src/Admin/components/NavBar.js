@@ -51,7 +51,7 @@ export default class NavBar extends Component {
             <Nav className='ml-auto' navbar>
               <NavItem>
                 <NavLink tag={Link} to='/'>
-                  Dashboard
+                  Shows Dashboard
                 </NavLink>
               </NavItem>
               <li>
