@@ -2,6 +2,7 @@ import User from "../../models/user";
 import { UserError } from "graphql-errors";
 import { ADMIN } from "../../constants";
 import PortfolioPeriod from "../../models/portfolioPeriod";
+import Portfolio from "../../models/portfolio";
 
 const isRequestingOwnUser = (req, args) => {
   return (
@@ -34,4 +35,34 @@ export function portfolioPeriods(_, args, req) {
   //TODO: Get student portfolios
 
   return PortfolioPeriod.findAll(order);
+}
+
+/**
+ * Just looking for the open portfolio period. If the student requestion (if a student is requesting)
+ * already has a portfolio for that period, return null.
+ */
+export function openPortfolioPeriod(_, args, req) {
+  return PortfolioPeriod.findOne({
+    where: {
+      $and: [
+        { entryStart: { $lt: new Date() } },
+        { entryEnd: { $gt: new Date() } }
+      ]
+    }
+  }).then(openPeriod => {
+    if (!openPeriod) return null;
+
+    if (args.studentUsername) {
+      return Portfolio.findOne({
+        where: {
+          portfolioPeriodId: openPeriod.id,
+          studentUsername: args.studentUsername
+        }
+      }).then(portfolio => {
+        return !portfolio ? openPeriod : null;
+      });
+    } else {
+      return openPeriod;
+    }
+  });
 }

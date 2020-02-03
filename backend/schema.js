@@ -346,6 +346,7 @@ type Query {
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
+    openPortfolioPeriod(studentUsername: String!): PortfolioPeriod
     entry(id: ID!): Entry
     entries(showId: ID, studentUsername: String): [Entry]
 }
