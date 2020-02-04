@@ -143,6 +143,7 @@ input EntryInput {
     comment: String
     forSale: Boolean
     hometown: String
+    displayName: String
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
