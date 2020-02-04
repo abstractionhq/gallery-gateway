@@ -131,7 +131,10 @@ class VideoSubmissionForm extends Component {
             }),
             title: yup.string().required('Required'),
             comment: yup.string(),
-            hometown: yup.string().required('Required'),
+            hometown: yup.string().when('submittingAsGroup', {
+              is: 'no',
+              then: yup.string().required('Required')
+            }),
             forSale: yup
               .string()
               .required('Required')
@@ -155,8 +158,14 @@ class VideoSubmissionForm extends Component {
                       participants: values.groupParticipants
                     }
                     : null,
+<<<<<<< HEAD
                 hometown: values.hometown,
                 displayName: values.displayName,
+=======
+                hometown: values.submittingAsGroup === 'no'?  
+                  values.hometown
+                  : null,
+>>>>>>> dev
                 studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
@@ -175,7 +184,9 @@ class VideoSubmissionForm extends Component {
             // Create an entry, show the success modal, and then go to the dashboard
             create(input)
               .then(()=>{
-                handleHometown(values.hometown)
+                if (values.submittingAsGroup == 'no'){
+                  handleHometown(values.hometown)
+                }
               })
               .then(()=>{
                 handleDisplayName(values.displayName)
@@ -269,6 +280,7 @@ class VideoSubmissionForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'comment')}
                   </FormGroup>
+                  {values.submittingAsGroup === 'no' ? (
                   <HomeTownInput
                     hometownNeeded={hometownNeeded}
                     values={values}

@@ -1,0 +1,12 @@
+mutation createPortfolioPeriod($input: PortfolioPeriodInput!) {
+  createPortfolioPeriod(input: $input) {
+    id
+    name
+    description
+    numPieces
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+  }
+}
