@@ -51,39 +51,36 @@ class PortfolioPeriodCard extends Component {
     </Fragment>
   )
 
-  /*
-  renderSubmissionSummary = (props) => {
+  renderPeriodSummary = (props) => {
 
-    const totalSubmissions = props.entries.length
-    const totalPhotoSubmissions = props.entries.filter(entry => entry.entryType === 'PHOTO').length
-    const totalVideoSubmissions = props.entries.filter(entry => entry.entryType === 'VIDEO').length
-    const totalOtherSubmissions = props.entries.filter(entry => entry.entryType === 'OTHER').length
+    // TODO: Change this to a proper call once the Student Portfolio PR goes though
+    // Remove dummy data
+    const totalPortfolios =  10
+    const submittedPortfolios = 6
+    const pendingPortfolios = 4
+//    const totalSubmissions = props.entries.length
+//    const totalPhotoSubmissions = props.entries.filter(entry => entry.entryType === 'PHOTO').length
+//    const totalVideoSubmissions = props.entries.filter(entry => entry.entryType === 'VIDEO').length
+//    const totalOtherSubmissions = props.entries.filter(entry => entry.entryType === 'OTHER').length
 
     return (
       <Fragment>
-        <h4>Submissions: <Badge color='primary'>{totalSubmissions}</Badge></h4>
+        <h4>Total Portfolios: <Badge color='primary'>{totalPortfolios}</Badge></h4>
         <div>
-          <FontAwesomeIcon icon={FaImage} className='mr-2' />
+          <FontAwesomeIcon icon={FaBook} className='mr-2' />
           <h6 className='text-bold d-inline-block'>
-            Photos: <Badge color='dark'>{totalPhotoSubmissions}</Badge>
-          </h6>
-        </div>
-        <div>
-          <FontAwesomeIcon icon={FaVideo} className='mr-2' />
-          <h6 className='text-bold d-inline-block'>
-            Videos: <Badge color='dark'>{totalVideoSubmissions}</Badge>
+            Submitted: <Badge color='dark'>{submittedPortfolios}</Badge>
           </h6>
         </div>
         <div>
           <FontAwesomeIcon icon={FaBook} className='mr-2' />
           <h6 className='text-bold d-inline-block'>
-            Other: <Badge color='dark'>{totalOtherSubmissions}</Badge>
+            Pending: <Badge color='dark'>{pendingPortfolios}</Badge>
           </h6>
         </div>
       </Fragment>
     )
   }
-  */
 
   renderClosedPeriod = ({ entryStart, judgingEnd }) => (
     <Row>
@@ -152,7 +149,7 @@ class PortfolioPeriodCard extends Component {
         </Col>
         <Col xs='12' md='6'>
           {isShowInSubmission
-            ? <Fragment/> //this.renderSubmissionSummary(props)
+            ? this.renderPeriodSummary(props)
             : (
               <Fragment>
                 <h4>Judging Period</h4>
