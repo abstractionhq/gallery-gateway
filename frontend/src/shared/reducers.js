@@ -52,16 +52,27 @@ const auth = (state = {}, action) => {
         downloadToken: action.payload
       }
     case actions.SET_USER_HOMETOWN:
-        if(state.user.hometown){
-          return state;
+      if (state.user.hometown) {
+        return state;
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          hometown: action.payload
         }
-        return {
-          ...state,
-          user : {
-            ...state.user,
-            hometown: action.payload
-          }
+      }
+    case actions.SET_USER_DISPLAY_NAME:
+      if (state.user.displayName) {
+        return state;
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          displayName: action.payload
         }
+      }
     default:
       return state
   }

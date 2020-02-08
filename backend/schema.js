@@ -26,6 +26,7 @@ input UserInput {
     firstName: String!
     lastName: String!
     displayName: String
+    hometown: String
 }
 
 input PermissionInput {
@@ -142,6 +143,7 @@ input EntryInput {
     comment: String
     forSale: Boolean
     hometown: String
+    displayName: String
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
@@ -355,7 +357,7 @@ type Mutation {
     createJudge(input: UserInput!): User
     createAdmin(input: UserInput!): User
     updatePermissions(input: PermissionInput!): User
-    updateUser(id: ID!, input: UserInput!): User
+    updateUser(input: UserInput!): User
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
