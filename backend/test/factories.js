@@ -8,6 +8,7 @@ import Video from '../models/video'
 import Other from '../models/other'
 import Vote from '../models/vote'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
+import PortfolioPeriod from '../models/portfolioPeriod'
 
 // Helper for faking shows
 Date.prototype.addDays = function (days) { // eslint-disable-line no-extend-native
@@ -176,4 +177,24 @@ export function fakeVoteReturnShowId (opts) {
         }).then(() => entry.showId)
       )
     })
+}
+
+export function fakePortfolioPeriod (opts) {
+  opts = opts || {}
+  opts.name = opts.name || faker.name.title()
+  opts.description = opts.description || faker.name.jobDescriptor()
+  opts.numPieces = opts.numPieces ||10
+  opts.entryStart = opts.entryStart || faker.date.between(new Date(-2), new Date().addDays(-1))
+  opts.entryEnd = opts.entryEnd || faker.date.between(new Date().addDays(2), new Date().addDays(3))
+  opts.judgingStart = opts.judgingStart || faker.date.between(new Date().addDays(4), new Date().addDays(5))
+  opts.judgingEnd = opts.judgingEnd || faker.date.between(new Date().addDays(6), new Date().addDays(7))
+  return PortfolioPeriod.create({
+    name: opts.name,
+    description: opts.description,
+    numPieces: opts.numPieces,
+    entryStart: opts.entryStart,
+    entryEnd: opts.entryEnd,
+    judgingStart: opts.judgingStart,
+    judgingEnd: opts.judgingEnd,
+  })
 }
