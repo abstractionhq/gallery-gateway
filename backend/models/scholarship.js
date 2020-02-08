@@ -1,55 +1,50 @@
-"use strict";
+import DataTypes from 'sequelize'
+import sequelize from '../config/sequelize'
 
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("scholarships", {
-      id: {
+const Scholarship = sequelize.define('scholarship', {
+    id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: DataTypes.INTEGER
       },
       name:{
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
       },
       gpa:{
-        type: Sequelize.FLOAT,
+        type: DataTypes.FLOAT,
         allowNull: true,
       },
       yearStatus:{
-        type: Sequelize.STRING,
+        type: DataTypes.String,
         allowNull: true
       },
       requiredPhotos: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       description: {
-        type: Sequelize.TEXT,
+        type: DataTypes.TEXT,
         allowNull: false
       },
       fulltime: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false
       },
       renewable: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false
       },
       requiresEssay: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false
       },
       degreePrograms: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       }
-    });
-  },
+})
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("scholarships");
-  }
-};
+export default Scholarship

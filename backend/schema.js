@@ -242,6 +242,31 @@ input OtherMediaInput {
     path: String
 }
 
+type Scholarship{
+    id: ID!
+    name: String!
+    description: String!
+    requiredPhotos: Int!
+    fulltime: Boolean!
+    renewable: Boolean!
+    requiresEssay: Boolean!
+    gpa: Float
+    yearStatus: String
+    degreePrograms: String
+}
+
+input ScholarshipInput{
+    name: String!
+    description: String!
+    requiredPhotos: Int!
+    fulltime: Boolean!
+    renewable: Boolean!
+    requiresEssay: Boolean!
+    gpa: Float
+    yearStatus: String
+    degreePrograms: String
+}
+
 enum UserType {
     STUDENT
     ADMIN
@@ -285,6 +310,8 @@ type Mutation {
     createVideo(input: VideoInput!): Show
     createOtherMedia(input: OtherMediaInput!): Show
     updateEntry(id: ID!, input: EntryUpdate!): Entry
+
+    createScholarship(input: ScholarshipInput!): Scholarship
 
     vote(input: VoteInput): Vote
 }
