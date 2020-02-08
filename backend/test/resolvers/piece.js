@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
 import Piece from "../../models/piece";
-import Portfolio from '../../models/portfolio'
+import Portfolio from "../../models/portfolio";
 import {
   createPortfolioPhoto,
   createPortfolioVideo,
@@ -65,14 +65,15 @@ describe("Piece Mutations", function() {
       const args = {
         input: {
           piece: standardPiece(user, period),
-          path: "https://www.rit.edu/computing/sites/rit.edu.computing/files/docs/BS%20-%20Flowchart%20Fall%202013-Sum%202016.pdf"
+          path:
+            "https://www.rit.edu/computing/sites/rit.edu.computing/files/docs/BS%20-%20Flowchart%20Fall%202013-Sum%202016.pdf"
         }
       };
-      return createPortfolioOtherMedia({}, args, { auth: { type: "ADMIN" } }).then(
-        () => {
-          return Piece.count().then(num => expect(num).to.equal(1));
-        }
-      );
+      return createPortfolioOtherMedia({}, args, {
+        auth: { type: "ADMIN" }
+      }).then(() => {
+        return Piece.count().then(num => expect(num).to.equal(1));
+      });
     });
   });
   it("creates a portfolio when necessary", function() {
@@ -82,22 +83,21 @@ describe("Piece Mutations", function() {
       const args = {
         input: {
           piece: standardPiece(user, period),
-          path: "https://www.rit.edu/computing/sites/rit.edu.computing/files/docs/BS%20-%20Flowchart%20Fall%202013-Sum%202016.pdf"
+          path:
+            "https://www.rit.edu/computing/sites/rit.edu.computing/files/docs/BS%20-%20Flowchart%20Fall%202013-Sum%202016.pdf"
         }
       };
       return Portfolio.count().then(beforeCount => {
-          return createPortfolioOtherMedia({}, args, { auth: { type: "ADMIN" } }).then(
-        () => {
-          return Portfolio.count().then(afterCount => 
-            {
-                expect(beforeCount).to.equal(0)
-                expect(afterCount).to.equal(1)
-                return Promise.resolve()
-            });
-        }
-      );
-      })
-      
+        return createPortfolioOtherMedia({}, args, {
+          auth: { type: "ADMIN" }
+        }).then(() => {
+          return Portfolio.count().then(afterCount => {
+            expect(beforeCount).to.equal(0);
+            expect(afterCount).to.equal(1);
+            return Promise.resolve();
+          });
+        });
+      });
     });
   });
 });
