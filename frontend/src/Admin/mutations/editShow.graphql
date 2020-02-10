@@ -1,0 +1,11 @@
+mutation editShow($input: ShowUpdate!) {
+  updateShow(input: $input) {
+    id
+    name
+    description
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+  }
+}

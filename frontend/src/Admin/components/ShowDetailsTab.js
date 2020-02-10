@@ -12,6 +12,7 @@ import {
 } from 'reactstrap'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import FaEdit from '@fortawesome/fontawesome-free-solid/faEdit'
 import FaPrint from '@fortawesome/fontawesome-free-solid/faPrint'
 import FaTable from '@fortawesome/fontawesome-free-solid/faTable'
 import FaArchive from '@fortawesome/fontawesome-free-solid/faFileArchive'
@@ -81,6 +82,17 @@ class ShowDetailsTab extends Component {
             <dd>{show.entryCap}</dd>
           </Col>
           <Col>
+            <Button
+              color='dark'
+              className='text-left'
+              outline
+              block
+              tag={Link}
+              to={`/show/${show.id}/edit`}
+            >
+              <FontAwesomeIcon icon={FaEdit} className='align-middle' /> Edit
+              Show Details
+            </Button>
             <Button
               color='dark'
               className='text-left'
