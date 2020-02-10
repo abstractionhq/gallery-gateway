@@ -1,4 +1,4 @@
-import { UserError } from "graphql-er"
+import { UserError } from "graphql-errors"
 import { ADMIN } from "../../constants";
 import Scholarship from "../../models/scholarship";
 
@@ -6,7 +6,7 @@ export function createScholarship(_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError("Permission Denied");
   }
-  
+
   const newScholarship = {
       name: args.input.name,
       gpa: args.input.gpa,

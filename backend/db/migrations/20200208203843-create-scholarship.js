@@ -9,16 +9,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name:{
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
-      gpa:{
+      gpa: {
         type: Sequelize.FLOAT,
-        allowNull: true,
+        allowNull: true
       },
-      yearStatus:{
+      yearStatus: {
         type: Sequelize.STRING,
         allowNull: true
       },
@@ -45,6 +45,14 @@ module.exports = {
       degreePrograms: {
         type: Sequelize.STRING,
         allowNull: true
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
