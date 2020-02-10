@@ -70,7 +70,6 @@ class EditShowForm extends Component {
     return (
       <Formik
         initialValues={{
-          id: show.id,
           name: show.name,
           description: show.description,
           entryCap: show.entryCap,
@@ -117,6 +116,10 @@ class EditShowForm extends Component {
             .required('End Date is Required')
         })}
         onSubmit={values => {
+          values.entryStart
+          values.entryEnd
+          values.judgingStart
+          values.judgingEnd
           update(values)
             .then(() => done())
             .catch(err => handleError(err.message))

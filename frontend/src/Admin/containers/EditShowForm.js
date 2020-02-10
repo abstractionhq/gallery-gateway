@@ -13,17 +13,13 @@ const mapDispatchToProps = dispatch => ({
   handleError: message => dispatch(displayError(message))
 })
 
-const addIdFromQueryParams = () => {
-  return window.location.search.split('=')[1]
-}
-
 export default compose(
   connect(null, mapDispatchToProps),
   graphql(EditShowMutation, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps }) => ({
       update: show =>
         mutate({
-          variables: { input: show }
+          variables: { id: ownProps.show.id, input: show }
         })
     }),
     options: () => ({
