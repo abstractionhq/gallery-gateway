@@ -43,7 +43,7 @@ const createEntry = (entry, entryType, entryId, t) => {
 
         let userUpdatePromise = Promise.resolve(null)
 
-        if (user.hometown != entry.hometown && user.displayName != entry.displayName){
+        if (!group && user.hometown != entry.hometown && user.displayName != entry.displayName){
           userUpdatePromise = User.update(
             {
               hometown: entry.hometown,
@@ -52,7 +52,7 @@ const createEntry = (entry, entryType, entryId, t) => {
             { where: {username: entry.studentUsername}}
           )
         }
-        else if (user.hometown != entry.hometown){
+        else if (!group && user.hometown != entry.hometown){
           userUpdatePromise = User.update(
             {
               hometown: entry.hometown
@@ -61,7 +61,7 @@ const createEntry = (entry, entryType, entryId, t) => {
           )
         }
 
-        else if (user.displayName != entry.displayName){
+        else if (!group && user.displayName != entry.displayName){
           userUpdatePromise = User.update(
             {
               displayName: entry.displayName
