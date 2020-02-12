@@ -234,6 +234,7 @@ class OtherSubmissionForm extends Component {
                         participants: values.groupParticipants
                       }
                     : null,
+                displayName: values.displayName,
                 hometown:
                   values.submittingAsGroup === "no" ? values.hometown : null,
                 studentUsername:
