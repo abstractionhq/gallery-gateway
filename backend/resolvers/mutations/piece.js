@@ -11,7 +11,7 @@ import Portfolio from "../../models/portfolio";
 import PortfolioPeriod from "../../models/portfolioPeriod";
 import Piece from "../../models/piece";
 
-// Creates an Piece based on the 'PieceInput' schema
+// Creates a Piece based on the 'PieceInput' schema
 const createPiece = (piece, entryType, pieceId, t) => {
   let existingId = piece.portfolioId;
   let portolioPromise =

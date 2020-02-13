@@ -17,7 +17,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/portfolio')),
-  handleHometown: hometown => dispatch(setUserHometown(hometown)),
   handleError: message => dispatch(displayError(message))
 })
 

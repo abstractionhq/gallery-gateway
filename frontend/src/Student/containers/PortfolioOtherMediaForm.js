@@ -20,7 +20,6 @@ const mapDispatchToProps = dispatch => ({
   done: () => dispatch(push('/portfolio')),
   handlePDFUpload: file => dispatch(uploadPDF(file)),
   handleImageUpload: file => dispatch(uploadImage(file)),
-  handleHometown: hometown => dispatch(setUserHometown(hometown)),
   clearPreview: () => dispatch(clearPreview()),
   handleError: message => dispatch(displayError(message))
 })
