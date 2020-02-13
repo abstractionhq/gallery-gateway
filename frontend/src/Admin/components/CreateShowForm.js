@@ -227,16 +227,34 @@ class CreateShowForm extends Component {
                 </Row>
               </Col>
             </Row>
-            <Button
-              type='submit'
-              color='primary'
-              style={{
-                cursor: 'pointer'
-              }}
-              disabled={isSubmitting}
-            >
-              Create
-            </Button>
+            <Row>
+              <Col>
+                <Button
+                  type='submit'
+                  color='primary'
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Create
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  type='button'
+                  color='danger'
+                  style={{
+                    cursor: 'pointer',
+                    float: 'right'
+                  }}
+                  disabled={isSubmitting}
+                  onClick={done}
+                >
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
           </Form>
         )}
       />
