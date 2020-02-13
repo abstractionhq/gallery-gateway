@@ -240,14 +240,10 @@ class PhotoSubmissionForm extends Component {
                       participants: values.groupParticipants
                     }
                     : null,
-<<<<<<< HEAD
-                hometown: values.hometown,
                 displayName: values.displayName,
-=======
                 hometown: values.submittingAsGroup === 'no'?  
                   values.hometown
                   : null,
->>>>>>> dev
                 studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
@@ -368,7 +364,7 @@ class PhotoSubmissionForm extends Component {
                     touched={touched}
                     errors={errors}
                     renderErrors={this.renderErrors}
-                  />
+                  />) : null}
                   <DisplayNameInput
                     displayNameNeeded={displayNameNeeded}
                     values={values}

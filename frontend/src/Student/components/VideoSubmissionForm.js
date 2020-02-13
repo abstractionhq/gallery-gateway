@@ -106,125 +106,121 @@ class VideoSubmissionForm extends Component {
       <Fragment>
         <Formik
           initialValues={{
-            academicProgram: '',
-            yearLevel: '',
-            submittingAsGroup: canSubmitAsSingle ? 'no' : 'yes',
-            groupParticipants: '',
-            title: 'Untitled',
-            comment: '',
-            forSale: 'no',
-            moreCopies: 'no',
-            url: '',
+            academicProgram: "",
+            yearLevel: "",
+            submittingAsGroup: canSubmitAsSingle ? "no" : "yes",
+            groupParticipants: "",
+            title: "Untitled",
+            comment: "",
+            forSale: "no",
+            moreCopies: "no",
+            url: "",
             hometown: defaultHometown,
             displayName: defaultDisplayName
           }}
           validationSchema={yup.object().shape({
-            academicProgram: yup.string().required('Required'),
-            yearLevel: yup.string().required('Required'),
+            academicProgram: yup.string().required("Required"),
+            yearLevel: yup.string().required("Required"),
             submittingAsGroup: yup
               .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
-            groupParticipants: yup.string().when('submittingAsGroup', {
-              is: 'yes',
-              then: yup.string().required('Required')
+              .required("Required")
+              .oneOf(["yes", "no"]), // Radio button values
+            groupParticipants: yup.string().when("submittingAsGroup", {
+              is: "yes",
+              then: yup.string().required("Required")
             }),
-            title: yup.string().required('Required'),
+            title: yup.string().required("Required"),
             comment: yup.string(),
-            hometown: yup.string().when('submittingAsGroup', {
-              is: 'no',
-              then: yup.string().required('Required')
+            hometown: yup.string().when("submittingAsGroup", {
+              is: "no",
+              then: yup.string().required("Required")
             }),
             forSale: yup
               .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
+              .required("Required")
+              .oneOf(["yes", "no"]), // Radio button values
             moreCopies: yup
               .string()
-              .required('Required')
-              .oneOf(['yes', 'no']), // Radio button values
+              .required("Required")
+              .oneOf(["yes", "no"]), // Radio button values
             url: yup
               .string()
-              .required('Required')
-              .url('Must be a valid URL')
+              .required("Required")
+              .url("Must be a valid URL")
           })}
           onSubmit={values => {
             const input = {
               entry: {
                 group:
-                  values.submittingAsGroup === 'yes'
+                  values.submittingAsGroup === "yes"
                     ? {
-                      creatorUsername: user.username,
-                      participants: values.groupParticipants
-                    }
+                        creatorUsername: user.username,
+                        participants: values.groupParticipants
+                      }
                     : null,
-<<<<<<< HEAD
-                hometown: values.hometown,
                 displayName: values.displayName,
-=======
-                hometown: values.submittingAsGroup === 'no'?  
-                  values.hometown
-                  : null,
->>>>>>> dev
-                studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
+                hometown:
+                  values.submittingAsGroup === "no" ? values.hometown : null,
+                studentUsername:
+                  values.submittingAsGroup === "no" ? user.username : null,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
                 yearLevel: values.yearLevel,
                 title: values.title,
                 comment: values.comment,
-                forSale: values.forSale === 'yes',
+                forSale: values.forSale === "yes",
                 // Must select 'forSale = yes' first
                 // So, if you select 'forSale = yes', 'moreCopies = yes', 'forSale = no' => 'moreCopies' will be false
                 moreCopies:
-                  values.forSale === 'yes' && values.moreCopies === 'yes'
+                  values.forSale === "yes" && values.moreCopies === "yes"
               },
               url: values.url
-            }
+            };
 
             // Create an entry, show the success modal, and then go to the dashboard
             create(input)
-              .then(()=>{
-                if (values.submittingAsGroup == 'no'){
-                  handleHometown(values.hometown)
+              .then(() => {
+                if (values.submittingAsGroup == "no") {
+                  handleHometown(values.hometown);
                 }
               })
-              .then(()=>{
-                handleDisplayName(values.displayName)
+              .then(() => {
+                handleDisplayName(values.displayName);
               })
               .then(() => {
                 this.setState({ showModal: true }, () => {
-                  setTimeout(done, 2000)
-                })
+                  setTimeout(done, 2000);
+                });
               })
-              .catch(err => handleError(err.message))
+              .catch(err => handleError(err.message));
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
-            <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>
+            <Form onSubmit={handleSubmit} style={{ marginBottom: "75px" }}>
               <Row>
-                <Col xs='12' md='8' style={{ margin: '0 auto' }}>
+                <Col xs="12" md="8" style={{ margin: "0 auto" }}>
                   <Header>New Video Submission</Header>
                   <SubHeader>{forShow.name}</SubHeader>
                   <FormGroup>
                     <Label>Academic Program</Label>
                     <Field
-                      type='text'
-                      id='academicProgram'
-                      name='academicProgram'
-                      className='form-control'
+                      type="text"
+                      id="academicProgram"
+                      name="academicProgram"
+                      className="form-control"
                       required
                     />
-                    {this.renderErrors(touched, errors, 'academicProgram')}
+                    {this.renderErrors(touched, errors, "academicProgram")}
                   </FormGroup>
                   <FormGroup>
                     <Label>Year Level</Label>
                     <Field
-                      type='text'
-                      id='yearLevel'
-                      name='yearLevel'
-                      className='form-control'
+                      type="text"
+                      id="yearLevel"
+                      name="yearLevel"
+                      className="form-control"
                       required
                     />
-                    {this.renderErrors(touched, errors, 'yearLevel')}
+                    {this.renderErrors(touched, errors, "yearLevel")}
                   </FormGroup>
                   <SubmitAsGroupRadio
                     values={values}
@@ -233,61 +229,62 @@ class VideoSubmissionForm extends Component {
                     canSubmitAsSingle={canSubmitAsSingle}
                     renderErrors={this.renderErrors}
                   />
-                  {values.submittingAsGroup === 'yes' ? (
+                  {values.submittingAsGroup === "yes" ? (
                     <FormGroup>
                       <Label>List the names of your other group members.</Label>
                       <Field
-                        type='text'
-                        id='groupParticipants'
-                        name='groupParticipants'
-                        className='form-control'
+                        type="text"
+                        id="groupParticipants"
+                        name="groupParticipants"
+                        className="form-control"
                         required
                       />
-                      {this.renderErrors(touched, errors, 'groupParticipants')}
+                      {this.renderErrors(touched, errors, "groupParticipants")}
                     </FormGroup>
                   ) : null}
                   <FormGroup>
                     <Label>YouTube or Vimeo Video URL</Label>
                     <Field
-                      type='url'
-                      id='url'
-                      name='url'
-                      className='form-control'
-                      placeholder='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                      type="url"
+                      id="url"
+                      name="url"
+                      className="form-control"
+                      placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                       required
                     />
-                    {this.renderErrors(touched, errors, 'url')}
+                    {this.renderErrors(touched, errors, "url")}
                   </FormGroup>
                   <FormGroup>
                     <Label>Title</Label>
                     <Field
-                      type='text'
-                      id='title'
-                      name='title'
-                      className='form-control'
+                      type="text"
+                      id="title"
+                      name="title"
+                      className="form-control"
                       required
                     />
-                    {this.renderErrors(touched, errors, 'title')}
+                    {this.renderErrors(touched, errors, "title")}
                   </FormGroup>
                   <FormGroup>
-                    <Label for='comment'>Artist Comment (Optional)</Label>
+                    <Label for="comment">Artist Comment (Optional)</Label>
                     <Field
-                      component='textarea'
-                      id='comment'
-                      name='comment'
-                      className='form-control'
+                      component="textarea"
+                      id="comment"
+                      name="comment"
+                      className="form-control"
                       rows={4}
                     />
-                    {this.renderErrors(touched, errors, 'comment')}
+                    {this.renderErrors(touched, errors, "comment")}
                   </FormGroup>
-                  {values.submittingAsGroup === 'no' ? (
-                  <HomeTownInput
-                    hometownNeeded={hometownNeeded}
-                    values={values}
-                    touched={touched}
-                    errors={errors}
-                    renderErrors={this.renderErrors}
-                  />
+                  {values.submittingAsGroup === "no" ? (
+                    <HomeTownInput
+                      hometownNeeded={hometownNeeded}
+                      values={values}
+                      touched={touched}
+                      errors={errors}
+                      renderErrors={this.renderErrors}
+                    />
+                  ) : null}
                   <DisplayNameInput
                     displayNameNeeded={displayNameNeeded}
                     values={values}
@@ -303,32 +300,32 @@ class VideoSubmissionForm extends Component {
                     <FormGroup check>
                       <Label check>
                         <Field
-                          type='radio'
-                          id='forSale'
-                          name='forSale'
-                          value='no'
+                          type="radio"
+                          id="forSale"
+                          name="forSale"
+                          value="no"
                           required
-                          checked={values.forSale === 'no'}
+                          checked={values.forSale === "no"}
                         />
-                        <span className='ml-2'>No</span>
+                        <span className="ml-2">No</span>
                       </Label>
                     </FormGroup>
                     <FormGroup check>
                       <Label check>
                         <Field
-                          type='radio'
-                          id='forSale'
-                          name='forSale'
-                          value='yes'
+                          type="radio"
+                          id="forSale"
+                          name="forSale"
+                          value="yes"
                           required
-                          checked={values.forSale === 'yes'}
+                          checked={values.forSale === "yes"}
                         />
-                        <span className='ml-2'>Yes</span>
+                        <span className="ml-2">Yes</span>
                       </Label>
                     </FormGroup>
-                    {this.renderErrors(touched, errors, 'forSale')}
+                    {this.renderErrors(touched, errors, "forSale")}
                   </FormGroup>
-                  {values.forSale === 'yes' ? (
+                  {values.forSale === "yes" ? (
                     <FormGroup>
                       <Label>
                         If selected for multiple purchase awards, are you
@@ -337,49 +334,49 @@ class VideoSubmissionForm extends Component {
                       <FormGroup check>
                         <Label check>
                           <Field
-                            type='radio'
-                            id='moreCopies'
-                            name='moreCopies'
-                            value='no'
+                            type="radio"
+                            id="moreCopies"
+                            name="moreCopies"
+                            value="no"
                             required
-                            checked={values.moreCopies === 'no'}
+                            checked={values.moreCopies === "no"}
                           />
-                          <span className='ml-2'>No</span>
+                          <span className="ml-2">No</span>
                         </Label>
                       </FormGroup>
                       <FormGroup check>
                         <Label check>
                           <Field
-                            type='radio'
-                            id='moreCopies'
-                            name='moreCopies'
-                            value='yes'
+                            type="radio"
+                            id="moreCopies"
+                            name="moreCopies"
+                            value="yes"
                             required
-                            checked={values.moreCopies === 'yes'}
+                            checked={values.moreCopies === "yes"}
                           />
-                          <span className='ml-2'>Yes</span>
+                          <span className="ml-2">Yes</span>
                         </Label>
                       </FormGroup>
-                      {this.renderErrors(touched, errors, 'moreCopies')}
+                      {this.renderErrors(touched, errors, "moreCopies")}
                     </FormGroup>
                   ) : null}
                   <ButtonContainer>
                     <Link to={`/submit?to=${forShow.id}`}>
                       <Button
-                        type='button'
-                        color='danger'
-                        style={{ cursor: 'pointer', width: '150px' }}
+                        type="button"
+                        color="danger"
+                        style={{ cursor: "pointer", width: "150px" }}
                       >
                         Back
                       </Button>
                     </Link>
                     <Button
-                      type='submit'
-                      color='primary'
+                      type="submit"
+                      color="primary"
                       style={{
-                        cursor: 'pointer',
-                        float: 'right',
-                        width: '150px'
+                        cursor: "pointer",
+                        float: "right",
+                        width: "150px"
                       }}
                       disabled={isSubmitting}
                     >
@@ -393,7 +390,7 @@ class VideoSubmissionForm extends Component {
         />
         <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
-    )
+    );
   }
 
   render () {
