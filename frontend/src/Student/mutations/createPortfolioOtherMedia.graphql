@@ -1,0 +1,9 @@
+mutation createPortfolioOtherMedia($input: PortfolioOtherMediaInput!) {
+  createPortfolioOtherMedia(input: $input) {
+    id
+    pieces{
+      id
+      title
+    }
+  }
+}

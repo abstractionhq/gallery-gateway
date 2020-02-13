@@ -2,7 +2,8 @@ import { graphql } from 'react-apollo'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
-import ShowsQuery from '../queries/shows.graphql'
+import PortfoliosQuery from '../queries/portfoliosByStudent.graphql'
+import OpenPortfolioPeriodQuery from '../queries/openPortfolioPeriod.graphql'
 import Portfolios from '../components/Portfolios'
 import { displayError } from '../../shared/actions'
 
@@ -16,16 +17,28 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(ShowsQuery, {
-    props: ({ data: { shows, loading, error } }) => ({
-      shows,
-      loading,
-      error
+  graphql(PortfoliosQuery,{
+    props: ({ data: {loading, portfoliosByStudent, error}}) => ({
+      portfoliosLoading: loading,
+      portfolios: portfoliosByStudent,
+      portfoliosError: error
     }),
     options: ownProps => ({
       variables: {
         studentUsername: ownProps.studentUsername
       }
-    })
+    })    
+  }),
+  graphql(OpenPortfolioPeriodQuery,{
+    props: ({ data: {loading, openPortfolioPeriod, error}}) => ({
+      openPeriodLoading: loading,
+      openPeriod: openPortfolioPeriod,
+      openPeriodError: error
+    }),
+    options:ownProps => ({
+      variables: {
+        studentUsername: ownProps.studentUsername
+      }
+    })   
   })
 )(Portfolios)

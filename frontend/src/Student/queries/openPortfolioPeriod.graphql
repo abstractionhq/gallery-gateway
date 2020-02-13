@@ -1,0 +1,9 @@
+query OpenPortfolioPeriod($studentUsername: String!) {
+  openPortfolioPeriod(studentUsername: $studentUsername) {
+    id
+    name
+    numPieces
+    entryStart
+    entryEnd
+  }
+}

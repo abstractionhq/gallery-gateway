@@ -1,0 +1,6 @@
+query portfolioPeriod($id: ID!) {
+  portfolioPeriod(id: $id) {
+    id
+    name
+  }
+}

@@ -8,7 +8,6 @@ const Dashboard = () => (
     <Row>
       <Col>
         <Shows />
-        {/* TODO: Show all open shows w/ link to any submissions a student made to them */}
       </Col>
     </Row>
   </Container>
