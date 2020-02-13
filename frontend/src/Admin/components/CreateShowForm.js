@@ -244,9 +244,9 @@ class CreateShowForm extends Component {
                 <Button
                   type='button'
                   color='danger'
+                  className="float-right"
                   style={{
-                    cursor: 'pointer',
-                    float: 'right'
+                    cursor: 'pointer'
                   }}
                   disabled={isSubmitting}
                   onClick={done}
