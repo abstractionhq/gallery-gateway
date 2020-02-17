@@ -21,8 +21,13 @@ const User = sequelize.define('user', {
     allowNull: false,
     notEmpty: true
   },
+  hometown: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   displayName: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: true
   },
   type: {
     type: DataTypes.ENUM(STUDENT, ADMIN, JUDGE),

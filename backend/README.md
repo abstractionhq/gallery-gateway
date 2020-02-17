@@ -4,9 +4,13 @@
 
 ### Prerequisites
 
-You'll need [Node](https://nodejs.org/en/download/) >= 8.x and [npm](https://docs.npmjs.com/cli/npm) to be installed.
+You'll need [Node](https://nodejs.org/en/download/) >= 8.x and [npm](https://docs.npmjs.com/cli/npm) to be installed. 
+
+*Note: The build does not currently work with Node >= 12.x due to an issue with the sequelize package*
 
 You'll need to be running [MySQL](https://www.mysql.com/downloads/) and [SimpleSAMLphp](https://simplesamlphp.org/). In development, our preferred method is to run them using [Docker](https://docs.docker.com/install/).
+
+*Note: Docker desktop is only available on Unix systems, as a result, the project may need to be run on a virtual machine. For this iteration of the project, we used a Linux VM running on [Virtual Box](https://www.virtualbox.org/)*
 
 ### Installation
 

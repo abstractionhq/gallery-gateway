@@ -7,6 +7,7 @@ import Video from '../../models/video'
 import Other from '../../models/other'
 import Group from '../../models/group'
 import Show from '../../models/show'
+import User from '../../models/user'
 import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY, VIDEO_ENTRY } from '../../constants'
 import { allowedToSubmit, parseVideo } from '../../helpers/submission'
 
@@ -28,17 +29,56 @@ const createEntry = (entry, entryType, entryId, t) => {
       // property and replace it with the group's ID, since our orm recognizes
       // groupId, not a Group
 
+      let userFindPromise = Promise.resolve(null)
+      if (entry.studentUsername){
+        userFindPromise = User.findById(entry.studentUsername);
+      }
+
       // clone the object
       let newEntry = Object.assign({}, entry)
       // remove the 'group' property
       delete newEntry['group']
       // create the new Entry with select properties filled-in
-      return Entry.create({
-        ...newEntry,
-        entryType: entryType,
-        entryId: entryId,
-        groupId: group ? group.id : null
-      }, { transaction: t })
+      return userFindPromise.then(user => {
+
+        let userUpdatePromise = Promise.resolve(null)
+
+        if (!group && user.hometown != entry.hometown && user.displayName != entry.displayName){
+          userUpdatePromise = User.update(
+            {
+              hometown: entry.hometown,
+              displayName: entry.displayName
+            },
+            { where: {username: entry.studentUsername}}
+          )
+        }
+        else if (!group && user.hometown != entry.hometown){
+          userUpdatePromise = User.update(
+            {
+              hometown: entry.hometown
+            },
+            { where: {username: entry.studentUsername}}
+          )
+        }
+
+        else if (!group && user.displayName != entry.displayName){
+          userUpdatePromise = User.update(
+            {
+              displayName: entry.displayName
+            },
+            { where: {username: entry.studentUsername}}
+          )
+        }
+        delete newEntry['hometown'];
+        return userUpdatePromise.then(()=>
+          Entry.create({
+            ...newEntry,
+            entryType: entryType,
+            entryId: entryId,
+            groupId: group ? group.id : null
+          }, { transaction: t })
+        );
+      })
     })
     .then(() => Show.findById(entry.showId))
 }

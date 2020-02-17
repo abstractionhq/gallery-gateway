@@ -1,0 +1,7 @@
+query PortfolioByPeriod($periodId: ID!, $studentUsername: String) {
+  portfolioByPeriod(periodId: $periodId, studentUsername: $studentUsername) {
+      id
+      yearLevel
+      academicProgram
+  }
+}

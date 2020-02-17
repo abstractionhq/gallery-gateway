@@ -14,6 +14,7 @@ import * as actions from './actions'
 //     'lastName': 'Kent',
 //     'type': 'ADMIN',
 //     'createdAt': '...',
+//     'hometown': 'Smallville'
 //     'iat': 1516390788 # expiry in epoch-seconds
 //   },
 //   'performingRole': 'JUDGE'
@@ -49,6 +50,28 @@ const auth = (state = {}, action) => {
       return {
         ...state,
         downloadToken: action.payload
+      }
+    case actions.SET_USER_HOMETOWN:
+      if (state.user.hometown) {
+        return state;
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          hometown: action.payload
+        }
+      }
+    case actions.SET_USER_DISPLAY_NAME:
+      if (state.user.displayName) {
+        return state;
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          displayName: action.payload
+        }
       }
     default:
       return state

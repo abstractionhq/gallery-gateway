@@ -18,6 +18,8 @@ import yup from 'yup'
 import FormikSelectInput from '../../shared/components/FormikSelectInput'
 import SuccessModal from './SuccessModal'
 import SubmitAsGroupRadio from './SubmitAsGroupRadio'
+import HomeTownInput from './HometownInput'
+import DisplayNameInput from './DisplayNameInput'
 import Loading from '../../shared/components/Loading'
 
 const Header = styled.h1`
@@ -39,7 +41,9 @@ const ButtonContainer = styled.div`
 class PhotoSubmissionForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
-      username: PropTypes.string
+      username: PropTypes.string,
+      hometown: PropTypes.string,
+      displayName: PropTypes.string
     }).isRequired,
     data: PropTypes.shape({
       show: PropTypes.shape({
@@ -154,11 +158,15 @@ class PhotoSubmissionForm extends Component {
   }
 
   renderShow = () => {
-    const { create, done, user, handleError } = this.props
+    const { create, done, user, handleError, handleHometown, handleDisplayName } = this.props
     const forShow = {
       id: this.props.data.show.id,
       name: this.props.data.show.name
     }
+    const defaultHometown = user.hometown || '';
+    const hometownNeeded = !user.hometown;
+    const defaultDisplayName= user.displayName || '';
+    const displayNameNeeded = !user.displayName;
 
     // calculate whether the user is beyond their single submissions
     const numSingleEntries = this.props.data.show.entries.filter(e => !e.group).length
@@ -179,7 +187,9 @@ class PhotoSubmissionForm extends Component {
             vertDimInch: '',
             forSale: 'no',
             moreCopies: 'no',
-            path: ''
+            path: '',
+            hometown: defaultHometown,
+            displayName: defaultDisplayName
           }}
           validationSchema={yup.object().shape({
             academicProgram: yup.string().required('Required'),
@@ -194,6 +204,10 @@ class PhotoSubmissionForm extends Component {
             }),
             title: yup.string().required('Required'),
             comment: yup.string(),
+            hometown: yup.string().when('submittingAsGroup', {
+              is: 'no',
+              then: yup.string().required('Required')
+            }),
             mediaType: yup
               .string()
               .required('Required')
@@ -226,6 +240,10 @@ class PhotoSubmissionForm extends Component {
                       participants: values.groupParticipants
                     }
                     : null,
+                displayName: values.displayName,
+                hometown: values.submittingAsGroup === 'no'?  
+                  values.hometown
+                  : null,
                 studentUsername: values.submittingAsGroup === 'no' ? user.username: null,
                 showId: forShow.id,
                 academicProgram: values.academicProgram,
@@ -246,6 +264,14 @@ class PhotoSubmissionForm extends Component {
 
             // Create an entry, show the success modal, and then go to the dashboard
             create(input)
+              .then(()=>{
+                if (values.submittingAsGroup == 'no'){
+                  handleHometown(values.hometown)
+                }
+              })
+              .then(()=>{
+                handleDisplayName(values.displayName)
+              })
               .then(() => {
                 this.setState({ showModal: true }, () => {
                   setTimeout(done, 2000)
@@ -331,6 +357,21 @@ class PhotoSubmissionForm extends Component {
                     />
                     {this.renderErrors(touched, errors, 'comment')}
                   </FormGroup>
+                  {values.submittingAsGroup === 'no' ? (
+                  <HomeTownInput
+                    hometownNeeded={hometownNeeded}
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    renderErrors={this.renderErrors}
+                  />) : null}
+                  <DisplayNameInput
+                    displayNameNeeded={displayNameNeeded}
+                    values={values}
+                    touched={touched}
+                    errors={errors}
+                    renderErrors={this.renderErrors}
+                  />
                   <FormGroup>
                     <Label>Type of Media</Label>
                     <FormikSelectInput

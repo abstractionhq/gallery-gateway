@@ -28,10 +28,12 @@
   ],
   "scripts": {
     "start": "npm run build && node ./build/main.js",
+    "debug": "npm run build && node --inspect ./build/main.js",
     "watch": "backpack",
     "build": "backpack build",
-    "test": "cross-env NODE_ENV=test nyc mocha --timeout 5000 test/setup.js test/**/*.js",
-    "test-file": "cross-env NODE_ENV=test nyc mocha test/setup.js",
+    "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/setup.js test/**/*.js",
+    "test-debug":"cross-env NODE_ENV=test nyc mocha --timeout 10000 --inspect test/setup.js test/**/*.js",
+    "test-file": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/setup.js",
     "keygen": "babel-node keygen",
     "sequelize": "babel-node ./node_modules/sequelize-cli/lib/sequelize",
     "migrate": "babel-node ./node_modules/sequelize-cli/lib/sequelize db:migrate",
@@ -40,6 +42,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^1.3.2",
+    "archiver": "^3.1.1",
     "backpack-core": "^0.7.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
@@ -64,7 +67,7 @@
     "passport": "^0.4.0",
     "passport-saml": "^0.30.0",
     "sequelize": "^4.15.0",
-    "sequelize-cli": "^3.1.0",
+    "sequelize-cli": "^3.2.0",
     "sharp": "^0.20.1",
     "umzug": "^2.1.0",
     "uuid": "^3.1.0"

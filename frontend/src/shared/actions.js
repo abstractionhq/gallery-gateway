@@ -11,6 +11,8 @@ export const SWITCH_TO_ADMIN = 'SWITCH_TO_ADMIN'
 export const GET_DOWNLOAD_TOKEN = 'GET_DOWNLOAD_TOKEN'
 export const DISPLAY_ERROR = 'DISPLAY_ERROR'
 export const DISMISS_ERROR = 'DISMISS_ERROR'
+export const SET_USER_HOMETOWN = 'SET_USER_HOMETOWN'
+export const SET_USER_DISPLAY_NAME = 'SET_USER_DISPLAY_NAME'
 
 export const shouldLogin = () => {
   return !!window.localStorage.getItem('_token_v1')
@@ -78,4 +80,17 @@ export const dismissError = index => (dispatch, getState, client) => {
     type: DISMISS_ERROR,
     payload: index
   })
+}
+
+export const setUserHometown = hometown => (dispatch, getState, client) => {
+  dispatch({
+    type: SET_USER_HOMETOWN,
+    payload: hometown
+  })
+}
+  export const setUserDisplayName = displayName => (dispatch, getState, client) => {
+    dispatch({
+      type: SET_USER_DISPLAY_NAME,
+      payload: displayName
+    })
 }

@@ -1,0 +1,29 @@
+query PortfolioPeriods($studentUsername: String!) {
+  portfolioPeriods(orderBy: { sort: "entryStart", direction: DESC }) {
+    id
+    name
+    description
+    numPieces
+    entryStart
+    entryEnd
+    judgingStart
+    judgingEnd
+    createdAt
+    updatedAt
+    entries {
+      id
+      title
+      entryType
+      ... on Video {
+        provider
+        videoId
+      }
+      ... on Photo {
+        path
+      }
+      ... on OtherMedia {
+        path
+      }
+    }
+  }
+}

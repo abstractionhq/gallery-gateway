@@ -3,7 +3,7 @@ import path from 'path'
 import { promisify } from 'util'
 
 import { Router } from 'express'
-import JSZip from 'jszip'
+import archiver from 'archiver'
 import stringify from 'csv-stringify'
 import moment from 'moment'
 
@@ -240,6 +240,8 @@ router.route('/csv/:showId')
                       studentEmail: `${entryData.studentUsername}@rit.edu`,
                       studentFirstName: user ? user.firstName : null,
                       studentLastName: user ? user.lastName : null,
+                      studentHometown: user ? user.hometown : null,
+                      studentDisplayName: user ? user.displayName : null,
                       isGroupSubmission: !!entryData.groupId,
                       groupParticipants: group ? group.participants : null,
                       entryType: entryType,
@@ -299,6 +301,8 @@ router.route('/csv/:showId')
                   studentEmail: 'Student Email',
                   studentFirstName: 'Student First Name',
                   studentLastName: 'Student Last Name',
+                  studentHometown: 'Student Homewtown',
+                  studentDisplayName: 'Student Display Name',
                   isGroupSubmission: 'Group Submission?',
                   groupParticipants: 'Group Participants',
                   entryType: 'Submission Type',
@@ -411,29 +415,20 @@ router.route('/zips/:showId')
             //   },
             //   ...
             // ]
-            const zip = new JSZip()
-            Promise.all(
-              entrySummaries.map((summary) => {
-                const filename = path.join(IMAGE_DIR, summary.path)
-                return readFileAsync(filename)
-                  .then((data) => {
-                    zip.file(`${show.name}/${summary.invited ? 'Invited' : 'Not Invited'}/${summary.name}`, data)
-                  })
-                  .catch((err) => {
-                    // eg. a file isn't found
-                    console.error(`There was an issue reading file: ${filename}`)
-                    console.error(err)
-                  })
-              })
-            ).then(() => {
-              res.status(200)
-                .type('zip')
-                .attachment(`${show.name}.zip`)
+      const archive = archiver('zip');
+      res.status(200)
+      .type('zip')
+      .attachment(`${show.name}.zip`);
 
-              zip.generateNodeStream().pipe(res)
-            })
-          })
+      archive.pipe(res); 
+
+      entrySummaries.map((summary) => {
+        const filename = path.join(IMAGE_DIR, summary.path)
+        archive.append(fs.createReadStream(filename), { name: `${show.name}/${summary.invited ? 'Invited' : 'Not Invited'}/${summary.name}` });
       })
+      archive.finalize();
+    })
+    })
       .catch(sequelize.EmptyResultError, () => {
         res.status(404).send('Show Not Found')
       })
