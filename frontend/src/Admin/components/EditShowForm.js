@@ -67,6 +67,7 @@ class EditShowForm extends Component {
 
   render () {
     const { show, update, done, handleError } = this.props
+    if(moment(show.entryStart).isAfter(moment())){
     return (
       <Formik
         initialValues={{
@@ -250,6 +251,12 @@ class EditShowForm extends Component {
       />
     )
   }
+  else{
+    return(
+      <h2>Shows cannot be edited once the submission period has begun.</h2>
+    )
+  }
+}
 }
 
 export default EditShowForm

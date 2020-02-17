@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap'
+import moment from 'moment'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaEdit from '@fortawesome/fontawesome-free-solid/faEdit'
@@ -89,6 +90,7 @@ class ShowDetailsTab extends Component {
               block
               tag={Link}
               to={`/show/${show.id}/edit`}
+              disabled={!moment(show.entryStart).isAfter(moment())}
             >
               <FontAwesomeIcon icon={FaEdit} className='align-middle' /> Edit
               Show Details
