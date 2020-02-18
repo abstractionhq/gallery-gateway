@@ -1,0 +1,9 @@
+mutation createPortfolioVideo($input: PortfolioVideoInput!) {
+  createPortfolioVideo(input: $input) {
+    id
+    pieces{
+      id
+      title
+    }
+  }
+}

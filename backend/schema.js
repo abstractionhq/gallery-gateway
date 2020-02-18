@@ -26,6 +26,7 @@ input UserInput {
     firstName: String!
     lastName: String!
     displayName: String
+    hometown: String
 }
 
 input PermissionInput {
@@ -142,6 +143,7 @@ input EntryInput {
     comment: String
     forSale: Boolean
     hometown: String
+    displayName: String
     yearLevel: String
     academicProgram: String
     moreCopies: Boolean
@@ -189,6 +191,67 @@ input PhotoInput {
     mediaType: String!
 }
 
+type Portfolio {
+    id: ID!
+    portfolioPeriod: PortfolioPeriod
+    student: User
+    yearLevel: String
+    academicProgram: String
+    pieces: [Piece]
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+interface Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+}
+
+type PhotoPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+
+    path: String!
+    horizDimInch: Float
+    vertDimInch: Float
+    mediaType: String
+}
+
+input PieceInput {
+    studentUsername: String!
+    portfolioId: Int
+    title: String!
+    comment: String
+    yearLevel: String
+    academicProgram: String
+    entryType: String
+    periodId: Int
+}
+
+input PortfolioPhotoInput {
+    piece: PieceInput
+    path: String!
+    horizDimInch: Float!
+    vertDimInch: Float!
+    mediaType: String!
+}
+
+input PortfolioVideoInput {
+    piece: PieceInput
+    url: String!
+}
+
+input PortfolioOtherMediaInput {
+    piece: PieceInput
+    path: String
+}
+
 type Video implements Entry {
     id: ID!
     group: Group
@@ -205,6 +268,17 @@ type Video implements Entry {
     entryType: String
     votes: [Vote]
     excludeFromJudging: Boolean
+
+    provider: String!
+    videoId: String!
+}
+
+type VideoPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
 
     provider: String!
     videoId: String!
@@ -235,6 +309,16 @@ type OtherMedia implements Entry {
     path: String!
 }
 
+type OtherMediaPiece implements Piece {
+    id: ID!
+    portfolio: Portfolio
+    title: String
+    comment: String
+    pieceType: String
+    
+    path: String!
+}
+
 input OtherMediaInput {
     entry: EntryInput
     path: String
@@ -254,12 +338,17 @@ type Query {
     show(id: ID!): Show
     groups: [Group]
     shows(orderBy: OrderByItem, studentUsername: String): [Show]
+    portfolio(id: ID!): Portfolio
+    portfolioByPeriod(periodId: ID!, studentUsername: String): Portfolio
+    portfoliosByStudent(orderBy: OrderByItem, studentUsername: String): [Portfolio]
+    portfolioPeriod(id: ID!): PortfolioPeriod
     portfolioPeriods(orderBy: OrderByItem, studentUsername: String): [PortfolioPeriod]
     vote(entryId: ID!, judgeUsername: String!): Vote
     votes(showId: ID!, judgeUsername: String): [Vote]
     photo(id: ID!): Photo
     video(id: ID!): Video
     otherMedia(id: ID!): OtherMedia
+    openPortfolioPeriod(studentUsername: String!): PortfolioPeriod
     entry(id: ID!): Entry
     entries(showId: ID, studentUsername: String): [Entry]
 }
@@ -268,7 +357,7 @@ type Mutation {
     createJudge(input: UserInput!): User
     createAdmin(input: UserInput!): User
     updatePermissions(input: PermissionInput!): User
-    updateUser(id: ID!, input: UserInput!): User
+    updateUser(input: UserInput!): User
     deleteUser(id: ID!): User
 
     createShow(input: ShowInput!): Show
@@ -280,8 +369,11 @@ type Mutation {
     createPortfolioPeriod(input: PortfolioPeriodInput!): PortfolioPeriod
 
     createPhoto(input: PhotoInput!): Show
+    createPortfolioPhoto(input: PortfolioPhotoInput!): Portfolio
     createVideo(input: VideoInput!): Show
+    createPortfolioVideo(input: PortfolioVideoInput!): Portfolio
     createOtherMedia(input: OtherMediaInput!): Show
+    createPortfolioOtherMedia(input: PortfolioOtherMediaInput!): Portfolio
     updateEntry(id: ID!, input: EntryUpdate!): Entry
 
     vote(input: VoteInput): Vote
