@@ -33,21 +33,9 @@ export function up (queryInterface, Sequelize) {
       onUpdate: 'cascade',
       onDelete: 'cascade'
     },
-    entryType: {
+    pieceId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
-      type: Sequelize.INTEGER
-    },
-    entryId: {
-      allowNull: false,
-      type: Sequelize.INTEGER
-    },
-    title: {
-      type: Sequelize.STRING,
-      defaultValue: 'Untitled',
-      allowNull: false
-    },
-    comment: {
-      type: Sequelize.TEXT
     },
     moreCopies: {
       allowNull: false,
@@ -78,14 +66,6 @@ export function up (queryInterface, Sequelize) {
       allowNull: false,
       defaultValue: false,
       type: Sequelize.BOOLEAN
-    },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE
     }
   })
 }
