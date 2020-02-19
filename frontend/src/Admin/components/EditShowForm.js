@@ -13,6 +13,7 @@ import { Formik, Field } from 'formik'
 import yup from 'yup'
 import styled from 'styled-components'
 import moment from 'moment'
+import  isAfterDay  from 'react-dates/src/utils/isAfterDay'
 
 import FormikDateRangePicker from '../../shared/components/FormikDateRangePicker'
 
@@ -180,6 +181,7 @@ class EditShowForm extends Component {
                       <Label>Submission Dates</Label>
                       <CalendarContainer>
                         <FormikDateRangePicker
+                          isOutsideRange={day => !isAfterDay(day, moment())}
                           startDateField={{
                             field: 'entryStart',
                             input: {
@@ -210,6 +212,7 @@ class EditShowForm extends Component {
                       <Label>Judging Dates</Label>
                       <CalendarContainer>
                         <FormikDateRangePicker
+                          isOutsideRange={day => !isAfterDay(day, moment())}
                           startDateField={{
                             field: 'judgingStart',
                             input: {
