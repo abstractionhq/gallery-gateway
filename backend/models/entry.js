@@ -39,21 +39,9 @@ const Entry = sequelize.define('entry', {
     onDelete: 'cascade',
     onUpdate: 'cascade'
   },
-  entryType: {
+  pieceId: {
     allowNull: false,
     type: DataTypes.INTEGER
-  },
-  entryId: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
-  title: {
-    type: DataTypes.STRING,
-    defaultValue: 'Untitled',
-    allowNull: false
-  },
-  comment: {
-    type: DataTypes.TEXT
   },
   moreCopies: {
     allowNull: false,
@@ -84,14 +72,6 @@ const Entry = sequelize.define('entry', {
     allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: false
-  },
-  createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE
-  },
-  updatedAt: {
-    allowNull: false,
-    type: DataTypes.DATE
   }
 },
 {
@@ -120,33 +100,6 @@ Entry.prototype.getScore = function getScore () {
     })
 }
 
-/*
- * Gets the associated photo as a Promise
- */
-Entry.prototype.getImage = function getImage () {
-  if (this.entryType !== IMAGE_ENTRY) {
-    return Promise.resolve(null)
-  }
-  return this.imagePromise ? this.imagePromise
-    : (this.imagePromise = Image.findOne({ where: { id: this.entryId } }))
-}
-
-Entry.prototype.getVideo = function getVideo () {
-  if (this.entryType !== VIDEO_ENTRY) {
-    return Promise.resolve(null)
-  }
-  return this.videoPromise ? this.videoPromise
-    : (this.videoPromise = Video.findOne({ where: { id: this.entryId } }))
-}
-
-Entry.prototype.getOther = function getOther () {
-  if (this.entryType !== OTHER_ENTRY) {
-    return Promise.resolve(null)
-  }
-  return this.otherPromise ? this.otherPromise
-    : (this.otherPromise = Other.findOne({ where: { id: this.entryId } }))
-}
-
 Entry.prototype.getGroup = function getGroup () {
   if (!this.isGroupSubmission()) {
     return Promise.resolve(null)
@@ -160,6 +113,10 @@ Entry.prototype.getStudent = function getUser () {
   }
   return User.findById(this.studentUsername)
 }
+
+Entry.prototype.getSinglePiece = function getSinglePiece() {
+  return SinglePiece.findById(this.pieceId);
+};
 
 Entry.prototype.isGroupSubmission = function () {
   return Number.isInteger(this.groupId)

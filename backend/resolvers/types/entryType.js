@@ -37,11 +37,11 @@ export const EntryBase = {
   },
   // Returning entry type directly on the base class, for convenience
   entryType (entry) {
-    if (entry.entryType === IMAGE_ENTRY) {
+    if (entry.getSinglePiece().entryType === IMAGE_ENTRY) {
       return 'PHOTO'
-    } else if (entry.entryType === VIDEO_ENTRY) {
+    } else if (entry.getSinglePiece().entryType === VIDEO_ENTRY) {
       return 'VIDEO'
-    } else if (entry.entryType === OTHER_ENTRY) {
+    } else if (entry.getSinglePiece().entryType === OTHER_ENTRY) {
       return 'OTHER'
     }
   }

@@ -94,14 +94,24 @@ function fakeOther (opts) {
   })
 }
 
-function fakeEntry (opts) {
+function fakeSinglePiece (opts) {
   opts = opts || {}
   if (!opts.image && !opts.video && !opts.other) {
     throw Error('No entry item found')
   }
   opts.title = opts.title || faker.lorem.words(3)
-  opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   opts.comment = opts.comment || faker.lorem.sentence()
+  const entryType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
+  const entryId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
+  return 
+}
+
+function fakeEntry (opts) {
+  opts = opts || {}
+  if (!opts.image && !opts.video && !opts.other) {
+    throw Error('No entry item found')
+  }
+  opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   opts.forSale = opts.forSale === undefined ? faker.random.boolean() : opts.forSale
   opts.invited = opts.invited === undefined ? faker.random.boolean() : opts.invited
   opts.awardWon = opts.awardWon || faker.lorem.words(2)
@@ -109,24 +119,21 @@ function fakeEntry (opts) {
   opts.academicProgram = opts.academicProgram === undefined ? faker.lorem.word() : opts.academicProgram
   const showPromise = opts.show ? Promise.resolve(opts.show) : fakeShow()
   const userPromise = opts.user || opts.group ? Promise.resolve(opts.user) : fakeUser()
-  const entryType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
-  const entryId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
-  return Promise.all([showPromise, userPromise])
+  const piecePromise = fakeSinglePiece(opts)
+  return Promise.all([showPromise, userPromise, piecePromise])
     .then((models) => {
       const show = models[0]
       const user = models[1]
+      const piece = models[2]
       return Entry.create({
         showId: show.id,
         studentUsername: user ? user.username : null,
         groupId: opts.group ? opts.group.id : null,
-        entryType: entryType,
-        entryId: entryId,
-        title: opts.title,
-        comment: opts.comment,
         moreCopies: opts.moreCopies,
         forSale: opts.forSale,
         awardWon: opts.awardWon,
-        invited: opts.invited
+        invited: opts.invited,
+        pieceId: piece.id
       })
     })
 }

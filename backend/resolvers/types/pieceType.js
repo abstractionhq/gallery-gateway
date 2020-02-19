@@ -2,11 +2,11 @@ import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from "../../constants";
 
 export const PieceBase = {
   pieceType(piece) {
-    if (piece.pieceType === IMAGE_ENTRY) {
+    if (piece.getSinglePiece().pieceType === IMAGE_ENTRY) {
       return "PHOTO";
-    } else if (piece.pieceType === VIDEO_ENTRY) {
+    } else if (piece.getSinglePiece().pieceType === VIDEO_ENTRY) {
       return "VIDEO";
-    } else if (piece.pieceType === OTHER_ENTRY) {
+    } else if (piece.getSinglePiece().pieceType === OTHER_ENTRY) {
       return "OTHER";
     }
   }

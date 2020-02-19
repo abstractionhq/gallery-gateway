@@ -82,7 +82,7 @@ describe('Entry Queries', function () {
                     entries: [
                       {
                         id: `${entry.id}`, // must be cast to a string :(
-                        title: entry.title,
+                        title: entry.getSinglePiece().title,
                         entryType: 'PHOTO',
                         path: 'foo.jpg',
                         horizDimInch: 3,
@@ -116,7 +116,7 @@ describe('Entry Queries', function () {
                   entries: [
                     {
                       id: `${entry.id}`, // must be cast to a string :(
-                      title: entry.title,
+                      title: entry.getSinglePiece().title,
                       entryType: 'VIDEO',
                       videoId: 'abc123',
                       provider: 'youtube'
@@ -148,7 +148,7 @@ describe('Entry Queries', function () {
                   entries: [
                     {
                       id: `${entry.id}`, // must be cast to a string :(
-                      title: entry.title,
+                      title: entry.getSinglePiece().title,
                       entryType: 'OTHER',
                       path: 'foo.jpg'
                     }

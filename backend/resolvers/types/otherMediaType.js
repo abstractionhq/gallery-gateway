@@ -4,7 +4,7 @@ export default {
   OtherMedia: {
     ...EntryBase,
     path (entry) {
-      return entry.getOther().then(other => other.path)
+      return entry.getSinglePiece().getOther().then(other => other.path)
     }
   }
 }

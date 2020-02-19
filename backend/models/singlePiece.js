@@ -1,6 +1,5 @@
 import DataTypes from "sequelize";
 import sequelize from "../config/sequelize";
-import Portfolio from "./portfolio";
 import Image from "./image";
 import Video from "./video";
 import Other from "./other";
@@ -34,7 +33,7 @@ const SinglePiece = sequelize.define("singlePiece", {
   }
 });
 
-PortfolioPiece.prototype.getImage = function getImage() {
+SinglePiece.prototype.getImage = function getImage() {
   if (this.pieceType !== IMAGE_ENTRY) {
     return Promise.resolve(null);
   }
@@ -43,7 +42,7 @@ PortfolioPiece.prototype.getImage = function getImage() {
     : (this.imagePromise = Image.findOne({ where: { id: this.pieceId } }));
 };
 
-PortfolioPiece.prototype.getVideo = function getVideo() {
+SinglePiece.prototype.getVideo = function getVideo() {
   if (this.pieceType !== VIDEO_ENTRY) {
     return Promise.resolve(null);
   }
@@ -52,7 +51,7 @@ PortfolioPiece.prototype.getVideo = function getVideo() {
     : (this.videoPromise = Video.findOne({ where: { id: this.pieceId } }));
 };
 
-PortfolioPiece.prototype.getOther = function getOther() {
+SinglePiece.prototype.getOther = function getOther() {
   if (this.pieceType !== OTHER_ENTRY) {
     return Promise.resolve(null);
   }

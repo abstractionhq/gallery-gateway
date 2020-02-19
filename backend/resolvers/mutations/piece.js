@@ -10,6 +10,7 @@ import { allowedToSubmit, parseVideo } from "../../helpers/submission";
 import Portfolio from "../../models/portfolio";
 import PortfolioPeriod from "../../models/portfolioPeriod";
 import Piece from "../../models/piece";
+import SinglePiece from "../../models/singlePiece"
 
 // Creates a Piece based on the 'PieceInput' schema
 const createPiece = (piece, entryType, pieceId, t) => {
@@ -18,17 +19,24 @@ const createPiece = (piece, entryType, pieceId, t) => {
     existingId !== null
       ? Promise.resolve(existingId)
       : createNewPortfolio(piece, t);
-  return portolioPromise
-    .then(portfolioId => {
-      delete piece["studentUsername"];
-      delete piece["yearLevel"];
-      delete piece["academicProgram"];
-      delete piece["periodId"]
+
+  const piecePromise = SinglePiece.create({
+    pieceType: entryType,
+    pieceId: entryId,
+    title: entry.title,
+    comment: entry.comment,
+    createdAt: entry.createdAt,
+    updatedAt: entry.updatedAt
+  })
+
+  return Promise.all([portolioPromise, piecePromise])
+    .then(values => {
+      portfolioId = values[0]
+      singlePieceId = values[1]
+
       return Piece.create(
         {
-          ...piece,
-          pieceType: entryType,
-          pieceId,
+          pieceId: singlePieceId,
           portfolioId
         },
         { transaction: t }

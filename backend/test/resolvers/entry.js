@@ -62,7 +62,7 @@ describe('Entry Mutations', function () {
               .then(show => show.getEntries())
               .then(([entry]) => entry)
               .then((entry) => {
-                expect(entry.title).to.equal('Untitled')
+                expect(entry.getSinglePiece().title).to.equal('Untitled')
                 expect(entry.moreCopies).to.equal(false)
                 // make sure an Entry was created
                 return Entry.count().then((num) => expect(num).to.equal(1))

@@ -112,7 +112,7 @@ describe('downloading a zip file', () => {
                     expect(zip.files[`${show.name}/`]).to.exist
                     expect(zip.files[`${show.name}/Invited/`]).to.exist
                     const zobj = zip.file(
-                      `${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`
+                      `${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.getSinglePiece().title}.jpg`
                     )
                     return zobj.async('nodebuffer')
                       .then(buf => {
@@ -150,7 +150,7 @@ describe('downloading a zip file', () => {
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
                 const zobj = zip.file(
-                  `${show.name}/Invited/${user.lastName}, ${user.firstName} & ${group.participants} - ${entry.title}.jpg`
+                  `${show.name}/Invited/${user.lastName}, ${user.firstName} & ${group.participants} - ${entry.getSinglePiece().title}.jpg`
                 )
                 return zobj.async('nodebuffer')
                   .then(buf => {
@@ -238,7 +238,7 @@ describe('downloading a zip file', () => {
                 expect(Object.keys(zip.files).length).to.eq(3)
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
-                expect(zip.files[`${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`]).to.exist
+                expect(zip.files[`${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.getSinglePiece().title}.jpg`]).to.exist
               })
           )
       ))
