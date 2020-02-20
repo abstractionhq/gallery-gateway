@@ -10,6 +10,7 @@ import Vote from '../models/vote'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 import PortfolioPeriod from '../models/portfolioPeriod'
 import Portfolio from '../models/portfolio'
+import Piece from '../models/piece'
 
 // Helper for faking shows
 Date.prototype.addDays = function (days) { // eslint-disable-line no-extend-native
@@ -216,5 +217,61 @@ export function fakePortfolio(opts){
         yearLevel: opts.yearLevel,
         academicProgram: opts.academicProgram
       })
+    })
+}
+
+function fakePiece(opts){
+  opts = opts || {}
+  if (!opts.image && !opts.video && !opts.other) {
+    throw Error('No entry item found')
+  }
+  opts.title = opts.title || faker.lorem.words(3)
+  opts.comment = opts.comment || faker.lorem.sentence()
+  const portfolioPromise = opts.portfolio ? Promise.resolve(opts.portfolio) : fakePortfolio(opts)
+  const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
+  const pieceType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
+  const pieceId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
+  return Promise.all([portfolioPromise, userPromise])
+    .then((models) => {
+      const portfolio = models[0]
+      const user = models[1]
+      return Piece.create({
+        portfolioId: portfolio.id,
+        studentUsername: user ? user.username : null,
+        pieceType,
+        pieceId,
+        title: opts.title,
+        comment: opts.comment
+      })
+    })
+}
+
+export function fakeImagePiece (opts) {
+  opts = opts || {}
+  const imagePromise = opts.image ? Promise.resolve(opts.image) : fakeImage(opts)
+  return imagePromise
+    .then((image) => {
+      opts.image = image
+      return fakePiece(opts)
+    })
+}
+
+export function fakeVideoPiece (opts) {
+  opts = opts || {}
+  const videoPromise = opts.video ? Promise.resolve(opts.video) : fakeVideo(opts)
+  return videoPromise
+    .then((video) => {
+      opts.video = video
+      return fakePiece(opts)
+    })
+}
+
+export function fakeOtherPiece (opts) {
+  opts = opts || {}
+  const otherPromise = opts.other ? Promise.resolve(opts.other) : fakeOther(opts)
+  return otherPromise
+    .then((other) => {
+      opts.other = other
+      return fakePiece(opts)
     })
 }

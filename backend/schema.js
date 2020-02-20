@@ -376,6 +376,8 @@ type Mutation {
     createPortfolioOtherMedia(input: PortfolioOtherMediaInput!): Portfolio
     updateEntry(id: ID!, input: EntryUpdate!): Entry
 
+    deletePiece(id: ID!): Boolean
+
     vote(input: VoteInput): Vote
 }
 
