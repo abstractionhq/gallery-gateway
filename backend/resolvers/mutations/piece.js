@@ -13,7 +13,7 @@ import Piece from "../../models/piece";
 import SinglePiece from "../../models/singlePiece"
 
 // Creates a Piece based on the 'PieceInput' schema
-const createPiece = (piece, entryType, pieceId, t) => {
+const createPiece = (piece, entryType, entryId, t) => {
   let existingId = piece.portfolioId;
   let portolioPromise =
     existingId !== null
@@ -24,15 +24,13 @@ const createPiece = (piece, entryType, pieceId, t) => {
     pieceType: entryType,
     pieceId: entryId,
     title: entry.title,
-    comment: entry.comment,
-    createdAt: entry.createdAt,
-    updatedAt: entry.updatedAt
+    comment: entry.comment
   })
 
   return Promise.all([portolioPromise, piecePromise])
     .then(values => {
-      portfolioId = values[0]
-      singlePieceId = values[1]
+      const portfolioId = values[0]
+      const singlePieceId = values[1]
 
       return Piece.create(
         {

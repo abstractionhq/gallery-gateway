@@ -27,9 +27,7 @@ const createEntry = (entry, entryType, entryId, t) => {
     pieceType: entryType,
     pieceId: entryId,
     title: entry.title,
-    comment: entry.comment,
-    createdAt: entry.createdAt,
-    updatedAt: entry.updatedAt
+    comment: entry.comment
   })
   
   return Promise.all([groupPromise, piecePromise])
@@ -40,8 +38,8 @@ const createEntry = (entry, entryType, entryId, t) => {
       // property and replace it with the group's ID, since our orm recognizes
       // groupId, not a Group
 
-      group = values[0]
-      piece = values[1]
+      const group = values[0]
+      const piece = values[1]
 
       let userFindPromise = Promise.resolve(null)
       if (entry.studentUsername){

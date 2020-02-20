@@ -7,6 +7,7 @@ import Entry from '../models/entry'
 import Video from '../models/video'
 import Other from '../models/other'
 import Vote from '../models/vote'
+import SinglePiece from '../models/singlePiece'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 import PortfolioPeriod from '../models/portfolioPeriod'
 import Portfolio from '../models/portfolio'
@@ -101,9 +102,14 @@ function fakeSinglePiece (opts) {
   }
   opts.title = opts.title || faker.lorem.words(3)
   opts.comment = opts.comment || faker.lorem.sentence()
-  const entryType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
-  const entryId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
-  return 
+  const pieceType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
+  const pieceId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
+  return SinglePiece.create({
+    pieceType: pieceType,
+    pieceId: pieceId,
+    title: opts.title,
+    comment: opts.comment
+  })
 }
 
 function fakeEntry (opts) {

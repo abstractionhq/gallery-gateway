@@ -4,6 +4,7 @@ import Image from "./image";
 import Video from "./video";
 import Other from "./other";
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
+import Entry from "./entry";
 
 
 const SinglePiece = sequelize.define("singlePiece", {
@@ -58,6 +59,11 @@ SinglePiece.prototype.getOther = function getOther() {
   return this.otherPromise
     ? this.otherPromise
     : (this.otherPromise = Other.findOne({ where: { id: this.pieceId } }));
+};
+
+SinglePiece.prototype.getEntry = function getEntry() {
+
+  return Entry.findOne({where: {pieceId: this.id}})
 };
 
 export default SinglePiece;

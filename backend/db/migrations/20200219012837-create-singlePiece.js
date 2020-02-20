@@ -9,11 +9,11 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    entryType: {
+    pieceType: {
       allowNull: false,
       type: Sequelize.INTEGER
     },
-    entryId: {
+    pieceId: {
       allowNull: false,
       type: Sequelize.INTEGER
     },
@@ -27,11 +27,13 @@ module.exports = {
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.fn('NOW')
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.fn('NOW')
     }
   })
 },
