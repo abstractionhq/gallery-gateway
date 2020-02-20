@@ -53,15 +53,10 @@ class PortfolioPeriodCard extends Component {
 
   renderPeriodSummary = (props) => {
 
-    // TODO: Change this to a proper call once the Student Portfolio PR goes though
-    // Remove dummy data
-    const totalPortfolios =  10
-    const submittedPortfolios = 6
-    const pendingPortfolios = 4
-//    const totalSubmissions = props.entries.length
-//    const totalPhotoSubmissions = props.entries.filter(entry => entry.entryType === 'PHOTO').length
-//    const totalVideoSubmissions = props.entries.filter(entry => entry.entryType === 'VIDEO').length
-//    const totalOtherSubmissions = props.entries.filter(entry => entry.entryType === 'OTHER').length
+    // Pulls number of portfolios, and shows how many have been started vs. finished
+    const totalPortfolios =  props.portfolios.length
+    const submittedPortfolios = props.portfolios.filter(portfolio => portfolio.submitted).length
+    const pendingPortfolios = props.portfolios.filter(portfolio => !portfolio.submitted).length
 
     return (
       <Fragment>
