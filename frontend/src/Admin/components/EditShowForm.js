@@ -239,16 +239,34 @@ class EditShowForm extends Component {
                 </Row>
               </Col>
             </Row>
-            <Button
-              type='submit'
-              color='primary'
-              style={{
-                cursor: 'pointer'
-              }}
-              disabled={isSubmitting}
-            >
-              Save
-            </Button>
+            <Row>
+              <Col>
+                <Button
+                type='submit'
+                color='primary'
+                style={{
+                  cursor: 'pointer'
+                }}
+                disabled={isSubmitting}
+              >
+                Save
+              </Button>
+              </Col>
+              <Col>
+                <Button
+                    type='button'
+                    color='danger'
+                    className="float-right"
+                    style={{
+                      cursor: 'pointer'
+                    }}
+                    disabled={isSubmitting}
+                    onClick={done}
+                  >
+                    Cancel
+                  </Button>
+              </Col>
+            </Row>
           </Form>
         )}
       />
