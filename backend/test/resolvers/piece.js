@@ -239,19 +239,55 @@ describe("Piece Mutations", function() {
         .then(([user, portfolio]) =>
           Promise.all([user, fakeOtherPiece({ user, portfolio })])
         )
-        .then(([user, piece]) =>
-          expect( () =>
-            deletePiece(
-              {},
-              { id: piece.id },
-              { auth: {
+        .then(([user, piece]) => {
+          return deletePiece(
+            {},
+            { id: piece.id },
+            {
+              auth: {
                 type: STUDENT,
                 username: user.username + "ABC" // Guaranteed wrong username
-                }
               }
-            )
-          ).to.throw(/Permission Denied/)
-        );
+            }
+          )
+            .then(() => {
+              assert.fail("Expected exception");
+            })
+            .catch(error => {
+              expect(error.message).to.equal("Permission Denied");
+            });
+        });
+    });
+
+    it("does not let a student Judge delete piece", function() {
+      return Promise.all([fakeUser(), fakePortfolioPeriod()])
+        .then(([user, period]) =>
+          Promise.all([
+            user,
+            fakePortfolio({
+              user,
+              period
+            })
+          ])
+        )
+        .then(([user, portfolio]) => fakeOtherPiece({ user, portfolio }))
+        .then(piece => {
+          return deletePiece(
+            {},
+            { id: piece.id },
+            {
+              auth: {
+                type: JUDGE
+              }
+            }
+          )
+            .then(() => {
+              assert.fail("Expected Exception");
+            })
+            .catch(error => {
+              expect(error.message).to.equal("Permission Denied");
+            });
+        });
     });
   });
 });

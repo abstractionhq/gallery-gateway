@@ -168,8 +168,6 @@ export function deletePiece(_, args, req) {
         ) {
           throw new UserError("Permission Denied");
         }
-
-        return Promise.resolve();
       })
       .then(() =>
         db.transaction(transaction =>

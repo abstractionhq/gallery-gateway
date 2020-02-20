@@ -48,7 +48,7 @@ Piece.prototype.getPortfolio = function getPortfolio() {
 
 Piece.prototype.getOwner = function getOwner() {
   return Portfolio.findById(this.portfolioId).then(
-    portfolio => portfolio.studentUsername
+    portfolio => Promise.resolve(portfolio.studentUsername)
   );
 };
 
