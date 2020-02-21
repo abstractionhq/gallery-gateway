@@ -74,6 +74,7 @@ input ShowInput {
 
 type PortfolioPeriod {
     id: ID!
+    portfolios: [Portfolio]
     name: String!
     description: String
     numPieces: Int!
@@ -198,6 +199,7 @@ type Portfolio {
     yearLevel: String
     academicProgram: String
     pieces: [Piece]
+    submitted: Boolean
     createdAt: Date!
     updatedAt: Date!
 }

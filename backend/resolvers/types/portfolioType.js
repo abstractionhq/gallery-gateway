@@ -1,5 +1,4 @@
 import Piece from "../../models/piece";
-import portfolioPeriod from '../../models/portfolioPeriod';
 import PortfolioPeriod from "../../models/portfolioPeriod";
 
 export default {
