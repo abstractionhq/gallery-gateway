@@ -15,32 +15,41 @@ const PieceDeleteModal = ({
   isOpen,
   picture,
   closeDeleteModal,
+  deletePiece,
   EntryThumb
-}) => (
-  <Modal isOpen={isOpen}>
-    <ModalHeader>
-      Warning{" "}
-      <FontAwesomeIcon icon={FaExclamationTriangle} className="align-middle" />
-    </ModalHeader>
-    <ModalBody>
-      <Container>
-        <Row>
-          Deleting a piece is a permanent action. Are you sure you want to
-          delete this piece?
-        </Row>
-        <Row className="justify-content-center">
-          <i>{picture.title}</i>
-        </Row>
-        <Row className="justify-content-center">
-          <EntryThumb piece={picture} type="piece" />
-        </Row>
-      </Container>
-    </ModalBody>
-    <ModalFooter>
-      <Button onClick={closeDeleteModal}>Cancel</Button>
-      <Button color="danger">Confirm Delete</Button>
-    </ModalFooter>
-  </Modal>
-);
+}) => {
+  const onDelete = e => deletePiece().then(() => closeDeleteModal(e));
+  return (
+    <Modal isOpen={isOpen}>
+      <ModalHeader>
+        Warning{" "}
+        <FontAwesomeIcon
+          icon={FaExclamationTriangle}
+          className="align-middle"
+        />
+      </ModalHeader>
+      <ModalBody>
+        <Container>
+          <Row>
+            Deleting a piece is a permanent action. Are you sure you want to
+            delete this piece?
+          </Row>
+          <Row className="justify-content-center">
+            <i>{picture.title}</i>
+          </Row>
+          <Row className="justify-content-center">
+            <EntryThumb piece={picture} type="piece" />
+          </Row>
+        </Container>
+      </ModalBody>
+      <ModalFooter>
+        <Button onClick={closeDeleteModal}>Cancel</Button>
+        <Button onClick={onDelete} color="danger">
+          Confirm Delete
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+};
 
 export default PieceDeleteModal;

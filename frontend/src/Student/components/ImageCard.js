@@ -222,6 +222,7 @@ class FlipCard extends React.Component {
           isOpen = {this.state.showDeleteModal}
           closeDeleteModal = {this.closeDeleteModal}
           picture = {this.props.picture}
+          deletePiece = {this.props.deletePiece}
           EntryThumb = {EntryThumb}
         />
       </EntryContainer>
