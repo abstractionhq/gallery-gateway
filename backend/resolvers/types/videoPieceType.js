@@ -4,10 +4,10 @@ export default {
   VideoPiece: {
     ...PieceBase,
     provider (piece) {
-      return piece.getSinglePiece().getVideo().then(video => video.provider)
+      return piece.getSinglePiece().then(singlePiece => singlePiece.getVideo().then(video => video.provider))
     },
     videoId (piece) {
-      return piece.getSinglePiece().getVideo().then(video => video.videoId)
+      return piece.getSinglePiece().then(singlePiece => singlePiece.getVideo().then(video => video.videoId))
     }
   }
 }

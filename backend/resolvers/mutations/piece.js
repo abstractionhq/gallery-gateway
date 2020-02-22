@@ -23,8 +23,8 @@ const createPiece = (piece, entryType, entryId, t) => {
   const piecePromise = SinglePiece.create({
     pieceType: entryType,
     pieceId: entryId,
-    title: entry.title,
-    comment: entry.comment
+    title: entry.title ? entry.title : "",
+    comment: entry.comment ? entry.comment : ""
   })
 
   return Promise.all([portolioPromise, piecePromise])

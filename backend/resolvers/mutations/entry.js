@@ -153,11 +153,28 @@ export function updateEntry (_, args, req) {
   if (req.auth.type !== ADMIN) {
     throw new UserError('Permission Denied')
   }
+  const setEntry = (entry) => {
+    return entry.update(args.input, {
+    fields: ['forSale', 'invited', 'yearLevel',
+      'academicProgram', 'moreCopies', 'excludeFromJudging']
+  })}
+
+  const setSinglePiece = (entry) => {
+    return SinglePiece.findById(entry.pieceId).then( 
+    singlePiece => {return singlePiece.update(args.input, {
+      fields: ['title', 'comment']
+    })}
+  )}
+
   return Entry.findById(args.id)
-    .then(entry => entry.update(args.input, {
-      fields: ['title', 'comment', 'forSale', 'invited', 'yearLevel',
-        'academicProgram', 'moreCopies', 'excludeFromJudging']
-    }))
+    .then((entry) => {return Promise.all([setEntry(entry), setSinglePiece(entry)]).then(
+      values => {
+      // combine results into a single return format
+      values[0].title = values[1].title
+      values[0].comment = values[1].comment
+      return values[0]
+    })
+    })
 }
 
 export function createPhoto (_, args, req) {

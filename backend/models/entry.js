@@ -4,6 +4,7 @@ import Other from './other'
 import Group from './group'
 import User from './user'
 import Vote from './vote'
+import SinglePiece from './singlePiece'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
 import { IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
@@ -72,6 +73,14 @@ const Entry = sequelize.define('entry', {
     allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: DataTypes.DATE
   }
 },
 {

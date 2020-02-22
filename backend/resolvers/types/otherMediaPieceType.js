@@ -4,7 +4,7 @@ export default {
   OtherMediaPiece: {
     ...PieceBase,
     path (piece) {
-      return piece.getSinglePiece().getOther().then(other => other.path)
+      return piece.getSinglePiece().then(singlePiece => singlePiece.getOther().then(other => other.path))
     }
   }
 }
