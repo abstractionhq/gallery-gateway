@@ -14,14 +14,18 @@ const Card = styled.div`
   width: 100%;
 `
 
-const SubmittedEntries = ({ portfolio }) =>
+const SubmittedEntries = ({ portfolio, deletePiece }) =>
   portfolio.pieces.map(piece => (
     <Col md='3'
     className='mb-3 text-center align-self-center d-flex justify-content-center align-items-center'
     style={{ minHeight: '10em' }}
     title={piece.title}
     key={piece.id}>
-    <FlipCard picture={piece} portfolio={portfolio} style={{width: '100%', height: '100%'}}>
+    <FlipCard
+      picture={piece}
+      portfolio={portfolio}
+      deletePiece={() => deletePiece(piece.id)}
+      style={{width: '100%', height: '100%'}}>
     </FlipCard>
   </Col>
   ))

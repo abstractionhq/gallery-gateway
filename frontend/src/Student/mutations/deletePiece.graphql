@@ -1,0 +1,3 @@
+mutation deletePiece($id: ID!) {
+  deletePiece(id: $id)
+}
