@@ -7,7 +7,7 @@ import uuidv4 from 'uuid/v4'
 import mkdirp from 'mkdirp'
 
 import Vote from '../../models/vote'
-import { createShow, assignToShow, removeFromShow } from '../../resolvers/mutations/show'
+import { createShow, assignToShow, removeFromShow, updateShow } from '../../resolvers/mutations/show'
 import { fakeShow, fakeUser, fakeImageEntry, fakeVoteReturnShowId, fakeOtherEntry } from '../factories'
 import { execGraphql } from '../util'
 import Show from '../../models/show'
@@ -62,6 +62,50 @@ describe('Show Resolvers', function () {
           expect(err.message).to.equal('Validation error: Entry start date must be before the entry end date')
           done()
         })
+    })
+  })
+  describe('Update a show', function () {
+    it('Does not allow non-admins', function () {
+      expect(() =>
+        updateShow('', {}, {auth: {type: 'STUDENT', username: 'billy'}})
+      ).to.throw(/Permission Denied/)
+    })
+    it('Updates a show', function (done) {
+      fakeShow().then(show => {
+          const input = { id: show.id, input: {
+            name: 'Updated Test Show',
+            description: 'Coolest-er of shows',
+            entryCap: 3,
+            entryStart: '2015-01-01',
+            entryEnd: '2015-01-02',
+            judgingStart: '2015-01-03',
+            judgingEnd: '2015-01-04'
+        }}
+        updateShow('', input, {auth: {type: 'ADMIN'}})
+          .then((show) => {
+            expect(show.name).to.eq('Updated Test Show')
+            expect(show.entryEnd.getFullYear()).to.eq(2015)
+            done()
+          })}
+      )
+    })
+    it('Validates entry/judging start/end dates', function (done) {
+      fakeShow().then(show => {
+      const input = { id: show.id, input: {
+        name: 'Bad Show',
+        entryCap: 11,
+        entryStart: '2015-01-05',
+        entryEnd: '2015-01-04',
+        judgingStart: '2015-01-06',
+        judgingEnd: '2015-01-07'
+      }}
+      updateShow('', input, {auth: {type: 'ADMIN'}})
+        .catch((err) => {
+          expect(err).to.exist
+          expect(err.message).to.equal('Validation error: Entry start date must be before the entry end date')
+          done()
+        })
+      })
     })
   })
   describe('Delete a show', () => {
