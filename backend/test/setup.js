@@ -10,6 +10,7 @@ import Other from '../models/other'
 import Vote from '../models/vote'
 import Portfolio from '../models/portfolio'
 import PortfolioPeriod from '../models/portfolioPeriod'
+import SinglePiece from '../models/singlePiece'
 import Piece from '../models/piece'
 import db from '../config/sequelize'
 
@@ -53,7 +54,8 @@ beforeEach(function () {
             Vote,
             PortfolioPeriod,
             Portfolio,
-            Piece
+            Piece,
+            SinglePiece
           ].map(model => model.destroy({ where: {}, transaction: t }))
         );
       })

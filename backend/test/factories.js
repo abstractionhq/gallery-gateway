@@ -140,6 +140,12 @@ function fakeEntry (opts) {
         awardWon: opts.awardWon,
         invited: opts.invited,
         pieceId: piece.id
+      }).then(entry => {
+        // this normally gets done by the resolver, but since the factory skips the 
+        // resolver we have to tack them on here
+        entry.title = piece.title
+        entry.comment = piece.comment
+        return entry
       })
     })
 }

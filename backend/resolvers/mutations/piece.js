@@ -23,18 +23,18 @@ const createPiece = (piece, entryType, entryId, t) => {
   const piecePromise = SinglePiece.create({
     pieceType: entryType,
     pieceId: entryId,
-    title: entry.title ? entry.title : "",
-    comment: entry.comment ? entry.comment : ""
+    title: piece.title,
+    comment: piece.comment
   })
 
   return Promise.all([portolioPromise, piecePromise])
     .then(values => {
       const portfolioId = values[0]
-      const singlePieceId = values[1]
+      const singlePiece = values[1]
 
       return Piece.create(
         {
-          pieceId: singlePieceId,
+          pieceId: singlePiece.id,
           portfolioId
         },
         { transaction: t }
