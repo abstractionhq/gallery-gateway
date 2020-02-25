@@ -240,7 +240,7 @@ router.route('/csv/:showId')
                     // path, vert and horiz dementions medaiType, videoUrl
                     const newSubmissionSummaries = entries.map(entry => {
                       let entryData = entry.dataValues
-                      let singlePieceData = pieceIdsToPieces[entryData.pieceId]
+                      let singlePieceData = pieceIdsToPieces[entryData.pieceId].dataValues
                       let entryType = singlePieceData.pieceType === IMAGE_ENTRY ? 'Image'
                         : singlePieceData.pieceType === VIDEO_ENTRY ? 'Video'
                           : singlePieceData.pieceType === OTHER_ENTRY ? 'Other' : ''
@@ -355,11 +355,13 @@ router.route('/zips/:showId')
         // find all image Entries to this show id
         SinglePiece.findAll({where: { pieceType: IMAGE_ENTRY }}).then(pieces => {
           
-          const pieceIds = pieces.map(e => e.pieceId)
+          const pieceIds = pieces.map(e => e.id)
+          console.log(pieceIds)
           const pieceIdsToPiece = pieces.reduce((obj, piece) => ({
             ...obj,
             [piece.id]: piece
           }), {})
+          console.log(pieceIdsToPiece)
 
         Entry.findAll({ where: { showId: req.params.showId, pieceId: {$in: pieceIds }} })
           .then(entries => {
@@ -369,7 +371,8 @@ router.route('/zips/:showId')
             //   entries: [Entry]
             // Evaluates to:
             //   [Entry]
-            const imageIds = entries.map((entry) => pieceIdsToPiece[entry.peiceId].pieceId)
+            console.log(entries)
+            const imageIds = entries.map((entry) => pieceIdsToPiece[entry.dataValues.peiceId].dataValues.pieceId)
             return Image.findAll({ where: { id: { $in: imageIds } } })
               .then(images => {
                 // create a mapping of imageId -> image for easy assigning
@@ -382,9 +385,9 @@ router.route('/zips/:showId')
                 
                 // assign 'path' to all entries
                 entries.forEach(entry => {
-                  entry.path = imageIdsToImage[pieceIdsToPiece[entry.peiceId].pieceId].path
-                  entry.title = pieceIdsToPiece[entry.peiceId].title
-                  entry.comment = pieceIdsToPiece[entry.peiceId].comment
+                  entry.path = imageIdsToImage[pieceIdsToPiece[entry.dataValues.peiceId].dataValues.pieceId].path
+                  entry.title = pieceIdsToPiece[entry.dataValues.peiceId].dataValues.title
+                  entry.comment = pieceIdsToPiece[entry.dataValues.peiceId].dataValues.comment
                 })
                 return entries
               })
