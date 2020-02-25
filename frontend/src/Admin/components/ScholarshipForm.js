@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, Component } from "react";
+import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 import {
   Form,
@@ -30,7 +31,7 @@ const ButtonContainer = styled.div`
   margin-top: 50px;
 `;
 
-class ScholarshipAdminForm extends Component {
+class ScholarshipForm extends Component {
   static propTypes = {
     user: PropTypes.shape({
       username: PropTypes.string,
@@ -69,11 +70,6 @@ class ScholarshipAdminForm extends Component {
     this.state = {
       showModal: false
     };
-    // We clear any uploaded files.
-    // This resets the field if a user uploads a file, navigates to another page,
-    // and comes back to this form, or a user makes a submission and comes back to
-    // this page to make another submission.
-    props.clearPreview();
   }
 
   componentDidUpdate() {
@@ -307,16 +303,13 @@ class ScholarshipAdminForm extends Component {
             </Form>
           )}
         />
-        <SuccessModal isOpen={this.state.showModal} />
       </Fragment>
     );
   };
 
   render() {
-    if (this.props.loading) {
-      return <Loading />;
-    }
+    return this.renderForm();
   }
 }
 
-export default ScholarshipAdminForm;
+export default ScholarshipForm;
