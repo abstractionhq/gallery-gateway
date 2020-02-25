@@ -47,6 +47,8 @@ export function updateShow (_, args, req) {
     .then((show) => {
       return show.update(args.input, {
         fields: ['name', 'description',
+          'entryStart', 'entryEnd',
+          'judgingStart', 'judgingEnd',
           'entryCap', 'finalized']
       })
     })

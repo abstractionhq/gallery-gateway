@@ -3,9 +3,9 @@ import { Modal, ModalBody } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import FaCheckCircle from '@fortawesome/fontawesome-free-solid/faCheckCircle'
 
-const SuccessModal = props => (
+const SuccessModal = ({isOpen, type="show"}) => (
   <Modal
-    isOpen={props.isOpen}
+    isOpen={isOpen}
     style={{
       height: '400px',
       textAlign: 'center',
@@ -30,10 +30,17 @@ const SuccessModal = props => (
     </div>
     <ModalBody style={{ padding: '40px 0' }}>
       <h2 style={{ color: '#3CB778' }}>Great!</h2>
-      <p>
-        Your submission was successfully submitted. Check back soon to see if
-        your work is invited to this show.
-      </p>
+      {type === "show"?
+        <p>
+          Your submission was successfully submitted. Check back soon to see if
+          your work is invited to this show.
+        </p>
+        :
+        <p>
+          Your piece was successfully uploaded. When you're ready to apply, it
+          will be included in your portfolio.
+        </p>
+      }
     </ModalBody>
   </Modal>
 )

@@ -9,7 +9,7 @@ import CreatePortfolioPeriodMutation from '../mutations/createPortfolioPeriod.gr
 import CreatePortfolioPeriodForm from '../components/CreatePortfolioPeriodForm'
 
 const mapDispatchToProps = dispatch => ({
-  done: () => dispatch(push('/')),
+  done: () => dispatch(push('/portfolio/')),
   handleError: message => dispatch(displayError(message))
 })
 

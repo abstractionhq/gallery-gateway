@@ -13,41 +13,57 @@ const NoShowsContainer = styled.div`
   transform: translate(-50%, -50%);
 `
 class Portfolios extends Component {
-  renderShows = shows => {
-    if (shows.length === 0) {
+  renderPortfolios = (portfolios, openPeriod, deletePiece) => {
+    if(openPeriod){
+      const skeletonPortfolio = {
+        portfolioPeriod: openPeriod,
+        pieces: [],
+        id: -1
+      }
+
+      if(!portfolios){
+        portfolios = []
+      }
+      portfolios = [skeletonPortfolio].concat(portfolios)
+    }
+    if (!portfolios || portfolios.length === 0) {
       return (
         <NoShowsContainer>
           The scholarship period is not currently open. Check back soon!
         </NoShowsContainer>
       )
     }
-    return shows.map(show => <PortfolioCard key={show.id} show={show} />)
+    return portfolios.map(portfolios => <PortfolioCard key={portfolios.id} portfolio={portfolios} deletePiece={deletePiece}/>)
   }
 
   componentDidUpdate () {
-    const { error, handleError } = this.props
-    if (error) {
-      error.graphQLErrors.forEach(e => {
+    const { portfoliosError, openPeriodError, handleError } = this.props
+    if (portfoliosError) {
+      portfoliosError.graphQLErrors.forEach(e => {
+        handleError(e.message)
+      })
+    }
+    if(openPeriodError){
+      openPeriodError.graphQLErrors.forEach(e => {
         handleError(e.message)
       })
     }
   }
 
   render () {
-    const { loading, shows } = this.props
+    const { portfoliosLoading, openPeriodLoading, portfolios, openPeriod, deletePiece} = this.props
 
-    return <div>{loading ? <Loading /> : this.renderShows(shows)}</div>
+    return <div>{portfoliosLoading || openPeriodLoading ? <Loading /> : this.renderPortfolios(portfolios, openPeriod, deletePiece)}</div>
   }
 }
 
 Portfolios.propTypes = {
-  shows: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.object
-}
-
-Portfolios.defaultProps = {
-  shows: []
+  portfolios: PropTypes.array,
+  portfoliosLoading: PropTypes.bool.isRequired,
+  portfoliosError: PropTypes.object,
+  openPeriod: PropTypes.array,
+  openPeriodLoading: PropTypes.bool.isRequired,
+  openPeriodError: PropTypes.object
 }
 
 export default Portfolios

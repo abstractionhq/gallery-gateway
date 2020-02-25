@@ -9,6 +9,9 @@ import Video from '../models/video'
 import Other from '../models/other'
 import Vote from '../models/vote'
 import Scholarship from '../models/scholarship'
+import Portfolio from '../models/portfolio'
+import PortfolioPeriod from '../models/portfolioPeriod'
+import Piece from '../models/piece'
 import db from '../config/sequelize'
 
 before(function () {
@@ -49,7 +52,10 @@ beforeEach(function () {
             Video,
             Other,
             Vote,
-            Scholarship
+            Scholarship,
+            PortfolioPeriod,
+            Portfolio,
+            Piece
           ].map(model => model.destroy({ where: {}, transaction: t }))
         );
       })
