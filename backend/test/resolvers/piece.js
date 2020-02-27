@@ -115,34 +115,34 @@ describe("Piece Mutations", function() {
     });
   });
   describe("Deletes pieces", function() {
-    // it("deletes an image piece", function() {
-    //   return Promise.all([fakeUser(), fakePortfolioPeriod()])
-    //     .then(([user, period]) =>
-    //       Promise.all([
-    //         user,
-    //         fakePortfolio({
-    //           user,
-    //           period
-    //         })
-    //       ])
-    //     )
-    //     .then(([user, portfolio]) =>
-    //       Promise.all([user, fakeImagePiece({ user, portfolio })])
-    //     )
-    //     .then(([user, piece]) =>
-    //       deletePiece(
-    //         {},
-    //         { id: piece.id },
-    //         { auth: { type: STUDENT, username: user.username } }
-    //       )
-    //     )
-    //     .then(() =>
-    //       Promise.all([
-    //         Piece.count().then(num => expect(num).to.equal(0)),
-    //         Image.count().then(num => expect(num).to.equal(0))
-    //       ])
-    //     );
-    // });
+    it("deletes an image piece", function() {
+      return Promise.all([fakeUser(), fakePortfolioPeriod()])
+        .then(([user, period]) =>
+          Promise.all([
+            user,
+            fakePortfolio({
+              user,
+              period
+            })
+          ])
+        )
+        .then(([user, portfolio]) =>
+          Promise.all([user, fakeImagePiece({ user, portfolio })])
+        )
+        .then(([user, piece]) =>
+          deletePiece(
+            {},
+            { id: piece.id },
+            { auth: { type: STUDENT, username: user.username } }
+          )
+        )
+        .then(() =>
+          Promise.all([
+            Piece.count().then(num => expect(num).to.equal(0)),
+            Image.count().then(num => expect(num).to.equal(0))
+          ])
+        );
+    });
 
     it("deletes a video piece", function() {
       return Promise.all([fakeUser(), fakePortfolioPeriod()])

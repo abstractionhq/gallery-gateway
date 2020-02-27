@@ -19,7 +19,8 @@ const Other = sequelize.define('other', {
 })
 
 Other.prototype.getEntry = function getEntry () {
-  return SinglePiece.findOne({where: {pieceType: OTHER_ENTRY, pieceId: this.id}}).getEntry()
+  return SinglePiece.findOne({where: {pieceType: OTHER_ENTRY, pieceId: this.id}})
+  .then(singlePiece => singlePiece.getEntry())
 }
 
 export default Other

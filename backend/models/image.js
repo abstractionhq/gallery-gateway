@@ -46,7 +46,8 @@ const Image = sequelize.define('image', {
 })
 
 Image.prototype.getEntry = function getEntry () {
-  return SinglePiece.findOne({where: {pieceType: IMAGE_ENTRY, pieceId: this.id}}).getEntry()
+  return SinglePiece.findOne({where: {pieceType: IMAGE_ENTRY, pieceId: this.id}})
+  .then(singlePiece => singlePiece.getEntry())
 }
 
 export default Image
