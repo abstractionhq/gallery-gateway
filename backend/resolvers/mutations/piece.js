@@ -5,7 +5,14 @@ import { UserError } from "graphql-errors";
 import Image from "../../models/image";
 import Video from "../../models/video";
 import Other from "../../models/other";
-import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY, VIDEO_ENTRY } from "../../constants";
+import {
+  ADMIN,
+  IMAGE_ENTRY,
+  OTHER_ENTRY,
+  VIDEO_ENTRY,
+  STUDENT,
+  JUDGE
+} from "../../constants";
 import { allowedToSubmit, parseVideo } from "../../helpers/submission";
 import Portfolio from "../../models/portfolio";
 import PortfolioPeriod from "../../models/portfolioPeriod";
@@ -31,7 +38,6 @@ const createPiece = (piece, entryType, entryId, t) => {
     .then(values => {
       const portfolioId = values[0]
       const singlePiece = values[1]
-
       return Piece.create(
         {
           pieceId: singlePiece.id,
@@ -151,4 +157,33 @@ export function createPortfolioOtherMedia(_, args, req) {
       ).then(other => createPiece(args.input.piece, OTHER_ENTRY, other.id, t))
     )
   );
+}
+
+export function deletePiece(_, args, req) {
+  const pieceId = args.id;
+
+  return Piece.findById(pieceId).then(piece => {
+    return piece
+      .getOwner()
+      .then(ownerUsername => {
+        if (
+          // Students can only delete their own
+          (req.auth.type === STUDENT && req.auth.username !== ownerUsername) ||
+          req.auth.type === JUDGE // Judges can never delete pieces
+        ) {
+          throw new UserError("Permission Denied");
+        }
+      })
+      .then(() => {
+
+        return piece.getSinglePiece().then(singlePiece => 
+          db.transaction()
+            .then(transaction => singlePiece.getMedia(transaction)
+            .then(media => media.destroy({ transaction }))
+            .then(() => singlePiece.destroy({ transaction }))
+            .then(() => piece.destroy({ transaction }))
+            )
+          )
+            });
+  });
 }

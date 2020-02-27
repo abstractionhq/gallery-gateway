@@ -8,7 +8,8 @@ import FaYouTube from '@fortawesome/fontawesome-free-brands/faYoutube'
 import FaVimeo from '@fortawesome/fontawesome-free-brands/faVimeoV'
 import ReactCardFlip from 'react-card-flip';
 import moment from 'moment'
-import { Row, Col, Button } from 'reactstrap'
+import { Col, Button } from 'reactstrap'
+import PieceDeleteModal from './PieceDeleteModal'
 
 import { getImageThumbnail, STATIC_PATH } from '../../utils'
 
@@ -131,10 +132,13 @@ class FlipCard extends React.Component {
   constructor() {
     super();
       this.state = {
-      isFlipped: false
+      isFlipped: false,
+      showDeleteModal: false
     };
     this.flip = this.flip.bind(this);
     this.unflip = this.unflip.bind(this);
+    this.beginDelete = this.beginDelete.bind(this)
+    this.closeDeleteModal = this.closeDeleteModal.bind(this)
   }
 
   flip(e) {
@@ -146,32 +150,83 @@ class FlipCard extends React.Component {
     e.preventDefault();
     this.setState({ isFlipped: false});
   }
+
+  beginDelete(e){
+    e.preventDefault()
+    this.setState({showDeleteModal: true})
+  }
+
+  closeDeleteModal(e){
+    e.preventDefault()
+    this.setState({showDeleteModal: false})
+  }
  
   render() {
     return (
       <EntryContainer onMouseLeave={this.unflip} onMouseEnter={this.flip}>
-      <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection="horizontal" style={{minHeight: '8em'}}>
-      <div key={'front'} style={{minHeight: '10em'}}>
-          <EntryThumb piece={this.props.picture} type ="piece" />
-          <Button color='secondary' style={{width: '100%'}} className="fixed-bottom" onClick={this.flip}>Options...</Button>
-        </div>
- 
-        <div key={'back'} style={{minHeight: '10em',
-          padding: 5,
-          boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-          transition: '0.3s',
-          borderRadius: '0.25rem',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: "column",}}>
-        <Button color='primary' style={{width: '100%'}} >View</Button>
-        {moment().isBefore(this.props.portfolio.portfolioPeriod.entryEnd) && (<Button color='primary' style={{width: '100%', marginBottom: '1em', marginTop: '1em'}} >Update</Button>)}
-        {moment().isBefore(this.props.portfolio.portfolioPeriod.entryEnd) && (<Button color='danger' style={{width: '100%' }}>Delete</Button>)}
-        </div>
-      </ReactCardFlip>
+        <ReactCardFlip
+          isFlipped={this.state.isFlipped}
+          flipDirection="horizontal"
+          style={{ minHeight: "8em" }}
+        >
+          <div key={"front"} style={{ minHeight: "10em" }}>
+            <EntryThumb piece={this.props.picture} type="piece" />
+            <Button
+              color="secondary"
+              style={{ width: "100%" }}
+              className="fixed-bottom"
+              onClick={this.flip}
+            >
+              Options...
+            </Button>
+          </div>
+
+          <div
+            key={"back"}
+            style={{
+              minHeight: "10em",
+              padding: 5,
+              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+              transition: "0.3s",
+              borderRadius: "0.25rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Button color="primary" style={{ width: "100%" }}>
+              View
+            </Button>
+            {moment().isBefore(
+              this.props.portfolio.portfolioPeriod.entryEnd
+            ) && (
+              <Button
+                color="primary"
+                style={{ width: "100%", marginBottom: "1em", marginTop: "1em" }}
+              >
+                Update
+              </Button>
+            )}
+            {moment().isBefore(
+              this.props.portfolio.portfolioPeriod.entryEnd
+            ) && (
+              <Button color="danger" style={{ width: "100%" }}
+              onClick={this.beginDelete} >
+                Delete
+              </Button>
+            )}
+          </div>
+        </ReactCardFlip>
+        <PieceDeleteModal
+          isOpen = {this.state.showDeleteModal}
+          closeDeleteModal = {this.closeDeleteModal}
+          picture = {this.props.picture}
+          deletePiece = {this.props.deletePiece}
+          EntryThumb = {EntryThumb}
+        />
       </EntryContainer>
-    )
+    );
   }
 }
 

@@ -8,10 +8,14 @@ query PortfolioPeriods {
     entryEnd
     judgingStart
     judgingEnd
+    finalized
     createdAt
     updatedAt
     judges {
       username
+    }
+    portfolios {
+      submitted
     }
   }
 }

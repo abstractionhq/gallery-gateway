@@ -13,7 +13,7 @@ const NoShowsContainer = styled.div`
   transform: translate(-50%, -50%);
 `
 class Portfolios extends Component {
-  renderPortfolios = (portfolios, openPeriod) => {
+  renderPortfolios = (portfolios, openPeriod, deletePiece) => {
     if(openPeriod){
       const skeletonPortfolio = {
         portfolioPeriod: openPeriod,
@@ -33,7 +33,7 @@ class Portfolios extends Component {
         </NoShowsContainer>
       )
     }
-    return portfolios.map(portfolios => <PortfolioCard key={portfolios.id} portfolio={portfolios} />)
+    return portfolios.map(portfolios => <PortfolioCard key={portfolios.id} portfolio={portfolios} deletePiece={deletePiece}/>)
   }
 
   componentDidUpdate () {
@@ -51,9 +51,9 @@ class Portfolios extends Component {
   }
 
   render () {
-    const { portfoliosLoading, openPeriodLoading, portfolios, openPeriod} = this.props
+    const { portfoliosLoading, openPeriodLoading, portfolios, openPeriod, deletePiece} = this.props
 
-    return <div>{portfoliosLoading || openPeriodLoading ? <Loading /> : this.renderPortfolios(portfolios, openPeriod)}</div>
+    return <div>{portfoliosLoading || openPeriodLoading ? <Loading /> : this.renderPortfolios(portfolios, openPeriod, deletePiece)}</div>
   }
 }
 

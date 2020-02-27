@@ -66,4 +66,22 @@ SinglePiece.prototype.getEntry = function getEntry() {
   return Entry.findOne({where: {pieceId: this.id}})
 };
 
+SinglePiece.prototype.getMedia = function(transaction) {
+  let Type = null;
+  switch (this.pieceType) {
+    case IMAGE_ENTRY:
+      Type = Image;
+      break;
+    case VIDEO_ENTRY:
+      Type = Video;
+      break;
+    case OTHER_ENTRY:
+      Type = Other;
+      break;
+    default:
+      return Promise.resolve(null);
+  }
+  return Type.findOne({where: {id: this.pieceId }, transaction})
+};
+
 export default SinglePiece;

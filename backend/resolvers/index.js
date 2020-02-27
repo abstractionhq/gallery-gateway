@@ -7,6 +7,7 @@ import DateScalar from './types/dateScalar'
 import Group from './types/groupType'
 import Show from './types/showType'
 import Vote from './types/voteType'
+import PortfolioPeriod from './types/portfolioPeriodType'
 import Portfolio from './types/portfolioType'
 import Piece from './types/pieceType'
 import PhotoPiece from './types/photoPieceType'
@@ -36,6 +37,7 @@ export default {
   ...Show,
   ...Vote,
   ...Piece,
+  ...PortfolioPeriod,
   ...Portfolio,
   ...PhotoPiece,
   ...VideoPiece,

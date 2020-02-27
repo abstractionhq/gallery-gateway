@@ -74,6 +74,7 @@ input ShowInput {
 
 type PortfolioPeriod {
     id: ID!
+    portfolios: [Portfolio]
     name: String!
     description: String
     numPieces: Int!
@@ -100,6 +101,10 @@ input PortfolioPeriodInput {
 input ShowUpdate {
     name: String
     description: String
+    entryStart: Date
+    entryEnd: Date
+    judgingStart: Date
+    judgingEnd: Date
     entryCap: Int
     finalized: Boolean
 }
@@ -198,6 +203,7 @@ type Portfolio {
     yearLevel: String
     academicProgram: String
     pieces: [Piece]
+    submitted: Boolean
     createdAt: Date!
     updatedAt: Date!
 }
@@ -375,6 +381,8 @@ type Mutation {
     createOtherMedia(input: OtherMediaInput!): Show
     createPortfolioOtherMedia(input: PortfolioOtherMediaInput!): Portfolio
     updateEntry(id: ID!, input: EntryUpdate!): Entry
+
+    deletePiece(id: ID!): Boolean
 
     vote(input: VoteInput): Vote
 }

@@ -356,12 +356,10 @@ router.route('/zips/:showId')
         SinglePiece.findAll({where: { pieceType: IMAGE_ENTRY }}).then(pieces => {
           
           const pieceIds = pieces.map(e => e.id)
-          console.log(pieceIds)
           const pieceIdsToPiece = pieces.reduce((obj, piece) => ({
             ...obj,
             [piece.id]: piece
           }), {})
-          console.log(pieceIdsToPiece)
 
         Entry.findAll({ where: { showId: req.params.showId, pieceId: {$in: pieceIds }} })
           .then(entries => {
@@ -371,7 +369,6 @@ router.route('/zips/:showId')
             //   entries: [Entry]
             // Evaluates to:
             //   [Entry]
-            console.log(entries)
             const imageIds = entries.map((entry) => pieceIdsToPiece[entry.dataValues.peiceId].dataValues.pieceId)
             return Image.findAll({ where: { id: { $in: imageIds } } })
               .then(images => {

@@ -11,6 +11,7 @@ import SinglePiece from '../models/singlePiece'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 import PortfolioPeriod from '../models/portfolioPeriod'
 import Portfolio from '../models/portfolio'
+import Piece from '../models/piece'
 
 // Helper for faking shows
 Date.prototype.addDays = function (days) { // eslint-disable-line no-extend-native
@@ -235,5 +236,55 @@ export function fakePortfolio(opts){
         yearLevel: opts.yearLevel,
         academicProgram: opts.academicProgram
       })
+    })
+}
+
+function fakePiece(opts){
+  opts = opts || {}
+  if (!opts.image && !opts.video && !opts.other) {
+    throw Error('No entry item found')
+  }
+  const portfolioPromise = opts.portfolio ? Promise.resolve(opts.portfolio) : fakePortfolio(opts)
+  const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
+  const piecePromise = fakeSinglePiece(opts)
+  return Promise.all([portfolioPromise, userPromise, piecePromise])
+    .then((models) => {
+      const portfolio = models[0]
+      const user = models[1]
+      const singlePiece = models[2]
+      return Piece.create({
+        portfolioId: portfolio.id,
+        pieceId: singlePiece.id
+      })
+    })
+}
+
+export function fakeImagePiece (opts) {
+  opts = opts || {}
+  const imagePromise = opts.image ? Promise.resolve(opts.image) : fakeImage(opts)
+  return imagePromise
+    .then((image) => {
+      opts.image = image
+      return fakePiece(opts)
+    })
+}
+
+export function fakeVideoPiece (opts) {
+  opts = opts || {}
+  const videoPromise = opts.video ? Promise.resolve(opts.video) : fakeVideo(opts)
+  return videoPromise
+    .then((video) => {
+      opts.video = video
+      return fakePiece(opts)
+    })
+}
+
+export function fakeOtherPiece (opts) {
+  opts = opts || {}
+  const otherPromise = opts.other ? Promise.resolve(opts.other) : fakeOther(opts)
+  return otherPromise
+    .then((other) => {
+      opts.other = other
+      return fakePiece(opts)
     })
 }

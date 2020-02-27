@@ -3,7 +3,6 @@ import sequelize from "../config/sequelize";
 import Portfolio from "./portfolio";
 import SinglePiece from "./singlePiece";
 
-
 const Piece = sequelize.define("piece", {
   portfolioId: {
     type: DataTypes.INTEGER,
@@ -34,6 +33,12 @@ Piece.prototype.getPortfolio = function getPortfolio() {
 
 Piece.prototype.getSinglePiece = function getSinglePiece() {
   return SinglePiece.findById(this.pieceId);
+}
+
+Piece.prototype.getOwner = function getOwner() {
+  return Portfolio.findById(this.portfolioId).then(
+    portfolio => Promise.resolve(portfolio.studentUsername)
+  );
 };
 
 export default Piece;
