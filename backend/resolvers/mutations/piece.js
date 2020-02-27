@@ -174,16 +174,16 @@ export function deletePiece(_, args, req) {
           throw new UserError("Permission Denied");
         }
       })
-      .then(() => {
-
-        return piece.getSinglePiece().then(singlePiece => 
-          db.transaction()
-            .then(transaction => singlePiece.getMedia(transaction)
+      .then(() =>
+        piece.getSinglePiece()).then( singlePiece =>
+        db.transaction(transaction =>
+          singlePiece
+            .getMedia(transaction)
             .then(media => media.destroy({ transaction }))
-            .then(() => singlePiece.destroy({ transaction }))
             .then(() => piece.destroy({ transaction }))
-            )
-          )
-            });
+            .then(() => singlePiece.destroy({ transaction }))
+        )
+      );
   });
 }
+

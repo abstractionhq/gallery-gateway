@@ -369,7 +369,7 @@ router.route('/zips/:showId')
             //   entries: [Entry]
             // Evaluates to:
             //   [Entry]
-            const imageIds = entries.map((entry) => pieceIdsToPiece[entry.dataValues.peiceId].dataValues.pieceId)
+            const imageIds = entries.map((entry) => pieceIdsToPiece[entry.dataValues.pieceId].dataValues.pieceId)
             return Image.findAll({ where: { id: { $in: imageIds } } })
               .then(images => {
                 // create a mapping of imageId -> image for easy assigning
@@ -382,9 +382,9 @@ router.route('/zips/:showId')
                 
                 // assign 'path' to all entries
                 entries.forEach(entry => {
-                  entry.path = imageIdsToImage[pieceIdsToPiece[entry.dataValues.peiceId].dataValues.pieceId].path
-                  entry.title = pieceIdsToPiece[entry.dataValues.peiceId].dataValues.title
-                  entry.comment = pieceIdsToPiece[entry.dataValues.peiceId].dataValues.comment
+                  entry.path = imageIdsToImage[pieceIdsToPiece[entry.dataValues.pieceId].dataValues.pieceId].path
+                  entry.title = pieceIdsToPiece[entry.dataValues.pieceId].dataValues.title
+                  entry.comment = pieceIdsToPiece[entry.dataValues.pieceId].dataValues.comment
                 })
                 return entries
               })
