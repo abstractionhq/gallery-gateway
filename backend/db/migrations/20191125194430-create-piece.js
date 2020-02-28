@@ -18,9 +18,21 @@ module.exports = {
         onUpdate: "cascade",
         onDelete: "cascade"
       },
-      pieceId: {
-        type: Sequelize.INTEGER,
+      pieceType: {
         allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      pieceId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      title: {
+        type: Sequelize.STRING,
+        defaultValue: "Untitled",
+        allowNull: false
+      },
+      comment: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
