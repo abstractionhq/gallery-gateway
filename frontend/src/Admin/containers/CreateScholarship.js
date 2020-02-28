@@ -5,7 +5,7 @@ import { compose } from 'recompose'
 import { displayError } from '../../shared/actions'
 
 import ShowsQuery from '../queries/shows.graphql'
-import CreateShowMutation from '../mutations/createShow.graphql'
+import CreateShowMutation from '../mutations/create.graphql'
 import ScholarshipForm from '../components/ScholarshipForm'
 
 const mapDispatchToProps = dispatch => ({
