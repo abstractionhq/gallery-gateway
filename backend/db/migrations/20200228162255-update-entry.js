@@ -3,23 +3,23 @@ import Entry from '../../models/entry'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      // return queryInterface.addColumn(
-      //   'entries',
-      //   'pieceId',
-      //   Sequelize.INTEGER,
-      //   {
-      //     allowNull: false,
-      //     defaultValue: 0,
-      //     references: {
-      //       model: 'singlePiece',
-      //       key: 'id'
-      //     },
-      //     onUpdate: 'cascade',
-      //     onDelete: 'cascade'
-      //   }
-      // )
-      // //transfer any existing data to the singlePiece table
-      // .then(() => 
+      return queryInterface.addColumn(
+        'entries',
+        'pieceId',
+        Sequelize.INTEGER,
+        {
+          allowNull: false,
+          defaultValue: 0,
+          references: {
+            model: 'singlePiece',
+            key: 'id'
+          },
+          onUpdate: 'cascade',
+          onDelete: 'cascade'
+        }
+      )
+      //transfer any existing data to the singlePiece table
+      .then(() => 
       Entry.findAll()
       .then(entries => entries.reduce((pieces, entry) => {
         console.log(pieces)
