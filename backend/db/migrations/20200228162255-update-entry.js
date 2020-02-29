@@ -3,25 +3,27 @@ import Entry from '../../models/entry'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.addColumn(
-        'entries',
-        'pieceId',
-        Sequelize.INTEGER,
-        {
-          allowNull: false,
-          defaultValue: 0,
-          references: {
-            model: 'singlePiece',
-            key: 'id'
-          },
-          onUpdate: 'cascade',
-          onDelete: 'cascade'
-        }
-      )
-      //transfer any existing data to the singlePiece table
-      .then(() => Entry.findAll())
+      // return queryInterface.addColumn(
+      //   'entries',
+      //   'pieceId',
+      //   Sequelize.INTEGER,
+      //   {
+      //     allowNull: false,
+      //     defaultValue: 0,
+      //     references: {
+      //       model: 'singlePiece',
+      //       key: 'id'
+      //     },
+      //     onUpdate: 'cascade',
+      //     onDelete: 'cascade'
+      //   }
+      // )
+      // //transfer any existing data to the singlePiece table
+      // .then(() => 
+      Entry.findAll()
       .then(entries => entries.reduce((pieces, entry) => {
-        return pieces.push( 
+        console.log(pieces)
+        pieces.push( 
         {
           id: entry.pieceId,
           title: entry.title,
@@ -29,6 +31,7 @@ module.exports = {
           pieceType: entry.entryType,
           pieceId: entry.entryId
         })
+        return pieces
       }, []))
       .then(pieces => {
         //mysql throws as syntax error if you bulk insert an empty array
