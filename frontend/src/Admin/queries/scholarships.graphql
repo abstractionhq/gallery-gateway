@@ -1,5 +1,5 @@
 query Scholarships {
-  shows(orderBy: { sort: "createdAt", direction: DESC }) {
+  Scholarships(orderBy: { sort: "createdAt", direction: DESC }) {
     id,
     name,
     gpa,

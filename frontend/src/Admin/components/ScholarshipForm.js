@@ -76,7 +76,6 @@ class ScholarshipForm extends Component {
             degreePrograms: yup.string()
           })}
           onSubmit={values => {
-            debugger
             create(values)
               .then(() => done())
               .catch(err => handleError(err.message))
@@ -216,11 +215,11 @@ class ScholarshipForm extends Component {
                       <Label check>
                         <Field
                           type="radio"
-                          id="essayRequired"
-                          name="essayRequired"
+                          id="requiresEssay"
+                          name="requiresEssay"
                           value="no"
                           required
-                          checked={values.essayRequired === 'no'}
+                          checked={values.requiresEssay === 'no'}
                         />
                         <span className="ml-2">No</span>
                       </Label>
@@ -229,16 +228,16 @@ class ScholarshipForm extends Component {
                       <Label check>
                         <Field
                           type="radio"
-                          id="essayRequired"
-                          name="essayRequired"
+                          id="requiresEssay"
+                          name="requiresEssay"
                           value="yes"
                           required
-                          checked={values.essayRequired === 'yes'}
+                          checked={values.requiresEssay === 'yes'}
                         />
                         <span className="ml-2">Yes</span>
                       </Label>
                     </FormGroup>
-                    {this.renderErrors(touched, errors, 'essayRequired')}
+                    {this.renderErrors(touched, errors, 'requiresEssay')}
                   </FormGroup>
                   <FormGroup>
                     <Label>Degree Programs Required</Label>

@@ -3,8 +3,6 @@ import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { displayError } from '../../shared/actions'
-
-import ScholarshipQuery from '../queries/scholarships.graphql'
 import CreateScholarshipMutation from '../mutations/createScholarship.graphql'
 import ScholarshipForm from '../components/ScholarshipForm'
 
@@ -21,13 +19,6 @@ export default compose(
         mutate({
           variables: { input: scholarship }
         })
-    }),
-    options: () => ({
-      refetchQueries: [
-        {
-          query: ScholarshipQuery
-        }
-      ]
     })
   })
 )(ScholarshipForm)
