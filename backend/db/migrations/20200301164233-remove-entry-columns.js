@@ -3,6 +3,16 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
+      queryInterface.addConstraint('entries', ['pieceId'], {
+        type: 'foreign key',
+        name: 'singlePiece_reference',
+        references: {
+          table: 'singlePieces',
+          field: 'id'
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      }),
       queryInterface.removeColumn('entries', 'title'),
       queryInterface.removeColumn('entries', 'comment'),
       queryInterface.removeColumn('entries', 'entryType'),
@@ -11,7 +21,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    Promise.all([
+    return Promise.all([
       queryInterface.addColumn('entries', 'title', Sequelize.STRING,
           {
             defaultValue: 'Untitled',

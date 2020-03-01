@@ -2,14 +2,15 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    Promise.all([
+    return Promise.all([
       queryInterface.removeColumn('pieces', 'title'),
       queryInterface.removeColumn('pieces', 'comment'),
       queryInterface.removeColumn('pieces', 'pieceType'),
       queryInterface.removeColumn('pieces', 'pieceId')
     ])
      //needs to happen after since another column has the same name
-      .then(() => queryInterface.addColumn(
+      .then(() => {
+        return queryInterface.addColumn(
         'pieces',
         'pieceId',
         Sequelize.INTEGER,
@@ -24,6 +25,7 @@ module.exports = {
           onDelete: 'cascade'
         }
       )
+      }
     )
   },
 

@@ -2,21 +2,38 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.addColumn(
+    // need to add default values to be able to run a bulk update
+    return Promise.all([
+      queryInterface.changeColumn('entries', ['entryType'], {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      }),
+      queryInterface.changeColumn('entries', ['entryId'], {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      }),
+      queryInterface.changeColumn('entries', ['createdAt'], {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
+      }),
+      queryInterface.changeColumn('entries', ['updatedAt'], {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('NOW')
+      }),
+      
+      queryInterface.addColumn(
         'entries',
         'pieceId',
-        Sequelize.INTEGER,
         {
+          type: Sequelize.INTEGER,
           allowNull: false,
-          defaultValue: 0,
-          references: {
-            model: 'singlePiece',
-            key: 'id'
-          },
-          onUpdate: 'cascade',
-          onDelete: 'cascade'
+          defaultValue: 0
         }
-      )
+      )])
   },
 
   down: (queryInterface, Sequelize) => {
