@@ -217,6 +217,29 @@ const portfolioPeriodAssignments = (state = {}, action) => {
           judge => judge.username
         )
       }
+    case actions.ASSIGN_JUDGES_TO_PORTFOLIO_PERIOD:
+      if (!action.payload.id) {
+        return state
+      }
+      
+      return {
+        ...state,
+        [action.payload.id]: [
+          ...state[action.payload.id],
+          ...action.payload.usernames
+        ]
+      }
+    case actions.REMOVE_JUDGES_FROM_PORTFOLIO_PERIOD:
+      if (!action.payload.id) {
+        return state
+      }
+  
+      return {
+        ...state,
+        [action.payload.id]: state[action.payload.id].filter(
+          judge => !action.payload.usernames.includes(judge)
+        )
+      }
     default:
       return state
   }

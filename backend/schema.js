@@ -373,6 +373,9 @@ type Mutation {
     assignToShow(showId: ID!, usernames: [String]!): Boolean
     removeFromShow(showId: ID!, usernames: [String]!): Boolean
 
+    assignToPortfolioPeriod(portfolioPeriodId: ID!, usernames: [String]!): Boolean
+    removeFromPortfolioPeriod(portfolioPeriodId: ID!, usernames: [String]!): Boolean
+
     createPortfolioPeriod(input: PortfolioPeriodInput!): PortfolioPeriod
 
     createPhoto(input: PhotoInput!): Show

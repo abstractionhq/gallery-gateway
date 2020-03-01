@@ -39,11 +39,11 @@ export default {
           return []
         case ADMIN:
           // Admins query against all shows
-          getShows = PortfolioPeriod.findAll.bind(Show)
+          getPortfolioPeriods = PortfolioPeriod.findAll.bind(Show)
           break
         case JUDGE:
           // Judges only query against their assigned shows
-          getShows = user.getPortfolioPeriods.bind(user)
+          getPortfolioPeriods = user.getPortfolioPeriods.bind(user)
           break
       }
       // Check if given date is before any show ends

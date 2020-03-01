@@ -115,7 +115,7 @@ class AssignJudgesTable extends Component {
   }
 
   render () {
-    const { data } = this.props
+    const { data, showId } = this.props
 
     return (
       <Fragment>
@@ -134,7 +134,7 @@ class AssignJudgesTable extends Component {
           <ModalBody>
             <p>
               Removing a judge will permanently delete any votes they have made
-              in this show.
+              in this {showId ? "show" : "portfolio period"}.
             </p>
           </ModalBody>
           <ModalFooter>

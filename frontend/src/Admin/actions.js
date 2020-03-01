@@ -19,6 +19,8 @@ export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW =
   'FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW'
 export const ASSIGN_JUDGES_TO_SHOW = 'ASSIGN_JUDGES_TO_SHOW'
 export const REMOVE_JUDGES_FROM_SHOW = 'REMOVE_JUDGES_FROM_SHOW'
+export const ASSIGN_JUDGES_TO_PORTFOLIO_PERIOD = 'ASSIGN_JUDGES_TO_PORTFOLIO_PERIOD'
+export const REMOVE_JUDGES_FROM_PORTFOLIO_PERIOD = 'REMOVE_JUDGES_FROM_PORTFOLIO_PERIOD'
 export const ADD_ADMIN = 'ADD_ADMIN'
 export const ADD_JUDGE = 'ADD_JUDGE'
 export const FETCH_PORTFOLIO_PERIOD = "FETCH_PORTFOLIO_PERIOD"
@@ -184,6 +186,34 @@ export const removeJudgesFromShow = (showId, usernames) => (
     type: REMOVE_JUDGES_FROM_SHOW,
     payload: {
       id: showId,
+      usernames
+    }
+  })
+}
+
+export const assignJudgesToPortfolioPeriod = (portfolioPeriodId, usernames) => (
+  dispatch,
+  getState,
+  client
+) => {
+  dispatch({
+    type: ASSIGN_JUDGES_TO_PORTFOLIO_PERIOD,
+    payload: {
+      id: portfolioPeriodId,
+      usernames
+    }
+  })
+}
+
+export const removeJudgesFromPortfolioPeriod = (portfolioPeriodId, usernames) => (
+  dispatch,
+  getState,
+  client
+) => {
+  dispatch({
+    type: REMOVE_JUDGES_FROM_PORTFOLIO_PERIOD,
+    payload: {
+      id: portfolioPeriodId,
       usernames
     }
   })
