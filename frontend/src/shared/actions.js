@@ -69,7 +69,6 @@ export const getDownloadToken = () => (dispatch, getState, client) => {
 }
 
 export const displayError = message => (dispatch, getState, client) => {
-  debugger;
   dispatch({
     type: DISPLAY_ERROR,
     payload: message
