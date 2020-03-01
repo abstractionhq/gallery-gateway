@@ -31,7 +31,7 @@
     "debug": "npm run build && node --inspect ./build/main.js",
     "watch": "backpack",
     "build": "backpack build",
-    "test": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/setup.js test/**/*.js",
+    "test": "cross-env NODE_ENV=test nyc mocha --timeout 20000 test/setup.js test/**/*.js",
     "test-debug": "cross-env NODE_ENV=test nyc mocha --timeout 10000 --inspect test/setup.js test/**/*.js",
     "test-file": "cross-env NODE_ENV=test nyc mocha --timeout 10000 test/setup.js",
     "keygen": "babel-node keygen",
