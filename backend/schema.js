@@ -19,6 +19,7 @@ type User {
     type: UserType!
     entries: [Entry]
     shows(date: Date): [Show]
+    portfolioPeriods(date: Date): [PortfolioPeriod]
 }
 
 input UserInput {

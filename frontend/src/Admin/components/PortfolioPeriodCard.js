@@ -198,7 +198,7 @@ class PortfolioPeriodCard extends Component {
           color='primary'
           style={{ cursor: 'pointer' }}
           tag={Link}
-          to={`/show/${props.id}/judges/assign`}
+          to={`/portfolio/${props.id}/judges/assign`}
           block
           outline
         >

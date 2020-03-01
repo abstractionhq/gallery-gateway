@@ -1,8 +1,11 @@
 import ShowQuery from './queries/show.graphql'
+import PortfolioQuery from './queries/portfolioPeriod.graphql'
 import ShowsQuery from './queries/shows.graphql'
+import PortfoliosQuery from './queries/portfolioPeriods.graphql'
 import AdminsQuery from './queries/admins.graphql'
 import JudgesQuery from './queries/judges.graphql'
 import JudgesForShowQuery from './queries/judgesForShow.graphql'
+import JudgesForPortfolioPeriodQuery from './queries/judgesForPortfolioPeriod.graphql'
 import { displayError } from '../shared/actions'
 import { ZIP_PATH, CSV_PATH } from '../utils'
 
@@ -18,6 +21,10 @@ export const ASSIGN_JUDGES_TO_SHOW = 'ASSIGN_JUDGES_TO_SHOW'
 export const REMOVE_JUDGES_FROM_SHOW = 'REMOVE_JUDGES_FROM_SHOW'
 export const ADD_ADMIN = 'ADD_ADMIN'
 export const ADD_JUDGE = 'ADD_JUDGE'
+export const FETCH_PORTFOLIO_PERIOD = "FETCH_PORTFOLIO_PERIOD"
+export const FETCH_PORTFOLIO_PERIODS = "FETCH_PORTFOLIO_PERIODS"
+export const FETCH_JUDGES_BY_ASSIGNMENT_FOR_PORTFOLIO_PERIOD =
+  'FETCH_JUDGES_BY_ASSIGNMENT_FOR_PORTFOLIO_PERIOD'
 
 export const fetchShow = showId => (dispatch, getState, client) => {
   return client
@@ -31,12 +38,32 @@ export const fetchShow = showId => (dispatch, getState, client) => {
     .catch(err => dispatch(displayError(err.message)))
 }
 
+
+export const fetchPortfolioPeriod = portfolioPeriodId => (dispatch, getState, client) => {
+  return client
+    .query({
+      query: PortfolioQuery,
+      variables: {
+        id: portfolioPeriodId
+      }
+    }) // TODO: Dispatch loading action & loading finished action
+    .then(({ data: { portfolioPeriod } }) => dispatch({ type: FETCH_PORTFOLIO_PERIOD, payload: portfolioPeriod }))
+    .catch(err => dispatch(displayError(err.message)))
+}
+
 export const fetchShows = () => (dispatch, getState, client) => {
   return client
     .query({ query: ShowsQuery }) // TODO: Dispatch loading action & loading finished action
     .then(({ data: { shows } }) =>
       dispatch({ type: FETCH_SHOWS, payload: shows })
     )
+    .catch(err => dispatch(displayError(err.message)))
+}
+
+export const fetchPortfolioPeriods = () => (dispatch, getState, client) => {
+  return client
+    .query({ query: PortfoliosQuery }) // TODO: Dispatch loading action & loading finished action
+    .then(({ data: { portfolioPeriods } }) => dispatch({ type: FETCH_PORTFOLIO_PERIODS, payload: portfolioPeriods }))
     .catch(err => dispatch(displayError(err.message)))
 }
 
@@ -97,6 +124,37 @@ export const fetchJudgesByAssignmentForShow = showId => (
         dispatch({
           type: FETCH_JUDGES_BY_ASSIGNMENT_FOR_SHOW,
           payload: show
+        })
+      }
+    })
+    .catch(err => dispatch(displayError(err.message)))
+}
+
+export const fetchJudgesByAssignmentForPortfolioPeriod = portfolioPeriodId => (
+  dispatch,
+  getState,
+  client
+) => {
+  return Promise.all([
+    client.query({
+      query: JudgesForPortfolioPeriodQuery,
+      variables: {
+        id: portfolioPeriodId
+      }
+    }),
+    dispatch(fetchPortfolioPeriods()),
+    dispatch(fetchJudges())
+  ])
+    .then(([{ data: { portfolioPeriod }, loading }]) => {
+      if (loading) {
+        dispatch({
+          type: LOADING_DATA, // TODO: Do something w/ this
+          payload: {}
+        })
+      } else {
+        dispatch({
+          type: FETCH_JUDGES_BY_ASSIGNMENT_FOR_PORTFOLIO_PERIOD,
+          payload: portfolioPeriod
         })
       }
     })

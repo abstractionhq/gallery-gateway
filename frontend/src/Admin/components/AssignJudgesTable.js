@@ -27,7 +27,8 @@ const ReassignButtonContainer = styled.div`
 
 class AssignJudgesTable extends Component {
   static propTypes = {
-    showId: PropTypes.string.isRequired,
+    showId: PropTypes.string,
+    portfolioPeriodId: PropTypes.string,
     fetchData: PropTypes.func.isRequired,
     data: PropTypes.shape({
       unassignedJudges: PropTypes.array.isRequired,
