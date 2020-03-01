@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 import { displayError } from '../../shared/actions'
 
-import ShowsQuery from '../queries/shows.graphql'
-import CreateShowMutation from '../mutations/create.graphql'
+import ScholarshipQuery from '../queries/scholarships.graphql'
+import CreateScholarshipMutation from '../mutations/createScholarship.graphql'
 import ScholarshipForm from '../components/ScholarshipForm'
 
 const mapDispatchToProps = dispatch => ({
@@ -15,17 +15,17 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  graphql(CreateShowMutation, {
+  graphql(CreateScholarshipMutation, {
     props: ({ mutate }) => ({
-      create: show =>
+      create: scholarship =>
         mutate({
-          variables: { input: show }
+          variables: { input: scholarship }
         })
     }),
     options: () => ({
       refetchQueries: [
         {
-          query: ShowsQuery
+          query: ScholarshipQuery
         }
       ]
     })
