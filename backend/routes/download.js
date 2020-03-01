@@ -269,8 +269,9 @@ router.route('/csv/:showId')
                         mediaType: '',
                         videoUrl: ''
                       }
+
                       // Add entry data to data object
-                      if (entryType === IMAGE_ENTRY) {
+                      if (singlePieceData.pieceType === IMAGE_ENTRY) {
                         let imageObj = imageIdsToImage[singlePieceData.pieceId]
                         return {
                           ...newEntry,
@@ -279,7 +280,7 @@ router.route('/csv/:showId')
                           vertDimInch: imageObj.vertDimInch,
                           mediaType: imageObj.mediaType
                         }
-                      } else if (entryType === VIDEO_ENTRY) {
+                      } else if (singlePieceData.pieceType === VIDEO_ENTRY) {
                         let videoObj = videoIdsToImage[singlePieceData.pieceId]
                         if (videoObj.provider === 'youtube') {
                           return {
@@ -292,7 +293,7 @@ router.route('/csv/:showId')
                             videoUrl: `${VIMEO_BASE_URL}${videoObj.videoId}`
                           }
                         }
-                      } else if (entryType === OTHER_ENTRY) {
+                      } else if (singlePieceData.pieceType === OTHER_ENTRY) {
                         let otherObj = otherMediaIdsToImage[singlePieceData.pieceId]
                         return {
                           ...newEntry,
