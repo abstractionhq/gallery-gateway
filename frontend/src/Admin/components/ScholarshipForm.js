@@ -76,6 +76,7 @@ class ScholarshipForm extends Component {
             degreePrograms: yup.string()
           })}
           onSubmit={values => {
+            debugger
             create(values)
               .then(() => done())
               .catch(err => handleError(err.message))
@@ -157,7 +158,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="fulltime"
                           name="fulltime"
-                          // value={this.props.fulltime}
+                          value="no"
                           required
                           checked={values.fulltime === 'no'}
                         />
@@ -170,7 +171,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="fulltime"
                           name="fulltime"
-                          // value={this.props.fulltime}
+                          value="yes"
                           required
                           checked={values.fulltime === 'yes'}
                         />
@@ -187,7 +188,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="renewable"
                           name="renewable"
-                          // value={this.props.renewable}
+                          value="no"
                           required
                           checked={values.renewable === 'no'}
                         />
@@ -200,7 +201,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="renewable"
                           name="renewable"
-                          // value={this.props.renewable}
+                          value="yes"
                           required
                           checked={values.renewable === 'yes'}
                         />
@@ -217,7 +218,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="essayRequired"
                           name="essayRequired"
-                          // value={this.props.essayRequired}
+                          value="no"
                           required
                           checked={values.essayRequired === 'no'}
                         />
@@ -230,7 +231,7 @@ class ScholarshipForm extends Component {
                           type="radio"
                           id="essayRequired"
                           name="essayRequired"
-                          // value={this.props.essayRequired}
+                          value="yes"
                           required
                           checked={values.essayRequired === 'yes'}
                         />
