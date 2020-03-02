@@ -252,7 +252,130 @@ export function up (queryInterface, Sequelize) {
       }))
     })
     .then(ids => {
-      const {showId, fishImageId, treeImageId} = ids
+      //create singlePiece Objects from the pieces
+      const {fishImageId, treeImageId, bookImageId, vimeoVideoId, 
+             purpleThingImageId, pdfOtherId, youtubeVideoId, 
+             imageOtherId, runningImageId, applesImageId
+      } = ids
+      const fishSinglePieceId = genId()
+      const treeSinglePieceId = genId()
+      const vimeoVideoSinglePieceId = genId()
+      const hangingBookSinglePieceId = genId()
+      const purpleThingSinglePieceId = genId()
+      const pdfSinglePieceId = genId()
+      const otherImageSinglePieceId = genId()
+      const youtubeSinglePieceId = genId()
+      const runningSinglePieceId = genId()
+      const applesSinglePieceId = genId()
+
+      const now = moment()
+      return queryInterface.bulkInsert('singlePieces', [
+        {
+          id: fishSinglePieceId,
+          pieceType: 1,
+          pieceId: fishImageId,
+          title: 'Betta In Bloom',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: treeSinglePieceId,
+          pieceType: 1,
+          pieceId: treeImageId,
+          title: 'Tree in the Field',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: vimeoVideoSinglePieceId,
+          pieceType: 2,
+          pieceId: vimeoVideoId,
+          title: 'Mountain Biking',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: hangingBookSinglePieceId,
+          pieceType: 1,
+          pieceId: bookImageId,
+          title: 'Cloudy Mind and Lofty Goals',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: purpleThingSinglePieceId,
+          pieceType: 1,
+          pieceId: purpleThingImageId,
+          title: 'Purple Saturday',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: pdfSinglePieceId,
+          pieceType: 3,
+          pieceId: pdfOtherId,
+          title: 'The Adventures of Souper Manne',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: youtubeSinglePieceId,
+          pieceType: 2,
+          pieceId: youtubeVideoId,
+          title: 'Bees?',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: otherImageSinglePieceId,
+          pieceType: 3,
+          pieceId: imageOtherId,
+          title: 'Exploratory Binding No. 1',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: runningSinglePieceId,
+          pieceType: 1,
+          pieceId: runningImageId,
+          title: 'Runaway Stone',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+          id: applesSinglePieceId,
+          pieceType: 1,
+          pieceId: applesImageId,
+          title: 'Harvest',
+          comment: '',
+          createdAt: now.format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: now.format('YYYY-MM-DD HH:mm:ss')
+        }
+      ]).then(() => ({
+        ...ids,
+        fishSinglePieceId,
+        treeSinglePieceId,
+        vimeoVideoSinglePieceId,
+        hangingBookSinglePieceId,
+        purpleThingSinglePieceId,
+        pdfSinglePieceId,
+        otherImageSinglePieceId,
+        youtubeSinglePieceId,
+        applesSinglePieceId,
+        runningSinglePieceId
+      }))
+    })
+    .then(ids => {
+      const {showId, fishSinglePieceId, treeSinglePieceId} = ids
       // make user 7 submit the fish and the tree and the hanging book
       const fishEntryId = genId()
       const treeEntryId = genId()
@@ -262,10 +385,7 @@ export function up (queryInterface, Sequelize) {
           id: fishEntryId,
           showId,
           studentUsername: 'user7',
-          entryType: 1,
-          entryId: fishImageId,
-          title: 'Betta In Bloom',
-          comment: '',
+          pieceId: fishSinglePieceId,
           moreCopies: 1,
           forSale: 1,
           yearLevel: 'five',
@@ -277,10 +397,7 @@ export function up (queryInterface, Sequelize) {
           id: treeEntryId,
           showId,
           studentUsername: 'user7',
-          entryType: 1,
-          entryId: treeImageId,
-          title: 'Tree in the Field',
-          comment: '',
+          pieceId: treeSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'five',
@@ -296,7 +413,7 @@ export function up (queryInterface, Sequelize) {
     })
     .then(ids => {
       // user 6 submits hanging book and vimeo video
-      const { showId, bookImageId, vimeoVideoId } = ids
+      const { showId, hangingBookSinglePieceId, vimeoVideoSinglePieceId } = ids
       const hangingBookEntryId = genId()
       const vimeoVideoEntryId = genId()
       const now = moment()
@@ -305,10 +422,7 @@ export function up (queryInterface, Sequelize) {
           id: vimeoVideoEntryId,
           showId,
           studentUsername: 'user6',
-          entryType: 2,
-          entryId: vimeoVideoId,
-          title: 'Mountain Biking',
-          comment: '',
+          pieceId: vimeoVideoSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'four',
@@ -320,10 +434,7 @@ export function up (queryInterface, Sequelize) {
           id: hangingBookEntryId,
           showId,
           studentUsername: 'user6',
-          entryType: 1,
-          entryId: bookImageId,
-          title: 'Cloudy Mind and Lofty Goals',
-          comment: '',
+          pieceId: hangingBookSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'four',
@@ -339,7 +450,7 @@ export function up (queryInterface, Sequelize) {
     })
     .then(ids => {
       // User 8 submits the sample PDF and the purple thing
-      const { showId, purpleThingImageId, pdfOtherId } = ids
+      const { showId, purpleThingSinglePieceId, pdfSinglePieceId } = ids
       const purpleThingEntryId = genId()
       const pdfEntryId = genId()
       const now = moment()
@@ -348,10 +459,7 @@ export function up (queryInterface, Sequelize) {
           id: purpleThingEntryId,
           showId,
           studentUsername: 'user8',
-          entryType: 1,
-          entryId: purpleThingImageId,
-          title: 'Purple Saturday',
-          comment: '',
+          pieceId: purpleThingSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'third',
@@ -363,10 +471,7 @@ export function up (queryInterface, Sequelize) {
           id: pdfEntryId,
           showId,
           studentUsername: 'user8',
-          entryType: 3,
-          entryId: pdfOtherId,
-          title: 'The Adventures of Souper Manne',
-          comment: '',
+          pieceId: pdfSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'third',
@@ -408,7 +513,7 @@ export function up (queryInterface, Sequelize) {
     .then(ids => {
       // group 1 submits the youtube video
       // group 2 submits the 'other' image
-      const { showId, group1Id, group2Id, youtubeVideoId, imageOtherId } = ids
+      const { showId, group1Id, group2Id, youtubeSinglePieceId, otherImageSinglePieceId } = ids
       const youtubeEntryId = genId()
       const otherImageEntryId = genId()
       const now = moment()
@@ -418,10 +523,7 @@ export function up (queryInterface, Sequelize) {
           showId,
           studentUsername: 'user8',
           groupId: group1Id,
-          entryType: 2,
-          entryId: youtubeVideoId,
-          title: 'Bees?',
-          comment: '',
+          pieceId: youtubeSinglePieceId,
           moreCopies: 0,
           forSale: 0,
           yearLevel: 'third',
@@ -434,10 +536,7 @@ export function up (queryInterface, Sequelize) {
           showId,
           studentUsername: 'user6',
           groupId: group2Id,
-          entryType: 3,
-          entryId: imageOtherId,
-          title: 'Exploratory Binding No. 1',
-          comment: '',
+          pieceId: otherImageSinglePieceId,
           moreCopies: 1,
           forSale: 1,
           yearLevel: 'third',
@@ -641,16 +740,13 @@ export function up (queryInterface, Sequelize) {
     })
     .then(ids => {
       // Make user8 have one invited and one not invited old submission
-      const {oldShowId, runningImageId, applesImageId} = ids
+      const {oldShowId, runningSinglePieceId, applesSinglePieceId} = ids
       const now = moment()
       return queryInterface.bulkInsert('entries', [
         {
           showId: oldShowId,
           studentUsername: 'user8',
-          entryType: 1,
-          entryId: runningImageId,
-          title: 'Runaway Stone',
-          comment: '',
+          pieceId: runningSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'third',
@@ -662,10 +758,7 @@ export function up (queryInterface, Sequelize) {
         {
           showId: oldShowId,
           studentUsername: 'user8',
-          entryType: 1,
-          entryId: applesImageId,
-          title: 'Harvest',
-          comment: '',
+          pieceId: applesSinglePieceId,
           moreCopies: 1,
           forSale: 0,
           yearLevel: 'third',

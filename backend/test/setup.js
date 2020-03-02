@@ -11,6 +11,7 @@ import Vote from '../models/vote'
 import Scholarship from '../models/scholarship'
 import Portfolio from '../models/portfolio'
 import PortfolioPeriod from '../models/portfolioPeriod'
+import SinglePiece from '../models/singlePiece'
 import Piece from '../models/piece'
 import db from '../config/sequelize'
 
@@ -55,7 +56,8 @@ beforeEach(function () {
             Scholarship,
             PortfolioPeriod,
             Portfolio,
-            Piece
+            Piece,
+            SinglePiece
           ].map(model => model.destroy({ where: {}, transaction: t }))
         );
       })

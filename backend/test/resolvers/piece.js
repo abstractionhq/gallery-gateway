@@ -144,7 +144,7 @@ describe("Piece Mutations", function() {
         );
     });
 
-    it("deletes an video piece", function() {
+    it("deletes a video piece", function() {
       return Promise.all([fakeUser(), fakePortfolioPeriod()])
         .then(([user, period]) =>
           Promise.all([

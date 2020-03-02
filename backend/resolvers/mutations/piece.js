@@ -17,25 +17,30 @@ import { allowedToSubmit, parseVideo } from "../../helpers/submission";
 import Portfolio from "../../models/portfolio";
 import PortfolioPeriod from "../../models/portfolioPeriod";
 import Piece from "../../models/piece";
+import SinglePiece from "../../models/singlePiece"
 
 // Creates a Piece based on the 'PieceInput' schema
-const createPiece = (piece, entryType, pieceId, t) => {
+const createPiece = (piece, entryType, entryId, t) => {
   let existingId = piece.portfolioId;
   let portolioPromise =
     existingId !== null
       ? Promise.resolve(existingId)
       : createNewPortfolio(piece, t);
-  return portolioPromise
-    .then(portfolioId => {
-      delete piece["studentUsername"];
-      delete piece["yearLevel"];
-      delete piece["academicProgram"];
-      delete piece["periodId"];
+
+  const piecePromise = SinglePiece.create({
+    pieceType: entryType,
+    pieceId: entryId,
+    title: piece.title,
+    comment: piece.comment
+  })
+
+  return Promise.all([portolioPromise, piecePromise])
+    .then(values => {
+      const portfolioId = values[0]
+      const singlePiece = values[1]
       return Piece.create(
         {
-          ...piece,
-          pieceType: entryType,
-          pieceId,
+          pieceId: singlePiece.id,
           portfolioId
         },
         { transaction: t }
@@ -170,12 +175,15 @@ export function deletePiece(_, args, req) {
         }
       })
       .then(() =>
+        piece.getSinglePiece()).then( singlePiece =>
         db.transaction(transaction =>
-          piece
+          singlePiece
             .getMedia(transaction)
             .then(media => media.destroy({ transaction }))
             .then(() => piece.destroy({ transaction }))
+            .then(() => singlePiece.destroy({ transaction }))
         )
       );
   });
 }
+

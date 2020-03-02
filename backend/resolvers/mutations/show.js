@@ -12,6 +12,7 @@ import Other from '../../models/other'
 import { UserError } from 'graphql-errors'
 import moment from 'moment-timezone'
 import { ADMIN, IMAGE_ENTRY, OTHER_ENTRY, VIDEO_ENTRY } from '../../constants'
+import SinglePiece from '../../models/singlePiece'
 
 const imageDir = config.get('upload:imageDir')
 const pdfDir = config.get('upload:pdfDir')
@@ -66,69 +67,78 @@ export function deleteShow (_, args, req) {
           // If the show doesn't exist, then no need to delete anything
           return Promise.resolve(true)
         }
-        // Otherwise, get all the entries with attachments so we can delete their files
+        // Otherwise, get all the entries with attachments so we can delete their files   
         return Entry.findAll({where: {showId: args.id}, transaction})
           .then(entries => {
-            // Collect IDs of the specific entry-types
-            const imageIds = entries
-              .filter(e => e.entryType === IMAGE_ENTRY)
-              .map(e => e.entryId)
-            const videoIds = entries
-              .filter(e => e.entryType === VIDEO_ENTRY)
-              .map(e => e.entryId)
-            const otherIds = entries
-              .filter(e => e.entryType === OTHER_ENTRY)
-              .map(e => e.entryId)
-            // Query the db to get their paths
-            return Promise.all([
-              Image.findAll({where: { id: {$in: imageIds} }, transaction}),
-              Other.findAll({where: { id: {$in: otherIds} }, transaction})
-            ])
-              .then(([images, others]) => {
-                // Merge together the paths into one array
-                const pathStubs = [
-                  ...images.map(i => i.path),
-                  ...others.map(o => o.path)
-                ].filter(p => p !== null)
-                // Add all _thumb.jpg files
-                const withThumbs = pathStubs.reduce(
-                  (arr, p) => {
-                    if (p.endsWith('.jpg')) {
-                      const parsed = path.parse(p)
-                      return [
-                        ...arr,
-                        p,
-                        `${parsed.dir}/${parsed.name}_thumb${parsed.ext}`
-                      ]
-                    } else {
-                      // Not an image
-                      return [...arr, p]
+            // Collect IDs of the specific entry-types through singlePieces
+            // console.log(args.id)
+            // console.log(entries)
+            const singlePieceIds = entries.map(e => e.pieceId)
+            // console.log(singlePieceIds)
+            return SinglePiece.findAll({where: { id: {$in: singlePieceIds}}, transaction}).then(singlePieces => {
+              const imageIds = singlePieces
+                .filter(e => e.pieceType === IMAGE_ENTRY)
+                .map(e => e.pieceId)
+              const videoIds = singlePieces
+                .filter(e => e.pieceType === VIDEO_ENTRY)
+                .map(e => e.pieceId)
+              const otherIds = singlePieces
+                .filter(e => e.pieceType === OTHER_ENTRY)
+                .map(e => e.pieceId)
+              // Query the db to get their paths
+              return Promise.all([
+                Image.findAll({where: { id: {$in: imageIds} }, transaction}),
+                Other.findAll({where: { id: {$in: otherIds} }, transaction})
+              ])
+                .then(([images, others]) => {
+                  // Merge together the paths into one array
+                  const pathStubs = [
+                    ...images.map(i => i.path),
+                    ...others.map(o => o.path)
+                  ].filter(p => p !== null)
+                  // Add all _thumb.jpg files
+                  const withThumbs = pathStubs.reduce(
+                    (arr, p) => {
+                      if (p.endsWith('.jpg')) {
+                        const parsed = path.parse(p)
+                        return [
+                          ...arr,
+                          p,
+                          `${parsed.dir}/${parsed.name}_thumb${parsed.ext}`
+                        ]
+                      } else {
+                        // Not an image
+                        return [...arr, p]
+                      }
+                    },
+                    []
+                  )
+                  // Prepend the storage directory to the path stubs
+                  const paths = withThumbs.map(path => {
+                    if (path.endsWith('.pdf')) {
+                      return `${pdfDir}/${path}`
                     }
-                  },
-                  []
-                )
-                // Prepend the storage directory to the path stubs
-                const paths = withThumbs.map(path => {
-                  if (path.endsWith('.pdf')) {
-                    return `${pdfDir}/${path}`
-                  }
-                  if (path.endsWith('.jpg')) {
-                    return `${imageDir}/${path}`
-                  }
-                  throw new Error(`unknown extension for path: ${path}`)
+                    if (path.endsWith('.jpg')) {
+                      return `${imageDir}/${path}`
+                    }
+                    throw new Error(`unknown extension for path: ${path}`)
+                  })
+                  // Delete everything
+                  const unlinkPromises = paths.map(path => unlink(path))
+                  return Promise.all(unlinkPromises)
                 })
-                // Delete everything
-                const unlinkPromises = paths.map(path => unlink(path))
-                return Promise.all(unlinkPromises)
-              })
-              .then(() => Promise.all([
-                // Remove all entry specifics, because they don't cascade
-                Image.destroy({where: {id: {$in: imageIds}}, transaction}),
-                Video.destroy({where: {id: {$in: videoIds}}, transaction}),
-                Other.destroy({where: {id: {$in: otherIds}}, transaction})
-              ]))
+                .then(() => Promise.all([
+                  // Remove all entry specifics, because they don't cascade
+                  Image.destroy({where: {id: {$in: imageIds}}, transaction}),
+                  Video.destroy({where: {id: {$in: videoIds}}, transaction}),
+                  Other.destroy({where: {id: {$in: otherIds}}, transaction}),
+                  SinglePiece.destroy({where: {id: {$in: singlePieceIds}}, transaction})
+                ]))
+            })
           })
-          .then(() => show.destroy({transaction}))
+          .then(() => 
+            show.destroy({where: {id: args.id}})
+          )
       })
   )
 }

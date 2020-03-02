@@ -7,6 +7,7 @@ import Entry from '../models/entry'
 import Video from '../models/video'
 import Other from '../models/other'
 import Vote from '../models/vote'
+import SinglePiece from '../models/singlePiece'
 import { STUDENT, IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY } from '../constants'
 import PortfolioPeriod from '../models/portfolioPeriod'
 import Portfolio from '../models/portfolio'
@@ -95,14 +96,29 @@ function fakeOther (opts) {
   })
 }
 
-function fakeEntry (opts) {
+function fakeSinglePiece (opts) {
   opts = opts || {}
   if (!opts.image && !opts.video && !opts.other) {
     throw Error('No entry item found')
   }
   opts.title = opts.title || faker.lorem.words(3)
-  opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   opts.comment = opts.comment || faker.lorem.sentence()
+  const pieceType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
+  const pieceId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
+  return SinglePiece.create({
+    pieceType: pieceType,
+    pieceId: pieceId,
+    title: opts.title,
+    comment: opts.comment
+  })
+}
+
+function fakeEntry (opts) {
+  opts = opts || {}
+  if (!opts.image && !opts.video && !opts.other) {
+    throw Error('No entry item found')
+  }
+  opts.moreCopies = opts.moreCopies === undefined ? faker.random.boolean() : opts.moreCopies
   opts.forSale = opts.forSale === undefined ? faker.random.boolean() : opts.forSale
   opts.invited = opts.invited === undefined ? faker.random.boolean() : opts.invited
   opts.awardWon = opts.awardWon || faker.lorem.words(2)
@@ -110,24 +126,27 @@ function fakeEntry (opts) {
   opts.academicProgram = opts.academicProgram === undefined ? faker.lorem.word() : opts.academicProgram
   const showPromise = opts.show ? Promise.resolve(opts.show) : fakeShow()
   const userPromise = opts.user || opts.group ? Promise.resolve(opts.user) : fakeUser()
-  const entryType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
-  const entryId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
-  return Promise.all([showPromise, userPromise])
+  const piecePromise = fakeSinglePiece(opts)
+  return Promise.all([showPromise, userPromise, piecePromise])
     .then((models) => {
       const show = models[0]
       const user = models[1]
+      const piece = models[2]
       return Entry.create({
         showId: show.id,
         studentUsername: user ? user.username : null,
         groupId: opts.group ? opts.group.id : null,
-        entryType: entryType,
-        entryId: entryId,
-        title: opts.title,
-        comment: opts.comment,
         moreCopies: opts.moreCopies,
         forSale: opts.forSale,
         awardWon: opts.awardWon,
-        invited: opts.invited
+        invited: opts.invited,
+        pieceId: piece.id
+      }).then(entry => {
+        // this normally gets done by the resolver, but since the factory skips the 
+        // resolver we have to tack them on here
+        entry.title = piece.title
+        entry.comment = piece.comment
+        return entry
       })
     })
 }
@@ -225,23 +244,17 @@ function fakePiece(opts){
   if (!opts.image && !opts.video && !opts.other) {
     throw Error('No entry item found')
   }
-  opts.title = opts.title || faker.lorem.words(3)
-  opts.comment = opts.comment || faker.lorem.sentence()
   const portfolioPromise = opts.portfolio ? Promise.resolve(opts.portfolio) : fakePortfolio(opts)
   const userPromise = opts.user ? Promise.resolve(opts.user) : fakeUser()
-  const pieceType = opts.image ? IMAGE_ENTRY : opts.video ? VIDEO_ENTRY : OTHER_ENTRY
-  const pieceId = opts.image ? opts.image.id : opts.video ? opts.video.id : opts.other.id
-  return Promise.all([portfolioPromise, userPromise])
+  const piecePromise = fakeSinglePiece(opts)
+  return Promise.all([portfolioPromise, userPromise, piecePromise])
     .then((models) => {
       const portfolio = models[0]
       const user = models[1]
+      const singlePiece = models[2]
       return Piece.create({
         portfolioId: portfolio.id,
-        studentUsername: user ? user.username : null,
-        pieceType,
-        pieceId,
-        title: opts.title,
-        comment: opts.comment
+        pieceId: singlePiece.id
       })
     })
 }

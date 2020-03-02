@@ -61,13 +61,14 @@ describe('Entry Queries', function () {
         }
       `
       it('Gets an image entry when it exists', () =>
-        fakeImageEntry({ path: 'foo.jpg', horizDimInch: 3, vertDimInch: 4, mediaType: 'mymedia' })
+        fakeImageEntry({ title: 'image 1', comment: 'comment', path: 'foo.jpg', horizDimInch: 3, vertDimInch: 4, mediaType: 'mymedia' })
           .then(entry =>
             execGraphql(
               `query {
                 entries {
                   id,
                   title,
+                  comment,
                   entryType,
                   ...photoFields
                 }
@@ -82,7 +83,8 @@ describe('Entry Queries', function () {
                     entries: [
                       {
                         id: `${entry.id}`, // must be cast to a string :(
-                        title: entry.title,
+                        title: 'image 1',
+                        comment: 'comment',
                         entryType: 'PHOTO',
                         path: 'foo.jpg',
                         horizDimInch: 3,
@@ -96,12 +98,13 @@ describe('Entry Queries', function () {
           )
       )
       it('gets a video entry when it exists', () =>
-        fakeVideoEntry({ videoId: 'abc123', provider: 'youtube' })
+        fakeVideoEntry({ title: 'video 1', comment: 'comment', videoId: 'abc123', provider: 'youtube' })
           .then(entry => execGraphql(
             `query {
               entries {
                 id,
                 title,
+                comment,
                 entryType,
                 ...videoFields
               }
@@ -116,7 +119,8 @@ describe('Entry Queries', function () {
                   entries: [
                     {
                       id: `${entry.id}`, // must be cast to a string :(
-                      title: entry.title,
+                      title: 'video 1',
+                      comment: 'comment',
                       entryType: 'VIDEO',
                       videoId: 'abc123',
                       provider: 'youtube'
@@ -128,12 +132,13 @@ describe('Entry Queries', function () {
           )
       )
       it('gets an other media entry when it exists', () =>
-        fakeOtherEntry({ path: 'foo.jpg' })
+        fakeOtherEntry({ title: 'other 1', comment: 'comment', path: 'foo.jpg' })
           .then(entry => execGraphql(
             `query {
               entries {
                 id,
                 title,
+                comment,
                 entryType,
                 ...otherMediaFields
               }
@@ -148,7 +153,8 @@ describe('Entry Queries', function () {
                   entries: [
                     {
                       id: `${entry.id}`, // must be cast to a string :(
-                      title: entry.title,
+                      title: 'other 1',
+                      comment: 'comment',
                       entryType: 'OTHER',
                       path: 'foo.jpg'
                     }

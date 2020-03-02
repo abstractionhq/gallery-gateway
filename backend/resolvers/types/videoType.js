@@ -3,11 +3,17 @@ import { EntryBase } from './entryType'
 export default {
   Video: {
     ...EntryBase,
+    title (entry) {
+      return entry.getSinglePiece().then(singlePiece => singlePiece.title)
+    },
+    comment (entry) {
+      return entry.getSinglePiece().then(singlePiece => singlePiece.comment)
+    },
     provider (entry) {
-      return entry.getVideo().then(video => video.provider)
+      return entry.getSinglePiece().then(singlePiece => singlePiece.getVideo().then(video => video.provider))
     },
     videoId (entry) {
-      return entry.getVideo().then(video => video.videoId)
+      return entry.getSinglePiece().then(singlePiece => singlePiece.getVideo().then(video => video.videoId))
     }
   }
 }

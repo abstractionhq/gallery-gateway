@@ -5,6 +5,7 @@ import Group from '../../models/group'
 import { createPhoto, createVideo, createOtherMedia, updateEntry } from '../../resolvers/mutations/entry'
 import { fakeUser, fakeShow, fakeImageEntry } from '../factories'
 import { execGraphql } from '../util'
+const util = require('util')
 
 const standardEntry = (user, show) => ({
   studentUsername: user.username,
@@ -62,10 +63,11 @@ describe('Entry Mutations', function () {
               .then(show => show.getEntries())
               .then(([entry]) => entry)
               .then((entry) => {
-                expect(entry.title).to.equal('Untitled')
                 expect(entry.moreCopies).to.equal(false)
                 // make sure an Entry was created
-                return Entry.count().then((num) => expect(num).to.equal(1))
+                return Promise.all([
+                  entry.getSinglePiece().then(singlePiece => expect(singlePiece.title).to.equal('Untitled')),
+                  Entry.count().then((num) => expect(num).to.equal(1))])
               })
           })
       })

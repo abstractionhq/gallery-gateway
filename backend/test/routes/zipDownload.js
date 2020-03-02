@@ -111,13 +111,15 @@ describe('downloading a zip file', () => {
                       .to.eq(3, 'Files Present: ' + Object.keys(zip.files) + '\nshould have only one file and two directories')
                     expect(zip.files[`${show.name}/`]).to.exist
                     expect(zip.files[`${show.name}/Invited/`]).to.exist
+                    entry.getSinglePiece().then(singlePiece => {
                     const zobj = zip.file(
-                      `${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`
+                      `${show.name}/Invited/${user.lastName}, ${user.firstName} - ${singlePiece.title}.jpg`
                     )
                     return zobj.async('nodebuffer')
                       .then(buf => {
                         expect(hash(buf)).to.eq(fileAHash)
                       })
+                    })
                   })
               )
           )
@@ -149,13 +151,15 @@ describe('downloading a zip file', () => {
                   .to.eq(3, 'Files Present: ' + Object.keys(zip.files) + '\nshould have only one file and two directories')
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
+                entry.getSinglePiece().then(singlePiece => {
                 const zobj = zip.file(
-                  `${show.name}/Invited/${user.lastName}, ${user.firstName} & ${group.participants} - ${entry.title}.jpg`
+                  `${show.name}/Invited/${user.lastName}, ${user.firstName} & ${group.participants} - ${singlePiece.title}.jpg`
                 )
                 return zobj.async('nodebuffer')
                   .then(buf => {
                     expect(hash(buf)).to.eq(fileBHash)
                   })
+                }) 
               })
           )
       )
@@ -235,10 +239,12 @@ describe('downloading a zip file', () => {
               .expect(200)
               .then(res => JSZip.loadAsync(res.body, {createFolders: true}))
               .then(zip => {
+                entry.getSinglePiece().then(singlePiece => {
                 expect(Object.keys(zip.files).length).to.eq(3)
                 expect(zip.files[`${show.name}/`]).to.exist
                 expect(zip.files[`${show.name}/Invited/`]).to.exist
-                expect(zip.files[`${show.name}/Invited/${user.lastName}, ${user.firstName} - ${entry.title}.jpg`]).to.exist
+                expect(zip.files[`${show.name}/Invited/${user.lastName}, ${user.firstName} - ${singlePiece.title}.jpg`]).to.exist
+                })
               })
           )
       ))

@@ -14,6 +14,7 @@ import Show from '../../models/show'
 import Entry from '../../models/entry'
 import Image from '../../models/image'
 import Other from '../../models/other'
+import SinglePiece from '../../models/singlePiece'
 
 const imageDir = config.get('upload:imageDir')
 const pdfDir = config.get('upload:pdfDir')
@@ -183,13 +184,19 @@ describe('Show Resolvers', function () {
               })
             })
             .then(() => {
+              // ensure no singlePieces exist in the db
+              return SinglePiece.count().then(numPieces => {
+                expect(numPieces).to.eq(0, 'should have no single pieces')
+              })
+            })
+            .then(() => {
               // ensure no Images exist in the db
               return Image.count().then(numImages => {
                 expect(numImages).to.eq(0, 'should have no images')
               })
             })
             .then(() => {
-              // ensure no Images exist in the db
+              // ensure no Other entries exist in the db
               return Other.count().then(numOthers => {
                 expect(numOthers).to.eq(0, 'should have no other entries')
               })

@@ -6,6 +6,7 @@ import {
   IMAGE_ENTRY, VIDEO_ENTRY, OTHER_ENTRY,
   ADMIN, JUDGE
 } from '../../constants'
+import SinglePiece from '../../models/singlePiece'
 
 // For Convenience: the 'base class' of functions for Photo / Video / OtherMedia
 // entry type fields, which they share.
@@ -37,28 +38,32 @@ export const EntryBase = {
   },
   // Returning entry type directly on the base class, for convenience
   entryType (entry) {
-    if (entry.entryType === IMAGE_ENTRY) {
-      return 'PHOTO'
-    } else if (entry.entryType === VIDEO_ENTRY) {
-      return 'VIDEO'
-    } else if (entry.entryType === OTHER_ENTRY) {
-      return 'OTHER'
-    }
+    return entry.getSinglePiece().then(piece => {
+      if (piece.pieceType === IMAGE_ENTRY) {
+        return 'PHOTO'
+      } else if (piece.pieceType === VIDEO_ENTRY) {
+        return 'VIDEO'
+      } else if (piece.pieceType === OTHER_ENTRY) {
+        return 'OTHER'
+      }
+    })
   }
 }
 
 export default {
   Entry: {
     __resolveType (data, context, info) {
-      // Identifies for GraphQL which concrete instance of Entry this object is.
-      if (data.entryType === IMAGE_ENTRY) {
-        return info.schema.getType('Photo')
-      } else if (data.entryType === VIDEO_ENTRY) {
-        return info.schema.getType('Video')
-      } else if (data.entryType === OTHER_ENTRY) {
-        return info.schema.getType('OtherMedia')
-      }
-      throw new Error('Unknown entry type')
+      return SinglePiece.findOne({where: {id: data.pieceId}}).then(piece => {
+        // Identifies for GraphQL which concrete instance of Entry this object is.
+        if (piece.pieceType === IMAGE_ENTRY) {
+          return info.schema.getType('Photo')
+        } else if (piece.pieceType === VIDEO_ENTRY) {
+          return info.schema.getType('Video')
+        } else if (piece.pieceType === OTHER_ENTRY) {
+          return info.schema.getType('OtherMedia')
+        }
+        throw new Error("Unknown piece type")
+      })
     }
   }
 }

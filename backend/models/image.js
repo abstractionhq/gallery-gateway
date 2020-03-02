@@ -2,6 +2,7 @@ import Entry from './entry'
 import { IMAGE_ENTRY } from '../constants'
 import DataTypes from 'sequelize'
 import sequelize from '../config/sequelize'
+import SinglePiece from './singlePiece'
 
 const Image = sequelize.define('image', {
   path: {
@@ -45,7 +46,8 @@ const Image = sequelize.define('image', {
 })
 
 Image.prototype.getEntry = function getEntry () {
-  return Entry.findOne({where: {entryType: IMAGE_ENTRY, entryId: this.id}})
+  return SinglePiece.findOne({where: {pieceType: IMAGE_ENTRY, pieceId: this.id}})
+  .then(singlePiece => singlePiece.getEntry())
 }
 
 export default Image
