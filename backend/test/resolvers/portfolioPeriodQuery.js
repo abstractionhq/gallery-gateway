@@ -1,7 +1,9 @@
 import { expect } from "chai";
 
 import { openPortfolioPeriod } from "../../resolvers/queries/portfolioPeriodQuery";
+import { assignToPortfolioPeriod } from "../../resolvers/mutations/portfolioPeriod";
 import { fakeUser, fakePortfolioPeriod, fakePortfolio } from "../factories";
+import PortfolioPeriod from "../../models/portfolioPeriod";
 
 describe("Portfolio Period Queries", function() {
   describe("openPortfolioPeriod", function() {

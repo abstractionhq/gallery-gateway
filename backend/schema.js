@@ -19,6 +19,7 @@ type User {
     type: UserType!
     entries: [Entry]
     shows(date: Date): [Show]
+    portfolioPeriods(date: Date): [PortfolioPeriod]
 }
 
 input UserInput {
@@ -396,6 +397,9 @@ type Mutation {
     deleteShow(id: ID!): Boolean
     assignToShow(showId: ID!, usernames: [String]!): Boolean
     removeFromShow(showId: ID!, usernames: [String]!): Boolean
+
+    assignToPortfolioPeriod(portfolioPeriodId: ID!, usernames: [String]!): Boolean
+    removeFromPortfolioPeriod(portfolioPeriodId: ID!, usernames: [String]!): Boolean
 
     createPortfolioPeriod(input: PortfolioPeriodInput!): PortfolioPeriod
 

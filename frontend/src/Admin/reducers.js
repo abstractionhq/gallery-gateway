@@ -172,10 +172,85 @@ const ui = (state = {}, action) => {
   }
 }
 
+const portfolioPeriods = (state = {}, action) => {
+  switch (action.type){
+    case actions.FETCH_PORTFOLIO_PERIOD:
+      if (!action.payload.id){
+        return state
+      }
+
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          ...action.payload
+        }
+      }
+    case actions.FETCH_PORTFOLIO_PERIODS:
+      if (!action.payload.length) {
+        return state
+      }
+
+      const portfolioPeriods = action.payload.reduce((accum, portfolioPeriod) => {
+        accum[portfolioPeriod.id] = portfolioPeriod
+        return accum
+      }, {})
+      return {
+        ...state,
+        ...portfolioPeriods
+      }
+    default:
+      return state
+  }
+}
+
+const portfolioPeriodAssignments = (state = {}, action) => {
+  switch (action.type) {
+    case actions.FETCH_JUDGES_BY_ASSIGNMENT_FOR_PORTFOLIO_PERIOD:
+      if (!action.payload.id) {
+        return state
+      }
+
+      return {
+        ...state,
+        [action.payload.id]: Object.values(action.payload.judges).map(
+          judge => judge.username
+        )
+      }
+    case actions.ASSIGN_JUDGES_TO_PORTFOLIO_PERIOD:
+      if (!action.payload.id) {
+        return state
+      }
+      
+      return {
+        ...state,
+        [action.payload.id]: [
+          ...state[action.payload.id],
+          ...action.payload.usernames
+        ]
+      }
+    case actions.REMOVE_JUDGES_FROM_PORTFOLIO_PERIOD:
+      if (!action.payload.id) {
+        return state
+      }
+  
+      return {
+        ...state,
+        [action.payload.id]: state[action.payload.id].filter(
+          judge => !action.payload.usernames.includes(judge)
+        )
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   shows,
   admins,
   judges,
   assignments,
+  portfolioPeriods,
+  portfolioPeriodAssignments,
   ui
 })
