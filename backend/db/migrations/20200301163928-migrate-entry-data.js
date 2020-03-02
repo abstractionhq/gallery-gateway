@@ -6,8 +6,8 @@ import db from "../../config/sequelize";
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return db.transaction().then(transaction => {
-    return OldEntry.findAll()
+    return db.transaction(t => {
+    return OldEntry.findAll({transaction: t})
       .then(entries => {
         const pieces = entries.reduce((pieces, entry) => {
         pieces.push( 
@@ -22,7 +22,7 @@ module.exports = {
       }, [])
         //mysql throws as syntax error if you bulk insert an empty array
       if(pieces.length > 0){
-          return queryInterface.bulkInsert('singlePieces', pieces, {transaction})
+          return queryInterface.bulkInsert('singlePieces', pieces, {transaction: t})
         .then(() => {
           const entryUpdates = entries.reduce((entryUpdates, entry) => {
           entryUpdates.push( 
@@ -42,7 +42,7 @@ module.exports = {
         }, [])
           //need to change all of the pieceIds on existing entries to match pieces
           if(entryUpdates.length > 0){
-            return Entry.bulkCreate(entryUpdates, {updateOnDuplicate: ["pieceId", "entryType"]}, {transaction})
+            return Entry.bulkCreate(entryUpdates, {updateOnDuplicate: ["pieceId", "entryType"]}, {transaction: t})
           }
         })
       }})
