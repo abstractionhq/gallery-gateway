@@ -1,0 +1,16 @@
+query Scholarships {
+  Scholarships(orderBy: { sort: "createdAt", direction: DESC }) {
+    id,
+    name,
+    gpa,
+    yearStatus,
+    requiredPhotos,
+    description,
+    fulltime,
+    renewable,
+    requiresEssay,
+    degreePrograms,
+    createdAt,
+    updatedAt
+  }
+}

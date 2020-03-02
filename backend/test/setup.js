@@ -8,6 +8,7 @@ import Image from '../models/image'
 import Video from '../models/video'
 import Other from '../models/other'
 import Vote from '../models/vote'
+import Scholarship from '../models/scholarship'
 import Portfolio from '../models/portfolio'
 import PortfolioPeriod from '../models/portfolioPeriod'
 import SinglePiece from '../models/singlePiece'
@@ -52,6 +53,7 @@ beforeEach(function () {
             Video,
             Other,
             Vote,
+            Scholarship,
             PortfolioPeriod,
             Portfolio,
             Piece,
