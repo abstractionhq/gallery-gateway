@@ -1,5 +1,5 @@
 import OldEntry from '../../models/oldEntry'
-import Entry from '../../models/Entry'
+import Entry from '../../models/entry'
 import SinglePiece from '../../models/singlePiece';
 import db from "../../config/sequelize";
 'use strict';

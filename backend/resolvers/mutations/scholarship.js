@@ -18,5 +18,10 @@ export function createScholarship(_, args, req) {
       requiresEssay: args.input.requiresEssay,
       degreePrograms: args.input.degreePrograms
   }
-  return Scholarship.create(newScholarship)
+  return Scholarship.findOne({where:{name: newScholarship.name}}).then((other)=>{
+    if(other){
+      throw new UserError("Error: A Scholarship with that name already exists.")
+    }
+    return Scholarship.create(newScholarship)
+  })
 }
