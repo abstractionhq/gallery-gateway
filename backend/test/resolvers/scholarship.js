@@ -49,6 +49,28 @@ describe("Scholarship Resolvers", () => {
           Scholarship.count().then(num => expect(num).to.equal(1));
         });
       });
+      it("Throws a helpful error if duplicate name scholarships are attempted", () => {
+        return createScholarship(
+          "",
+          { input: newScholarship },
+          { auth: { type: ADMIN } }
+        )
+          .then(() =>
+            createScholarship(
+              "",
+              { input: newScholarship },
+              { auth: { type: ADMIN } }
+            )
+          )
+          .then(() => {
+            assert.fail("Expected exception from promise");
+          })
+          .catch(error => {
+            expect(error.message).to.equal(
+              "Error: A Scholarship with that name already exists."
+            );
+          });
+      });
     });
   });
 });

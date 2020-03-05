@@ -75,10 +75,13 @@ class ScholarshipForm extends Component {
             requiresEssay: yup.string().required('Required'),
             degreePrograms: yup.string()
           })}
-          onSubmit={values => {
+          onSubmit={(values, actions) => {
             create(values)
               .then(() => done())
-              .catch(err => handleError(err.message))
+              .catch(err => {
+                handleError(err.message)
+                actions.setSubmitting(false);
+              })
           }}
           render={({ values, errors, touched, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit} style={{ marginBottom: '75px' }}>
